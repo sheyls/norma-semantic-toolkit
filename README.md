@@ -7,7 +7,7 @@ This software transforms a legal compliance processes represented using BPMN tha
 - Camunda Modeler 8
 - Python 3.8.10
 
-## Instructions 
+## Set up
 
 1. Set up Camunda Modeler
 	1. Download and install [Camunda Modeler](https://camunda.com/platform/modeler/) version 8. It is [open source](https://github.com/camunda/camunda-modeler). 
@@ -25,5 +25,7 @@ macOS:
 If the folder `resources/element-templates` does not exists, feel free to create it. Once installed, restart Camunda Modeler and you should see be able to create a model, then create a task: you should see advanced the template in the Property Panel.
 
 
-2. Open a sample BPMN
+## How to run an example
+
+1. Open a sample BPMN
 Open the [example](examples/1.bpmn).
