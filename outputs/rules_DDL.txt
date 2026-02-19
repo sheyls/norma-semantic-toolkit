@@ -8,23 +8,23 @@ syntetic content?
 Event_1la3yhu -> Gateway_00rfxw0 | src='start' dst='Generation of
 syntetic content?' | tasks: (no tasks) | via_flows: Flow_08j11ee
 Gateway_00rfxw0 [No] -> Event_06rxany | src='Generation of
-syntetic content?' dst='end' | tasks: Activity_0frln57{PER_001:permission} | via_flows: Flow_0wsk78b, Flow_09rqj0k
-Gateway_00rfxw0 [Yes] -> Event_06rxany | src='Generation of
-syntetic content?' dst='end' | tasks: Activity_07zrvnr{OBL_001:obligation} | via_flows: Flow_1jqp5jl, Flow_08x0i5d
+syntetic content?' dst='end' | tasks: Activity_0frln57{REC_1:recommendation} | via_flows: Flow_0wsk78b, Flow_09rqj0k
+Gateway_00rfxw0 [yes] -> Event_06rxany | src='Generation of
+syntetic content?' dst='end' | tasks: Activity_07zrvnr{OBL_1:obligation} | via_flows: Flow_1jqp5jl, Flow_08x0i5d
 
 === START → END PATHS (2) ===
 
 Path 1:
   Event_1la3yhu -> Gateway_00rfxw0 | tasks: (no tasks)
-  Gateway_00rfxw0 [Yes] -> Event_06rxany | tasks: Activity_07zrvnr{OBL_001:obligation}
+  Gateway_00rfxw0 [yes] -> Event_06rxany | tasks: Activity_07zrvnr{OBL_1:obligation}
 
 Path 2:
   Event_1la3yhu -> Gateway_00rfxw0 | tasks: (no tasks)
-  Gateway_00rfxw0 [No] -> Event_06rxany | tasks: Activity_0frln57{PER_001:permission}
+  Gateway_00rfxw0 [No] -> Event_06rxany | tasks: Activity_0frln57{REC_1:recommendation}
 
 % RULES
-r1: Generation_ofsynteticcontent => O(AI_owner_OBLIGATIONOBL_001marking_as_syntheticAI_contentIA_act42).
-r2: not Generation_ofsynteticcontent => P(AI_owner_PERMISSIONPER_001conduct_voluntary_codeyouIA_act52).
+r1: x_Generation_of_syntetic_content => O(AI_owner, Marking_obligation, generate_content).
+r2: not x_Generation_of_syntetic_content => RS(AI_owner, Adopt_volutary_codes_of_conduct, generated_content).
 
 % SUPERIORITY
 r1 > r2.

@@ -9,8 +9,8 @@
       <ruleml:Rule key="r1">
         <ruleml:if>
           <ruleml:Atom>
-            <ruleml:Rel>ofsynteticcontent</ruleml:Rel>
-            <ruleml:Var>Generation</ruleml:Var>
+            <ruleml:Rel>Generation_of_syntetic_content</ruleml:Rel>
+            <ruleml:Var>x</ruleml:Var>
             <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
           </ruleml:Atom>
         </ruleml:if>
@@ -18,7 +18,7 @@
           <ruleml:Atom>
             <ruleml:Rel>task</ruleml:Rel>
             <ruleml:Var>AI_owner</ruleml:Var>
-            <ruleml:Data xsi:type="xs:string">OBLIGATION|OBL_001|marking_as_synthetic|AI_content|IA_act|4|2</ruleml:Data>
+            <ruleml:Data xsi:type="xs:string">OBLIGATION|OBL_1|Marking_obligation|generate_content</ruleml:Data>
           </ruleml:Atom>
         </ruleml:then>
       </ruleml:Rule>
@@ -28,8 +28,8 @@
       <ruleml:Rule key="r2">
         <ruleml:if>
           <ruleml:Atom>
-            <ruleml:Rel>ofsynteticcontent</ruleml:Rel>
-            <ruleml:Var>Generation</ruleml:Var>
+            <ruleml:Rel>Generation_of_syntetic_content</ruleml:Rel>
+            <ruleml:Var>x</ruleml:Var>
             <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
           </ruleml:Atom>
         </ruleml:if>
@@ -37,7 +37,7 @@
           <ruleml:Atom>
             <ruleml:Rel>task</ruleml:Rel>
             <ruleml:Var>AI_owner</ruleml:Var>
-            <ruleml:Data xsi:type="xs:string">PERMISSION|PER_001|conduct_voluntary_code|you|IA_act|5|2</ruleml:Data>
+            <ruleml:Data xsi:type="xs:string">RECOMMENDATION|REC_1|Adopt_volutary_codes_of_conduct|generated_content</ruleml:Data>
           </ruleml:Atom>
         </ruleml:then>
       </ruleml:Rule>
