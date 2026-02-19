@@ -1,36 +1,34 @@
 {
   "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
   "name": "Legal Compliance Task",
-  "id": "legal.compliance.deontic.task.v1",
-  "description": "Task with legal compliance annotations using deontic modalities (obligation, prohibition, permission)",
+  "id": "legal.compliance.deontic.task.v2",
+  "description": "Task with legal compliance annotations using deontic modalities",
   "version": 1,
   "appliesTo": [
     "bpmn:Task",
     "bpmn:UserTask",
     "bpmn:ServiceTask",
-    "bpmn:ManualTask"
+    "bpmn:ManualTask",
+    "bpmn:BusinessRuleTask",
+    "bpmn:SendTask"
   ],
   "elementType": {
     "value": "bpmn:Task"
   },
   "groups": [
-    {
-      "id": "deontic",
-      "label": "Deontic Modality"
-    },
-    {
-      "id": "legalSource",
-      "label": "Legal Source"
-    },
-    {
-      "id": "metadata",
-      "label": "Annotation Metadata"
-    }
+    { "id": "deontic",      "label": "Deontic Norm" },
+    { "id": "condition",    "label": "Conditions & Scope" },
+    { "id": "parties",      "label": "Parties & Roles" },
+    { "id": "consequence",  "label": "Consequences & Exceptions" },
+    { "id": "legalSource",  "label": "Legal Source" },
+    { "id": "metadata",     "label": "Annotation Metadata" }
   ],
   "properties": [
+
     {
+      "id": "deonticType",
       "label": "Deontic Modality",
-      "description": "Type of deontic operator: obligation (MUST), prohibition (MUST NOT), or permission (MAY)",
+      "description": "Type of deontic operator: obligation (MUST), prohibition (MUST NOT), permission (MAY), recommendation (SHOULD), negative recommendation (SHOULD NOT), or constitutive fact (IS)",
       "type": "Dropdown",
       "group": "deontic",
       "binding": {
@@ -38,33 +36,31 @@
         "name": "compliance_deonticType"
       },
       "choices": [
-        { "name": "🔴 Obligation (MUST)", "value": "obligation" },
-        { "name": "🚫 Prohibition (MUST NOT)", "value": "prohibition" },
-        { "name": "✅ Permission (MAY)", "value": "permission" }
+        { "name": "🔴 Obligation — MUST",           "value": "obligation" },
+        { "name": "🚫 Prohibition — MUST NOT",      "value": "prohibition" },
+        { "name": "✅ Permission — MAY",            "value": "permission" },
+        { "name": "🟡 Recommendation — SHOULD",     "value": "recommendation" },
+        { "name": "🟠 Negative Rec. — SHOULD NOT", "value": "recommendation_not" },
+        { "name": "📘 Constitutive Fact — IS",      "value": "fact" }
       ],
       "value": "obligation"
     },
+
     {
-      "label": "Deontic ID",
-      "description": "Unique identifier for this deontic statement (e.g., OBL_001, PRH_001, PER_001)",
-      "type": "String",
+      "label": "Norm Statement (Plain Language)",
+      "description": "Human-readable restatement of the norm. E.g. 'The AI provider must maintain a risk management system throughout the entire lifecycle.'",
+      "type": "Text",
       "group": "deontic",
       "binding": {
         "type": "zeebe:property",
-        "name": "compliance_deonticId"
+        "name": "compliance_normStatement"
       },
-      "value": "",
-      "constraints": {
-        "notEmpty": true,
-        "pattern": {
-          "value": "^(OBL|PRH|PER)_[A-Z0-9_]+$",
-          "message": "Must follow pattern: OBL_xxx, PRH_xxx, or PER_xxx"
-        }
-      }
+      "value": ""
     },
+
     {
       "label": "Agent (Who)",
-      "description": "Who must/must not/may perform the action? (e.g., AI_Provider, Data_Controller, Manufacturer)",
+      "description": "Who must / must not / may / should perform the action? E.g. AI_Provider, Data_Controller, Manufacturer",
       "type": "String",
       "group": "deontic",
       "binding": {
@@ -72,13 +68,16 @@
         "name": "compliance_agent"
       },
       "value": "",
-      "constraints": {
-        "notEmpty": true
+      "constraints": { "notEmpty": true },
+      "condition": {
+        "property": "deonticType",
+        "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"]
       }
     },
+
     {
       "label": "Action (What)",
-      "description": "What action must/must not/may be performed? (e.g., establish, conduct, deploy, process)",
+      "description": "Verb phrase describing the action. E.g. establish, conduct, deploy, disclose",
       "type": "String",
       "group": "deontic",
       "binding": {
@@ -86,13 +85,16 @@
         "name": "compliance_action"
       },
       "value": "",
-      "constraints": {
-        "notEmpty": true
+      "constraints": { "notEmpty": true },
+      "condition": {
+        "property": "deonticType",
+        "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"]
       }
     },
+
     {
       "label": "Object (On What)",
-      "description": "What is the action performed on? (e.g., risk_management_system, personal_data, medical_device)",
+      "description": "What the action is performed on. E.g. generated_content, risk_management_system, personal_data, audit_log",
       "type": "String",
       "group": "deontic",
       "binding": {
@@ -100,13 +102,182 @@
         "name": "compliance_object"
       },
       "value": "",
-      "constraints": {
-        "notEmpty": true
+      "constraints": { "notEmpty": true },
+      "condition": {
+        "property": "deonticType",
+        "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"]
+      }
+    },
+
+    {
+      "label": "Fact Statement",
+      "description": "Constitutive rule or legal definition being recorded. E.g. 'A system is classified as high-risk AI if it falls under Annex III.' No agent or action required.",
+      "type": "Text",
+      "group": "deontic",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_factStatement"
+      },
+      "value": "",
+      "constraints": { "notEmpty": true },
+      "condition": {
+        "property": "deonticType",
+        "equals": "fact"
+      }
+    },
+
+    {
+      "label": "Binding Force",
+      "description": "Legal weight of this norm",
+      "type": "Dropdown",
+      "group": "deontic",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_bindingForce"
+      },
+      "choices": [
+        { "name": "Hard law (legally binding)",       "value": "hard_law" },
+        { "name": "Soft law (guidelines, standards)", "value": "soft_law" },
+        { "name": "Internal policy",                  "value": "internal_policy" },
+        { "name": "Contractual obligation",           "value": "contractual" }
+      ],
+      "value": "hard_law"
+    },
+
+    {
+      "label": "Condition / Trigger",
+      "description": "When does this norm apply? E.g. 'when processing biometric data', 'upon deployment of high-risk AI'",
+      "type": "Text",
+      "group": "condition",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_condition"
+      },
+      "value": ""
+    },
+    {
+      "label": "Jurisdiction",
+      "description": "Geographic/legal scope. E.g. EU, US-CA, UK, global",
+      "type": "String",
+      "group": "condition",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_jurisdiction"
+      },
+      "value": ""
+    },
+    {
+      "label": "Effective Date",
+      "description": "Date from which this norm applies (YYYY-MM-DD)",
+      "type": "String",
+      "group": "condition",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_effectiveDate"
+      },
+      "value": ""
+    },
+    {
+      "label": "Deadline / Sunset Date",
+      "description": "Compliance deadline or expiry date (YYYY-MM-DD)",
+      "type": "String",
+      "group": "condition",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_deadline"
+      },
+      "value": ""
+    },
+    {
+      "label": "Norm Status",
+      "type": "Dropdown",
+      "group": "condition",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_status"
+      },
+      "choices": [
+        { "name": "Active",           "value": "active" },
+        { "name": "Under review",     "value": "under_review" },
+        { "name": "Disputed",         "value": "disputed" },
+        { "name": "Superseded",       "value": "superseded" },
+        { "name": "Not yet in force", "value": "pending" }
+      ],
+      "value": "active"
+    },
+
+    {
+      "label": "Addressee / Right-Holder (Who benefits)",
+      "description": "The beneficiary of the norm. E.g. Data_Subject, Supervisory_Authority, User. Optional for facts.",
+      "type": "String",
+      "group": "parties",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_addressee"
+      },
+      "value": ""
+    },
+
+    {
+      "label": "Exception / Carve-out",
+      "description": "Conditions under which this norm does NOT apply.",
+      "type": "Text",
+      "group": "consequence",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_exception"
+      },
+      "value": ""
+    },
+    {
+      "label": "Sanction / Consequence of Breach",
+      "description": "E.g. 'Fine up to €30M or 6% global turnover (Art. 99 EU AI Act)'",
+      "type": "Text",
+      "group": "consequence",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_sanction"
+      },
+      "value": "",
+      "condition": {
+        "property": "deonticType",
+        "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"]
       }
     },
     {
+      "label": "Risk Level",
+      "type": "Dropdown",
+      "group": "consequence",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_riskLevel"
+      },
+      "choices": [
+        { "name": "🔴 Critical", "value": "critical" },
+        { "name": "🟠 High",     "value": "high" },
+        { "name": "🟡 Medium",   "value": "medium" },
+        { "name": "🟢 Low",      "value": "low" }
+      ],
+      "value": "high",
+      "condition": {
+        "property": "deonticType",
+        "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"]
+      }
+    },
+    {
+      "label": "Cross-references (Deontic IDs)",
+      "description": "Comma-separated IDs of related norms. E.g. OBL_002, FCT_005",
+      "type": "String",
+      "group": "consequence",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_crossRefs"
+      },
+      "value": ""
+    },
+
+    {
       "label": "Regulation Name",
-      "description": "Name of the legal regulation or standard",
       "type": "String",
       "group": "legalSource",
       "binding": {
@@ -114,13 +285,10 @@
         "name": "compliance_regulation"
       },
       "value": "",
-      "constraints": {
-        "notEmpty": true
-      }
+      "constraints": { "notEmpty": true }
     },
     {
-      "label": "Article/Section",
-      "description": "Article, section, or clause number (e.g., Article 9, Section 5.2, Clause 3.1)",
+      "label": "Article / Section",
       "type": "String",
       "group": "legalSource",
       "binding": {
@@ -130,8 +298,7 @@
       "value": ""
     },
     {
-      "label": "Paragraph/Subsection",
-      "description": "Paragraph, subsection, or sub-clause (optional)",
+      "label": "Paragraph / Subsection",
       "type": "String",
       "group": "legalSource",
       "binding": {
@@ -142,7 +309,7 @@
     },
     {
       "label": "Original Legal Text",
-      "description": "Exact quote from the legal text for traceability and provenance",
+      "description": "Verbatim quote from the source text (for traceability)",
       "type": "Text",
       "group": "legalSource",
       "binding": {
@@ -153,7 +320,7 @@
     },
     {
       "label": "Regulation URI",
-      "description": "Official URI or URL of the regulation (e.g., EUR-Lex, legislation.gov.uk, FDA.gov)",
+      "description": "E.g. https://eur-lex.europa.eu/...",
       "type": "String",
       "group": "legalSource",
       "binding": {
@@ -162,9 +329,27 @@
       },
       "value": ""
     },
+
     {
-      "label": "Confidence Score",
-      "description": "Confidence score (0.0-1.0) if this annotation was extracted automatically from legal text",
+      "label": "Extraction Method",
+      "type": "Dropdown",
+      "group": "metadata",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_extractionMethod"
+      },
+      "choices": [
+        { "name": "Manual annotation (lawyer)",  "value": "manual_lawyer" },
+        { "name": "Manual annotation (analyst)", "value": "manual_analyst" },
+        { "name": "LLM extraction",              "value": "llm" },
+        { "name": "Pattern matching",            "value": "pattern-matching" },
+        { "name": "Rule-based extraction",       "value": "rule-based" }
+      ],
+      "value": "manual_lawyer"
+    },
+    {
+      "label": "Confidence Score (0.0–1.0)",
+      "description": "Certainty of interpretation. Flag values below 0.7 for legal review.",
       "type": "String",
       "group": "metadata",
       "binding": {
@@ -174,26 +359,22 @@
       "value": "1.0"
     },
     {
-      "label": "Extraction Method",
-      "description": "Method used to create this annotation",
+      "label": "Reviewed by Legal Counsel",
       "type": "Dropdown",
       "group": "metadata",
       "binding": {
         "type": "zeebe:property",
-        "name": "compliance_extractionMethod"
+        "name": "compliance_legalReview"
       },
       "choices": [
-        { "name": "Manual annotation", "value": "manual" },
-        { "name": "NLP extraction (GPT-4)", "value": "nlp-gpt4" },
-        { "name": "Pattern matching", "value": "pattern-matching" },
-        { "name": "Rule-based extraction", "value": "rule-based" },
-        { "name": "Other", "value": "other" }
+        { "name": "✅ Reviewed and approved", "value": "approved" },
+        { "name": "⏳ Pending legal review",  "value": "pending" },
+        { "name": "❌ Not reviewed",           "value": "none" }
       ],
-      "value": "manual"
+      "value": "pending"
     },
     {
       "label": "Annotator",
-      "description": "Person or system that created this annotation",
       "type": "String",
       "group": "metadata",
       "binding": {
@@ -203,13 +384,22 @@
       "value": ""
     },
     {
-      "label": "Annotation Date",
-      "description": "Date when this annotation was created (YYYY-MM-DD)",
+      "label": "Annotation Date (YYYY-MM-DD)",
       "type": "String",
       "group": "metadata",
       "binding": {
         "type": "zeebe:property",
         "name": "compliance_annotationDate"
+      },
+      "value": ""
+    },
+    {
+      "label": "Last Reviewed Date (YYYY-MM-DD)",
+      "type": "String",
+      "group": "metadata",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_lastReviewDate"
       },
       "value": ""
     }

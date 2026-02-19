@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_095ovb4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
   <bpmn:process id="Process_00pfve6" isExecutable="true">
-    <bpmn:task id="Activity_07zrvnr" name="Marking obligation" zeebe:modelerTemplate="legal.compliance.deontic.task.v1" zeebe:modelerTemplateVersion="1">
+    <bpmn:task id="Activity_07zrvnr" name="Marking obligation" zeebe:modelerTemplate="legal.compliance.deontic.task.v2" zeebe:modelerTemplateVersion="2">
       <bpmn:extensionElements>
         <zeebe:properties>
           <zeebe:property name="compliance_deonticType" value="obligation" />
-          <zeebe:property name="compliance_deonticId" value="OBL_001" />
+          <zeebe:property name="compliance_normStatement" value="" />
           <zeebe:property name="compliance_agent" value="AI owner" />
           <zeebe:property name="compliance_action" value="marking as synthetic" />
           <zeebe:property name="compliance_object" value="AI content" />
+          <zeebe:property name="compliance_bindingForce" value="hard_law" />
+          <zeebe:property name="compliance_condition" value="" />
+          <zeebe:property name="compliance_jurisdiction" value="" />
+          <zeebe:property name="compliance_effectiveDate" value="" />
+          <zeebe:property name="compliance_deadline" value="" />
+          <zeebe:property name="compliance_status" value="active" />
+          <zeebe:property name="compliance_addressee" value="" />
+          <zeebe:property name="compliance_exception" value="" />
+          <zeebe:property name="compliance_sanction" value="" />
+          <zeebe:property name="compliance_riskLevel" value="high" />
+          <zeebe:property name="compliance_crossRefs" value="" />
           <zeebe:property name="compliance_regulation" value="IA act" />
           <zeebe:property name="compliance_article" value="4" />
           <zeebe:property name="compliance_paragraph" value="2" />
           <zeebe:property name="compliance_originalText" value="BLABLABLAadhjadjajf" />
           <zeebe:property name="compliance_regulationURI" value="hhtps://" />
+          <zeebe:property name="compliance_extractionMethod" value="manual_lawyer" />
           <zeebe:property name="compliance_confidence" value="1.0" />
-          <zeebe:property name="compliance_extractionMethod" value="manual" />
+          <zeebe:property name="compliance_legalReview" value="pending" />
           <zeebe:property name="compliance_annotator" value="Juana" />
           <zeebe:property name="compliance_annotationDate" value="2026-02-13" />
+          <zeebe:property name="compliance_lastReviewDate" value="" />
         </zeebe:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1jqp5jl</bpmn:incoming>
@@ -31,23 +44,36 @@
     <bpmn:sequenceFlow id="Flow_1jqp5jl" name="Yes" sourceRef="Gateway_00rfxw0" targetRef="Activity_07zrvnr">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:task id="Activity_0frln57" name="Volutary codes&#10;of conduct" zeebe:modelerTemplate="legal.compliance.deontic.task.v1" zeebe:modelerTemplateVersion="1">
+    <bpmn:task id="Activity_0frln57" name="Volutary codes&#10;of conduct" zeebe:modelerTemplate="legal.compliance.deontic.task.v2" zeebe:modelerTemplateVersion="2">
       <bpmn:extensionElements>
         <zeebe:properties>
-          <zeebe:property name="compliance_deonticType" value="permission" />
-          <zeebe:property name="compliance_deonticId" value="PER_001" />
+          <zeebe:property name="compliance_deonticType" value="recommendation" />
+          <zeebe:property name="compliance_normStatement" value="" />
           <zeebe:property name="compliance_agent" value="AI owner" />
           <zeebe:property name="compliance_action" value="conduct voluntary code" />
           <zeebe:property name="compliance_object" value="you" />
+          <zeebe:property name="compliance_bindingForce" value="hard_law" />
+          <zeebe:property name="compliance_condition" value="" />
+          <zeebe:property name="compliance_jurisdiction" value="" />
+          <zeebe:property name="compliance_effectiveDate" value="" />
+          <zeebe:property name="compliance_deadline" value="" />
+          <zeebe:property name="compliance_status" value="active" />
+          <zeebe:property name="compliance_addressee" value="" />
+          <zeebe:property name="compliance_exception" value="" />
+          <zeebe:property name="compliance_sanction" value="" />
+          <zeebe:property name="compliance_riskLevel" value="high" />
+          <zeebe:property name="compliance_crossRefs" value="" />
           <zeebe:property name="compliance_regulation" value="IA act" />
           <zeebe:property name="compliance_article" value="5" />
           <zeebe:property name="compliance_paragraph" value="2" />
           <zeebe:property name="compliance_originalText" value="BLABLABLA" />
           <zeebe:property name="compliance_regulationURI" value="hhtps://..." />
+          <zeebe:property name="compliance_extractionMethod" value="manual_lawyer" />
           <zeebe:property name="compliance_confidence" value="1.0" />
-          <zeebe:property name="compliance_extractionMethod" value="manual" />
+          <zeebe:property name="compliance_legalReview" value="pending" />
           <zeebe:property name="compliance_annotator" value="Juana" />
           <zeebe:property name="compliance_annotationDate" value="2026-02-13" />
+          <zeebe:property name="compliance_lastReviewDate" value="" />
         </zeebe:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0wsk78b</bpmn:incoming>
