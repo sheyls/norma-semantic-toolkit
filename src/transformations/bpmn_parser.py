@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 @dataclass(frozen=True)
 class Node:
     id: str
-    type: str  # startEvent, endEvent, exclusiveGateway, task, parallelGateway, etc.
+    type: str
     name: str = ""
 
 
@@ -25,7 +25,6 @@ class ReducedEdge:
     src: str
     dst: str
     guard: Optional[str]
-    # NOTE: tasks are task IDs now (e.g., Activity_07zrvnr), not labels
     tasks: Tuple[str, ...]
     via_flows: Tuple[str, ...]
 
@@ -36,14 +35,9 @@ class ReducedEdge:
 
 def _local(tag: str) -> str:
     return tag.split("}", 1)[1] if "}" in tag else tag
-# Complexity: Time O(1), Space O(1).
 
 
 def _get_nsmap(root: ET.Element) -> Dict[str, str]:
-    """
-    Tries to recover namespace URIs from root attributes like:
-      xmlns:zeebe="http://camunda.org/schema/zeebe/1.0"
-    """
     ns: Dict[str, str] = {}
     for k, v in root.attrib.items():
         if k.startswith("xmlns:"):
@@ -52,7 +46,27 @@ def _get_nsmap(root: ET.Element) -> Dict[str, str]:
 
 
 # -----------------------------
-# BPMN parsing (full graph + gateway order)
+# Tipo sets
+# -----------------------------
+
+_KEEP_TYPES: Set[str] = {"startEvent", "endEvent", "exclusiveGateway"}
+
+# Elementos de los que se extraen zeebe:properties
+_PROP_TYPES: Set[str] = {
+    "task", "userTask", "serviceTask", "manualTask",
+    "businessRuleTask", "sendTask",
+    "exclusiveGateway",
+}
+
+# Elementos que se acumulan como tareas en los reduced edges
+_TASK_TYPES: Set[str] = {
+    "task", "userTask", "serviceTask", "manualTask",
+    "businessRuleTask", "sendTask",
+}
+
+
+# -----------------------------
+# BPMN parsing
 # -----------------------------
 
 @dataclass(frozen=True)
@@ -63,41 +77,22 @@ class _Flow:
     name: Optional[str]
 
 
-_KEEP_TYPES: Set[str] = {"startEvent", "endEvent", "exclusiveGateway"}
-
-
 @dataclass(frozen=True)
 class BpmnParseArtifacts:
     nodes: Dict[str, Node]
     flows: Dict[str, _Flow]
     outgoing: Dict[str, List[str]]
     incoming: Dict[str, List[str]]
-    # exclusiveGateway -> [flow_id] (XML order)
     gateway_outgoing_order: Dict[str, List[str]]
-    # exclusiveGateway -> {flow_id: idx} for O(1) index lookup
     gateway_outgoing_index: Dict[str, Dict[str, int]]
-    # NEW: task_id -> {prop_name: prop_value}
+    # element_id -> {prop_name: prop_value} — tasks AND annotated gateways
     task_props: Dict[str, Dict[str, str]]
 
 
 def parse_bpmn_full(xml: str) -> BpmnParseArtifacts:
-    """
-    Parse BPMN XML into:
-      nodes: element_id -> Node
-      flows: flow_id -> _Flow
-      outgoing: element_id -> [flow_id]
-      incoming: element_id -> [flow_id]
-      gateway_outgoing_order/index: exclusiveGateway outgoing flow IDs in XML order.
-      task_props: task_id -> {zeebe_property_name: zeebe_property_value}
-
-    Notes:
-    - Only first bpmn:process is considered.
-    - BPMN-DI is ignored; semantics come from sequenceFlow sourceRef/targetRef.
-    """
     root = ET.fromstring(xml)
-    _ = _get_nsmap(root)  # not strictly needed because we use _local()
+    _ = _get_nsmap(root)
 
-    # Find first process
     process_el: Optional[ET.Element] = None
     for el in root.iter():
         if _local(el.tag) == "process":
@@ -110,20 +105,14 @@ def parse_bpmn_full(xml: str) -> BpmnParseArtifacts:
     flows: Dict[str, _Flow] = {}
     outgoing: Dict[str, List[str]] = {}
     incoming: Dict[str, List[str]] = {}
-
     gateway_outgoing_order: Dict[str, List[str]] = {}
     gateway_outgoing_index: Dict[str, Dict[str, int]] = {}
-
     task_props: Dict[str, Dict[str, str]] = {}
 
-    # 1) Nodes + gateway outgoing order + task properties
     for el in process_el:
         t = _local(el.tag)
         el_id = el.attrib.get("id")
-        if not el_id:
-            continue
-
-        if t == "sequenceFlow":
+        if not el_id or t == "sequenceFlow":
             continue
 
         name = el.attrib.get("name", "") or ""
@@ -139,8 +128,8 @@ def parse_bpmn_full(xml: str) -> BpmnParseArtifacts:
                 gateway_outgoing_order[el_id] = outs
                 gateway_outgoing_index[el_id] = {fid: i for i, fid in enumerate(outs)}
 
-        # Zeebe properties for tasks (extensionElements -> properties -> property[name,value])
-        if t == "task":
+        # Zeebe properties — tasks AND annotated gateways
+        if t in _PROP_TYPES:
             props: Dict[str, str] = {}
             for ext in el:
                 if _local(ext.tag) != "extensionElements":
@@ -158,7 +147,6 @@ def parse_bpmn_full(xml: str) -> BpmnParseArtifacts:
             if props:
                 task_props[el_id] = props
 
-    # 2) sequenceFlows
     for el in process_el:
         if _local(el.tag) != "sequenceFlow":
             continue
@@ -172,7 +160,6 @@ def parse_bpmn_full(xml: str) -> BpmnParseArtifacts:
         outgoing.setdefault(src, []).append(fid)
         incoming.setdefault(dst, []).append(fid)
 
-    # Ensure every node has outgoing/incoming lists
     for nid in nodes.keys():
         outgoing.setdefault(nid, [])
         incoming.setdefault(nid, [])
@@ -195,35 +182,30 @@ def parse_bpmn_to_reduced_graph(
     List[ReducedEdge],
     Dict[str, List[str]],
     Dict[str, Dict[str, int]],
-    Dict[str, Dict[str, str]],  # task_props
+    Dict[str, Dict[str, str]],
 ]:
-    """
-    Return:
-      kept_nodes, reduced_edges, gateway_outgoing_order, gateway_outgoing_index, task_props
-    """
     art = parse_bpmn_full(xml)
 
-    # Identify kept nodes
     kept: Dict[str, Node] = {
         nid: Node(id=n.id, type=n.type, name=(n.name or ""))
         for nid, n in art.nodes.items()
         if n.type in _KEEP_TYPES
     }
 
-    # Sanity: start & end
     start_ids = [nid for nid, n in kept.items() if n.type == "startEvent"]
-    end_ids = [nid for nid, n in kept.items() if n.type == "endEvent"]
+    end_ids   = [nid for nid, n in kept.items() if n.type == "endEvent"]
     if len(start_ids) != 1:
         raise ValueError(f"Expected exactly 1 startEvent; got {len(start_ids)}")
     if len(end_ids) < 1:
         raise ValueError("Expected at least 1 endEvent")
 
-    # Precompute task-ness for O(1)
-    is_task: Dict[str, bool] = {nid: (n.type == "task") for nid, n in art.nodes.items()}
+    is_task: Dict[str, bool] = {
+        nid: (n.type in _TASK_TYPES)
+        for nid, n in art.nodes.items()
+    }
 
     reduced_edges_set: Set[ReducedEdge] = set()
 
-    # Traverse from each kept node to reach other kept nodes
     for src_id in kept.keys():
         src_type = kept[src_id].type
         for first_flow_id in art.outgoing.get(src_id, []):
@@ -248,7 +230,10 @@ def parse_bpmn_to_reduced_graph(
                 reduced_edges_out=reduced_edges_set,
             )
 
-    reduced_edges = sorted(reduced_edges_set, key=lambda e: (e.src, e.dst, e.guard or "", e.tasks))
+    reduced_edges = sorted(
+        reduced_edges_set,
+        key=lambda e: (e.src, e.dst, e.guard or "", e.tasks)
+    )
     return (
         kept,
         reduced_edges,
@@ -273,15 +258,6 @@ def _walk_from_flow(
     reduced_edges_out: Set[ReducedEdge],
     _seen: Optional[Set[Tuple[str, str]]] = None,
 ) -> None:
-    """
-    Recursive walk from a node until reaching a kept node.
-
-    Optimization: _seen tracks (current_node, last_flow_id) not the whole prefix.
-    This cuts memory and still prevents trivial cycles. It is conservative:
-    - avoids infinite loops
-    - may prune some distinct paths in highly cyclic BPMN models
-      (acceptable for process diagrams intended as DAG-like flows).
-    """
     if _seen is None:
         _seen = set()
 
@@ -291,7 +267,6 @@ def _walk_from_flow(
         return
     _seen.add(state)
 
-    # If we reached a kept node, emit reduced edge
     if current_node in kept and current_node != src_kept:
         reduced_edges_out.add(
             ReducedEdge(
@@ -304,7 +279,6 @@ def _walk_from_flow(
         )
         return
 
-    # Otherwise, continue along all outgoing flows
     for fid in outgoing.get(current_node, []):
         f = flows[fid]
         nxt = f.dst
@@ -321,7 +295,7 @@ def _walk_from_flow(
             is_task=is_task,
             src_kept=src_kept,
             current_node=nxt,
-            guard=guard,  # guard determined by first flow leaving src_kept if exclusiveGateway
+            guard=guard,
             tasks_acc=new_tasks,
             via_flows_acc=via_flows_acc + (fid,),
             reduced_edges_out=reduced_edges_out,

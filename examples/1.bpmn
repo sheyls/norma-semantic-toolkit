@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_095ovb4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.44.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_095ovb4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.42.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
   <bpmn:process id="Process_00pfve6" isExecutable="true">
-    <bpmn:task id="Activity_07zrvnr" name="Marking obligation" zeebe:modelerTemplate="legal.compliance.deontic.task.v2" zeebe:modelerTemplateVersion="2">
+    <bpmn:task id="Activity_07zrvnr" name="Marking obligation" zeebe:modelerTemplate="legal.compliance.deontic.v1" zeebe:modelerTemplateVersion="1">
       <bpmn:extensionElements>
         <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="task" />
           <zeebe:property name="compliance_deonticType" value="obligation" />
           <zeebe:property name="compliance_normStatement" value="" />
+          <zeebe:property name="compliance_deonticId" value="OBL_1" />
           <zeebe:property name="compliance_agent" value="AI owner" />
-          <zeebe:property name="compliance_action" value="marking as synthetic" />
-          <zeebe:property name="compliance_object" value="AI content" />
+          <zeebe:property name="compliance_action" value="Marking obligation" />
+          <zeebe:property name="compliance_object" value="generate content" />
           <zeebe:property name="compliance_bindingForce" value="hard_law" />
           <zeebe:property name="compliance_condition" value="" />
           <zeebe:property name="compliance_jurisdiction" value="" />
           <zeebe:property name="compliance_effectiveDate" value="" />
           <zeebe:property name="compliance_deadline" value="" />
           <zeebe:property name="compliance_status" value="active" />
-          <zeebe:property name="compliance_addressee" value="" />
           <zeebe:property name="compliance_exception" value="" />
           <zeebe:property name="compliance_sanction" value="" />
           <zeebe:property name="compliance_riskLevel" value="high" />
@@ -36,32 +37,58 @@
       <bpmn:incoming>Flow_1jqp5jl</bpmn:incoming>
       <bpmn:outgoing>Flow_08x0i5d</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:exclusiveGateway id="Gateway_00rfxw0" name="Generation of&#10;syntetic content?">
+    <bpmn:exclusiveGateway id="Gateway_00rfxw0" name="Generation of&#10;syntetic content?" zeebe:modelerTemplate="legal.compliance.deontic.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionType" value="fact" />
+          <zeebe:property name="gw_conditionStatement" value="Generation of syntetic content?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+          <zeebe:property name="gw_crossRefs" value="" />
+          <zeebe:property name="compliance_jurisdiction" value="" />
+          <zeebe:property name="compliance_effectiveDate" value="" />
+          <zeebe:property name="compliance_deadline" value="" />
+          <zeebe:property name="compliance_status" value="active" />
+          <zeebe:property name="compliance_regulation" value="AI Act" />
+          <zeebe:property name="compliance_article" value="" />
+          <zeebe:property name="compliance_paragraph" value="" />
+          <zeebe:property name="compliance_originalText" value="" />
+          <zeebe:property name="compliance_regulationURI" value="" />
+          <zeebe:property name="compliance_extractionMethod" value="manual_lawyer" />
+          <zeebe:property name="compliance_confidence" value="1.0" />
+          <zeebe:property name="compliance_legalReview" value="pending" />
+          <zeebe:property name="compliance_annotator" value="" />
+          <zeebe:property name="compliance_annotationDate" value="" />
+          <zeebe:property name="compliance_lastReviewDate" value="" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_08j11ee</bpmn:incoming>
       <bpmn:outgoing>Flow_1jqp5jl</bpmn:outgoing>
       <bpmn:outgoing>Flow_0wsk78b</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1jqp5jl" name="Yes" sourceRef="Gateway_00rfxw0" targetRef="Activity_07zrvnr">
+    <bpmn:sequenceFlow id="Flow_1jqp5jl" name="yes" sourceRef="Gateway_00rfxw0" targetRef="Activity_07zrvnr">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:task id="Activity_0frln57" name="Volutary codes&#10;of conduct" zeebe:modelerTemplate="legal.compliance.deontic.task.v2" zeebe:modelerTemplateVersion="2">
+    <bpmn:task id="Activity_0frln57" name="Volutary codes&#10;of conduct" zeebe:modelerTemplate="legal.compliance.deontic.v1" zeebe:modelerTemplateVersion="1">
       <bpmn:extensionElements>
         <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="task" />
           <zeebe:property name="compliance_deonticType" value="recommendation" />
           <zeebe:property name="compliance_normStatement" value="" />
+          <zeebe:property name="compliance_deonticId" value="REC_1" />
           <zeebe:property name="compliance_agent" value="AI owner" />
-          <zeebe:property name="compliance_action" value="conduct voluntary code" />
-          <zeebe:property name="compliance_object" value="you" />
-          <zeebe:property name="compliance_bindingForce" value="hard_law" />
+          <zeebe:property name="compliance_action" value="Adopt volutary codes of conduct" />
+          <zeebe:property name="compliance_object" value="generated content" />
+          <zeebe:property name="compliance_bindingForce" value="soft_law" />
           <zeebe:property name="compliance_condition" value="" />
           <zeebe:property name="compliance_jurisdiction" value="" />
           <zeebe:property name="compliance_effectiveDate" value="" />
           <zeebe:property name="compliance_deadline" value="" />
           <zeebe:property name="compliance_status" value="active" />
-          <zeebe:property name="compliance_addressee" value="" />
           <zeebe:property name="compliance_exception" value="" />
           <zeebe:property name="compliance_sanction" value="" />
-          <zeebe:property name="compliance_riskLevel" value="high" />
+          <zeebe:property name="compliance_riskLevel" value="low" />
           <zeebe:property name="compliance_crossRefs" value="" />
           <zeebe:property name="compliance_regulation" value="IA act" />
           <zeebe:property name="compliance_article" value="5" />
@@ -102,7 +129,7 @@
       <bpmndi:BPMNShape id="Gateway_00rfxw0_di" bpmnElement="Gateway_00rfxw0" isMarkerVisible="true">
         <dc:Bounds x="325" y="115" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="308" y="77.5" width="83" height="27" />
+          <dc:Bounds x="308" y="78" width="83" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_08g9xtz" bpmnElement="Activity_0frln57">

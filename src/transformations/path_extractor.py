@@ -5,7 +5,7 @@ from typing import Dict, List, Tuple, Optional
 from collections import deque
 
 from src.transformations.bpmn_parser import Node, ReducedEdge
-from src.transformations.rule_ir import RuleIR, Condition, Action
+from src.transformations.rule_ir import RuleIR, Condition, Action, RelationAtom, DataAtom
 from utils import to_symbol
 
 
@@ -65,42 +65,47 @@ def _split_actor_predicate(gateway_name: str) -> Tuple[str, str]:
     return "x", raw.replace(" ", "") or "unnamed"
 
 
-def _action_from_deontic_props(props: Dict[str, str]) -> Action:
+def _action_from_deontic_props(props: Dict[str, str], task_id: str) -> Tuple[Action, Tuple[RelationAtom, ...], Tuple[DataAtom, ...]]:
     """
-    Build an Action from Zeebe compliance properties.
-
-    We keep it minimal and compatible with your existing SWRL exporter:
-      - Action.actor = normalized compliance_agent
-      - Action.name  = a canonical payload string with deontic+AoO (+legal trace)
-        Example:
-          OBL|OBL_001|marking_as_synthetic|AI_content|IA_act|4|2
+    Build a rich Action + RelationAtoms + DataAtoms from compliance props.
     """
-    dtype = (props.get("compliance_deonticType") or "").strip().lower()
-    did = (props.get("compliance_deonticId") or "").strip()
+    dtype  = (props.get("compliance_deonticType") or "unknown").strip().lower()
+    did    = (props.get("compliance_deonticId")   or "NO_ID").strip()
+    agent  = to_symbol(props.get("compliance_agent")  or "x")
+    action = to_symbol(props.get("compliance_action") or "")
+    obj    = to_symbol(props.get("compliance_object")  or "")
+    reg    = to_symbol(props.get("compliance_regulation") or "")
+    art    = (props.get("compliance_article")   or "").strip()
+    par    = (props.get("compliance_paragraph") or "").strip()
+    uri    = (props.get("compliance_regulationURI") or "").strip()
+    risk   = (props.get("compliance_riskLevel") or "").strip()
+    bind   = (props.get("compliance_bindingForce") or "").strip()
 
-    agent = (props.get("compliance_agent") or "x").strip()
-    act = (props.get("compliance_action") or "").strip()
-    obj = (props.get("compliance_object") or "").strip()
+    # Canonical action node id (e.g. obl_001 or task_Activity_07zrvnr)
+    node_id = to_symbol(did) if did != "NO_ID" else f"task_{to_symbol(task_id)}"
 
-    reg = (props.get("compliance_regulation") or "").strip()
-    art = (props.get("compliance_article") or "").strip()
-    par = (props.get("compliance_paragraph") or "").strip()
+    main_action = Action(actor=agent, name=f"{dtype.upper()}|{node_id}|{action}|{obj}")
 
-    # normalize
-    actor = to_symbol(agent)
-    name = "|".join(
-        [
-            (dtype or "unknown").upper(),
-            did or "NO_ID",
-            to_symbol(act) if act else "NO_ACTION",
-            to_symbol(obj) if obj else "NO_OBJECT",
-            to_symbol(reg) if reg else "NO_REG",
-            art or "NO_ART",
-            par or "NO_PAR",
-        ]
-    )
-    return Action(actor=actor, name=name)
+    relations: List[RelationAtom] = [
+        RelationAtom(predicate="performsAction", subject=agent,   object=node_id),
+        RelationAtom(predicate="actsOn",         subject=node_id, object=obj),
+    ]
 
+    data: List[DataAtom] = [
+        DataAtom(predicate="hasDeonticType",  subject=node_id, value=dtype),
+        DataAtom(predicate="hasDeonticId",    subject=node_id, value=did),
+        DataAtom(predicate="hasBindingForce", subject=node_id, value=bind),
+        DataAtom(predicate="fromRegulation",  subject=node_id, value=reg),
+        DataAtom(predicate="fromArticle",     subject=node_id, value=art),
+        DataAtom(predicate="fromParagraph",   subject=node_id, value=par),
+    ]
+
+    if uri:
+        data.append(DataAtom(predicate="regulationURI", subject=node_id, value=uri, datatype="xsd:anyURI"))
+    if risk:
+        data.append(DataAtom(predicate="hasRiskLevel", subject=node_id, value=risk))
+
+    return main_action, tuple(relations), tuple(data)
 
 def build_rule_ir_from_path(
     path_edges: List[ReducedEdge],
@@ -108,31 +113,43 @@ def build_rule_ir_from_path(
     rid: str,
     task_props: TaskProps,
     *,
-    # v0: if you want ONLY obligations, set {"obligation"}
     allowed_deontic: Optional[set[str]] = None,
-    # if True: ignore tasks without compliance props
     ignore_non_compliance_tasks: bool = True,
 ) -> RuleIR:
     conds: List[Condition] = []
     actions: List[Action] = []
+    all_relations: List[RelationAtom] = []
+    all_data: List[DataAtom] = []
 
     if allowed_deontic is None:
-        allowed_deontic = {"obligation", "prohibition", "permission"}
+        allowed_deontic = {
+            "obligation", "prohibition", "permission",
+            "recommendation", "recommendation_not",
+        }
 
     for e in path_edges:
-        # conditions from exclusiveGateway + guard
-        if nodes[e.src].type == "exclusiveGateway" and e.guard in {"Yes", "No"}:
-            actor, pred = _split_actor_predicate(nodes[e.src].name)
-            conds.append(Condition(actor=actor, predicate=pred, value=(e.guard == "Yes")))
+        # Conditions from exclusiveGateway
+        if nodes[e.src].type == "exclusiveGateway":
+            gw_props = task_props.get(e.src, {})
 
-        # actions from tasks (task IDs)
+            if gw_props.get("gw_conditionStatement"):
+                # Use annotated condition statement (preferred)
+                statement  = to_symbol(gw_props["gw_conditionStatement"])
+                true_label = gw_props.get("gw_trueBranch",  "Yes")
+                value = (e.guard.lower() == true_label.lower()) if e.guard else False
+                conds.append(Condition(actor="x", predicate=statement, value=value))
+            elif e.guard in {"Yes", "No"}:
+                # Fallback: parse gateway name
+                actor, pred = _split_actor_predicate(nodes[e.src].name)
+                conds.append(Condition(actor=actor, predicate=pred, value=(e.guard == "Yes")))
+
+        # Actions from tasks
         for task_id in e.tasks:
             props = task_props.get(task_id)
 
             if not props:
                 if ignore_non_compliance_tasks:
                     continue
-                # fallback: keep something, using the task_id as name
                 actions.append(Action(actor="x", name=to_symbol(task_id)))
                 continue
 
@@ -140,10 +157,13 @@ def build_rule_ir_from_path(
             if dtype and dtype not in allowed_deontic:
                 continue
 
-            actions.append(_action_from_deontic_props(props))
+            action, rels, dats = _action_from_deontic_props(props, task_id)
+            actions.append(action)
+            all_relations.extend(rels)
+            all_data.extend(dats)
 
-    # dedup (preserve order)
-    seen_c = set()
+    # dedup conditions (preserve order)
+    seen_c: set = set()
     out_c: List[Condition] = []
     for c in conds:
         key = (c.actor, c.predicate, c.value)
@@ -151,7 +171,8 @@ def build_rule_ir_from_path(
             seen_c.add(key)
             out_c.append(c)
 
-    seen_a = set()
+    # dedup actions (preserve order)
+    seen_a: set = set()
     out_a: List[Action] = []
     for a in actions:
         key = (a.actor, a.name)
@@ -159,8 +180,13 @@ def build_rule_ir_from_path(
             seen_a.add(key)
             out_a.append(a)
 
-    return RuleIR(rid=rid, conditions=tuple(out_c), actions=tuple(out_a))
-
+    return RuleIR(
+        rid=rid,
+        conditions=tuple(out_c),
+        actions=tuple(out_a),
+        relations=tuple(all_relations),
+        data_atoms=tuple(all_data),
+    )
 
 def enumerate_paths_and_build_ir(
     *,

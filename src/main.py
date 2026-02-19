@@ -79,7 +79,7 @@ def _path_block(path: List[ReducedEdge], nodes: Dict[str, Node], task_props: Tas
 
 def main(argv: Optional[List[str]] = None) -> int:
     argv = argv or sys.argv[1:]
-    in_path = Path(argv[0]) if len(argv) >= 1 else Path("examples/example.bpmn")
+    in_path = Path(argv[0]) if len(argv) >= 1 else Path("examples/1.bpmn")
     out_path = Path(argv[1]) if len(argv) >= 2 else Path("outputs/rules_DDL.txt")
 
     xml = in_path.read_text(encoding="utf-8")
