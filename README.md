@@ -16,13 +16,13 @@ This software transforms a legal compliance processes represented using BPMN tha
 	Windows:
 	`C:\Users\YOURUSER\AppData\Roaming\camunda-modeler\resources\element-templates`
 
-Linux:
-`/home/YOURUSER/.config/camunda-modeler/resources/element-templates`
+	Linux:
+	`/home/YOURUSER/.config/camunda-modeler/resources/element-templates`
 
-macOS:
-`/Users/YOURUSER/Library/Application Support/camunda-modeler/resources/element-templates`
+	macOS:
+	`/Users/YOURUSER/Library/Application Support/camunda-modeler/resources/element-templates`
 
-If the folder `resources/element-templates` does not exists, feel free to create it. Once installed, restart Camunda Modeler and you should see be able to create a model, then create a task: you should see advanced the template in the Property Panel.
+	If the folder `resources/element-templates` does not exists, feel free to create it. Once installed, restart Camunda Modeler and you should see be able to create a model, then create a task: you should see advanced the template in the Property Panel.
 
 
 ## How to run an example
