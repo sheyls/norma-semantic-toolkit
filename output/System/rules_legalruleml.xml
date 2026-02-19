@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lrml:LegalRuleML
+  xmlns:lrml="http://docs.oasis-open.org/legalruleml/ns/v1.0/"
+  xmlns:ruleml="http://ruleml.org/spec"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <lrml:Statements>
+    <lrml:PrescriptiveStatement key="r1">
+      <ruleml:Rule key="r1">
+        <ruleml:if>
+          <ruleml:Atom>
+            <ruleml:Rel>itabasicdataprocessingsystem</ruleml:Rel>
+            <ruleml:Var>Is</ruleml:Var>
+            <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom>
+            <ruleml:Rel>task</ruleml:Rel>
+            <ruleml:Var>Print</ruleml:Var>
+            <ruleml:Data xsi:type="xs:string">message:OUTAIACT</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r2">
+      <ruleml:Rule key="r2">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itabasicdataprocessingsystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itaMachine-Based,AutonomousandAdaptivesystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r3">
+      <ruleml:Rule key="r3">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itabasicdataprocessingsystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itaMachine-Based,AutonomousandAdaptivesystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom>
+            <ruleml:Rel>task</ruleml:Rel>
+            <ruleml:Var>Print</ruleml:Var>
+            <ruleml:Data xsi:type="xs:string">message:OUTAIACT</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r4">
+      <ruleml:Rule key="r4">
+        <ruleml:if>
+          <ruleml:Atom>
+            <ruleml:Rel>itamathematicaloptimizationsystem</ruleml:Rel>
+            <ruleml:Var>Is</ruleml:Var>
+            <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom>
+            <ruleml:Rel>task</ruleml:Rel>
+            <ruleml:Var>Print</ruleml:Var>
+            <ruleml:Data xsi:type="xs:string">message:OUTAIACT</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r5">
+      <ruleml:Rule key="r5">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itamathematicaloptimizationsystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itaMachine-Based,AutonomousandAdaptivesystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r6">
+      <ruleml:Rule key="r6">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itamathematicaloptimizationsystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itaMachine-Based,AutonomousandAdaptivesystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom>
+            <ruleml:Rel>task</ruleml:Rel>
+            <ruleml:Var>Print</ruleml:Var>
+            <ruleml:Data xsi:type="xs:string">message:OUTAIACT</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r7">
+      <ruleml:Rule key="r7">
+        <ruleml:if>
+          <ruleml:Atom>
+            <ruleml:Rel>itasystembased onclassicalheuristics</ruleml:Rel>
+            <ruleml:Var>Is</ruleml:Var>
+            <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom>
+            <ruleml:Rel>task</ruleml:Rel>
+            <ruleml:Var>Print</ruleml:Var>
+            <ruleml:Data xsi:type="xs:string">message:OUTAIACT</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r8">
+      <ruleml:Rule key="r8">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itasystembased onclassicalheuristics</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itaMachine-Based,AutonomousandAdaptivesystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r9">
+      <ruleml:Rule key="r9">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itasystembased onclassicalheuristics</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itaMachine-Based,AutonomousandAdaptivesystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom>
+            <ruleml:Rel>task</ruleml:Rel>
+            <ruleml:Var>Print</ruleml:Var>
+            <ruleml:Data xsi:type="xs:string">message:OUTAIACT</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r10">
+      <ruleml:Rule key="r10">
+        <ruleml:if>
+          <ruleml:Atom>
+            <ruleml:Rel>itasimplepredictionsystem</ruleml:Rel>
+            <ruleml:Var>Is</ruleml:Var>
+            <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom>
+            <ruleml:Rel>task</ruleml:Rel>
+            <ruleml:Var>Print</ruleml:Var>
+            <ruleml:Data xsi:type="xs:string">message:OUTAIACT</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r11">
+      <ruleml:Rule key="r11">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itasimplepredictionsystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itaMachine-Based,AutonomousandAdaptivesystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r12">
+      <ruleml:Rule key="r12">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itasimplepredictionsystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itaMachine-Based,AutonomousandAdaptivesystem</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom>
+            <ruleml:Rel>task</ruleml:Rel>
+            <ruleml:Var>Print</ruleml:Var>
+            <ruleml:Data xsi:type="xs:string">message:OUTAIACT</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r1" under="#r2"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r2" under="#r3"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r3" under="#r4"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r4" under="#r5"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r5" under="#r6"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r6" under="#r7"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r7" under="#r8"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r8" under="#r9"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r9" under="#r10"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r10" under="#r11"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r11" under="#r12"/>
+    </lrml:OverrideStatement>
+  </lrml:Statements>
+
+</lrml:LegalRuleML>

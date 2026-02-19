@@ -1,0 +1,237 @@
+<?xml version="1.0"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+  xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+  xmlns:ruleml="http://www.w3.org/2003/11/ruleml#"
+  xml:base="http://example.org/bpmn2rules">
+
+  <owl:Ontology rdf:about="http://example.org/bpmn2rules"/>
+
+  <owl:DatatypeProperty rdf:about="http://example.org/bpmn2rules#itforinternationalcooperation/agreementsforlawenforcementandjudicialcooperation"/>
+  <owl:DatatypeProperty rdf:about="http://example.org/bpmn2rules#itformilitary\defence\nationalsecurity"/>
+  <owl:DatatypeProperty rdf:about="http://example.org/bpmn2rules#itforpre-marketresearch\testing\development activity"/>
+  <owl:DatatypeProperty rdf:about="http://example.org/bpmn2rules#itforscientificresearchanddevelopment"/>
+  <owl:DatatypeProperty rdf:about="http://example.org/bpmn2rules#task"/>
+  <owl:DatatypeProperty rdf:about="http://example.org/bpmn2rules#youa 3rdcountry publicauthority"/>
+
+  <swrl:Variable rdf:about="http://example.org/bpmn2rules#var_Are"/>
+  <swrl:Variable rdf:about="http://example.org/bpmn2rules#var_Is"/>
+  <swrl:Variable rdf:about="http://example.org/bpmn2rules#var_Print"/>
+
+  <!-- SWRL Rules -->
+  <swrl:Imp rdf:about="http://example.org/bpmn2rules#r1">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#itforinternationalcooperation/agreementsforlawenforcementandjudicialcooperation"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Is"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#youa 3rdcountry publicauthority"/>
+                  <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Are"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#task"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Print"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">message:OUTAIACT</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="http://example.org/bpmn2rules#r2">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#itforinternationalcooperation/agreementsforlawenforcementandjudicialcooperation"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Is"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#youa 3rdcountry publicauthority"/>
+                  <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Are"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="http://example.org/bpmn2rules#r3">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#itforinternationalcooperation/agreementsforlawenforcementandjudicialcooperation"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Is"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="http://example.org/bpmn2rules#r4">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#itformilitary\defence\nationalsecurity"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Is"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#task"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Print"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">message:OUTAIACT</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="http://example.org/bpmn2rules#r5">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#itformilitary\defence\nationalsecurity"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Is"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="http://example.org/bpmn2rules#r6">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#itforpre-marketresearch\testing\development activity"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Is"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#task"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Print"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">message:OUTAIACT</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="http://example.org/bpmn2rules#r7">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#itforpre-marketresearch\testing\development activity"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Is"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="http://example.org/bpmn2rules#r8">
+    <swrl:body>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#task"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Print"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">message:OUTAIACT</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="http://example.org/bpmn2rules#r9">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="http://example.org/bpmn2rules#itforscientificresearchanddevelopment"/>
+              <swrl:argument1 rdf:resource="http://example.org/bpmn2rules#var_Is"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </swrl:head>
+  </swrl:Imp>
+
+</rdf:RDF>

@@ -1,0 +1,217 @@
+{
+  "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
+  "name": "Legal Compliance Task",
+  "id": "legal.compliance.deontic.task.v1",
+  "description": "Task with legal compliance annotations using deontic modalities (obligation, prohibition, permission)",
+  "version": 1,
+  "appliesTo": [
+    "bpmn:Task",
+    "bpmn:UserTask",
+    "bpmn:ServiceTask",
+    "bpmn:ManualTask"
+  ],
+  "elementType": {
+    "value": "bpmn:Task"
+  },
+  "groups": [
+    {
+      "id": "deontic",
+      "label": "Deontic Modality"
+    },
+    {
+      "id": "legalSource",
+      "label": "Legal Source"
+    },
+    {
+      "id": "metadata",
+      "label": "Annotation Metadata"
+    }
+  ],
+  "properties": [
+    {
+      "label": "Deontic Modality",
+      "description": "Type of deontic operator: obligation (MUST), prohibition (MUST NOT), or permission (MAY)",
+      "type": "Dropdown",
+      "group": "deontic",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_deonticType"
+      },
+      "choices": [
+        { "name": "🔴 Obligation (MUST)", "value": "obligation" },
+        { "name": "🚫 Prohibition (MUST NOT)", "value": "prohibition" },
+        { "name": "✅ Permission (MAY)", "value": "permission" }
+      ],
+      "value": "obligation"
+    },
+    {
+      "label": "Deontic ID",
+      "description": "Unique identifier for this deontic statement (e.g., OBL_001, PRH_001, PER_001)",
+      "type": "String",
+      "group": "deontic",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_deonticId"
+      },
+      "value": "",
+      "constraints": {
+        "notEmpty": true,
+        "pattern": {
+          "value": "^(OBL|PRH|PER)_[A-Z0-9_]+$",
+          "message": "Must follow pattern: OBL_xxx, PRH_xxx, or PER_xxx"
+        }
+      }
+    },
+    {
+      "label": "Agent (Who)",
+      "description": "Who must/must not/may perform the action? (e.g., AI_Provider, Data_Controller, Manufacturer)",
+      "type": "String",
+      "group": "deontic",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_agent"
+      },
+      "value": "",
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Action (What)",
+      "description": "What action must/must not/may be performed? (e.g., establish, conduct, deploy, process)",
+      "type": "String",
+      "group": "deontic",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_action"
+      },
+      "value": "",
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Object (On What)",
+      "description": "What is the action performed on? (e.g., risk_management_system, personal_data, medical_device)",
+      "type": "String",
+      "group": "deontic",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_object"
+      },
+      "value": "",
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Regulation Name",
+      "description": "Name of the legal regulation or standard",
+      "type": "String",
+      "group": "legalSource",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_regulation"
+      },
+      "value": "",
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Article/Section",
+      "description": "Article, section, or clause number (e.g., Article 9, Section 5.2, Clause 3.1)",
+      "type": "String",
+      "group": "legalSource",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_article"
+      },
+      "value": ""
+    },
+    {
+      "label": "Paragraph/Subsection",
+      "description": "Paragraph, subsection, or sub-clause (optional)",
+      "type": "String",
+      "group": "legalSource",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_paragraph"
+      },
+      "value": ""
+    },
+    {
+      "label": "Original Legal Text",
+      "description": "Exact quote from the legal text for traceability and provenance",
+      "type": "Text",
+      "group": "legalSource",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_originalText"
+      },
+      "value": ""
+    },
+    {
+      "label": "Regulation URI",
+      "description": "Official URI or URL of the regulation (e.g., EUR-Lex, legislation.gov.uk, FDA.gov)",
+      "type": "String",
+      "group": "legalSource",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_regulationURI"
+      },
+      "value": ""
+    },
+    {
+      "label": "Confidence Score",
+      "description": "Confidence score (0.0-1.0) if this annotation was extracted automatically from legal text",
+      "type": "String",
+      "group": "metadata",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_confidence"
+      },
+      "value": "1.0"
+    },
+    {
+      "label": "Extraction Method",
+      "description": "Method used to create this annotation",
+      "type": "Dropdown",
+      "group": "metadata",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_extractionMethod"
+      },
+      "choices": [
+        { "name": "Manual annotation", "value": "manual" },
+        { "name": "NLP extraction (GPT-4)", "value": "nlp-gpt4" },
+        { "name": "Pattern matching", "value": "pattern-matching" },
+        { "name": "Rule-based extraction", "value": "rule-based" },
+        { "name": "Other", "value": "other" }
+      ],
+      "value": "manual"
+    },
+    {
+      "label": "Annotator",
+      "description": "Person or system that created this annotation",
+      "type": "String",
+      "group": "metadata",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_annotator"
+      },
+      "value": ""
+    },
+    {
+      "label": "Annotation Date",
+      "description": "Date when this annotation was created (YYYY-MM-DD)",
+      "type": "String",
+      "group": "metadata",
+      "binding": {
+        "type": "zeebe:property",
+        "name": "compliance_annotationDate"
+      },
+      "value": ""
+    }
+  ]
+}

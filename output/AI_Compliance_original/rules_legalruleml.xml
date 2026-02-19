@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lrml:LegalRuleML
+  xmlns:lrml="http://docs.oasis-open.org/legalruleml/ns/v1.0/"
+  xmlns:ruleml="http://ruleml.org/spec"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <lrml:Statements>
+    <lrml:PrescriptiveStatement key="r1">
+      <ruleml:Rule key="r1">
+
+
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+
+  </lrml:Statements>
+
+</lrml:LegalRuleML>

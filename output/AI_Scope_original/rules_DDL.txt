@@ -1,0 +1,143 @@
+=== REDUCED NODES ===
+- Event_008k2zj      | endEvent         | No AI Act
+- Event_02aytmj      | endEvent         | No AI Act
+- Event_1phbtu6      | endEvent         | 
+- Gateway_0egzy1d    | exclusiveGateway | Is it for international
+cooperation/
+agreements for
+law enforcement
+and judicial cooperation ?
+- Gateway_0o97mhb    | exclusiveGateway | Are you a
+ 3rd country
+ public
+authority?
+- Gateway_0z2rht4    | exclusiveGateway | Is it for
+military\defence\
+national security?
+- Gateway_19lrsty    | exclusiveGateway | Is it for pre-market research\
+testing\development
+ activity?
+- Gateway_1jwc7gt    | exclusiveGateway | Is it for scientific
+research and development?
+- StartEvent_1       | startEvent       | 
+
+=== REDUCED EDGES ===
+Gateway_0egzy1d [No] -> Event_1phbtu6 | src='Is it for international
+cooperation/
+agreements for
+law enforcement
+and judicial cooperation ?' dst='' | tasks: (no tasks) | via_flows: Flow_1kq6be6, Flow_0rdjbbb
+Gateway_0egzy1d [Yes] -> Gateway_0o97mhb | src='Is it for international
+cooperation/
+agreements for
+law enforcement
+and judicial cooperation ?' dst='Are you a
+ 3rd country
+ public
+authority?' | tasks: (no tasks) | via_flows: Flow_0u8qkp9
+Gateway_0o97mhb [Yes] -> Event_008k2zj | src='Are you a
+ 3rd country
+ public
+authority?' dst='No AI Act' | tasks: Print message:
+OUT AI ACT | via_flows: Flow_063l4r5, Flow_0w1hj5f
+Gateway_0o97mhb [No] -> Event_1phbtu6 | src='Are you a
+ 3rd country
+ public
+authority?' dst='' | tasks: (no tasks) | via_flows: Flow_0x4lzja, Flow_0rdjbbb
+Gateway_0z2rht4 [Yes] -> Event_008k2zj | src='Is it for
+military\defence\
+national security?' dst='No AI Act' | tasks: Print message:
+OUT AI ACT | via_flows: Flow_0ssx1pn, Flow_0w1hj5f
+Gateway_0z2rht4 [No] -> Event_1phbtu6 | src='Is it for
+military\defence\
+national security?' dst='' | tasks: (no tasks) | via_flows: Flow_1yw6f4v, Flow_0rdjbbb
+Gateway_19lrsty [Yes] -> Event_02aytmj | src='Is it for pre-market research\
+testing\development
+ activity?' dst='No AI Act' | tasks: Print message:
+OUT AI ACT | via_flows: Flow_1yo2u73, Flow_1lwf6af
+Gateway_19lrsty [No] -> Event_1phbtu6 | src='Is it for pre-market research\
+testing\development
+ activity?' dst='' | tasks: (no tasks) | via_flows: Flow_0lyvkdp, Flow_0rdjbbb
+Gateway_1jwc7gt [yes] -> Event_02aytmj | src='Is it for scientific
+research and development?' dst='No AI Act' | tasks: Print message:
+OUT AI ACT | via_flows: Flow_12eq20t, Flow_1lwf6af
+Gateway_1jwc7gt [No] -> Event_1phbtu6 | src='Is it for scientific
+research and development?' dst='' | tasks: (no tasks) | via_flows: Flow_02xndkc, Flow_0rdjbbb
+StartEvent_1 -> Gateway_0egzy1d | src='' dst='Is it for international
+cooperation/
+agreements for
+law enforcement
+and judicial cooperation ?' | tasks: (no tasks) | via_flows: Flow_0ddgo7s, Flow_12d4qsl
+StartEvent_1 -> Gateway_0z2rht4 | src='' dst='Is it for
+military\defence\
+national security?' | tasks: (no tasks) | via_flows: Flow_0ddgo7s, Flow_1on6ado
+StartEvent_1 -> Gateway_19lrsty | src='' dst='Is it for pre-market research\
+testing\development
+ activity?' | tasks: (no tasks) | via_flows: Flow_0ddgo7s, Flow_15lxyik
+StartEvent_1 -> Gateway_1jwc7gt | src='' dst='Is it for scientific
+research and development?' | tasks: (no tasks) | via_flows: Flow_0ddgo7s, Flow_1xszjsk
+
+=== START → END PATHS (9) ===
+
+Path 1:
+  StartEvent_1 -> Gateway_0egzy1d | tasks: (no tasks)
+  Gateway_0egzy1d [Yes] -> Gateway_0o97mhb | tasks: (no tasks)
+  Gateway_0o97mhb [Yes] -> Event_008k2zj | tasks: Print message:
+OUT AI ACT
+
+Path 2:
+  StartEvent_1 -> Gateway_0egzy1d | tasks: (no tasks)
+  Gateway_0egzy1d [Yes] -> Gateway_0o97mhb | tasks: (no tasks)
+  Gateway_0o97mhb [No] -> Event_1phbtu6 | tasks: (no tasks)
+
+Path 3:
+  StartEvent_1 -> Gateway_0egzy1d | tasks: (no tasks)
+  Gateway_0egzy1d [No] -> Event_1phbtu6 | tasks: (no tasks)
+
+Path 4:
+  StartEvent_1 -> Gateway_0z2rht4 | tasks: (no tasks)
+  Gateway_0z2rht4 [Yes] -> Event_008k2zj | tasks: Print message:
+OUT AI ACT
+
+Path 5:
+  StartEvent_1 -> Gateway_0z2rht4 | tasks: (no tasks)
+  Gateway_0z2rht4 [No] -> Event_1phbtu6 | tasks: (no tasks)
+
+Path 6:
+  StartEvent_1 -> Gateway_19lrsty | tasks: (no tasks)
+  Gateway_19lrsty [Yes] -> Event_02aytmj | tasks: Print message:
+OUT AI ACT
+
+Path 7:
+  StartEvent_1 -> Gateway_19lrsty | tasks: (no tasks)
+  Gateway_19lrsty [No] -> Event_1phbtu6 | tasks: (no tasks)
+
+Path 8:
+  StartEvent_1 -> Gateway_1jwc7gt | tasks: (no tasks)
+  Gateway_1jwc7gt [yes] -> Event_02aytmj | tasks: Print message:
+OUT AI ACT
+
+Path 9:
+  StartEvent_1 -> Gateway_1jwc7gt | tasks: (no tasks)
+  Gateway_1jwc7gt [No] -> Event_1phbtu6 | tasks: (no tasks)
+
+% RULES
+r1: Is_itforinternationalcooperationagreementsforlawenforcementandjudicialcooperation, Are_youa_3rdcountry_publicauthority => O(Print_messageOUTAIACT).
+r2: Is_itforinternationalcooperationagreementsforlawenforcementandjudicialcooperation, not Are_youa_3rdcountry_publicauthority => O(none).
+r3: not Is_itforinternationalcooperationagreementsforlawenforcementandjudicialcooperation => O(none).
+r4: Is_itformilitarydefencenationalsecurity => O(Print_messageOUTAIACT).
+r5: not Is_itformilitarydefencenationalsecurity => O(none).
+r6: Is_itforpremarketresearchtestingdevelopment_activity => O(Print_messageOUTAIACT).
+r7: not Is_itforpremarketresearchtestingdevelopment_activity => O(none).
+r8: true => O(Print_messageOUTAIACT).
+r9: not Is_itforscientificresearchanddevelopment => O(none).
+
+% SUPERIORITY
+r1 > r2.
+r2 > r3.
+r3 > r4.
+r4 > r5.
+r5 > r6.
+r6 > r7.
+r7 > r8.
+r8 > r9.

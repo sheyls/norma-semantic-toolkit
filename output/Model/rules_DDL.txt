@@ -1,0 +1,133 @@
+=== REDUCED NODES ===
+- Event_0cmv33z      | endEvent         | 
+- Gateway_00py15p    | exclusiveGateway | Is it open-acces and free license?
+- Gateway_08ey031    | exclusiveGateway | Gives substancial info?
+- Gateway_0h02wml    | exclusiveGateway | 
+- Gateway_0lwgtna    | exclusiveGateway | FLOP more than 10(25)?
+- Gateway_1aly8r8    | exclusiveGateway | Does it serve a wide range
+of tasks?
+- Gateway_1wgee65    | exclusiveGateway | Does it work on a large amount
+of data?
+- StartEvent_1       | startEvent       | 
+
+=== REDUCED EDGES ===
+Gateway_00py15p [Yes] -> Gateway_08ey031 | src='Is it open-acces and free license?' dst='Gives substancial info?' | tasks: (no tasks) | via_flows: Flow_1pi9ogk
+Gateway_08ey031 [No] -> Gateway_0h02wml | src='Gives substancial info?' dst='' | tasks: GPAI open and free | via_flows: Flow_0fq2pjt, Flow_0rdt64d
+Gateway_08ey031 [Yes] -> Gateway_0h02wml | src='Gives substancial info?' dst='' | tasks: (no tasks) | via_flows: Flow_1os5g09
+Gateway_0h02wml -> Gateway_0lwgtna | src='' dst='FLOP more than 10(25)?' | tasks: (no tasks) | via_flows: Flow_0co07gb
+Gateway_0lwgtna [No] -> Event_0cmv33z | src='FLOP more than 10(25)?' dst='' | tasks: (no tasks) | via_flows: Flow_10nmnqr
+Gateway_0lwgtna [Yes] -> Event_0cmv33z | src='FLOP more than 10(25)?' dst='' | tasks: GPAI obl with risk, Print message:
+GPAI WITH
+SUBSTANTIAL
+RISK | via_flows: Flow_0z0aq9w, Flow_1mr3h0b, Flow_0xdjzte
+Gateway_1aly8r8 [No] -> Gateway_0h02wml | src='Does it serve a wide range
+of tasks?' dst='' | tasks: (no tasks) | via_flows: Flow_12aoi7n
+Gateway_1aly8r8 [Yes] -> Gateway_1wgee65 | src='Does it serve a wide range
+of tasks?' dst='Does it work on a large amount
+of data?' | tasks: (no tasks) | via_flows: Flow_1cni5sa
+Gateway_1wgee65 [Yes] -> Gateway_00py15p | src='Does it work on a large amount
+of data?' dst='Is it open-acces and free license?' | tasks: Print message:
+GPAI | via_flows: Flow_0in76sj, Flow_066cx38
+Gateway_1wgee65 [No] -> Gateway_0h02wml | src='Does it work on a large amount
+of data?' dst='' | tasks: (no tasks) | via_flows: Flow_025ni38
+StartEvent_1 -> Gateway_1aly8r8 | src='' dst='Does it serve a wide range
+of tasks?' | tasks: (no tasks) | via_flows: Flow_0hfxj2j
+
+=== START → END PATHS (8) ===
+
+Path 1:
+  StartEvent_1 -> Gateway_1aly8r8 | tasks: (no tasks)
+  Gateway_1aly8r8 [Yes] -> Gateway_1wgee65 | tasks: (no tasks)
+  Gateway_1wgee65 [Yes] -> Gateway_00py15p | tasks: Print message:
+GPAI
+  Gateway_00py15p [Yes] -> Gateway_08ey031 | tasks: (no tasks)
+  Gateway_08ey031 [No] -> Gateway_0h02wml | tasks: GPAI open and free
+  Gateway_0h02wml -> Gateway_0lwgtna | tasks: (no tasks)
+  Gateway_0lwgtna [Yes] -> Event_0cmv33z | tasks: GPAI obl with risk, Print message:
+GPAI WITH
+SUBSTANTIAL
+RISK
+
+Path 2:
+  StartEvent_1 -> Gateway_1aly8r8 | tasks: (no tasks)
+  Gateway_1aly8r8 [Yes] -> Gateway_1wgee65 | tasks: (no tasks)
+  Gateway_1wgee65 [Yes] -> Gateway_00py15p | tasks: Print message:
+GPAI
+  Gateway_00py15p [Yes] -> Gateway_08ey031 | tasks: (no tasks)
+  Gateway_08ey031 [No] -> Gateway_0h02wml | tasks: GPAI open and free
+  Gateway_0h02wml -> Gateway_0lwgtna | tasks: (no tasks)
+  Gateway_0lwgtna [No] -> Event_0cmv33z | tasks: (no tasks)
+
+Path 3:
+  StartEvent_1 -> Gateway_1aly8r8 | tasks: (no tasks)
+  Gateway_1aly8r8 [Yes] -> Gateway_1wgee65 | tasks: (no tasks)
+  Gateway_1wgee65 [Yes] -> Gateway_00py15p | tasks: Print message:
+GPAI
+  Gateway_00py15p [Yes] -> Gateway_08ey031 | tasks: (no tasks)
+  Gateway_08ey031 [Yes] -> Gateway_0h02wml | tasks: (no tasks)
+  Gateway_0h02wml -> Gateway_0lwgtna | tasks: (no tasks)
+  Gateway_0lwgtna [Yes] -> Event_0cmv33z | tasks: GPAI obl with risk, Print message:
+GPAI WITH
+SUBSTANTIAL
+RISK
+
+Path 4:
+  StartEvent_1 -> Gateway_1aly8r8 | tasks: (no tasks)
+  Gateway_1aly8r8 [Yes] -> Gateway_1wgee65 | tasks: (no tasks)
+  Gateway_1wgee65 [Yes] -> Gateway_00py15p | tasks: Print message:
+GPAI
+  Gateway_00py15p [Yes] -> Gateway_08ey031 | tasks: (no tasks)
+  Gateway_08ey031 [Yes] -> Gateway_0h02wml | tasks: (no tasks)
+  Gateway_0h02wml -> Gateway_0lwgtna | tasks: (no tasks)
+  Gateway_0lwgtna [No] -> Event_0cmv33z | tasks: (no tasks)
+
+Path 5:
+  StartEvent_1 -> Gateway_1aly8r8 | tasks: (no tasks)
+  Gateway_1aly8r8 [Yes] -> Gateway_1wgee65 | tasks: (no tasks)
+  Gateway_1wgee65 [No] -> Gateway_0h02wml | tasks: (no tasks)
+  Gateway_0h02wml -> Gateway_0lwgtna | tasks: (no tasks)
+  Gateway_0lwgtna [Yes] -> Event_0cmv33z | tasks: GPAI obl with risk, Print message:
+GPAI WITH
+SUBSTANTIAL
+RISK
+
+Path 6:
+  StartEvent_1 -> Gateway_1aly8r8 | tasks: (no tasks)
+  Gateway_1aly8r8 [Yes] -> Gateway_1wgee65 | tasks: (no tasks)
+  Gateway_1wgee65 [No] -> Gateway_0h02wml | tasks: (no tasks)
+  Gateway_0h02wml -> Gateway_0lwgtna | tasks: (no tasks)
+  Gateway_0lwgtna [No] -> Event_0cmv33z | tasks: (no tasks)
+
+Path 7:
+  StartEvent_1 -> Gateway_1aly8r8 | tasks: (no tasks)
+  Gateway_1aly8r8 [No] -> Gateway_0h02wml | tasks: (no tasks)
+  Gateway_0h02wml -> Gateway_0lwgtna | tasks: (no tasks)
+  Gateway_0lwgtna [Yes] -> Event_0cmv33z | tasks: GPAI obl with risk, Print message:
+GPAI WITH
+SUBSTANTIAL
+RISK
+
+Path 8:
+  StartEvent_1 -> Gateway_1aly8r8 | tasks: (no tasks)
+  Gateway_1aly8r8 [No] -> Gateway_0h02wml | tasks: (no tasks)
+  Gateway_0h02wml -> Gateway_0lwgtna | tasks: (no tasks)
+  Gateway_0lwgtna [No] -> Event_0cmv33z | tasks: (no tasks)
+
+% RULES
+r1: Does_itserveawiderangeoftasks, Does_itworkonalargeamountofdata, Is_itopenaccesandfreelicense, not Gives_substancialinfo, FLOP_morethan1025 => O(Print_messageGPAI) & O(GPAI_openandfree) & O(GPAI_oblwithrisk) & O(Print_messageGPAIWITHSUBSTANTIALRISK).
+r2: Does_itserveawiderangeoftasks, Does_itworkonalargeamountofdata, Is_itopenaccesandfreelicense, not Gives_substancialinfo, not FLOP_morethan1025 => O(Print_messageGPAI) & O(GPAI_openandfree).
+r3: Does_itserveawiderangeoftasks, Does_itworkonalargeamountofdata, Is_itopenaccesandfreelicense, Gives_substancialinfo, FLOP_morethan1025 => O(Print_messageGPAI) & O(GPAI_oblwithrisk) & O(Print_messageGPAIWITHSUBSTANTIALRISK).
+r4: Does_itserveawiderangeoftasks, Does_itworkonalargeamountofdata, Is_itopenaccesandfreelicense, Gives_substancialinfo, not FLOP_morethan1025 => O(Print_messageGPAI).
+r5: Does_itserveawiderangeoftasks, not Does_itworkonalargeamountofdata, FLOP_morethan1025 => O(GPAI_oblwithrisk) & O(Print_messageGPAIWITHSUBSTANTIALRISK).
+r6: Does_itserveawiderangeoftasks, not Does_itworkonalargeamountofdata, not FLOP_morethan1025 => O(none).
+r7: not Does_itserveawiderangeoftasks, FLOP_morethan1025 => O(GPAI_oblwithrisk) & O(Print_messageGPAIWITHSUBSTANTIALRISK).
+r8: not Does_itserveawiderangeoftasks, not FLOP_morethan1025 => O(none).
+
+% SUPERIORITY
+r1 > r2.
+r2 > r3.
+r3 > r4.
+r4 > r5.
+r5 > r6.
+r6 > r7.
+r7 > r8.

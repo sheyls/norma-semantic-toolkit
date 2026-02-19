@@ -1,0 +1,154 @@
+=== REDUCED NODES ===
+- Event_031zxv5      | endEvent         | No AI Act
+- Event_0cqoakc      | endEvent         | No AI Act
+- Event_0k6f81q      | endEvent         | No AI Act
+- Event_0l84sfm      | endEvent         | 
+- Gateway_03d8hof    | exclusiveGateway | Is it a basic
+data processing system?
+- Gateway_0gvsa16    | exclusiveGateway | Is it a mathematical
+optimization system?
+- Gateway_1ba4coj    | exclusiveGateway | Is it a Machine- Based,
+Autonomous
+and Adaptive system?
+- Gateway_1hhgdoe    | exclusiveGateway | Is it a system based
+ on classical heuristics?
+- Gateway_1q6ovet    | exclusiveGateway | Is it a
+simple prediction
+system?
+- StartEvent_1       | startEvent       | 
+
+=== REDUCED EDGES ===
+Gateway_03d8hof [Yes] -> Event_0k6f81q | src='Is it a basic
+data processing system?' dst='No AI Act' | tasks: Print message:
+OUT AI ACT | via_flows: Flow_0bp8qhl, Flow_0rcbljx
+Gateway_03d8hof [No] -> Gateway_1ba4coj | src='Is it a basic
+data processing system?' dst='Is it a Machine- Based,
+Autonomous
+and Adaptive system?' | tasks: (no tasks) | via_flows: Flow_1eutnmm, Flow_07sej3q
+Gateway_0gvsa16 [Yes] -> Event_0k6f81q | src='Is it a mathematical
+optimization system?' dst='No AI Act' | tasks: Print message:
+OUT AI ACT | via_flows: Flow_1867n9k, Flow_0rcbljx
+Gateway_0gvsa16 [No] -> Gateway_1ba4coj | src='Is it a mathematical
+optimization system?' dst='Is it a Machine- Based,
+Autonomous
+and Adaptive system?' | tasks: (no tasks) | via_flows: Flow_1kq855d, Flow_07sej3q
+Gateway_1ba4coj [No] -> Event_031zxv5 | src='Is it a Machine- Based,
+Autonomous
+and Adaptive system?' dst='No AI Act' | tasks: Print message: OUT AI ACT | via_flows: Flow_1xs4joj, Flow_0zbf60n
+Gateway_1ba4coj [Yes] -> Event_0l84sfm | src='Is it a Machine- Based,
+Autonomous
+and Adaptive system?' dst='' | tasks: (no tasks) | via_flows: Flow_0vhmvh0
+Gateway_1hhgdoe [Yes] -> Event_0cqoakc | src='Is it a system based
+ on classical heuristics?' dst='No AI Act' | tasks: Print message:
+OUT AI ACT | via_flows: Flow_0r27ck4, Flow_0c7bwel
+Gateway_1hhgdoe [No] -> Gateway_1ba4coj | src='Is it a system based
+ on classical heuristics?' dst='Is it a Machine- Based,
+Autonomous
+and Adaptive system?' | tasks: (no tasks) | via_flows: Flow_156wpqf, Flow_07sej3q
+Gateway_1q6ovet [Yes] -> Event_0cqoakc | src='Is it a
+simple prediction
+system?' dst='No AI Act' | tasks: Print message:
+OUT AI ACT | via_flows: Flow_0crt4rb, Flow_0c7bwel
+Gateway_1q6ovet [No] -> Gateway_1ba4coj | src='Is it a
+simple prediction
+system?' dst='Is it a Machine- Based,
+Autonomous
+and Adaptive system?' | tasks: (no tasks) | via_flows: Flow_0p9ey17, Flow_07sej3q
+StartEvent_1 -> Gateway_03d8hof | src='' dst='Is it a basic
+data processing system?' | tasks: (no tasks) | via_flows: Flow_0tibj27, Flow_0cbqxrz
+StartEvent_1 -> Gateway_0gvsa16 | src='' dst='Is it a mathematical
+optimization system?' | tasks: (no tasks) | via_flows: Flow_0tibj27, Flow_08qfilj
+StartEvent_1 -> Gateway_1hhgdoe | src='' dst='Is it a system based
+ on classical heuristics?' | tasks: (no tasks) | via_flows: Flow_0tibj27, Flow_0c6oyzi
+StartEvent_1 -> Gateway_1q6ovet | src='' dst='Is it a
+simple prediction
+system?' | tasks: (no tasks) | via_flows: Flow_0tibj27, Flow_1dq0mlr
+
+=== START → END PATHS (12) ===
+
+Path 1:
+  StartEvent_1 -> Gateway_03d8hof | tasks: (no tasks)
+  Gateway_03d8hof [Yes] -> Event_0k6f81q | tasks: Print message:
+OUT AI ACT
+
+Path 2:
+  StartEvent_1 -> Gateway_03d8hof | tasks: (no tasks)
+  Gateway_03d8hof [No] -> Gateway_1ba4coj | tasks: (no tasks)
+  Gateway_1ba4coj [Yes] -> Event_0l84sfm | tasks: (no tasks)
+
+Path 3:
+  StartEvent_1 -> Gateway_03d8hof | tasks: (no tasks)
+  Gateway_03d8hof [No] -> Gateway_1ba4coj | tasks: (no tasks)
+  Gateway_1ba4coj [No] -> Event_031zxv5 | tasks: Print message: OUT AI ACT
+
+Path 4:
+  StartEvent_1 -> Gateway_0gvsa16 | tasks: (no tasks)
+  Gateway_0gvsa16 [Yes] -> Event_0k6f81q | tasks: Print message:
+OUT AI ACT
+
+Path 5:
+  StartEvent_1 -> Gateway_0gvsa16 | tasks: (no tasks)
+  Gateway_0gvsa16 [No] -> Gateway_1ba4coj | tasks: (no tasks)
+  Gateway_1ba4coj [Yes] -> Event_0l84sfm | tasks: (no tasks)
+
+Path 6:
+  StartEvent_1 -> Gateway_0gvsa16 | tasks: (no tasks)
+  Gateway_0gvsa16 [No] -> Gateway_1ba4coj | tasks: (no tasks)
+  Gateway_1ba4coj [No] -> Event_031zxv5 | tasks: Print message: OUT AI ACT
+
+Path 7:
+  StartEvent_1 -> Gateway_1hhgdoe | tasks: (no tasks)
+  Gateway_1hhgdoe [Yes] -> Event_0cqoakc | tasks: Print message:
+OUT AI ACT
+
+Path 8:
+  StartEvent_1 -> Gateway_1hhgdoe | tasks: (no tasks)
+  Gateway_1hhgdoe [No] -> Gateway_1ba4coj | tasks: (no tasks)
+  Gateway_1ba4coj [Yes] -> Event_0l84sfm | tasks: (no tasks)
+
+Path 9:
+  StartEvent_1 -> Gateway_1hhgdoe | tasks: (no tasks)
+  Gateway_1hhgdoe [No] -> Gateway_1ba4coj | tasks: (no tasks)
+  Gateway_1ba4coj [No] -> Event_031zxv5 | tasks: Print message: OUT AI ACT
+
+Path 10:
+  StartEvent_1 -> Gateway_1q6ovet | tasks: (no tasks)
+  Gateway_1q6ovet [Yes] -> Event_0cqoakc | tasks: Print message:
+OUT AI ACT
+
+Path 11:
+  StartEvent_1 -> Gateway_1q6ovet | tasks: (no tasks)
+  Gateway_1q6ovet [No] -> Gateway_1ba4coj | tasks: (no tasks)
+  Gateway_1ba4coj [Yes] -> Event_0l84sfm | tasks: (no tasks)
+
+Path 12:
+  StartEvent_1 -> Gateway_1q6ovet | tasks: (no tasks)
+  Gateway_1q6ovet [No] -> Gateway_1ba4coj | tasks: (no tasks)
+  Gateway_1ba4coj [No] -> Event_031zxv5 | tasks: Print message: OUT AI ACT
+
+% RULES
+r1: Is_itabasicdataprocessingsystem => O(Print_messageOUTAIACT).
+r2: not Is_itabasicdataprocessingsystem, Is_itaMachineBasedAutonomousandAdaptivesystem => O(none).
+r3: not Is_itabasicdataprocessingsystem, not Is_itaMachineBasedAutonomousandAdaptivesystem => O(Print_messageOUTAIACT).
+r4: Is_itamathematicaloptimizationsystem => O(Print_messageOUTAIACT).
+r5: not Is_itamathematicaloptimizationsystem, Is_itaMachineBasedAutonomousandAdaptivesystem => O(none).
+r6: not Is_itamathematicaloptimizationsystem, not Is_itaMachineBasedAutonomousandAdaptivesystem => O(Print_messageOUTAIACT).
+r7: Is_itasystembased_onclassicalheuristics => O(Print_messageOUTAIACT).
+r8: not Is_itasystembased_onclassicalheuristics, Is_itaMachineBasedAutonomousandAdaptivesystem => O(none).
+r9: not Is_itasystembased_onclassicalheuristics, not Is_itaMachineBasedAutonomousandAdaptivesystem => O(Print_messageOUTAIACT).
+r10: Is_itasimplepredictionsystem => O(Print_messageOUTAIACT).
+r11: not Is_itasimplepredictionsystem, Is_itaMachineBasedAutonomousandAdaptivesystem => O(none).
+r12: not Is_itasimplepredictionsystem, not Is_itaMachineBasedAutonomousandAdaptivesystem => O(Print_messageOUTAIACT).
+
+% SUPERIORITY
+r1 > r2.
+r2 > r3.
+r3 > r4.
+r4 > r5.
+r5 > r6.
+r6 > r7.
+r7 > r8.
+r8 > r9.
+r9 > r10.
+r10 > r11.
+r11 > r12.

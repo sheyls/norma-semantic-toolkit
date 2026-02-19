@@ -1,0 +1,16 @@
+=== REDUCED NODES ===
+- Event_111i10m      | endEvent         | 
+- StartEvent_1       | startEvent       | 
+
+=== REDUCED EDGES ===
+StartEvent_1 -> Event_111i10m | src='' dst='' | tasks: (no tasks) | via_flows: Flow_13ix8si, Flow_04myk1o, Flow_1plpi9d, Flow_08l60ka, Flow_1gb7sni, Flow_1mhhmrp
+
+=== START → END PATHS (1) ===
+
+Path 1:
+  StartEvent_1 -> Event_111i10m | tasks: (no tasks)
+
+% RULES
+r1: true => O(none).
+
+% SUPERIORITY

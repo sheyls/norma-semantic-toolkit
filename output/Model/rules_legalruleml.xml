@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lrml:LegalRuleML
+  xmlns:lrml="http://docs.oasis-open.org/legalruleml/ns/v1.0/"
+  xmlns:ruleml="http://ruleml.org/spec"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <lrml:Statements>
+    <lrml:PrescriptiveStatement key="r1">
+      <ruleml:Rule key="r1">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itserveawiderangeoftasks</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itworkonalargeamountofdata</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itopen-accesandfreelicense</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>substancialinfo</ruleml:Rel>
+                <ruleml:Var>Gives</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>morethan10(25)</ruleml:Rel>
+                <ruleml:Var>FLOP</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>Print</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">message:GPAI</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>GPAI</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">openandfree</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>GPAI</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">oblwithrisk</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>Print</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">message:GPAIWITHSUBSTANTIALRISK</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r2">
+      <ruleml:Rule key="r2">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itserveawiderangeoftasks</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itworkonalargeamountofdata</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itopen-accesandfreelicense</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>substancialinfo</ruleml:Rel>
+                <ruleml:Var>Gives</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>morethan10(25)</ruleml:Rel>
+                <ruleml:Var>FLOP</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>Print</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">message:GPAI</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>GPAI</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">openandfree</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r3">
+      <ruleml:Rule key="r3">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itserveawiderangeoftasks</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itworkonalargeamountofdata</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itopen-accesandfreelicense</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>substancialinfo</ruleml:Rel>
+                <ruleml:Var>Gives</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>morethan10(25)</ruleml:Rel>
+                <ruleml:Var>FLOP</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>Print</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">message:GPAI</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>GPAI</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">oblwithrisk</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>Print</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">message:GPAIWITHSUBSTANTIALRISK</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r4">
+      <ruleml:Rule key="r4">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itserveawiderangeoftasks</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itworkonalargeamountofdata</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itopen-accesandfreelicense</ruleml:Rel>
+                <ruleml:Var>Is</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>substancialinfo</ruleml:Rel>
+                <ruleml:Var>Gives</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>morethan10(25)</ruleml:Rel>
+                <ruleml:Var>FLOP</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:Atom>
+            <ruleml:Rel>task</ruleml:Rel>
+            <ruleml:Var>Print</ruleml:Var>
+            <ruleml:Data xsi:type="xs:string">message:GPAI</ruleml:Data>
+          </ruleml:Atom>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r5">
+      <ruleml:Rule key="r5">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itserveawiderangeoftasks</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itworkonalargeamountofdata</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>morethan10(25)</ruleml:Rel>
+                <ruleml:Var>FLOP</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>GPAI</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">oblwithrisk</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>Print</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">message:GPAIWITHSUBSTANTIALRISK</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r6">
+      <ruleml:Rule key="r6">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itserveawiderangeoftasks</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>itworkonalargeamountofdata</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>morethan10(25)</ruleml:Rel>
+                <ruleml:Var>FLOP</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r7">
+      <ruleml:Rule key="r7">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itserveawiderangeoftasks</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>morethan10(25)</ruleml:Rel>
+                <ruleml:Var>FLOP</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">true</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+        <ruleml:then>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>GPAI</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">oblwithrisk</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>task</ruleml:Rel>
+                <ruleml:Var>Print</ruleml:Var>
+                <ruleml:Data xsi:type="xs:string">message:GPAIWITHSUBSTANTIALRISK</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:then>
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:PrescriptiveStatement key="r8">
+      <ruleml:Rule key="r8">
+        <ruleml:if>
+          <ruleml:And>
+              <ruleml:Atom>
+                <ruleml:Rel>itserveawiderangeoftasks</ruleml:Rel>
+                <ruleml:Var>Does</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+              <ruleml:Atom>
+                <ruleml:Rel>morethan10(25)</ruleml:Rel>
+                <ruleml:Var>FLOP</ruleml:Var>
+                <ruleml:Data xsi:type="xs:boolean">false</ruleml:Data>
+              </ruleml:Atom>
+          </ruleml:And>
+        </ruleml:if>
+
+      </ruleml:Rule>
+    </lrml:PrescriptiveStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r1" under="#r2"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r2" under="#r3"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r3" under="#r4"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r4" under="#r5"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r5" under="#r6"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r6" under="#r7"/>
+    </lrml:OverrideStatement>
+
+    <lrml:OverrideStatement>
+      <lrml:Override over="#r7" under="#r8"/>
+    </lrml:OverrideStatement>
+  </lrml:Statements>
+
+</lrml:LegalRuleML>
