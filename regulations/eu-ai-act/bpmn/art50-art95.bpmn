@@ -79,7 +79,7 @@
           <zeebe:property name="compliance_deonticId" value="REC_1" />
           <zeebe:property name="compliance_agent" value="AI owner" />
           <zeebe:property name="compliance_action" value="Adopt volutary codes of conduct" />
-          <zeebe:property name="compliance_object" value="generated content" />
+          <zeebe:property name="compliance_object" value="generate content" />
           <zeebe:property name="compliance_bindingForce" value="soft_law" />
           <zeebe:property name="compliance_condition" value="" />
           <zeebe:property name="compliance_jurisdiction" value="" />

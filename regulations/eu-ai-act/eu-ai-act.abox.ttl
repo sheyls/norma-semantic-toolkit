@@ -1,0 +1,91 @@
+# ABox from: regulations/eu-ai-act/bpmn
+# TBox:    https://w3id.org/norma-ontology
+
+@prefix norma: <https://w3id.org/norma-ontology#> .
+@prefix :      <https://w3id.org/norma-abox/eu-ai-act#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+<https://w3id.org/norma-abox/eu-ai-act>
+    a owl:Ontology ;
+    owl:imports <https://w3id.org/norma-ontology> .
+
+# ── Agents ───────────────────────────────────────────────────────
+:Agent_AI_owner
+    a owl:NamedIndividual, norma:Agent ;
+    rdfs:label "AI owner"@en .
+
+# ── Legal Objects ────────────────────────────────────────────────
+:Object_generate_content
+    a owl:NamedIndividual, norma:LegalObject ;
+    rdfs:label "generate content"@en .
+
+# ── Legal Sources ────────────────────────────────────────────────
+:Regulation_EU_AI_Act
+    a owl:NamedIndividual, norma:LegalSource ;
+    norma:regulationName "EU AI Act"^^xsd:string ;
+    norma:regulationURI "hhtps://"^^xsd:anyURI ;
+    norma:articleNumber "4"^^xsd:string ;
+    norma:paragraphNumber "2"^^xsd:string ;
+    norma:originalText "BLABLABLAadhjadjajf"^^xsd:string ;
+    norma:articleNumber "5"^^xsd:string ;
+    norma:paragraphNumber "2"^^xsd:string ;
+    norma:originalText "BLABLABLA"^^xsd:string.
+
+# ── Norms ────────────────────────────────────────────────────────────
+:OBL_1
+    a owl:NamedIndividual, <https://w3id.org/norma-ontology#Obligation> ;
+    rdfs:label "Marking obligation"@en ;
+    norma:deonticId "OBL_1"^^xsd:string ;
+    norma:action "Marking obligation"^^xsd:string ;
+    norma:annotator "Juana"^^xsd:string ;
+    norma:fromRegulation "EU AI Act"^^xsd:string ;
+    norma:fromArticle "4"^^xsd:string ;
+    norma:fromParagraph "2"^^xsd:string ;
+    norma:annotationDate "2026-02-13"^^xsd:date ;
+    norma:confidenceScore "1.0"^^xsd:decimal ;
+    norma:sourceURI "hhtps://"^^xsd:anyURI ;
+    norma:hasBindingForce <https://w3id.org/norma-ontology#HardLaw> ;
+    norma:hasNormStatus <https://w3id.org/norma-ontology#Active> ;
+    norma:hasRiskLevel <https://w3id.org/norma-ontology#HighRisk> ;
+    norma:hasExtractionMethod <https://w3id.org/norma-ontology#ManualLawyer> ;
+    norma:hasReviewStatus <https://w3id.org/norma-ontology#PendingReview> ;
+    norma:hasAgent       :Agent_AI_owner ;
+    norma:actsOn         :Object_generate_content ;
+    norma:hasLegalSource :Regulation_EU_AI_Act.
+
+:REC_1
+    a owl:NamedIndividual, <https://w3id.org/norma-ontology#Recommendation> ;
+    rdfs:label "Volutary codes\nof conduct"@en ;
+    norma:deonticId "REC_1"^^xsd:string ;
+    norma:action "Adopt volutary codes of conduct"^^xsd:string ;
+    norma:annotator "Juana"^^xsd:string ;
+    norma:fromRegulation "EU AI Act"^^xsd:string ;
+    norma:fromArticle "5"^^xsd:string ;
+    norma:fromParagraph "2"^^xsd:string ;
+    norma:annotationDate "2026-02-13"^^xsd:date ;
+    norma:confidenceScore "1.0"^^xsd:decimal ;
+    norma:sourceURI "hhtps://..."^^xsd:anyURI ;
+    norma:hasBindingForce <https://w3id.org/norma-ontology#SoftLaw> ;
+    norma:hasNormStatus <https://w3id.org/norma-ontology#Active> ;
+    norma:hasRiskLevel <https://w3id.org/norma-ontology#LowRisk> ;
+    norma:hasExtractionMethod <https://w3id.org/norma-ontology#ManualLawyer> ;
+    norma:hasReviewStatus <https://w3id.org/norma-ontology#PendingReview> ;
+    norma:hasAgent       :Agent_AI_owner ;
+    norma:actsOn         :Object_generate_content ;
+    norma:hasLegalSource :Regulation_EU_AI_Act.
+
+# ── Legal Conditions (Gateways) ──────────────────────────────────────
+:Condition_Gateway_00rfxw0
+    a owl:NamedIndividual, norma:LegalCondition ;
+    rdfs:label "Generation of syntetic content?"@en ;
+    norma:conditionStatement "Generation of syntetic content?"^^xsd:string ;
+    norma:trueBranchLabel  "Yes"^^xsd:string ;
+    norma:falseBranchLabel "No"^^xsd:string ;
+    norma:confidenceScore "1.0"^^xsd:decimal ;
+    norma:hasNormStatus <https://w3id.org/norma-ontology#Active> ;
+    norma:hasExtractionMethod <https://w3id.org/norma-ontology#ManualLawyer> ;
+    norma:hasReviewStatus <https://w3id.org/norma-ontology#PendingReview> ;
+    norma:hasLegalSource :Regulation_EU_AI_Act.
