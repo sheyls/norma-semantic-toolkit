@@ -8,17 +8,12 @@ Pipeline overview:
   3. Build a RuleIR object per path:
        - conditions are derived from exclusiveGateway guards,
        - actions (obligations/permissions/prohibitions) are derived from accumulated tasks (Zeebe props),
-       - a linear superiority relation is generated according to BPMN order.
   4. Export:
-       - Defeasible Deontic Logic (DDL, Governatori-style) rules to a text file,
        - SWRL rules to an executable OWL ontology,
-       - LegalRuleML.
   5. Write a single human-readable artifact containing:
        - reduced nodes,
        - reduced edges,
        - enumerated paths,
-       - generated DDL rules,
-       - superiority relations.
 """
 
 from __future__ import annotations
