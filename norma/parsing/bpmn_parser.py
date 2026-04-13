@@ -46,19 +46,19 @@ def _get_nsmap(root: ET.Element) -> Dict[str, str]:
 
 
 # -----------------------------
-# Tipo sets
+# Node type sets
 # -----------------------------
 
 _KEEP_TYPES: Set[str] = {"startEvent", "endEvent", "exclusiveGateway"}
 
-# Elementos de los que se extraen zeebe:properties
+# Elements from which zeebe:properties are extracted
 _PROP_TYPES: Set[str] = {
     "task", "userTask", "serviceTask", "manualTask",
     "businessRuleTask", "sendTask",
     "exclusiveGateway",
 }
 
-# Elementos que se acumulan como tareas en los reduced edges
+# Elements accumulated as tasks on reduced edges
 _TASK_TYPES: Set[str] = {
     "task", "userTask", "serviceTask", "manualTask",
     "businessRuleTask", "sendTask",

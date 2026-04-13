@@ -1,8 +1,8 @@
 {
   "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
-  "name": "Legal Compliance Annotation",
-  "id": "legal.compliance.deontic.v1",
-  "description": "Legal compliance annotation for tasks (deontic norms) and exclusive gateways (legal conditions)",
+  "name": "NORMA — Legal Compliance Annotation",
+  "id": "norma.compliance.annotation.v1",
+  "description": "Legal compliance annotation for BPMN tasks (deontic norms) and exclusive gateways (legal conditions). Part of the NORMA pipeline.",
   "version": 1,
   "appliesTo": [
     "bpmn:Task",
@@ -17,9 +17,9 @@
     { "id": "elementType",  "label": "Element Type" },
     { "id": "deontic",      "label": "Deontic Norm" },
     { "id": "condition",    "label": "Legal Condition" },
-    { "id": "scope",        "label": "Conditions & Scope" },
+    { "id": "scope",        "label": "Scope & Temporal" },
     { "id": "consequence",  "label": "Consequences & Exceptions" },
-    { "id": "legalSource",  "label": "Legal Source" },
+    { "id": "legalSource",  "label": "Legal Source & Provenance" },
     { "id": "metadata",     "label": "Annotation Metadata" }
   ],
   "properties": [
@@ -32,7 +32,7 @@
       "group": "elementType",
       "binding": { "type": "zeebe:property", "name": "compliance_elementType" },
       "choices": [
-        { "name": "🟦 Task — carries a deontic obligation, prohibition, permission or recommendation", "value": "task" },
+        { "name": "🟦 Task — carries a deontic norm (obligation, prohibition, permission, recommendation or constitutive fact)", "value": "task" },
         { "name": "🔷 Exclusive Gateway — evaluates a legal fact or triggering condition", "value": "exclusiveGateway" }
       ],
       "value": "task"
@@ -41,33 +41,35 @@
     {
       "id": "deonticType",
       "label": "Deontic Modality",
-      "description": "Type of deontic operator: obligation (MUST), prohibition (MUST NOT), permission (MAY), recommendation (SHOULD), negative recommendation (SHOULD NOT), or constitutive fact (IS)",
+      "description": "The deontic operator of this norm.",
       "type": "Dropdown",
       "group": "deontic",
       "binding": { "type": "zeebe:property", "name": "compliance_deonticType" },
       "choices": [
-        { "name": "🔴 Obligation — MUST",          "value": "obligation" },
-        { "name": "🚫 Prohibition — MUST NOT",     "value": "prohibition" },
-        { "name": "✅ Permission — MAY",           "value": "permission" },
-        { "name": "🟡 Recommendation — SHOULD",    "value": "recommendation" },
-        { "name": "🟠 Negative Rec. — SHOULD NOT", "value": "recommendation_not" },
-        { "name": "📘 Constitutive Fact — IS",     "value": "fact" }
+        { "name": "🔴 Obligation — MUST",                  "value": "obligation" },
+        { "name": "🚫 Prohibition — MUST NOT",             "value": "prohibition" },
+        { "name": "✅ Permission — MAY",                   "value": "permission" },
+        { "name": "🟡 Recommendation — SHOULD",            "value": "recommendation" },
+        { "name": "🟠 Negative Rec. — SHOULD NOT",         "value": "recommendation_not" },
+        { "name": "📘 Constitutive Fact — IS / COUNTS AS", "value": "fact" }
       ],
       "value": "obligation",
       "condition": { "property": "elementType", "equals": "task" }
     },
+
     {
       "label": "Norm Statement (Plain Language)",
-      "description": "Human-readable restatement of the norm for lawyers and auditors",
+      "description": "Human-readable restatement of the norm for lawyers and auditors. Not parsed by the pipeline.",
       "type": "Text",
       "group": "deontic",
       "binding": { "type": "zeebe:property", "name": "compliance_normStatement" },
       "value": "",
       "condition": { "property": "elementType", "equals": "task" }
     },
+
     {
       "label": "Deontic ID",
-      "description": "Unique identifier. Prefixes: OBL_ | PRH_ | PER_ | REC_ | REC_NOT_",
+      "description": "Unique identifier for this norm within the regulation pack. Prefixes: OBL_ · PRH_ · PER_ · REC_ · REC_NOT_ · FCT_",
       "type": "String",
       "group": "deontic",
       "binding": { "type": "zeebe:property", "name": "compliance_deonticId" },
@@ -75,20 +77,16 @@
       "constraints": {
         "notEmpty": true,
         "pattern": {
-          "value": "^(OBL|PRH|PER|REC|REC_NOT)_[A-Z0-9_]+$",
-          "message": "Must follow pattern: OBL_xxx, PRH_xxx, PER_xxx, REC_xxx, or REC_NOT_xxx"
+          "value": "^(OBL|PRH|PER|REC|REC_NOT|FCT)_[A-Z0-9_]+$",
+          "message": "Must match: OBL_xxx · PRH_xxx · PER_xxx · REC_xxx · REC_NOT_xxx · FCT_xxx"
         }
       },
-      "condition": {
-        "allMatch": [
-          { "property": "elementType", "equals": "task" },
-          { "property": "deonticType", "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"] }
-        ]
-      }
+      "condition": { "property": "elementType", "equals": "task" }
     },
+
     {
       "label": "Agent (Who)",
-      "description": "Who must / must not / may / should perform the action. E.g. AI_Provider, Data_Controller, Manufacturer",
+      "description": "The entity that must / must not / may / should perform the action. E.g. AI_Provider, Data_Controller, Manufacturer. Minted as a norma:Agent individual in the knowledge graph.",
       "type": "String",
       "group": "deontic",
       "binding": { "type": "zeebe:property", "name": "compliance_agent" },
@@ -101,9 +99,10 @@
         ]
       }
     },
+
     {
       "label": "Action (What)",
-      "description": "Verb phrase describing the action. E.g. establish, conduct, deploy, disclose",
+      "description": "Verb phrase describing the action the agent must / must not / may perform. E.g. establish, disclose, deploy, mark.",
       "type": "String",
       "group": "deontic",
       "binding": { "type": "zeebe:property", "name": "compliance_action" },
@@ -116,9 +115,10 @@
         ]
       }
     },
+
     {
       "label": "Object (On What)",
-      "description": "What the action is performed on. E.g. risk_management_system, personal_data, audit_log",
+      "description": "The entity or resource on which the action is performed. E.g. risk_management_system, personal_data, audit_log. Minted as a norma:LegalObject individual in the knowledge graph.",
       "type": "String",
       "group": "deontic",
       "binding": { "type": "zeebe:property", "name": "compliance_object" },
@@ -131,9 +131,10 @@
         ]
       }
     },
+
     {
       "label": "Fact Statement",
-      "description": "Constitutive rule or legal definition. E.g. 'A system is classified as high-risk AI if it falls under Annex III.'",
+      "description": "The constitutive rule or legal classification in plain language. E.g. 'A system is classified as high-risk if it falls under Annex III.'",
       "type": "Text",
       "group": "deontic",
       "binding": { "type": "zeebe:property", "name": "compliance_factStatement" },
@@ -146,9 +147,10 @@
         ]
       }
     },
+
     {
       "label": "Binding Force",
-      "description": "Legal weight of this norm: hard law, soft law, internal policy, or contractual",
+      "description": "Legal weight of this norm.",
       "type": "Dropdown",
       "group": "deontic",
       "binding": { "type": "zeebe:property", "name": "compliance_bindingForce" },
@@ -159,12 +161,17 @@
         { "name": "Contractual obligation",           "value": "contractual" }
       ],
       "value": "hard_law",
-      "condition": { "property": "elementType", "equals": "task" }
+      "condition": {
+        "allMatch": [
+          { "property": "elementType", "equals": "task" },
+          { "property": "deonticType", "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"] }
+        ]
+      }
     },
 
     {
       "label": "Condition Statement (Plain Language)",
-      "description": "What is being decided here? E.g. 'Does the system generate synthetic content?', 'Is the AI system classified as high-risk?'",
+      "description": "The legal question evaluated at this gateway. E.g. 'Does the system generate synthetic content?', 'Is the AI system classified as high-risk?'",
       "type": "Text",
       "group": "condition",
       "binding": { "type": "zeebe:property", "name": "gw_conditionStatement" },
@@ -172,27 +179,30 @@
       "constraints": { "notEmpty": true },
       "condition": { "property": "elementType", "equals": "exclusiveGateway" }
     },
+
     {
       "label": "True Branch Label",
-      "description": "Outgoing flow when condition is met. E.g. Yes, High-risk, Consent given",
+      "description": "Label on the outgoing flow when the condition is met. E.g. Yes, High-risk, Consent given.",
       "type": "String",
       "group": "condition",
       "binding": { "type": "zeebe:property", "name": "gw_trueBranch" },
       "value": "Yes",
       "condition": { "property": "elementType", "equals": "exclusiveGateway" }
     },
+
     {
       "label": "False Branch Label",
-      "description": "Outgoing flow when condition is not met. E.g. No, Low-risk, No consent",
+      "description": "Label on the outgoing flow when the condition is not met. E.g. No, Low-risk, No consent.",
       "type": "String",
       "group": "condition",
       "binding": { "type": "zeebe:property", "name": "gw_falseBranch" },
       "value": "No",
       "condition": { "property": "elementType", "equals": "exclusiveGateway" }
     },
+
     {
-      "label": "Cross-references (Deontic IDs)",
-      "description": "IDs of norms in downstream tasks triggered by this condition. E.g. OBL_001, PRH_002",
+      "label": "Triggered Norm IDs",
+      "description": "Comma-separated deontic IDs of norms triggered by this condition. E.g. OBL_001, PRH_002. Used by the pipeline to generate norma:triggersNorm links.",
       "type": "String",
       "group": "condition",
       "binding": { "type": "zeebe:property", "name": "gw_crossRefs" },
@@ -201,38 +211,50 @@
     },
 
     {
-      "label": "Condition / Trigger",
-      "description": "When does this norm apply? E.g. 'when processing biometric data', 'upon deployment of high-risk AI'",
+      "label": "Trigger Condition",
+      "description": "Free-text description of when this norm applies. E.g. 'when processing biometric data', 'upon deployment of a high-risk AI system'. Human-readable only — not parsed into SWRL rule bodies.",
       "type": "Text",
       "group": "scope",
-      "binding": { "type": "zeebe:property", "name": "compliance_condition" },
+      "binding": { "type": "zeebe:property", "name": "compliance_triggerCondition" },
       "value": "",
-      "condition": { "property": "elementType", "equals": "task" }
+      "condition": {
+        "allMatch": [
+          { "property": "elementType", "equals": "task" },
+          { "property": "deonticType", "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"] }
+        ]
+      }
     },
+
     {
       "label": "Jurisdiction",
-      "description": "Geographic/legal scope. E.g. EU, US-CA, UK, global",
+      "description": "Geographic or legal scope. E.g. EU, US-CA, UK, global.",
       "type": "String",
       "group": "scope",
       "binding": { "type": "zeebe:property", "name": "compliance_jurisdiction" },
       "value": ""
     },
+
     {
       "label": "Effective Date (YYYY-MM-DD)",
+      "description": "Date from which this norm is in force.",
       "type": "String",
       "group": "scope",
       "binding": { "type": "zeebe:property", "name": "compliance_effectiveDate" },
       "value": ""
     },
+
     {
       "label": "Deadline / Sunset Date (YYYY-MM-DD)",
+      "description": "Date after which this norm ceases to apply.",
       "type": "String",
       "group": "scope",
       "binding": { "type": "zeebe:property", "name": "compliance_deadline" },
       "value": ""
     },
+
     {
       "label": "Norm Status",
+      "description": "Current lifecycle status of this norm.",
       "type": "Dropdown",
       "group": "scope",
       "binding": { "type": "zeebe:property", "name": "compliance_status" },
@@ -248,16 +270,22 @@
 
     {
       "label": "Exception / Carve-out",
-      "description": "Conditions under which this norm does NOT apply",
+      "description": "Conditions under which this norm does NOT apply. Free text — formal negation is handled at the DDL layer, not by SWRL.",
       "type": "Text",
       "group": "consequence",
       "binding": { "type": "zeebe:property", "name": "compliance_exception" },
       "value": "",
-      "condition": { "property": "elementType", "equals": "task" }
+      "condition": {
+        "allMatch": [
+          { "property": "elementType", "equals": "task" },
+          { "property": "deonticType", "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"] }
+        ]
+      }
     },
+
     {
       "label": "Sanction / Consequence of Breach",
-      "description": "E.g. 'Fine up to €30M or 6% global turnover (Art. 99 EU AI Act)'",
+      "description": "Consequence of non-compliance. E.g. 'Fine up to €30M or 6% of global annual turnover (AI Act Art. 99)'.",
       "type": "Text",
       "group": "consequence",
       "binding": { "type": "zeebe:property", "name": "compliance_sanction" },
@@ -269,8 +297,10 @@
         ]
       }
     },
+
     {
       "label": "Risk Level",
+      "description": "Non-compliance risk associated with this norm.",
       "type": "Dropdown",
       "group": "consequence",
       "binding": { "type": "zeebe:property", "name": "compliance_riskLevel" },
@@ -281,11 +311,17 @@
         { "name": "🟢 Low",      "value": "low" }
       ],
       "value": "high",
-      "condition": { "property": "elementType", "equals": "task" }
+      "condition": {
+        "allMatch": [
+          { "property": "elementType", "equals": "task" },
+          { "property": "deonticType", "oneOf": ["obligation", "prohibition", "permission", "recommendation", "recommendation_not"] }
+        ]
+      }
     },
+
     {
-      "label": "Cross-references (Deontic IDs)",
-      "description": "Comma-separated IDs of related norms. E.g. OBL_002, FCT_005",
+      "label": "Related Norm IDs",
+      "description": "Comma-separated deontic IDs of norms related to this one. E.g. OBL_002, FCT_005. Used by the pipeline to generate norma:relatesTo links.",
       "type": "String",
       "group": "consequence",
       "binding": { "type": "zeebe:property", "name": "compliance_crossRefs" },
@@ -295,36 +331,44 @@
 
     {
       "label": "Regulation Name",
+      "description": "Full name of the source regulation. E.g. EU AI Act, GDPR, DSA. Minted as a norma:LegalSource individual shared across all norms of this regulation pack.",
       "type": "String",
       "group": "legalSource",
       "binding": { "type": "zeebe:property", "name": "compliance_regulation" },
       "value": "",
       "constraints": { "notEmpty": true }
     },
+
     {
       "label": "Article / Section",
+      "description": "Article or section number within the source document. E.g. 50, 6, 17.",
       "type": "String",
       "group": "legalSource",
       "binding": { "type": "zeebe:property", "name": "compliance_article" },
       "value": ""
     },
+
     {
       "label": "Paragraph / Subsection",
+      "description": "Paragraph or subsection number. E.g. 2, 1(a).",
       "type": "String",
       "group": "legalSource",
       "binding": { "type": "zeebe:property", "name": "compliance_paragraph" },
       "value": ""
     },
+
     {
       "label": "Original Legal Text",
-      "description": "Verbatim quote from the source text for traceability",
+      "description": "Verbatim quote from the source legislative text. Used for traceability and audit.",
       "type": "Text",
       "group": "legalSource",
       "binding": { "type": "zeebe:property", "name": "compliance_originalText" },
       "value": ""
     },
+
     {
       "label": "Regulation URI",
+      "description": "Dereferenceable URI of the source document. ELI-compatible. E.g. https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=OJ:L_202401689",
       "type": "String",
       "group": "legalSource",
       "binding": { "type": "zeebe:property", "name": "compliance_regulationURI" },
@@ -333,6 +377,7 @@
 
     {
       "label": "Extraction Method",
+      "description": "How this annotation was produced.",
       "type": "Dropdown",
       "group": "metadata",
       "binding": { "type": "zeebe:property", "name": "compliance_extractionMethod" },
@@ -345,16 +390,25 @@
       ],
       "value": "manual_lawyer"
     },
+
     {
       "label": "Confidence Score (0.0–1.0)",
-      "description": "Certainty of interpretation. Flag values below 0.7 for legal review.",
+      "description": "Annotator certainty in interpretation. Values below 0.7 trigger mandatory legal review.",
       "type": "String",
       "group": "metadata",
       "binding": { "type": "zeebe:property", "name": "compliance_confidence" },
-      "value": "1.0"
+      "value": "1.0",
+      "constraints": {
+        "pattern": {
+          "value": "^(0(\\.[0-9]+)?|1(\\.0+)?)$",
+          "message": "Must be a decimal between 0.0 and 1.0"
+        }
+      }
     },
+
     {
       "label": "Reviewed by Legal Counsel",
+      "description": "Legal review status of this annotation.",
       "type": "Dropdown",
       "group": "metadata",
       "binding": { "type": "zeebe:property", "name": "compliance_legalReview" },
@@ -365,13 +419,16 @@
       ],
       "value": "pending"
     },
+
     {
       "label": "Annotator",
+      "description": "Name or identifier of the person who created this annotation.",
       "type": "String",
       "group": "metadata",
       "binding": { "type": "zeebe:property", "name": "compliance_annotator" },
       "value": ""
     },
+
     {
       "label": "Annotation Date (YYYY-MM-DD)",
       "type": "String",
@@ -379,6 +436,7 @@
       "binding": { "type": "zeebe:property", "name": "compliance_annotationDate" },
       "value": ""
     },
+
     {
       "label": "Last Reviewed Date (YYYY-MM-DD)",
       "type": "String",
@@ -386,5 +444,6 @@
       "binding": { "type": "zeebe:property", "name": "compliance_lastReviewDate" },
       "value": ""
     }
+
   ]
 }
