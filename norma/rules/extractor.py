@@ -176,6 +176,9 @@ def _action_from_deontic_props(
             )
         )
 
+    # Recover the human-readable action label before symbolisation
+    action_label_raw = (props.get("compliance_action") or "").strip()
+
     data: List[DataAtom] = [
         DataAtom(
             predicate=tbox("deonticId"),
@@ -198,6 +201,24 @@ def _action_from_deontic_props(
             value=par,
         ),
     ]
+
+    if action_label_raw:
+        data.append(
+            DataAtom(
+                predicate=tbox("action"),
+                subject=norm_ref,
+                value=action_label_raw,
+            )
+        )
+
+    if obj:
+        data.append(
+            DataAtom(
+                predicate=tbox("actsOnLabel"),
+                subject=norm_ref,
+                value=(props.get("compliance_object") or "").strip(),
+            )
+        )
 
     if uri:
         data.append(
