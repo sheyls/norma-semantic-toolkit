@@ -8,6 +8,50 @@ Annotated BPMN  →  Knowledge Graph (ABox/TBox)  →  SWRL rules + SPARQL
 
 ---
 
+## Table of Contents
+
+- [Requirements](#requirements)
+- [Repository Structure](#repository-structure)
+- [Camunda Element Template](#camunda-element-template)
+  - [Installation](#installation)
+  - [Template Fields](#template-fields)
+    - [Group 1 — Element Type](#group-1--element-type)
+    - [Group 2 — Deontic Norm](#group-2--deontic-norm-shown-when-elementtype--task)
+    - [Group 3 — Legal Condition](#group-3--legal-condition-shown-when-elementtype--exclusivegateway)
+    - [Group 4 — Scope & Temporal](#group-4--scope--temporal)
+    - [Group 5 — Consequences & Exceptions](#group-5--consequences--exceptions)
+    - [Group 6 — Legal Source & Provenance](#group-6--legal-source--provenance)
+    - [Group 7 — Annotation Metadata](#group-7--annotation-metadata)
+- [NORMA Ontology (TBox)](#norma-ontology-tbox)
+  - [Design Principle](#design-principle)
+  - [Classes](#classes)
+  - [Object Properties](#object-properties)
+  - [Data Properties](#data-properties)
+- [Knowledge Graph (ABox)](#knowledge-graph-abox)
+  - [What the Pipeline Produces](#what-the-pipeline-produces)
+  - [Building the KG](#building-the-kg)
+  - [Normalization](#normalization)
+  - [Visualizing the KG](#visualizing-the-kg)
+- [SWRL Rules](#swrl-rules)
+  - [What SWRL Rules Express](#what-swrl-rules-express)
+  - [Generating SWRL Rules](#generating-swrl-rules)
+  - [Loading SWRL Rules in Protégé](#loading-swrl-rules-in-protégé)
+  - [Rule Intermediate Representation](#rule-intermediate-representation)
+- [SPARQL Queries](#sparql-queries)
+  - [Running Queries](#running-queries)
+  - [Preset Query Library](#preset-query-library)
+  - [Example Queries](#example-queries)
+  - [Extending the Preset Library](#extending-the-preset-library)
+- [Web Application](#web-application)
+  - [Starting the App](#starting-the-app)
+  - [UI Panels](#ui-panels)
+  - [API Endpoints](#api-endpoints)
+- [Quick Start](#quick-start)
+- [Example — EU AI Act Art. 50 / Art. 95](#example--eu-ai-act-art-50--art-95)
+- [Licence](#licence)
+
+---
+
 ## Requirements
 
 - Python 3.10+
