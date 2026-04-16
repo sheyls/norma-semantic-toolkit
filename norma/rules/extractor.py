@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple, Optional
 from collections import deque
 
 from norma.parsing.bpmn_parser import Node, ReducedEdge
+from norma.kg.builder import auto_deontic_id
 from norma.rules.ir import (
     Ref,
     RuleIR,
@@ -104,10 +105,10 @@ def _binding_force_ref(raw: str) -> Optional[Ref]:
 
 def _risk_level_ref(raw: str) -> Optional[Ref]:
     mapping = {
-        "critical": "CriticalRisk",
-        "high": "HighRisk",
-        "medium": "MediumRisk",
-        "low": "LowRisk",
+        "critical": "Critical",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low",
     }
     key = to_symbol(raw or "").lower()
     target = mapping.get(key)
@@ -119,7 +120,9 @@ def _action_from_deontic_props(
     task_id: str,
 ) -> Tuple[Action, Tuple[RelationAtom, ...], Tuple[DataAtom, ...]]:
     dtype = (props.get("compliance_deonticType") or "unknown").strip().lower()
-    did = (props.get("compliance_deonticId") or "NO_ID").strip()
+    raw_did = (props.get("compliance_deonticId") or "").strip()
+    bpmn_name = (props.get("_bpmn_name") or "").strip()
+    did = raw_did if raw_did else auto_deontic_id(dtype, bpmn_name, task_id)
 
     agent = to_symbol(props.get("compliance_agent") or "x")
     action_name = to_symbol(props.get("compliance_action") or "")
@@ -131,7 +134,7 @@ def _action_from_deontic_props(
     risk = (props.get("compliance_riskLevel") or "").strip()
     bind = (props.get("compliance_bindingForce") or "").strip()
 
-    node_id = to_symbol(did) if did != "NO_ID" else f"task_{to_symbol(task_id)}"
+    node_id = to_symbol(did)
 
     agent_ref = abox(f"Agent_{agent}")
     object_ref = abox(f"Object_{obj}")
@@ -145,12 +148,12 @@ def _action_from_deontic_props(
 
     relations: List[RelationAtom] = [
         RelationAtom(
-            predicate=tbox("performsAction"),
+            predicate=tbox("isLegalAgentOf"),
             subject=agent_ref,
             object=norm_ref,
         ),
         RelationAtom(
-            predicate=tbox("actsOn"),
+            predicate=tbox("hasObject"),
             subject=norm_ref,
             object=object_ref,
         ),
@@ -170,14 +173,16 @@ def _action_from_deontic_props(
     if risk_ref is not None:
         relations.append(
             RelationAtom(
-                predicate=tbox("hasRiskLevel"),
+                predicate=tbox("hasComplianceCriticality"),
                 subject=norm_ref,
                 object=risk_ref,
             )
         )
 
-    # Recover the human-readable action label before symbolisation
+    # Recover the human-readable labels before symbolisation
+    agent_label_raw  = (props.get("compliance_agent")  or "").strip()
     action_label_raw = (props.get("compliance_action") or "").strip()
+    object_label_raw = (props.get("compliance_object") or "").strip()
 
     data: List[DataAtom] = [
         DataAtom(
@@ -202,21 +207,30 @@ def _action_from_deontic_props(
         ),
     ]
 
+    if agent_label_raw:
+        data.append(
+            DataAtom(
+                predicate=tbox("agentText"),
+                subject=norm_ref,
+                value=agent_label_raw,
+            )
+        )
+
     if action_label_raw:
         data.append(
             DataAtom(
-                predicate=tbox("action"),
+                predicate=tbox("actionText"),
                 subject=norm_ref,
                 value=action_label_raw,
             )
         )
 
-    if obj:
+    if object_label_raw:
         data.append(
             DataAtom(
-                predicate=tbox("actsOnLabel"),
+                predicate=tbox("objectText"),
                 subject=norm_ref,
-                value=(props.get("compliance_object") or "").strip(),
+                value=object_label_raw,
             )
         )
 

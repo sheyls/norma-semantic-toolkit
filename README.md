@@ -130,8 +130,7 @@ All values are stored as `zeebe:property` bindings and read by the NORMA pipelin
 |-------|---------|------|-------|
 | Deontic Modality | `compliance_deonticType` | Dropdown | `obligation` · `prohibition` · `permission` · `recommendation` · `recommendation_not` · `fact` |
 | Norm Statement | `compliance_normStatement` | Text area | Human-readable restatement for lawyers. Not parsed by the pipeline. |
-| Deontic ID | `compliance_deonticId` | String | Unique ID within the regulation pack. Pattern: `OBL_xxx`, `PRH_xxx`, `PER_xxx`, `REC_xxx`, `REC_NOT_xxx`, `FCT_xxx`. |
-| Agent (Who) | `compliance_agent` | String | The norm bearer — who must/must not/may act. Minted as `norma:Agent` in the KG. |
+| Agent (Who) | `compliance_agent` | String | The norm bearer — who must/must not/may act. Minted as `norma:LegalAgent` in the KG. Auto-generates the deontic individual ID from modality and task label. |
 | Action (What) | `compliance_action` | String | Verb phrase — e.g. *establish*, *disclose*, *deploy*. |
 | Object (On What) | `compliance_object` | String | Entity acted upon — e.g. *risk_management_system*. Minted as `norma:LegalObject` in the KG. |
 | Fact Statement | `compliance_factStatement` | Text area | *(fact only)* Constitutive rule in plain language. |
@@ -146,7 +145,7 @@ All values are stored as `zeebe:property` bindings and read by the NORMA pipelin
 | Condition Statement | `gw_conditionStatement` | Text area | Legal question at the gateway — e.g. *"Is the AI system classified as high-risk?"* |
 | True Branch Label | `gw_trueBranch` | String | Label on the "yes" outgoing flow — e.g. *High-risk* |
 | False Branch Label | `gw_falseBranch` | String | Label on the "no" outgoing flow — e.g. *Low-risk* |
-| Triggered Norm IDs | `gw_crossRefs` | String | Comma-separated deontic IDs triggered by this condition — used to generate `norma:triggersNorm` links. |
+| Cross-Reference IDs | `gw_crossRefs` | String | Comma-separated deontic IDs cross-referenced by this condition — used to generate `norma:relatesTo` links. |
 
 ---
 
@@ -227,11 +226,12 @@ The TBox is derived strictly from the element template:
 
 | Class | Role |
 |-------|------|
-| `norma:NormativeContent` | Root class for content carried by BPMN task elements |
+| `norma:RegulativeNorm` | Root class for content carried by BPMN task elements |
 | `norma:LegalCondition` | Content carried by BPMN exclusive gateway elements |
-| `norma:Agent` | The bearer of a norm — who must/must not/may act |
+| `norma:LegalAgent` | The bearer of a norm — who must/must not/may act |
 | `norma:LegalObject` | The entity on which the prescribed action is performed |
 | `norma:LegalSource` | The legislative document from which a norm is extracted |
+| `norma:ComplianceCriticality` | Risk level of non-compliance (`Critical/High/Medium/Low`) |
 
 #### Deontic Modality Classes *(subclasses of NormativeContent)*
 
@@ -250,7 +250,7 @@ The TBox is derived strictly from the element template:
 
 #### Risk Level Individuals
 
-`norma:CriticalRisk` · `norma:HighRisk` · `norma:MediumRisk` · `norma:LowRisk`
+`norma:Critical` · `norma:High` · `norma:Medium` · `norma:Low`
 
 #### Norm Status Individuals
 
@@ -268,27 +268,29 @@ The TBox is derived strictly from the element template:
 
 | Property | Domain | Range | Meaning |
 |----------|--------|-------|---------|
-| `norma:hasAgent` | NormativeContent | Agent | Who bears the norm |
-| `norma:actsOn` | NormativeContent | LegalObject | Object of the prescribed action |
-| `norma:fromSource` | NormativeContent | LegalSource | Provenance link |
-| `norma:hasBindingForce` | NormativeContent | BindingForce | Legal weight |
-| `norma:hasRiskLevel` | NormativeContent | RiskLevel | Non-compliance risk |
-| `norma:hasStatus` | NormativeContent | NormStatus | Lifecycle status |
-| `norma:hasExtractionMethod` | NormativeContent | ExtractionMethod | How annotation was produced |
-| `norma:hasLegalReview` | NormativeContent | LegalReview | Review status |
-| `norma:relatesTo` | NormativeContent | NormativeContent | Cross-reference between norms |
-| `norma:triggersNorm` | LegalCondition | NormativeContent | Gateway → triggered norm |
+| `norma:hasLegalAgent` | RegulativeNorm | LegalAgent | Who bears the norm |
+| `norma:isLegalAgentOf` | LegalAgent | RegulativeNorm | Inverse of `hasLegalAgent` |
+| `norma:hasObject` | RegulativeNorm | LegalObject | Object of the prescribed action |
+| `norma:hasLegalSource` | RegulativeNorm | LegalSource | Provenance link |
+| `norma:hasBindingForce` | RegulativeNorm | BindingForce | Legal weight |
+| `norma:hasComplianceCriticality` | RegulativeNorm | ComplianceCriticality | Non-compliance risk level |
+| `norma:hasNormStatus` | RegulativeNorm | NormStatus | Lifecycle status |
+| `norma:hasExtractionMethod` | RegulativeNorm | ExtractionMethod | How annotation was produced |
+| `norma:hasReviewStatus` | RegulativeNorm | ReviewStatus | Review status |
+| `norma:relatesTo` | RegulativeNorm | RegulativeNorm | Cross-reference between norms |
+| `norma:triggersNorm` | LegalCondition | RegulativeNorm | Gateway → triggered norm |
 
 ### Data Properties
 
 | Property | Type | Source field |
 |----------|------|-------------|
+| `norma:deonticId` | xsd:string | `compliance_deonticId` *(auto-generated)* |
 | `norma:normStatement` | xsd:string | `compliance_normStatement` |
-| `norma:deonticId` | xsd:string | `compliance_deonticId` |
-| `norma:action` | xsd:string | `compliance_action` |
-| `norma:actsOnLabel` | xsd:string | `compliance_object` |
+| `norma:agentText` | xsd:string | `compliance_agent` |
+| `norma:actionText` | xsd:string | `compliance_action` |
+| `norma:objectText` | xsd:string | `compliance_object` |
 | `norma:factStatement` | xsd:string | `compliance_factStatement` |
-| `norma:triggerCondition` | xsd:string | `compliance_triggerCondition` |
+| `norma:conditionTrigger` | xsd:string | `compliance_triggerCondition` |
 | `norma:jurisdiction` | xsd:string | `compliance_jurisdiction` |
 | `norma:effectiveDate` | xsd:date | `compliance_effectiveDate` |
 | `norma:deadline` | xsd:date | `compliance_deadline` |
@@ -298,8 +300,8 @@ The TBox is derived strictly from the element template:
 | `norma:fromArticle` | xsd:string | `compliance_article` |
 | `norma:fromParagraph` | xsd:string | `compliance_paragraph` |
 | `norma:originalText` | xsd:string | `compliance_originalText` |
-| `norma:regulationURI` | xsd:anyURI | `compliance_regulationURI` |
-| `norma:confidence` | xsd:decimal | `compliance_confidence` |
+| `norma:sourceURI` | xsd:anyURI | `compliance_regulationURI` |
+| `norma:confidenceScore` | xsd:decimal | `compliance_confidence` |
 | `norma:annotator` | xsd:string | `compliance_annotator` |
 | `norma:annotationDate` | xsd:date | `compliance_annotationDate` |
 | `norma:lastReviewDate` | xsd:date | `compliance_lastReviewDate` |
@@ -455,9 +457,9 @@ SELECT ?agent ?norm ?article
 WHERE {
   ?norm a norma:Obligation ;
         norma:hasBindingForce norma:HardLaw ;
-        norma:hasAgent ?agent ;
+        norma:hasLegalAgent ?agent ;
         norma:fromArticle ?article .
-  ?agent rdfs:label ?agent .
+  ?agent rdfs:label ?agentLabel .
 }
 ```
 
@@ -471,8 +473,8 @@ WHERE {
   VALUES ?type { norma:Obligation norma:Prohibition norma:Permission }
   ?norm a ?type ;
         rdfs:label ?label ;
-        norma:hasAgent ?agent ;
-        norma:hasRiskLevel ?riskLevel .
+        norma:hasLegalAgent ?agent ;
+        norma:hasComplianceCriticality ?riskLevel .
   ?agent rdfs:label "AI_Provider"@en .
 }
 ```

@@ -38,11 +38,14 @@ def _node_line(n: Node) -> str:
 
 def _task_brief(task_id: str, task_props: TaskProps) -> str:
     """Pretty-print a task id with its deontic fields if annotated."""
+    from norma.kg.builder import auto_deontic_id
     props = task_props.get(task_id, {})
-    did = props.get("compliance_deonticId")
-    dt  = props.get("compliance_deonticType")
+    dt    = props.get("compliance_deonticType") or ""
+    raw   = (props.get("compliance_deonticId") or "").strip()
+    name  = (props.get("_bpmn_name") or "").strip()
+    did   = raw if raw else (auto_deontic_id(dt, name, task_id) if dt else "")
     if did or dt:
-        return f"{task_id}{{{did or 'NO_ID'}:{dt or 'unknown'}}}"
+        return f"{task_id}{{{did or '?'}:{dt or 'unknown'}}}"
     return task_id
 
 

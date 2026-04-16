@@ -97,7 +97,7 @@ class TestToTurtle:
 
     def test_risk_level_iri_not_literal(self, sample_bpmn_xml):
         ttl = self._turtle(sample_bpmn_xml)
-        assert f"<{NORMA_IRI}HighRisk>"      in ttl
+        assert f"<{NORMA_IRI}High>"          in ttl
         assert '"high"'                      not in ttl
 
     def test_obligation_class_iri(self, sample_bpmn_xml):
@@ -110,7 +110,7 @@ class TestToTurtle:
 
     def test_agent_individual_declared(self, sample_bpmn_xml):
         ttl = self._turtle(sample_bpmn_xml)
-        assert "norma:Agent" in ttl
+        assert "norma:LegalAgent" in ttl
         assert 'rdfs:label "AI owner"@en' in ttl
 
     def test_articles_aggregated_under_one_source(self, sample_bpmn_xml):

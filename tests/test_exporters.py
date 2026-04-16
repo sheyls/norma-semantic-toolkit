@@ -71,8 +71,8 @@ class TestSWRLExporter:
 
     def test_tbox_properties_in_head(self, sample_bpmn_xml):
         content = _export(sample_bpmn_xml)
-        assert f"{TBOX_NS}performsAction" in content
-        assert f"{TBOX_NS}actsOn"         in content
+        assert f"{TBOX_NS}isLegalAgentOf" in content
+        assert f"{TBOX_NS}hasObject"      in content
 
     def test_abox_individuals_in_head(self, sample_bpmn_xml):
         content = _export(sample_bpmn_xml)
