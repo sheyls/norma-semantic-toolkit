@@ -2,7 +2,7 @@
   "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
   "name": "NORMA — Legal Compliance Annotation",
   "id": "norma.compliance.annotation.v1",
-  "description": "Legal compliance annotation for BPMN tasks and exclusive gateways in the NORMA workflow.",
+  "description": "Annotate BPMN tasks with legally relevant norms — obligations, prohibitions, permissions, and recommendations — derived from regulatory sources. Annotate exclusive gateways with the legal conditions that determine the applicability of those norms.",
   "version": 1,
   "appliesTo": [
     "bpmn:Task",
