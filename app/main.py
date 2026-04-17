@@ -27,6 +27,7 @@ Endpoints:
 
 from __future__ import annotations
 
+import dataclasses
 import io
 import json
 import re
@@ -50,12 +51,15 @@ from norma.parsing.bpmn_parser import parse_bpmn_to_reduced_graph
 from norma.rules.extractor import enumerate_paths_and_build_ir
 from norma.rules.ir import RuleIR
 from norma.exporters.swrl import export_rules_to_owl
+from norma.utils import to_symbol
 
 try:
-    from norma.kg.builder import parse_bpmn_folder, to_json, to_turtle
+    from norma.kg.builder import parse_bpmn_folder, to_json, to_turtle, auto_deontic_id
     _KG_AVAILABLE = True
 except ImportError:
     _KG_AVAILABLE = False
+    def auto_deontic_id(dtype: str, bpmn_name: str, bpmn_id: str) -> str:  # type: ignore[misc]
+        return bpmn_id
 
 # ── pyoxigraph ────────────────────────────────────────────────────────────────
 try:
@@ -98,12 +102,41 @@ async def load_packs() -> None:
     for reg_dir in sorted(REGS_DIR.iterdir()):
         if not reg_dir.is_dir():
             continue
-        abox_file = next(reg_dir.glob("*.abox.ttl"), None)
-        swrl_file = next(reg_dir.glob("*.swrl.owl"), None)
-        if not abox_file:
+
+        abox_iri  = f"https://w3id.org/norma-abox/{reg_dir.name}"
+        bpmn_dir  = reg_dir / "bpmn"
+        abox_ttl: Optional[str] = None
+
+        # ── Prefer building ABox live from all BPMN files in bpmn/ ──────────
+        if _KG_AVAILABLE and bpmn_dir.is_dir() and any(bpmn_dir.glob("*.bpmn")):
+            try:
+                elements, _ = parse_bpmn_folder(bpmn_dir)
+                records  = to_json(elements)
+                abox_ttl = to_turtle(records, str(bpmn_dir), abox_iri)
+            except Exception as exc:
+                print(f"[norma] Warning: ABox build failed for {reg_dir.name}: {exc}")
+
+        # ── Fall back to pre-built .abox.ttl ────────────────────────────────
+        if not abox_ttl:
+            abox_file = next(reg_dir.glob("*.abox.ttl"), None)
+            if abox_file:
+                abox_ttl = abox_file.read_text(encoding="utf-8")
+
+        if not abox_ttl:
             continue
+
         rules_ir, task_props = _rules_from_bpmn_dir(reg_dir)
-        _register_pack(reg_dir.name, abox_file, swrl_file, rules_ir, task_props)
+        swrl_file = next(reg_dir.glob("*.swrl.owl"), None)
+        store = _build_store(abox_ttl) if _OX_AVAILABLE else None
+
+        _packs[reg_dir.name] = {
+            "abox_ttl":   abox_ttl,
+            "swrl_owl":   swrl_file.read_text(encoding="utf-8") if swrl_file else None,
+            "store":      store,
+            "rules_ir":   rules_ir,
+            "task_props": task_props or {},
+        }
+        print(f"[norma] Loaded: {reg_dir.name} — {len(rules_ir)} rule(s)")
 
 
 def _rules_from_bpmn_dir(reg_dir: Path):
@@ -126,30 +159,13 @@ def _rules_from_bpmn_dir(reg_dir: Path):
                 gateway_outgoing_index=gw_index,
                 task_props=task_props,
             )
-            rules_ir.extend(ir)
+            # Tag each rule with the source BPMN filename
+            rules_ir.extend(
+                dataclasses.replace(r, source=bpmn_file.name) for r in ir
+            )
         except Exception as exc:
             print(f"[norma] Warning: could not extract rules from {bpmn_file.name}: {exc}")
     return rules_ir, all_task_props
-
-
-def _register_pack(
-    name: str,
-    abox_path: Path,
-    swrl_path: Optional[Path],
-    rules_ir: list,
-    task_props: Optional[dict] = None,
-) -> None:
-    abox_ttl = abox_path.read_text(encoding="utf-8")
-    swrl_owl = swrl_path.read_text(encoding="utf-8") if swrl_path else None
-    store    = _build_store(abox_ttl) if _OX_AVAILABLE else None
-    _packs[name] = {
-        "abox_ttl":   abox_ttl,
-        "swrl_owl":   swrl_owl,
-        "store":      store,
-        "rules_ir":   rules_ir,
-        "task_props": task_props or {},
-    }
-    print(f"[norma] Loaded: {name} — {len(rules_ir)} rule(s)")
 
 
 def _build_store(ttl_text: str):
@@ -283,47 +299,87 @@ async def get_conditions(pack: str):
 async def evaluate_conditions(pack: str, request: Request):
     """
     Body: {predicate_name: bool, ...}
-    Returns rules whose conditions are all satisfied by the provided answers.
+    Returns one result per applicable norm (deduplicated across matched paths).
+    A rule matches when ALL its conditions are answered and satisfied.
     """
     p = _require_pack(pack)
     answers: Any = await request.json()
 
-    matched = []
+    seen_norm_ids: set = set()
+    matched: list = []
+
     for rule in p["rules_ir"]:
         cond_names = {c.predicate.name for c in rule.conditions}
         if not cond_names.issubset(answers.keys()):
-            continue  # unanswered conditions — skip
-        if all(answers[c.predicate.name] == c.value for c in rule.conditions):
-            matched.append(_rule_to_dict(rule))
+            continue  # some conditions unanswered — skip
+        if not all(answers[c.predicate.name] == c.value for c in rule.conditions):
+            continue  # conditions not satisfied
+
+        # Rule matches — emit one entry per norm on this path, deduplicated
+        for norm_id in _norm_ids_in_rule(rule):
+            if norm_id in seen_norm_ids:
+                continue
+            seen_norm_ids.add(norm_id)
+            matched.append(_norm_to_dict(norm_id, rule))
 
     return {"matched_rules": matched}
 
 
-def _rule_to_dict(rule: RuleIR) -> Any:
-    def _rel(pred: str) -> Optional[str]:
-        return next(
-            (r.object.name for r in rule.relations if r.predicate.name == pred), None
-        )
+def _norm_ids_in_rule(rule: RuleIR) -> list[str]:
+    """Return the deontic IDs of every norm on this rule's path, in order."""
+    seen: set = set()
+    ids: list = []
+    for d in rule.data_atoms:
+        if d.predicate.name == "deonticId" and d.value not in seen:
+            seen.add(d.value)
+            ids.append(d.value)
+    return ids
+
+
+def _norm_to_dict(norm_id: str, rule: RuleIR) -> Any:
+    """Build an evaluate result dict for a single norm using per-subject filtering."""
+    sym = to_symbol(norm_id)
+
     def _dat(pred: str) -> Optional[str]:
         return next(
-            (d.value for d in rule.data_atoms if d.predicate.name == pred), None
+            (d.value for d in rule.data_atoms
+             if d.predicate.name == pred and d.subject.name == sym),
+            None,
         )
 
-    # Fallback for object: derive from actsOn IRI name
-    object_label = _dat("actsOnLabel") or None
+    def _rel_obj(pred: str) -> Optional[str]:
+        """Object-property where THIS norm is the subject."""
+        return next(
+            (r.object.name for r in rule.relations
+             if r.predicate.name == pred and r.subject.name == sym),
+            None,
+        )
+
+    def _rel_subj(pred: str) -> Optional[str]:
+        """Object-property where THIS norm is the object."""
+        return next(
+            (r.subject.name for r in rule.relations
+             if r.predicate.name == pred and r.object.name == sym),
+            None,
+        )
+
+    object_label = _dat("objectText") or None
     if not object_label:
-        raw = _rel("actsOn") or ""
+        raw = _rel_obj("hasObject") or ""
         object_label = raw.replace("Object_", "").replace("_", " ").strip() or None
+
+    agent_id = _rel_subj("isLegalAgentOf")
 
     return {
         "rule_id":       rule.rid,
-        "norm_id":       _dat("deonticId") or rule.rid,
+        "norm_id":       norm_id,
+        "bpmn_source":   rule.source,
         "conditions":    [{"predicate": c.predicate.name, "value": c.value} for c in rule.conditions],
-        "agent":         next((r.subject.name for r in rule.relations if r.predicate.name == "performsAction"), None),
-        "action":        _dat("action"),
+        "agent":         agent_id,
+        "action":        _dat("actionText"),
         "object":        object_label,
-        "binding_force": _rel("hasBindingForce"),
-        "risk_level":    _rel("hasRiskLevel"),
+        "binding_force": _rel_obj("hasBindingForce"),
+        "risk_level":    _rel_obj("hasComplianceCriticality"),
         "regulation":    _dat("fromRegulation"),
         "article":       _dat("fromArticle"),
         "paragraph":     _dat("fromParagraph"),
@@ -430,12 +486,16 @@ async def upload_bpmn(file: UploadFile = File(...)):
         nodes, edges, _, gw_index, task_props = parse_bpmn_to_reduced_graph(xml)
         for props in task_props.values():
             props.setdefault("_bpmn_source", file.filename or "upload.bpmn")
-        _, rules_ir, _ = enumerate_paths_and_build_ir(
+        _, rules_ir_raw, _ = enumerate_paths_and_build_ir(
             nodes=nodes,
             edges=edges,
             gateway_outgoing_index=gw_index,
             task_props=task_props,
         )
+        rules_ir = [
+            dataclasses.replace(r, source=file.filename or "upload.bpmn")
+            for r in rules_ir_raw
+        ]
     except Exception as exc:
         raise HTTPException(422, f"Rule extraction failed: {exc}")
 
@@ -519,7 +579,7 @@ async def pack_graph(pack: str):
         rsbj = {r.predicate.name: r.subject.name for r in rule.relations}
 
         norm_id      = dat.get("deonticId") or rule.rid
-        action_label = dat.get("action") or norm_id
+        action_label = dat.get("actionText") or norm_id
 
         dtype = "Norm"
         for action in rule.actions:
@@ -531,17 +591,22 @@ async def pack_graph(pack: str):
         reg      = dat.get("fromRegulation", "")
         article  = dat.get("fromArticle", "")
         src_info = " · ".join(x for x in [reg, f"Art. {article}" if article else ""] if x)
-        add_node(norm_id, action_label, dtype, {"source": src_info, "regulation": reg, "article": article})
+        add_node(norm_id, action_label, dtype, {
+            "source":      src_info,
+            "regulation":  reg,
+            "article":     article,
+            "bpmn_source": rule.source,
+        })
 
-        agent_id = rsbj.get("performsAction")
+        agent_id = rsbj.get("isLegalAgentOf")
         if agent_id:
             agent_label = agent_id.replace("Agent_", "").replace("_", " ").title()
             add_node(agent_id, agent_label, "Agent")
             add_edge(agent_id, norm_id, "performs")
 
-        obj_id = robj.get("actsOn")
+        obj_id = robj.get("hasObject")
         if obj_id:
-            obj_label = dat.get("actsOnLabel") or obj_id.replace("Object_", "").replace("_", " ").title()
+            obj_label = dat.get("objectText") or obj_id.replace("Object_", "").replace("_", " ").title()
             add_node(obj_id, obj_label, "Object")
             add_edge(norm_id, obj_id, "acts on")
 
@@ -550,7 +615,7 @@ async def pack_graph(pack: str):
             add_node(bf_id, camel_split(bf_id), "BindingForce")
             add_edge(norm_id, bf_id, "binding force")
 
-        risk_id = robj.get("hasRiskLevel")
+        risk_id = robj.get("hasComplianceCriticality")
         if risk_id:
             add_node(risk_id, camel_split(risk_id), "RiskLevel")
             add_edge(norm_id, risk_id, "risk level")
@@ -571,76 +636,110 @@ async def pack_graph(pack: str):
 
 @app.get("/api/pack/{pack}/norms")
 async def pack_norms(pack: str):
-    """Return every norm with the complete set of Camunda template fields."""
+    """
+    Return every annotated BPMN element (one entry per task / gateway),
+    with the complete Camunda template fields read directly from task_props
+    and the minimal gateway conditions that trigger each norm.
+    """
     p = _require_pack(pack)
     raw_props: dict = p.get("task_props", {})
 
-    # Build lookup: deonticId → raw props dict
-    id_to_props: dict = {}
-    for props in raw_props.values():
-        did = (props.get("compliance_deonticId") or "").strip()
-        if did:
-            id_to_props[did] = props
+    # ── Build norm_id → minimal conditions across all rules that contain it ──
+    #    "minimal" = intersection of condition sets: conditions that are the
+    #    same (same predicate + same value) on every path that includes this norm.
+    norm_to_cond_sets: dict = {}  # norm_id → list[frozenset[(pred, val)]]
+    norm_to_first_conds: dict = {}  # norm_id → first condition list (for label fallback)
+    for rule in p["rules_ir"]:
+        rule_norm_ids = _norm_ids_in_rule(rule)
+        rule_cond_set = frozenset((c.predicate.name, c.value) for c in rule.conditions)
+        rule_cond_list = [
+            {"predicate": c.predicate.name, "label": c.predicate.name.replace("_", " "), "value": c.value}
+            for c in rule.conditions
+        ]
+        for nid in rule_norm_ids:
+            norm_to_cond_sets.setdefault(nid, []).append(rule_cond_set)
+            norm_to_first_conds.setdefault(nid, rule_cond_list)
+
+    def _minimal_conditions(norm_id: str) -> list:
+        sets = norm_to_cond_sets.get(norm_id)
+        if not sets:
+            return []
+        common = sets[0]
+        for s in sets[1:]:
+            common = common & s
+        # Sort by predicate name for stable output
+        return [
+            {"predicate": pred, "label": pred.replace("_", " "), "value": val}
+            for pred, val in sorted(common)
+        ]
 
     def g(d: dict, key: str) -> str:
         return (d.get(key) or "").strip()
 
     result = []
-    for rule in p["rules_ir"]:
-        dat  = {da.predicate.name: da.value for da in rule.data_atoms}
-        norm_id = dat.get("deonticId") or rule.rid
-        raw = id_to_props.get(norm_id, {})
+    seen: set = set()
+
+    for bpmn_id, props in raw_props.items():
+        etype     = (props.get("compliance_elementType") or "task").strip()
+        dtype     = (props.get("compliance_deonticType") or "").strip().lower()
+        bpmn_name = (props.get("_bpmn_name") or "").strip()
+
+        # Compute canonical norm_id — same logic as extractor
+        raw_did = (props.get("compliance_deonticId") or "").strip()
+        if raw_did:
+            norm_id = raw_did
+        elif dtype:
+            norm_id = auto_deontic_id(dtype, bpmn_name, bpmn_id)
+        else:
+            norm_id = bpmn_id  # gateway with no deontic type
+
+        if norm_id in seen:
+            continue
+        seen.add(norm_id)
 
         result.append({
-            "rule_id":    rule.rid,
+            "rule_id":    bpmn_id,
             "norm_id":    norm_id,
-            # ── Source provenance (not in template, derived) ──────────────────
-            "bpmn_source":  raw.get("_bpmn_source", ""),
-            "element_type": g(raw, "compliance_elementType") or "task",
+            # ── Source provenance ─────────────────────────────────────────────
+            "bpmn_source":  g(props, "_bpmn_source"),
+            "element_type": etype,
             # ── Deontic Norm ──────────────────────────────────────────────────
-            "deontic_type":   g(raw, "compliance_deonticType")   or dat.get("deonticType", ""),
-            "norm_statement": g(raw, "compliance_normStatement"),
-            "agent":          g(raw, "compliance_agent"),
-            "action":         g(raw, "compliance_action")        or dat.get("action", ""),
-            "object":         g(raw, "compliance_object")        or dat.get("actsOnLabel", ""),
-            "fact_statement": g(raw, "compliance_factStatement"),
-            "binding_force":  g(raw, "compliance_bindingForce"),
+            "deontic_type":   dtype,
+            "norm_statement": g(props, "compliance_normStatement"),
+            "agent":          g(props, "compliance_agent"),
+            "action":         g(props, "compliance_action"),
+            "object":         g(props, "compliance_object"),
+            "fact_statement": g(props, "compliance_factStatement"),
+            "binding_force":  g(props, "compliance_bindingForce"),
             # ── Legal Condition (gateway fields) ──────────────────────────────
-            "gw_condition_statement": g(raw, "gw_conditionStatement"),
-            "gw_true_branch":         g(raw, "gw_trueBranch"),
-            "gw_false_branch":        g(raw, "gw_falseBranch"),
-            "gw_triggered_norms":     g(raw, "gw_crossRefs"),
+            "gw_condition_statement": g(props, "gw_conditionStatement"),
+            "gw_true_branch":         g(props, "gw_trueBranch"),
+            "gw_false_branch":        g(props, "gw_falseBranch"),
             # ── Legal Source ──────────────────────────────────────────────────
-            "regulation":     g(raw, "compliance_regulation")    or dat.get("fromRegulation", ""),
-            "article":        g(raw, "compliance_article")       or dat.get("fromArticle", ""),
-            "paragraph":      g(raw, "compliance_paragraph")     or dat.get("fromParagraph", ""),
-            "original_text":  g(raw, "compliance_originalText"),
-            "regulation_uri": g(raw, "compliance_regulationURI") or dat.get("sourceURI", ""),
+            "regulation":     g(props, "compliance_regulation"),
+            "article":        g(props, "compliance_article"),
+            "paragraph":      g(props, "compliance_paragraph"),
+            "original_text":  g(props, "compliance_originalText"),
+            "regulation_uri": g(props, "compliance_regulationURI"),
             # ── Scope & Temporal ──────────────────────────────────────────────
-            "trigger_condition": g(raw, "compliance_triggerCondition"),
-            "jurisdiction":      g(raw, "compliance_jurisdiction"),
-            "effective_date":    g(raw, "compliance_effectiveDate"),
-            "deadline":          g(raw, "compliance_deadline"),
-            "status":            g(raw, "compliance_status"),
+            "trigger_condition": g(props, "compliance_triggerCondition"),
+            "jurisdiction":      g(props, "compliance_jurisdiction"),
+            "effective_date":    g(props, "compliance_effectiveDate"),
+            "deadline":          g(props, "compliance_deadline"),
+            "status":            g(props, "compliance_status"),
             # ── Consequences & Exceptions ─────────────────────────────────────
-            "exception":  g(raw, "compliance_exception"),
-            "sanction":   g(raw, "compliance_sanction"),
-            "risk_level": g(raw, "compliance_riskLevel"),
-            "cross_refs": g(raw, "compliance_crossRefs"),
+            "exception":  g(props, "compliance_exception"),
+            "sanction":   g(props, "compliance_sanction"),
+            "risk_level": g(props, "compliance_riskLevel"),
             # ── Annotation Metadata ───────────────────────────────────────────
-            "extraction_method": g(raw, "compliance_extractionMethod"),
-            "confidence":        g(raw, "compliance_confidence"),
-            "legal_review":      g(raw, "compliance_legalReview"),
-            "annotator":         g(raw, "compliance_annotator"),
-            "annotation_date":   g(raw, "compliance_annotationDate"),
-            "last_review_date":  g(raw, "compliance_lastReviewDate"),
-            # ── Conditions (from IR — BPMN gateway paths) ────────────────────
-            "conditions": [
-                {"predicate": c.predicate.name,
-                 "label":     c.predicate.name.replace("_", " "),
-                 "value":     c.value}
-                for c in rule.conditions
-            ],
+            "extraction_method": g(props, "compliance_extractionMethod"),
+            "confidence":        g(props, "compliance_confidence"),
+            "legal_review":      g(props, "compliance_legalReview"),
+            "annotator":         g(props, "compliance_annotator"),
+            "annotation_date":   g(props, "compliance_annotationDate"),
+            "last_review_date":  g(props, "compliance_lastReviewDate"),
+            # ── Conditions: minimal set that triggers this norm ───────────────
+            "conditions": _minimal_conditions(norm_id),
         })
 
     return {"norms": result}
@@ -653,7 +752,6 @@ _NORM_FIELD_MAP: dict = {
     "gw_condition_statement":  "gw_conditionStatement",
     "gw_true_branch":          "gw_trueBranch",
     "gw_false_branch":         "gw_falseBranch",
-    "gw_triggered_norms":      "gw_crossRefs",
     "agent":              "compliance_agent",
     "action":             "compliance_action",
     "object":             "compliance_object",
@@ -672,7 +770,6 @@ _NORM_FIELD_MAP: dict = {
     "risk_level":         "compliance_riskLevel",
     "sanction":           "compliance_sanction",
     "exception":          "compliance_exception",
-    "cross_refs":         "compliance_crossRefs",
     "extraction_method":  "compliance_extractionMethod",
     "confidence":         "compliance_confidence",
     "legal_review":       "compliance_legalReview",
@@ -689,11 +786,17 @@ async def update_norm(pack: str, norm_id: str, request: Request):
     body = await request.json()
     raw_props: dict = p.setdefault("task_props", {})
 
-    # Find the existing entry whose compliance_deonticId matches norm_id
+    # Find the task entry whose deontic ID (explicit or auto-generated) matches
     target_key: Optional[str] = None
     for task_key, props in raw_props.items():
-        did = (props.get("compliance_deonticId") or "").strip()
-        if did == norm_id:
+        explicit = (props.get("compliance_deonticId") or "").strip()
+        if explicit == norm_id:
+            target_key = task_key
+            break
+        # Try auto-generated ID
+        dtype = (props.get("compliance_deonticType") or "").strip().lower()
+        bpmn_name = (props.get("_bpmn_name") or "").strip()
+        if dtype and auto_deontic_id(dtype, bpmn_name, task_key) == norm_id:
             target_key = task_key
             break
 

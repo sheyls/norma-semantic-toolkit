@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal, Tuple
 
 
@@ -41,6 +41,21 @@ class Action:
 
 
 @dataclass(frozen=True)
+class ClassAtom:
+    """
+    SWRL head class-membership atom.
+
+    Asserts the OWL class of the norm individual so that a SWRL reasoner
+    can infer the deontic modality from the rule alone (without the ABox).
+
+    Example:
+      norma:Obligation(:OBL_1)
+    """
+    class_ref: Ref   # must be Ref("tbox", ...)
+    subject: Ref     # must be Ref("abox", ...) or Ref("var", ...)
+
+
+@dataclass(frozen=True)
 class RelationAtom:
     """
     SWRL head object-property atom.
@@ -74,3 +89,5 @@ class RuleIR:
     actions: Tuple[Action, ...] = ()
     relations: Tuple[RelationAtom, ...] = ()
     data_atoms: Tuple[DataAtom, ...] = ()
+    class_atoms: Tuple[ClassAtom, ...] = ()  # norm rdf:type assertions for SWRL head
+    source: str = ""                          # source BPMN filename
