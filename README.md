@@ -87,99 +87,109 @@ The template is also available as a download from the web application: **Tools �
 
 # NORMA Annotation Template — Field Reference
 
-The NORMA annotation template is applied directly inside Camunda Modeler to BPMN tasks and exclusive gateways. Each annotated element becomes a node in the NORMA knowledge graph. The template is organised into seven sections.
+The NORMA annotation template is applied directly inside Camunda Modeler to BPMN tasks and exclusive gateways. Each annotated element becomes a node in the NORMA knowledge graph. This section describes every field in the template, organised by section, explaining what it captures and why it is necessary.
 
 ---
 
 ## Element Type
 
-**Element Type** determines whether the annotated element is a task or an exclusive gateway. A task represents a norm — something a legal role must do, must not do, may do, or should do. An exclusive gateway represents a legal condition — a yes/no question whose answer determines which norms apply in a given situation. This field controls the visibility of all other fields and is the entry point of the annotation.
+The template applies to two structurally different kinds of BPMN elements, and the first field makes that distinction explicit.
+
+**Element Type** determines whether the element being annotated is a task or an exclusive gateway. A task represents a norm: something a legal role must do, must not do, may do, or should do. An exclusive gateway represents a legal condition: a yes/no question whose answer determines which norms are applicable in a given situation. This field controls the visibility of all other fields in the template and is the entry point of the entire annotation.
 
 ---
 
 ## Norm Content
 
-This section captures the substantive content of the norm. It is the semantic core of the annotation — defining what the law prescribes, to whom, on what, and with what legal weight.
+This section captures the substantive content of the norm. It is the semantic core of the annotation — the information that defines what the law prescribes, to whom, on what, and with what legal weight.
 
-**Deontic Modality** specifies the modal operator of the norm. Available values: obligation (MUST), prohibition (MUST NOT), permission (MAY), recommendation (SHOULD), negative recommendation (SHOULD NOT), constitutive rule (IS / COUNTS AS). This field determines how the norm individual is classified in the knowledge graph and which deontic class it belongs to.
+**Deontic Modality** specifies the modal operator of the norm. In standard deontic logic every norm establishes a normative relation between a subject and an action through one of the following operators: obligation (must be done), prohibition (must not be done), permission (may be done), recommendation (should be done), negative recommendation (should not be done), or constitutive rule (defines what counts as what in the legal order). This field determines how the norm individual is classified in the knowledge graph and which properties are assigned to it.
 
-**Norm Statement** is a plain-language restatement of the norm. It is not parsed automatically. Its function is to provide the auditable bridge between the formal annotation and the legal intention behind it.
+**Norm Statement** is a plain-language restatement of the norm written by the annotator. It is not parsed automatically by the pipeline. Its function is to provide the auditable bridge between the formal annotation and the legal intention behind it, allowing a lawyer or auditor to verify that the formalisation correctly represents the original provision.
 
-**Responsible Party (Who)** is the legal role that is the subject of the norm — the entity that must, must not, or may act. It is expressed as an abstract role (e.g., AI Provider, Data Controller, Deployer). The pipeline generates a `LegalAgent` individual shared across all norms that reference the same role.
+**Responsible Party (Who)** is the legal role that is the subject of the norm — the entity that must, must not, may, or should act. It is expressed as an abstract role exactly as it appears in the law, not as a concrete organisation: AI Provider, Data Controller, Manufacturer, Deployer. This is the WHO of the WHO–WHAT–ON-WHAT structure that formalises every regulative norm. The pipeline generates with this value an Agent entity shared across all norms that reference the same role within the regulation pack.
 
-**Legal Action (What)** is the verb phrase of the prescribed, prohibited, or permitted action in the infinitive (e.g., establish, disclose, deploy, mark, notify). This is the WHAT of the WHO–WHAT–ON-WHAT structure of every regulative norm.
+**Legal Action (What)** is the action that the norm prescribes, prohibits, permits, or recommends, expressed as a verb phrase in the infinitive: establish, disclose, deploy, mark, notify. This is the WHAT of the structural triple. It is expressed as free text because the vocabulary of legal actions varies enormously across regulations and cannot be enumerated in advance.
 
-**Legal Object / Target (On What)** is the entity on which the action falls — the system, data, or document affected by the norm (e.g., personal data, AI system, audit log). The pipeline generates a `LegalObject` individual shared across norms that reference the same object.
+**Legal Object / Target (On What)** is the entity on which the action falls — the system, resource, data, or document that is affected by the norm. Examples include personal data, AI system, audit log, risk management system. This is the ON-WHAT of the structural triple. The pipeline generates with this value a Legal Object entity shared across norms that reference the same object.
 
-**Constitutive Rule / Fact Statement** only appears when the modality is set to Constitutive Rule / Fact. Unlike regulative norms, constitutive rules define legal classifications: under what conditions a system is high-risk, what counts as data processing. This field captures those declarations.
+**Constitutive Rule / Fact Statement** only appears when the modality is set to Constitutive Rule / Fact. Unlike regulative norms, constitutive rules do not prescribe behaviour but establish legal classifications: under what conditions a system is high-risk, what counts as data processing, what entity counts as an AI provider. This field captures those declarations in plain language. A separate field is necessary because the semantic structure of constitutive rules is fundamentally different from regulative norms — they have no WHO, WHAT, or ON-WHAT.
 
-**Binding Force** captures the legal weight of the norm: hard law (directly enforceable), soft law (guidelines and codes of conduct), internal policy, or contractual obligation.
+**Binding Force** captures the legal weight of the norm. Hard law is directly enforceable and its breach carries formal legal consequences. Soft law encompasses guidelines, standards, and codes of conduct that orient behaviour without legally obliging it. Internal policy and contractual obligation operate in sub-regulatory domains. This field is essential for any organisation that needs to distinguish which norms are legally mandatory and which are recommendations, and for the reasoning system to treat each category differently.
 
 ---
 
 ## Legal Condition
 
-This section is active only when the element is an exclusive gateway.
+This section is active only when the element is an exclusive gateway. It captures the legal condition that determines which branch of the process applies and therefore which norms are relevant.
 
-**Condition Statement** is the legal yes/no question evaluated at the gateway (e.g., "Does the system generate synthetic content?"). This question becomes the predicate of the SWRL rule body — its boolean value determines which norms are inferred as applicable.
+**Condition Statement** is the legal question evaluated at the gateway, phrased so that it admits a yes or no answer. For example: Does the system generate synthetic content? Is the AI system classified as high-risk under Annex III? This question becomes the antecedent of the automatic reasoning rules — its boolean value determines which norms are inferred as applicable.
 
-**True Branch Label** is the display label on the outgoing flow when the condition is satisfied (default: "Yes"). The pipeline uses this label to map the graph arc to the boolean `true` value in the SWRL body.
+**True Branch Label** is the display label on the outgoing flow when the condition is satisfied, typically Yes. The pipeline needs this label to correctly map the graph arc to the true value of the condition in the reasoning rules.
 
-**False Branch Label** is the display label on the outgoing flow when the condition is not satisfied (default: "No"). It serves the same purpose for the boolean `false` value.
+**False Branch Label** is the display label on the outgoing flow when the condition is not satisfied, typically No. It serves the same purpose as the true branch label but for the false value.
 
 ---
 
 ## Scope and Temporal
 
-**Trigger Condition** is a plain-language description of the circumstances under which the norm applies. It is stored as a data property and not processed as a rule.
+This section defines the boundaries of the norm's applicability — territorial, temporal, and circumstantial. It allows the system to filter norms by context and to manage the temporal evolution of regulation.
 
-**Jurisdiction** is the territorial scope of the norm (e.g., EU, UK, US-CA).
+**Trigger Condition** is a plain-language description of the circumstances under which the norm applies: when processing biometric data, upon deployment in a high-risk context. It is not processed as an automatic rule. Its function is to document the annotator's interpretive reasoning, providing auditable context that explains why the norm was annotated as applying in certain circumstances.
 
-**Effective Date** is the date from which the norm is legally in force (`xsd:date`).
+**Jurisdiction** is the territorial scope in which the norm has legal force: EU, UK, US-CA, global. It allows the system to manage scenarios where regulations from different jurisdictions coexist in the same knowledge graph and to filter norms by the territory in which an organisation operates.
 
-**Deadline / Sunset Date** is the compliance deadline or expiry date (`xsd:date`).
+**Effective Date** is the date from which the norm is legally in force. It enables temporal reasoning: determining which norms were applicable at a given moment in time, identifying norms not yet in force, and detecting compliance obligations that predate the availability of the system.
 
-**Norm Status** captures the lifecycle state: Active, UnderReview, Disputed, Superseded, or NotYetInForce.
+**Deadline / Sunset Date** is the compliance deadline or expiry date of the norm. It is useful for obligations with implementation or transposition deadlines and for identifying norms that are no longer applicable.
+
+**Norm Status** captures the lifecycle state of the norm. Norms are not static: they are adopted, reviewed, challenged, and repealed. This field allows the system to distinguish active norms from obsolete ones, preventing the reasoner from inferring obligations based on repealed provisions. Norms with status Superseded are retained in the knowledge graph for historical traceability.
 
 ---
 
 ## Consequences and Exceptions
 
-**Exception / Carve-out** records the conditions under which the norm expressly does not apply. Stored as a data property; full formalisation into negation rules belongs to the defeasible logic layer.
+This section captures information about the consequences of non-compliance and the exceptions to the norm's applicability. It does not participate directly in automatic reasoning but is essential for the operational use of the knowledge graph.
 
-**Sanction / Consequence of Breach** is the legal consequence of non-compliance (e.g., administrative fines). Not used in automatic reasoning.
+**Exception / Carve-out** records the conditions under which the norm expressly does not apply. In law every norm can have exceptions that limit its scope. This field captures them in free text because exceptions vary enormously in structure across regulations. The system stores them in the knowledge graph as a property of the norm. Their formalisation into negation rules belongs to the defeasible logic layer, which operates above this pipeline.
 
-**Compliance Criticality** is the operational severity of non-compliance from the organisation's perspective: Critical, High, Medium, or Low. Distinct from binding force — an internal policy can have Critical criticality, and a hard-law norm can have Low if breach risk is minimal.
+**Sanction / Consequence of Breach** is the legal consequence of non-compliance where known: administrative fines, civil liability, supervisory sanctions. It does not participate in automatic reasoning but is essential information for an organisation to assess the actual risk of each norm and prioritise its compliance efforts.
+
+**Compliance Criticality** is the operational severity of non-compliance from the perspective of the organisation. It is conceptually distinct from binding force: an internal policy can be of critical operational severity, and a hard-law norm can be of low criticality if the breach risk is minimal in practice. This field allows compliance officers to prioritise which norms to address first.
 
 ---
 
 ## Legal Source
 
-**Regulation Name** is the full name of the legislative instrument (e.g., EU AI Act, GDPR). The pipeline creates a `LegalSource` individual shared across all norms from the same regulation within a pack.
+This section captures the legislative provenance of the norm — where it comes from, where exactly it sits in the legal text, and how to access the source. It is the section that guarantees the traceability of the system.
 
-**Article / Section** is the article or section number. Every automatically derived norm conclusion carries its legislative locator.
+**Regulation Name** is the full name of the legislative instrument from which the norm is derived: EU AI Act, GDPR, DSA. The pipeline uses this name to create a Legal Source entity shared across all norms in the same regulation pack. Consistency in the name across different BPMN files within the same pack is important — the pipeline normaliser resolves variants automatically, but consistency is always preferable.
 
-**Paragraph / Subsection** is the paragraph, subparagraph, or point within the article.
+**Article / Section** is the article or section number within the legislative instrument. Together with the paragraph, it forms the exact legislative locator. This locator appears in every conclusion inferred by the system — every automatically derived obligation carries its legislative traceability embedded within it, which is a baseline requirement for any compliance system with legal validity.
 
-**Original Legal Text** is the verbatim quotation from the legislative text. The primary verification field — allows any lawyer or auditor to check that the annotation faithfully represents the provision.
+**Paragraph / Subsection** is the paragraph, subparagraph, or point within the article. It enables fine-grained provenance: a norm is traceable not just to an article but to the specific paragraph that mandates it. This level of precision is especially important in regulations such as the AI Act, where different paragraphs of the same article impose different obligations on different actors.
 
-**Regulation URI** is the stable identifier of the legislative instrument, preferably an ELI URI (e.g., `https://eur-lex.europa.eu/...`). Converts norms into linked data interoperable with EUR-Lex.
+**Original Legal Text** is the verbatim quotation from the legislative text that supports the annotation. It is the primary verification field of the system: it allows any lawyer or auditor to check directly that the formalised annotation faithfully represents the original legal provision. Without this field the traceability chain is incomplete.
+
+**Regulation URI** is the stable, dereferenceable identifier of the legislative instrument, preferably an ELI (European Legislation Identifier) URI where available. It converts the norms in the knowledge graph into linked data — Legal Source entities can be connected directly to repositories such as EUR-Lex, making the graph interoperable with the European legal data ecosystem.
 
 ---
 
 ## Annotation Metadata
 
-**Extraction Method** is the procedure by which the annotation was produced: ManualLawyer, ManualAnalyst, LLMExtraction, PatternMatching, or RuleBased. Fundamental for scientific reproducibility and governance.
+This section does not describe the norm itself but the annotation. It captures who produced it, how, with what degree of certainty, and in what governance state it currently sits.
 
-**Confidence Score** is the annotator's certainty (0.0–1.0). Allows quantifying legal ambiguity.
+**Extraction Method** is the procedure by which the annotation was produced. It distinguishes between manual annotation by a lawyer, manual annotation by an analyst, extraction by a language model, pattern matching, and rule-based extraction. It is fundamental for scientific reproducibility and for operational governance: annotations produced by automatic methods must receive legal review before being used in production reasoning.
 
-**Legal Review Status** is the validation state: Approved, PendingReview, or NotReviewed.
+**Confidence Score** is the annotator's certainty in their interpretation of the legal provision, expressed on a scale from 0.0 to 1.0. Legal text is frequently ambiguous, and this field allows that ambiguity to be quantified. The pipeline uses low values to flag annotations that require mandatory review before being activated in the reasoning system. Without this field all annotations are treated as equally certain, which is scientifically incorrect.
 
-**Annotator** is the identifier of the person who created the annotation.
+**Legal Review Status** is the validation state of the annotation by legal counsel: reviewed and approved, pending legal review, or not reviewed. It allows an organisation to activate in its reasoning system only norms that have passed legal review, ensuring that the production knowledge graph contains only validated knowledge.
 
-**Annotation Date** is the date the annotation was created.
+**Annotator** is the name or identifier of the person who created the annotation. Together with the annotation date and confidence score, it completes the provenance record of the annotation and makes it possible to contact the annotator to resolve interpretive doubts or to update the annotation after a legislative amendment.
 
-**Last Reviewed Date** is the date of the most recent legal review.
+**Annotation Date** is the date on which the annotation was created. It makes it possible to identify annotations that may have become outdated following a subsequent amendment to the regulation.
+
+**Last Reviewed Date** is the date of the most recent legal review. If this date precedes a known amendment to the regulation, the annotation may need updating. This field underpins the long-term maintenance of the knowledge graph — without it there is no systematic way to identify which annotations need revision when the law changes.
 
 ---
 
