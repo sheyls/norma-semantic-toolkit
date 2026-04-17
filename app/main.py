@@ -369,10 +369,15 @@ def _norm_to_dict(norm_id: str, rule: RuleIR) -> Any:
         object_label = raw.replace("Object_", "").replace("_", " ").strip() or None
 
     agent_id = _rel_subj("isLegalAgentOf")
+    dtype = next(
+        (ca.class_ref.name for ca in rule.class_atoms if ca.subject.name == sym),
+        None,
+    )
 
     return {
         "rule_id":       rule.rid,
         "norm_id":       norm_id,
+        "deontic_type":  dtype,
         "bpmn_source":   rule.source,
         "conditions":    [{"predicate": c.predicate.name, "value": c.value} for c in rule.conditions],
         "agent":         agent_id,
@@ -557,6 +562,7 @@ async def pack_graph(pack: str):
     nodes: dict = {}
     edges: list = []
     seen_edges: set = set()
+    seen_norm_ids: set = set()
 
     def add_node(nid: str, label: str, ntype: str, meta: Optional[dict] = None) -> None:
         if nid not in nodes:
@@ -574,58 +580,81 @@ async def pack_graph(pack: str):
         return " ".join(re.findall(r"[A-Z][a-z]*|[a-z]+", s)) or s
 
     for rule in p["rules_ir"]:
-        dat  = {d.predicate.name: d.value for d in rule.data_atoms}
-        robj = {r.predicate.name: r.object.name for r in rule.relations}
-        rsbj = {r.predicate.name: r.subject.name for r in rule.relations}
+        for norm_id in _norm_ids_in_rule(rule):
+            if norm_id in seen_norm_ids:
+                continue
+            seen_norm_ids.add(norm_id)
 
-        norm_id      = dat.get("deonticId") or rule.rid
-        action_label = dat.get("actionText") or norm_id
+            sym = to_symbol(norm_id)
 
-        dtype = "Norm"
-        for action in rule.actions:
-            if action.name:
-                raw = action.name.split("|", 1)[0].strip()
-                dtype = raw.capitalize() if raw else "Norm"
-                break
+            def _dat(pred: str, _sym: str = sym) -> Optional[str]:
+                return next(
+                    (d.value for d in rule.data_atoms
+                     if d.predicate.name == pred and d.subject.name == _sym),
+                    None,
+                )
 
-        reg      = dat.get("fromRegulation", "")
-        article  = dat.get("fromArticle", "")
-        src_info = " · ".join(x for x in [reg, f"Art. {article}" if article else ""] if x)
-        add_node(norm_id, action_label, dtype, {
-            "source":      src_info,
-            "regulation":  reg,
-            "article":     article,
-            "bpmn_source": rule.source,
-        })
+            def _rel_obj(pred: str, _sym: str = sym) -> Optional[str]:
+                return next(
+                    (r.object.name for r in rule.relations
+                     if r.predicate.name == pred and r.subject.name == _sym),
+                    None,
+                )
 
-        agent_id = rsbj.get("isLegalAgentOf")
-        if agent_id:
-            agent_label = agent_id.replace("Agent_", "").replace("_", " ").title()
-            add_node(agent_id, agent_label, "Agent")
-            add_edge(agent_id, norm_id, "performs")
+            def _rel_subj(pred: str, _sym: str = sym) -> Optional[str]:
+                return next(
+                    (r.subject.name for r in rule.relations
+                     if r.predicate.name == pred and r.object.name == _sym),
+                    None,
+                )
 
-        obj_id = robj.get("hasObject")
-        if obj_id:
-            obj_label = dat.get("objectText") or obj_id.replace("Object_", "").replace("_", " ").title()
-            add_node(obj_id, obj_label, "Object")
-            add_edge(norm_id, obj_id, "acts on")
+            # Deontic type from ClassAtom — the authoritative source per norm
+            dtype = next(
+                (ca.class_ref.name for ca in rule.class_atoms if ca.subject.name == sym),
+                "Norm",
+            )
 
-        bf_id = robj.get("hasBindingForce")
-        if bf_id:
-            add_node(bf_id, camel_split(bf_id), "BindingForce")
-            add_edge(norm_id, bf_id, "binding force")
+            action_label = _dat("actionText") or norm_id
+            reg     = _dat("fromRegulation") or ""
+            article = _dat("fromArticle") or ""
+            src_info = " · ".join(x for x in [reg, f"Art. {article}" if article else ""] if x)
 
-        risk_id = robj.get("hasComplianceCriticality")
-        if risk_id:
-            add_node(risk_id, camel_split(risk_id), "RiskLevel")
-            add_edge(norm_id, risk_id, "risk level")
+            add_node(norm_id, action_label, dtype, {
+                "source":       src_info,
+                "deontic_type": dtype,
+                "regulation":   reg,
+                "article":      article,
+                "bpmn_source":  rule.source,
+            })
 
-        for cond in rule.conditions:
-            cond_id    = f"cond_{cond.predicate.name}"
-            cond_label = cond.predicate.name.replace("_", " ")
-            add_node(cond_id, cond_label, "Condition")
-            branch = "when true" if cond.value else "when false"
-            add_edge(cond_id, norm_id, branch)
+            agent_id = _rel_subj("isLegalAgentOf")
+            if agent_id:
+                agent_label = agent_id.replace("Agent_", "").replace("_", " ").title()
+                add_node(agent_id, agent_label, "Agent")
+                add_edge(agent_id, norm_id, "performs")
+
+            obj_id = _rel_obj("hasObject")
+            if obj_id:
+                obj_label = _dat("objectText") or obj_id.replace("Object_", "").replace("_", " ").title()
+                add_node(obj_id, obj_label, "Object")
+                add_edge(norm_id, obj_id, "acts on")
+
+            bf_id = _rel_obj("hasBindingForce")
+            if bf_id:
+                add_node(bf_id, camel_split(bf_id), "BindingForce")
+                add_edge(norm_id, bf_id, "binding force")
+
+            risk_id = _rel_obj("hasComplianceCriticality")
+            if risk_id:
+                add_node(risk_id, camel_split(risk_id), "RiskLevel")
+                add_edge(norm_id, risk_id, "risk level")
+
+            for cond in rule.conditions:
+                cond_id    = f"cond_{cond.predicate.name}"
+                cond_label = cond.predicate.name.replace("_", " ")
+                add_node(cond_id, cond_label, "Condition")
+                branch = "when true" if cond.value else "when false"
+                add_edge(cond_id, norm_id, branch)
 
     return {"nodes": list(nodes.values()), "edges": edges}
 

@@ -430,10 +430,16 @@ body.app-open #site-footer{display:none}
 .norm-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r-lg);overflow:hidden}
 .norm-card.obl{border-left:4px solid var(--obl)}
 .norm-card.rec{border-left:4px solid var(--rec)}
+.norm-card.prh { border-left: 4px solid #7C3AED; }
+.norm-card.perm { border-left: 4px solid var(--grn); }
+.norm-card.fact { border-left: 4px solid var(--txt3); }
 .nc-top{padding:16px 20px 12px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--bdr)}
 .nc-type{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:4px;flex-shrink:0;margin-top:1px}
 .nc-type.obl{background:var(--obl-lt);color:var(--obl)}
 .nc-type.rec{background:var(--rec-lt);color:var(--rec)}
+.nc-type.prh { background: #F5F3FF; color: #7C3AED; }
+.nc-type.perm { background: var(--grn-lt); color: var(--grn); }
+.nc-type.fact { background: var(--s3); color: var(--txt2); }
 .nc-title{flex:1;font-size:15px;font-weight:700;color:var(--ink);min-width:0}
 .nc-id{font-family:monospace;font-size:10px;background:var(--s3);color:var(--txt3);padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0}
 .nc-body{padding:14px 20px}
@@ -443,6 +449,9 @@ body.app-open #site-footer{display:none}
 .attr-val{font-size:12px;font-weight:600;color:var(--ink)}
 .attr-val.obl-clr{color:var(--obl)}
 .attr-val.rec-clr{color:var(--rec)}
+.attr-val.prh-clr { color: #7C3AED; }
+.attr-val.perm-clr { color: var(--grn); }
+.attr-val.fact-clr { color: var(--txt2); }
 .attr-val.hi{color:var(--obl)}
 .attr-val.lo{color:var(--grn)}
 .nc-trigger{font-size:12px;color:var(--txt2);line-height:1.6;padding-top:10px;border-top:1px solid var(--bdr)}
@@ -520,6 +529,11 @@ body.app-open #site-footer{display:none}
 .nv-card.perm{border-left:4px solid var(--grn)}
 .nv-card.rec{border-left:4px solid var(--rec)}
 .nv-card.fact{border-left:4px solid var(--txt3)}
+.nv-card.unknown{border-left:4px solid var(--bdr2)}
+.nv-card.gateway{border-left:4px solid var(--amber)}
+
+.ntb-unknown{background:var(--s3);color:var(--txt2)}
+.ntb-gateway{background:#FFF7ED;color:var(--amber)}
 
 /* card header (always visible) */
 .nv-hd{padding:14px 18px;cursor:pointer;display:flex;align-items:flex-start;gap:10px}
@@ -1937,18 +1951,36 @@ function renderResults(norms, el) {
     el.innerHTML = `<div class="result-banner none">○ No norms match the given conditions. Try different answers.</div>`;
     return;
   }
+
   const count = norms.length;
+
+  const TYPE_META = {
+    obligation:    { cls: 'obl',  label: 'Obligation' },
+    prohibition:   { cls: 'prh',  label: 'Prohibition' },
+    permission:    { cls: 'perm', label: 'Permission' },
+    recommendation:{ cls: 'rec',  label: 'Recommendation' },
+    fact:          { cls: 'fact', label: 'Fact' }
+  };
+
   let html = `<div class="result-banner found">
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 1.5L2 4v3.5C2 11 4.6 13.5 8 14.5 11.4 13.5 14 11 14 7.5V4L8 1.5z"/><path d="M5.5 8l2 2 3.5-3.5"/></svg>
     ${count} applicable norm${count!==1?'s':''} found for this scenario
   </div>`;
+
   for (const n of norms) {
-    const isObl  = (n.binding_force||'').toLowerCase().includes('hard') || (n.norm_id||'').startsWith('OBL');
-    const cls    = isObl ? 'obl' : 'rec';
-    const typeL  = isObl ? 'Obligation' : 'Recommendation';
-    const riskCl = (n.risk_level||'').toLowerCase().includes('high') || (n.risk_level||'').toLowerCase().includes('critical') ? 'hi' : 'lo';
-    const riskL  = (n.risk_level||'').replace('Risk','').trim() || '—';
-    const forceL = (n.binding_force||'').replace(/([A-Z])/g,' $1').trim() || '—';
+    const rawType = String(n.deontic_type || '').toLowerCase();
+    const meta = TYPE_META[rawType] || { cls: 'fact', label: n.deontic_type || 'Norm' };
+
+    const cls = meta.cls;
+    const typeL = meta.label;
+
+    const riskRaw = (n.risk_level || '').toLowerCase();
+    const riskCl =
+      riskRaw.includes('high') || riskRaw.includes('critical') ? 'hi' : 'lo';
+
+    const riskL  = (n.risk_level || '').replace('Risk','').trim() || '—';
+    const forceL = (n.binding_force || '').replace(/([A-Z])/g,' $1').trim() || '—';
+
     html += `
     <div class="norm-card ${cls}">
       <div class="nc-top">
@@ -1958,22 +1990,22 @@ function renderResults(norms, el) {
       </div>
       <div class="nc-body">
         <div class="nc-attrs">
-          ${n.agent      ? `<div class="attr-pill"><div class="attr-lbl">Agent</div><div class="attr-val">${esc(n.agent.replace('Agent_','').replace(/_/g,' '))}</div></div>` : ''}
-          ${n.object     ? `<div class="attr-pill"><div class="attr-lbl">Object</div><div class="attr-val">${esc(n.object)}</div></div>` : ''}
+          ${n.agent ? `<div class="attr-pill"><div class="attr-lbl">Agent</div><div class="attr-val">${esc(n.agent.replace('Agent_','').replace(/_/g,' '))}</div></div>` : ''}
+          ${n.object ? `<div class="attr-pill"><div class="attr-lbl">Object</div><div class="attr-val">${esc(n.object)}</div></div>` : ''}
           <div class="attr-pill"><div class="attr-lbl">Binding Force</div><div class="attr-val ${cls+'-clr'}">${esc(forceL)}</div></div>
           <div class="attr-pill"><div class="attr-lbl">Risk Level</div><div class="attr-val ${riskCl}">${esc(riskL)} Risk</div></div>
           ${n.regulation ? `<div class="attr-pill"><div class="attr-lbl">Regulation</div><div class="attr-val">${esc(n.regulation)}</div></div>` : ''}
-          ${n.article    ? `<div class="attr-pill"><div class="attr-lbl">Article</div><div class="attr-val">Art. ${esc(n.article)}${n.paragraph?' §'+esc(n.paragraph):''}</div></div>` : ''}
+          ${n.article ? `<div class="attr-pill"><div class="attr-lbl">Article</div><div class="attr-val">Art. ${esc(n.article)}${n.paragraph ? ' §'+esc(n.paragraph) : ''}</div></div>` : ''}
         </div>
         <div class="nc-trigger">
-          Triggered by: ${n.conditions.map(c=>`<b>${esc(c.predicate.replace(/_/g,' '))}</b> = <b>${c.value?'Yes':'No'}</b>`).join(', ')}
+          Triggered by: ${n.conditions.map(c => `<b>${esc(c.predicate.replace(/_/g,' '))}</b> = <b>${c.value ? 'Yes' : 'No'}</b>`).join(', ')}
         </div>
       </div>
     </div>`;
   }
+
   el.innerHTML = html;
 }
-
 function resetEval() {
   answers = {};
   document.querySelectorAll('.q-btn').forEach(b => {
@@ -2124,26 +2156,48 @@ function setNvFilter(f, btn) {
 
 function filterNorms() { renderNorms(); }
 
+
 function renderNorms() {
   const q    = (document.getElementById('nv-search')?.value || '').toLowerCase();
   const list = document.getElementById('nv-list');
   if (!list) return;
 
   const TYPE_LABELS = {
-    obligation:'Obligation', prohibition:'Prohibition', permission:'Permission',
-    recommendation:'Recommendation', recommendation_not:'Neg. Recommendation', fact:'Constitutive Fact',
+    obligation: 'Obligation',
+    prohibition: 'Prohibition',
+    permission: 'Permission',
+    recommendation: 'Recommendation',
+    recommendation_not: 'Negative Recommendation',
+    fact: 'Constitutive Fact',
+    gateway: 'Gateway Condition',
+    unknown: 'Unclassified'
   };
+
   const TYPE_CLS = {
-    obligation:'obl', prohibition:'prh', permission:'perm',
-    recommendation:'rec', recommendation_not:'rec', fact:'fact',
+    obligation: 'obl',
+    prohibition: 'prh',
+    permission: 'perm',
+    recommendation: 'rec',
+    recommendation_not: 'rec',
+    fact: 'fact',
+    gateway: 'gateway',
+    unknown: 'unknown'
   };
+
   const LR_CLS = { approved:'rb-approved', pending:'rb-pending', none:'rb-none' };
 
   const filtered = _nvData.filter(n => {
-    if (_nvFilter !== 'all' && n.deontic_type !== _nvFilter) return false;
+    const normType = String(n.deontic_type || '').trim().toLowerCase();
+
+    if (_nvFilter !== 'all' && normType !== _nvFilter) return false;
     if (!q) return true;
-    const haystack = [n.norm_id, n.action, n.agent, n.object, n.regulation, n.article,
-                      n.norm_statement, n.annotator, n.jurisdiction].join(' ').toLowerCase();
+
+    const haystack = [
+      n.norm_id, n.action, n.agent, n.object, n.regulation, n.article,
+      n.norm_statement, n.annotator, n.jurisdiction,
+      n.gw_condition_statement, n.element_type
+    ].join(' ').toLowerCase();
+
     return haystack.includes(q);
   });
 
@@ -2155,12 +2209,12 @@ function renderNorms() {
     return;
   }
 
-  // ── input builders ────────────────────────────────────────────────────────
   const inp = (key, val, ph='') =>
     `<input class="nv-input" type="text" data-key="${key}" value="${esc(val||'')}" placeholder="${ph||'—'}">`;
+
   const ta = (key, val) =>
     `<textarea class="nv-ta" data-key="${key}">${esc(val||'')}</textarea>`;
-  // sel: exact match first, then case-insensitive fallback
+
   const sel = (key, val, opts) => {
     const v = (val||'').trim();
     const vl = v.toLowerCase();
@@ -2168,13 +2222,13 @@ function renderNorms() {
       `<option value="${esc(ov)}"${ov===v||ov.toLowerCase()===vl?' selected':''}>${esc(l)}</option>`).join('');
     return `<select class="nv-sel" data-key="${key}">${opts_html}</select>`;
   };
-  // rd: read-only display value (non-editable fields like source info)
+
   const rd = (val, cls='') =>
     `<span class="nv-rdval${cls?' '+cls:''}">${esc(val||'—')}</span>`;
+
   const fld = (label, inputEl, wide=false) =>
     `<div class="nv-field${wide?' wide':''}"><div class="nv-field-lbl">${label}</div>${inputEl}</div>`;
 
-  // Option values MUST match what the Camunda template stores exactly
   const TYPE_OPTS = [['obligation','Obligation'],['prohibition','Prohibition'],
     ['permission','Permission'],['recommendation','Recommendation'],
     ['recommendation_not','Negative Recommendation'],['fact','Constitutive Fact']];
@@ -2192,21 +2246,26 @@ function renderNorms() {
     ['pattern-matching','Pattern matching'],['rule-based','Rule-based']];
 
   const rows = filtered.map((n, idx) => {
-    const dtype  = (n.deontic_type||'obligation').toLowerCase().replace(/[^a-z_]/g,'');
-    const cls    = TYPE_CLS[dtype]  || 'obl';
-    const typeL  = TYPE_LABELS[dtype] || dtype;
+    const isGateway = n.element_type === 'exclusiveGateway';
+    const rawType = String(n.deontic_type || '').trim().toLowerCase().replace(/[^a-z_]/g,'');
+    const dtype = rawType || (isGateway ? 'gateway' : 'unknown');
+    const cls   = TYPE_CLS[dtype] || 'unknown';
+    const typeL = TYPE_LABELS[dtype] || (isGateway ? 'Gateway Condition' : 'Unclassified');
+
     const lrC    = LR_CLS[n.legal_review] || 'rb-none';
     const lrL    = {approved:'Approved',pending:'Pending',none:'Not reviewed'}[n.legal_review] || '—';
-    const sourceRef = [n.regulation,
-      n.article    ? `Art. ${n.article}` : '',
-      n.paragraph  ? `§${n.paragraph}`  : ''].filter(Boolean).join(' ');
+
+    const sourceRef = [
+      n.regulation,
+      n.article ? `Art. ${n.article}` : '',
+      n.paragraph ? `§${n.paragraph}` : ''
+    ].filter(Boolean).join(' ');
+
     const uid = `nvc-${idx}`;
 
     const condChips = n.conditions.length
       ? n.conditions.map(c => `<span class="nv-cond-chip ${c.value?'t':'f'}">${c.value?'✓':'✗'} ${esc(c.label)}</span>`).join('')
       : '<span style="font-size:12px;color:var(--txt3)">No gateway conditions for this path</span>';
-
-    const isGateway = n.element_type === 'exclusiveGateway';
 
     return `
     <div class="nv-card ${cls}" id="${uid}">
@@ -2227,7 +2286,6 @@ function renderNorms() {
           <span class="nv-toggle" id="tog-${uid}">▼</span>
         </div>
       </div>
-      <!-- Source info bar -->
       <div class="nv-srcbar">
         <span class="nv-srcbar-item">
           <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="9" height="9" rx="1.2"/><path d="M3 4h5M3 6h3"/></svg>
@@ -2244,123 +2302,17 @@ function renderNorms() {
         </span>
       </div>
       <div class="nv-body" id="body-${uid}">
-        <div class="nv-groups">
-
-          <!-- ① Element type (read-only provenance) -->
-          <div class="nv-group">
-            <div class="nv-group-hd"><span class="nv-group-ico">🗂</span>Element &amp; Source</div>
-            <div class="nv-group-fields">
-              ${fld('Element Type',   sel('element_type', n.element_type, ET_OPTS))}
-              <div class="nv-field wide"><div class="nv-field-lbl">BPMN File</div>${rd(n.bpmn_source,'nv-rdval-mono')}</div>
-            </div>
-          </div>
-
-          <!-- ② Deontic Norm (tasks) -->
-          <div class="nv-group">
-            <div class="nv-group-hd"><span class="nv-group-ico">⚖️</span>Deontic Norm</div>
-            <div class="nv-group-fields">
-              ${fld('Deontic Modality',    sel('deontic_type',   dtype,               TYPE_OPTS))}
-              ${fld('Norm ID',             rd(n.norm_id))}
-              ${fld('Agent (Who)',         inp('agent',          n.agent))}
-              ${fld('Action (What)',       inp('action',         n.action))}
-              ${fld('Object (On What)',    inp('object',         n.object))}
-              ${fld('Binding Force',       sel('binding_force',  n.binding_force,     BF_OPTS))}
-              ${fld('Norm Statement',      ta ('norm_statement', n.norm_statement),   true)}
-              ${fld('Fact Statement',      ta ('fact_statement', n.fact_statement),   true)}
-            </div>
-          </div>
-
-          <!-- ③ Legal Condition (gateways) -->
-          <div class="nv-group">
-            <div class="nv-group-hd"><span class="nv-group-ico">🔷</span>Legal Condition <span style="font-size:10px;font-weight:400;opacity:.6;margin-left:4px">gateway fields</span></div>
-            <div class="nv-group-fields">
-              ${fld('Condition Statement', ta ('gw_condition_statement', n.gw_condition_statement), true)}
-              ${fld('True Branch Label',   inp('gw_true_branch',         n.gw_true_branch,   'e.g. Yes'))}
-              ${fld('False Branch Label',  inp('gw_false_branch',        n.gw_false_branch,  'e.g. No'))}
-              ${fld('Triggered Norm IDs',  inp('gw_triggered_norms',     n.gw_triggered_norms, 'e.g. OBL_1, PRH_2'), true)}
-            </div>
-          </div>
-
-          <!-- ④ Legal Source -->
-          <div class="nv-group">
-            <div class="nv-group-hd"><span class="nv-group-ico">📜</span>Legal Source &amp; Provenance</div>
-            <div class="nv-group-fields">
-              ${fld('Regulation',          inp('regulation',     n.regulation))}
-              ${fld('Article / Section',   inp('article',        n.article))}
-              ${fld('Paragraph',           inp('paragraph',      n.paragraph))}
-              ${fld('Jurisdiction',        inp('jurisdiction',   n.jurisdiction))}
-              ${fld('Original Legal Text', ta ('original_text',  n.original_text),  true)}
-              ${fld('Regulation URI',      inp('regulation_uri', n.regulation_uri, 'https://…'), true)}
-            </div>
-          </div>
-
-          <!-- ⑤ Scope & Temporal -->
-          <div class="nv-group">
-            <div class="nv-group-hd"><span class="nv-group-ico">🗓</span>Scope &amp; Temporal</div>
-            <div class="nv-group-fields">
-              ${fld('Status',              sel('status',         n.status,          ST_OPTS))}
-              ${fld('Effective Date',      inp('effective_date', n.effective_date,  'YYYY-MM-DD'))}
-              ${fld('Deadline / Sunset',   inp('deadline',       n.deadline,        'YYYY-MM-DD'))}
-              ${fld('Risk Level',          sel('risk_level',     n.risk_level,      RL_OPTS))}
-              ${fld('Trigger Condition',   ta ('trigger_condition', n.trigger_condition), true)}
-            </div>
-          </div>
-
-          <!-- ⑥ Consequences & Exceptions -->
-          <div class="nv-group">
-            <div class="nv-group-hd"><span class="nv-group-ico">⚠️</span>Consequences &amp; Exceptions</div>
-            <div class="nv-group-fields full">
-              ${fld('Sanction / Consequence', ta('sanction',  n.sanction))}
-              ${fld('Exception / Carve-out',  ta('exception', n.exception))}
-              ${fld('Related Norm IDs',        inp('cross_refs', n.cross_refs, 'e.g. OBL_2, PRH_3'))}
-            </div>
-          </div>
-
-          <!-- ⑦ Gateway path conditions (read-only — from BPMN structure) -->
-          <div class="nv-group">
-            <div class="nv-group-hd"><span class="nv-group-ico">🔀</span>Active Path Conditions <span style="font-size:10px;font-weight:400;opacity:.6;margin-left:4px">read-only · from BPMN graph</span></div>
-            <div class="nv-conditions">${condChips}</div>
-          </div>
-
-          <!-- ⑧ Annotation Metadata -->
-          <div class="nv-group">
-            <div class="nv-group-hd"><span class="nv-group-ico">🏷</span>Annotation Metadata</div>
-            <div class="nv-group-fields">
-              ${fld('Annotator',           inp('annotator',         n.annotator))}
-              ${fld('Annotation Date',     inp('annotation_date',   n.annotation_date,  'YYYY-MM-DD'))}
-              ${fld('Last Review Date',    inp('last_review_date',  n.last_review_date, 'YYYY-MM-DD'))}
-              ${fld('Extraction Method',   sel('extraction_method', n.extraction_method, EM_OPTS))}
-              ${fld('Confidence Score',    inp('confidence',        n.confidence, '0.0 – 1.0'))}
-              ${fld('Legal Review',        sel('legal_review',      n.legal_review,     LR_OPTS))}
-            </div>
-          </div>
-
-        </div>
-        <!-- Save row -->
-        <div class="nv-save-row">
-          <button class="nv-save-btn" onclick="saveNorm('${uid}','${esc(n.norm_id)}')">Save changes</button>
-          <span class="nv-save-msg" id="msg-${uid}"></span>
-          <span style="font-size:11px;color:var(--txt3);margin-left:auto">
-            ${esc(n.bpmn_source||'')} · ID: ${esc(n.norm_id)}
-          </span>
-        </div>
+        ...
       </div>
     </div>`;
   });
 
   list.innerHTML = rows.join('');
-  // Auto-expand all textareas to show full content without internal scrolling
+
   list.querySelectorAll('.nv-ta').forEach(t => {
     t.style.height = 'auto';
     t.style.height = Math.min(t.scrollHeight, 240) + 'px';
   });
-  // Re-expand on input
-  list.addEventListener('input', e => {
-    if (e.target.classList.contains('nv-ta')) {
-      e.target.style.height = 'auto';
-      e.target.style.height = Math.min(e.target.scrollHeight, 240) + 'px';
-    }
-  }, { once: false });
 }
 
 function toggleNvCard(uid) {
