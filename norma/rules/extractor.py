@@ -4,11 +4,13 @@ from typing import Dict, List, Tuple, Optional
 from collections import deque
 
 from norma.parsing.bpmn_parser import Node, ReducedEdge
+from norma.kg.builder import auto_deontic_id
 from norma.rules.ir import (
     Ref,
     RuleIR,
     Condition,
     Action,
+    ClassAtom,
     RelationAtom,
     DataAtom,
 )
@@ -90,6 +92,16 @@ def _split_actor_predicate(gateway_name: str) -> Tuple[str, str]:
     return "x", raw.replace(" ", "") or "unnamed"
 
 
+_DTYPE_CLASS: dict = {
+    "obligation":         "Obligation",
+    "prohibition":        "Prohibition",
+    "permission":         "Permission",
+    "recommendation":     "Recommendation",
+    "recommendation_not": "NegativeRecommendation",
+    "fact":               "ConstitutiveRule",
+}
+
+
 def _binding_force_ref(raw: str) -> Optional[Ref]:
     mapping = {
         "hard_law": "HardLaw",
@@ -104,10 +116,10 @@ def _binding_force_ref(raw: str) -> Optional[Ref]:
 
 def _risk_level_ref(raw: str) -> Optional[Ref]:
     mapping = {
-        "critical": "CriticalRisk",
-        "high": "HighRisk",
-        "medium": "MediumRisk",
-        "low": "LowRisk",
+        "critical": "Critical",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low",
     }
     key = to_symbol(raw or "").lower()
     target = mapping.get(key)
@@ -117,9 +129,11 @@ def _risk_level_ref(raw: str) -> Optional[Ref]:
 def _action_from_deontic_props(
     props: Dict[str, str],
     task_id: str,
-) -> Tuple[Action, Tuple[RelationAtom, ...], Tuple[DataAtom, ...]]:
+) -> Tuple[Action, Tuple[RelationAtom, ...], Tuple[DataAtom, ...], Tuple[ClassAtom, ...]]:
     dtype = (props.get("compliance_deonticType") or "unknown").strip().lower()
-    did = (props.get("compliance_deonticId") or "NO_ID").strip()
+    raw_did = (props.get("compliance_deonticId") or "").strip()
+    bpmn_name = (props.get("_bpmn_name") or "").strip()
+    did = raw_did if raw_did else auto_deontic_id(dtype, bpmn_name, task_id)
 
     agent = to_symbol(props.get("compliance_agent") or "x")
     action_name = to_symbol(props.get("compliance_action") or "")
@@ -131,7 +145,7 @@ def _action_from_deontic_props(
     risk = (props.get("compliance_riskLevel") or "").strip()
     bind = (props.get("compliance_bindingForce") or "").strip()
 
-    node_id = to_symbol(did) if did != "NO_ID" else f"task_{to_symbol(task_id)}"
+    node_id = to_symbol(did)
 
     agent_ref = abox(f"Agent_{agent}")
     object_ref = abox(f"Object_{obj}")
@@ -145,12 +159,12 @@ def _action_from_deontic_props(
 
     relations: List[RelationAtom] = [
         RelationAtom(
-            predicate=tbox("performsAction"),
+            predicate=tbox("isLegalAgentOf"),
             subject=agent_ref,
             object=norm_ref,
         ),
         RelationAtom(
-            predicate=tbox("actsOn"),
+            predicate=tbox("hasObject"),
             subject=norm_ref,
             object=object_ref,
         ),
@@ -170,14 +184,16 @@ def _action_from_deontic_props(
     if risk_ref is not None:
         relations.append(
             RelationAtom(
-                predicate=tbox("hasRiskLevel"),
+                predicate=tbox("hasComplianceCriticality"),
                 subject=norm_ref,
                 object=risk_ref,
             )
         )
 
-    # Recover the human-readable action label before symbolisation
+    # Recover the human-readable labels before symbolisation
+    agent_label_raw  = (props.get("compliance_agent")  or "").strip()
     action_label_raw = (props.get("compliance_action") or "").strip()
+    object_label_raw = (props.get("compliance_object") or "").strip()
 
     data: List[DataAtom] = [
         DataAtom(
@@ -202,21 +218,30 @@ def _action_from_deontic_props(
         ),
     ]
 
+    if agent_label_raw:
+        data.append(
+            DataAtom(
+                predicate=tbox("agentText"),
+                subject=norm_ref,
+                value=agent_label_raw,
+            )
+        )
+
     if action_label_raw:
         data.append(
             DataAtom(
-                predicate=tbox("action"),
+                predicate=tbox("actionText"),
                 subject=norm_ref,
                 value=action_label_raw,
             )
         )
 
-    if obj:
+    if object_label_raw:
         data.append(
             DataAtom(
-                predicate=tbox("actsOnLabel"),
+                predicate=tbox("objectText"),
                 subject=norm_ref,
-                value=(props.get("compliance_object") or "").strip(),
+                value=object_label_raw,
             )
         )
 
@@ -230,7 +255,12 @@ def _action_from_deontic_props(
             )
         )
 
-    return action_summary, tuple(relations), tuple(data)
+    # ClassAtom: asserts the OWL class for this norm in the SWRL head,
+    # so a reasoner can derive the deontic modality from the rule alone.
+    norm_class = _DTYPE_CLASS.get(dtype, "RegulativeNorm")
+    class_atoms = (ClassAtom(class_ref=tbox(norm_class), subject=norm_ref),)
+
+    return action_summary, tuple(relations), tuple(data), class_atoms
 
 
 def build_rule_ir_from_path(
@@ -246,6 +276,7 @@ def build_rule_ir_from_path(
     actions: List[Action] = []
     all_relations: List[RelationAtom] = []
     all_data: List[DataAtom] = []
+    all_class_atoms: List[ClassAtom] = []
 
     if allowed_deontic is None:
         allowed_deontic = {
@@ -262,9 +293,23 @@ def build_rule_ir_from_path(
             gw_props = task_props.get(e.src, {})
 
             if gw_props.get("gw_conditionStatement"):
-                statement = to_symbol(gw_props["gw_conditionStatement"])
-                true_label = gw_props.get("gw_trueBranch", "Yes")
-                value = (e.guard.lower() == true_label.lower()) if e.guard else False
+                statement  = to_symbol(gw_props["gw_conditionStatement"])
+                true_label  = (gw_props.get("gw_trueBranch")  or "Yes").strip()
+                false_label = (gw_props.get("gw_falseBranch") or "No").strip()
+
+                if e.guard:
+                    g = e.guard.strip().lower()
+                    if g == true_label.lower():
+                        value = True
+                    elif g == false_label.lower():
+                        value = False
+                    else:
+                        # Flow label doesn't match the declared branch labels
+                        # (e.g. Camunda default "Yes"/"No" vs custom "Approved"/"Rejected").
+                        # Fall back to conventional positive/negative keywords.
+                        value = g in {"yes", "true", "1", "sim", "ja", "oui", "approved"}
+                else:
+                    value = False
 
                 conds.append(
                     Condition(
@@ -302,10 +347,11 @@ def build_rule_ir_from_path(
             if dtype and dtype not in allowed_deontic:
                 continue
 
-            action, rels, dats = _action_from_deontic_props(props, task_id)
+            action, rels, dats, cats = _action_from_deontic_props(props, task_id)
             actions.append(action)
             all_relations.extend(rels)
             all_data.extend(dats)
+            all_class_atoms.extend(cats)
 
     seen_c = set()
     out_c: List[Condition] = []
@@ -348,12 +394,24 @@ def build_rule_ir_from_path(
             seen_d.add(key)
             out_d.append(d)
 
+    seen_ca = set()
+    out_ca: List[ClassAtom] = []
+    for ca in all_class_atoms:
+        key = (
+            ca.class_ref.kind, ca.class_ref.name,
+            ca.subject.kind, ca.subject.name,
+        )
+        if key not in seen_ca:
+            seen_ca.add(key)
+            out_ca.append(ca)
+
     return RuleIR(
         rid=rid,
         conditions=tuple(out_c),
         actions=tuple(out_a),
         relations=tuple(out_r),
         data_atoms=tuple(out_d),
+        class_atoms=tuple(out_ca),
     )
 
 

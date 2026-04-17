@@ -26,14 +26,15 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 SELECT ?norm ?label ?type ?bindingForce ?riskLevel ?article
 WHERE {
   VALUES ?type {
-    norma:Obligation norma:Prohibition
-    norma:Permission norma:Recommendation
+    norma:Obligation        norma:Prohibition
+    norma:Permission        norma:Recommendation
+    norma:NegativeRecommendation
   }
   ?norm a ?type ;
-        rdfs:label      ?label ;
-        norma:hasBindingForce ?bindingForce ;
-        norma:hasRiskLevel    ?riskLevel ;
-        norma:fromArticle     ?article .
+        rdfs:label ?label .
+  OPTIONAL { ?norm norma:hasBindingForce          ?bindingForce . }
+  OPTIONAL { ?norm norma:hasComplianceCriticality ?riskLevel . }
+  OPTIONAL { ?norm norma:fromArticle              ?article . }
 }
 ORDER BY ?norm""",
     },
@@ -47,9 +48,9 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?agent ?agentLabel ?norm ?normLabel ?bindingForce
 WHERE {
-  ?norm norma:hasAgent     ?agent ;
-        rdfs:label          ?normLabel ;
-        norma:hasBindingForce ?bindingForce .
+  ?norm norma:hasLegalAgent  ?agent ;
+        rdfs:label             ?normLabel ;
+        norma:hasBindingForce  ?bindingForce .
   ?agent rdfs:label ?agentLabel .
 }
 ORDER BY ?agent""",
@@ -83,8 +84,8 @@ WHERE {
         rdfs:label              ?label ;
         norma:hasBindingForce   norma:HardLaw ;
         norma:fromRegulation    ?regulation ;
-        norma:fromArticle       ?article ;
-        norma:fromParagraph     ?paragraph .
+        norma:fromArticle       ?article .
+  OPTIONAL { ?norm norma:fromParagraph ?paragraph . }
 }
 ORDER BY ?regulation ?article""",
     },
@@ -99,10 +100,10 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 SELECT ?norm ?label ?action ?object ?riskLevel
 WHERE {
   ?norm a norma:Prohibition ;
-        rdfs:label          ?label ;
-        norma:hasRiskLevel  ?riskLevel .
-  OPTIONAL { ?norm norma:action      ?action . }
-  OPTIONAL { ?norm norma:actsOnLabel ?object . }
+        rdfs:label                     ?label ;
+        norma:hasComplianceCriticality ?riskLevel .
+  OPTIONAL { ?norm norma:actionText ?action . }
+  OPTIONAL { ?norm norma:objectText ?object . }
 }
 ORDER BY ?riskLevel""",
     },
@@ -117,13 +118,14 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 SELECT ?regulation ?article ?norm ?label ?type
 WHERE {
   VALUES ?type {
-    norma:Obligation norma:Prohibition
-    norma:Permission norma:Recommendation
+    norma:Obligation        norma:Prohibition
+    norma:Permission        norma:Recommendation
+    norma:NegativeRecommendation
   }
   ?norm a ?type ;
-        rdfs:label           ?label ;
-        norma:fromRegulation  ?regulation ;
-        norma:fromArticle     ?article .
+        rdfs:label ?label .
+  OPTIONAL { ?norm norma:fromRegulation ?regulation . }
+  OPTIONAL { ?norm norma:fromArticle    ?article . }
 }
 ORDER BY ?regulation ?article""",
     },
@@ -139,12 +141,13 @@ SELECT ?norm ?label ?type ?riskLevel ?regulation ?article
 WHERE {
   VALUES ?riskLevel { norma:Critical norma:High }
   VALUES ?type {
-    norma:Obligation norma:Prohibition
-    norma:Permission norma:Recommendation
+    norma:Obligation        norma:Prohibition
+    norma:Permission        norma:Recommendation
+    norma:NegativeRecommendation
   }
   ?norm a ?type ;
-        rdfs:label          ?label ;
-        norma:hasRiskLevel  ?riskLevel .
+        rdfs:label                     ?label ;
+        norma:hasComplianceCriticality ?riskLevel .
   OPTIONAL { ?norm norma:fromRegulation ?regulation . }
   OPTIONAL { ?norm norma:fromArticle    ?article . }
 }
@@ -160,8 +163,9 @@ PREFIX norma: <https://w3id.org/norma-ontology#>
 SELECT ?type (COUNT(?norm) AS ?count)
 WHERE {
   VALUES ?type {
-    norma:Obligation norma:Prohibition
-    norma:Permission norma:Recommendation
+    norma:Obligation        norma:Prohibition
+    norma:Permission        norma:Recommendation
+    norma:NegativeRecommendation norma:ConstitutiveRule
   }
   ?norm a ?type .
 }

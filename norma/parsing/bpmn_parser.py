@@ -145,6 +145,7 @@ def parse_bpmn_full(xml: str) -> BpmnParseArtifacts:
                         if k:
                             props[k] = v
             if props:
+                props["_bpmn_name"] = name  # carried for auto deontic-ID generation
                 task_props[el_id] = props
 
     for el in process_el:

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Iterable, List, Set, Tuple
 from xml.sax.saxutils import escape
 
-from norma.rules.ir import RuleIR, Ref
+from norma.rules.ir import RuleIR, Ref, ClassAtom
 
 RDF_NIL = "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
 XSD_BOOL = "http://www.w3.org/2001/XMLSchema#boolean"
@@ -72,6 +72,15 @@ def _swrl_data_atom(*, predicate_iri: str, subject_iri: str, value: str, datatyp
     )
 
 
+def _swrl_class_atom(*, class_iri: str, subject_iri: str) -> str:
+    return (
+        "<swrl:ClassAtom>\n"
+        f'  <swrl:classPredicate rdf:resource="{escape(class_iri)}"/>\n'
+        f'  <swrl:argument1 rdf:resource="{escape(subject_iri)}"/>\n'
+        "</swrl:ClassAtom>"
+    )
+
+
 def _swrl_object_atom(*, predicate_iri: str, subject_iri: str, object_iri: str) -> str:
     return (
         "<swrl:IndividualPropertyAtom>\n"
@@ -134,7 +143,11 @@ def rule_ir_to_swrl_xml(
     export_actions: bool = False,
 ) -> str:
     if not ir.conditions:
-        raise ValueError(f"Rule {ir.rid} has no body conditions.")
+        raise ValueError(
+            f"Rule {ir.rid} has no body conditions. "
+            "Unconditional norms are fully declared in the ABox and do not need a SWRL rule. "
+            "Call export_rules_to_owl() which filters these out automatically."
+        )
 
     body_atoms: List[str] = []
 
@@ -178,6 +191,20 @@ def rule_ir_to_swrl_xml(
                     datatype=a.datatype,
                 )
             )
+
+    # ClassAtoms first — assert rdf:type of the norm individual
+    for ca in ir.class_atoms:
+        if ca.class_ref.kind != "tbox":
+            raise ValueError(f"ClassAtom class_ref must be Ref(kind='tbox', ...), got {ca.class_ref}")
+        if ca.subject.kind not in {"abox", "var"}:
+            raise ValueError(f"ClassAtom subject must be Ref(kind='abox'|'var', ...), got {ca.subject}")
+
+        class_iri = _resolve_ref(ca.class_ref, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
+        subj_iri  = _resolve_ref(ca.subject,   rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
+
+        head_atoms.append(
+            _swrl_class_atom(class_iri=class_iri, subject_iri=subj_iri)
+        )
 
     for rel in ir.relations:
         _validate_head_predicate(rel.predicate, "RelationAtom")
@@ -246,6 +273,15 @@ def export_rules_to_owl(
     imports_iri: str | None = None,
     export_actions: bool = False,
 ) -> None:
+    # Unconditional norms (no gateway conditions) are fully declared in the ABox
+    # and do not need a SWRL rule.  Skip them so the export never crashes on
+    # linear BPMN paths that have no exclusive gateways.
+    conditional_rules = [r for r in rules if r.conditions]
+    skipped = len(rules) - len(conditional_rules)
+    if skipped:
+        print(f"[norma] SWRL export: skipped {skipped} unconditional rule(s) — already in ABox.")
+    rules = conditional_rules
+
     vars_, body_data_preds = _collect_vars_and_predicates(rules)
 
     data_props_xml = "\n".join(

@@ -36,6 +36,15 @@ NORMA_ONT = "https://w3id.org/norma-ontology"
 
 # ── Controlled-vocabulary mappings (template dropdown → OWL individual IRI) ───
 
+DEONTIC_PREFIX = {
+    "obligation":         "OBL",
+    "prohibition":        "PRH",
+    "permission":         "PER",
+    "recommendation":     "REC",
+    "recommendation_not": "REC_NOT",
+    "fact":               "FCT",
+}
+
 DEONTIC_CLASS = {
     "obligation":       f"{NORMA_IRI}Obligation",
     "prohibition":      f"{NORMA_IRI}Prohibition",
@@ -61,10 +70,10 @@ NORM_STATUS = {
 }
 
 RISK_LEVEL = {
-    "critical": f"{NORMA_IRI}CriticalRisk",
-    "high":     f"{NORMA_IRI}HighRisk",
-    "medium":   f"{NORMA_IRI}MediumRisk",
-    "low":      f"{NORMA_IRI}LowRisk",
+    "critical": f"{NORMA_IRI}Critical",
+    "high":     f"{NORMA_IRI}High",
+    "medium":   f"{NORMA_IRI}Medium",
+    "low":      f"{NORMA_IRI}Low",
 }
 
 EXTRACTION = {
@@ -97,6 +106,17 @@ except ImportError:
 def slug(text: str) -> str:
     """Convert an arbitrary label to a valid IRI local name."""
     return re.sub(r"_+", "_", re.sub(r"[^A-Za-z0-9_]", "_", text.strip())).strip("_")
+
+
+def auto_deontic_id(dtype: str, bpmn_name: str, bpmn_id: str) -> str:
+    """Generate a stable deontic ID when the annotator left the field blank.
+
+    Pattern: {TYPE_PREFIX}_{slug(bpmn_element_name)}
+    Falls back to the BPMN element ID if the element has no name.
+    """
+    prefix = DEONTIC_PREFIX.get(dtype, "NORM")
+    label = bpmn_name.strip() if bpmn_name.strip() else bpmn_id
+    return f"{prefix}_{slug(label)}"
 
 
 def esc(s: str) -> str:
@@ -221,14 +241,17 @@ def to_json(elements: list[dict]) -> list[dict]:
 
         if etype == "task":
             trigger = p.get("compliance_triggerCondition") or p.get("compliance_condition", "")
+            dtype   = p.get("compliance_deonticType", "")
+            raw_did = p.get("compliance_deonticId", "").strip()
+            did     = raw_did if raw_did else auto_deontic_id(dtype, el["bpmn_name"], el["id"])
             r.update({
-                "deontic_type":      p.get("compliance_deonticType", ""),
+                "deontic_type":      dtype,
                 "binding_force":     p.get("compliance_bindingForce", ""),
                 "norm_status":       p.get("compliance_status", ""),
                 "risk_level":        p.get("compliance_riskLevel", ""),
                 "extraction_method": p.get("compliance_extractionMethod", ""),
                 "review_status":     p.get("compliance_legalReview", ""),
-                "deontic_id":        p.get("compliance_deonticId", ""),
+                "deontic_id":        did,
                 "norm_statement":    p.get("compliance_normStatement", ""),
                 "agent":             p.get("compliance_agent", ""),
                 "action":            p.get("compliance_action", ""),
@@ -240,7 +263,6 @@ def to_json(elements: list[dict]) -> list[dict]:
                 "deadline":          p.get("compliance_deadline", ""),
                 "exception":         p.get("compliance_exception", ""),
                 "sanction":          p.get("compliance_sanction", ""),
-                "cross_refs":        p.get("compliance_crossRefs", ""),
                 "regulation":        p.get("compliance_regulation", ""),
                 "article":           p.get("compliance_article", ""),
                 "paragraph":         p.get("compliance_paragraph", ""),
@@ -260,7 +282,6 @@ def to_json(elements: list[dict]) -> list[dict]:
                 "condition_statement": p.get("gw_conditionStatement", ""),
                 "true_branch":        p.get("gw_trueBranch", "Yes"),
                 "false_branch":       p.get("gw_falseBranch", "No"),
-                "cross_refs":         p.get("gw_crossRefs", ""),
                 "jurisdiction":       p.get("compliance_jurisdiction", ""),
                 "effective_date":     p.get("compliance_effectiveDate", ""),
                 "deadline":           p.get("compliance_deadline", ""),
@@ -328,7 +349,7 @@ def to_turtle(records: list[dict], source: str, base_iri: str) -> str:
         for label, local in agents.items():
             lines += [
                 f":{local}",
-                "    a owl:NamedIndividual, norma:Agent ;",
+                "    a owl:NamedIndividual, norma:LegalAgent ;",
                 f'    rdfs:label "{esc(label)}"@en .',
                 "",
             ]
@@ -404,13 +425,14 @@ def to_turtle(records: list[dict], source: str, base_iri: str) -> str:
         # Data properties
         _dp(T, "deonticId",        did)
         _dp(T, "normStatement",    r.get("norm_statement", ""))
-        _dp(T, "action",           r.get("action", ""))
+        _dp(T, "actionText",        r.get("action", ""))
+        _dp(T, "agentText",         r.get("agent", ""))
+        _dp(T, "objectText",        r.get("object", ""))
         _dp(T, "factStatement",    r.get("fact_statement", ""))
         _dp(T, "conditionTrigger", r.get("trigger_condition", ""))
         _dp(T, "jurisdiction",     r.get("jurisdiction", ""))
         _dp(T, "exception",        r.get("exception", ""))
         _dp(T, "sanction",         r.get("sanction", ""))
-        _dp(T, "crossRefsNorm",    r.get("cross_refs", ""))
         _dp(T, "annotator",        r.get("annotator", ""))
         _dp(T, "fromRegulation",   r.get("regulation", ""))
         _dp(T, "fromArticle",      r.get("article", ""))
@@ -433,7 +455,7 @@ def to_turtle(records: list[dict], source: str, base_iri: str) -> str:
         # Object properties — controlled vocabularies
         _op(T, "hasBindingForce",     BINDING_FORCE, r, "binding_force")
         _op(T, "hasNormStatus",       NORM_STATUS,   r, "norm_status")
-        _op(T, "hasRiskLevel",        RISK_LEVEL,    r, "risk_level")
+        _op(T, "hasComplianceCriticality", RISK_LEVEL,    r, "risk_level")
         _op(T, "hasExtractionMethod", EXTRACTION,    r, "extraction_method")
         _op(T, "hasReviewStatus",     REVIEW,        r, "review_status")
 
@@ -441,8 +463,8 @@ def to_turtle(records: list[dict], source: str, base_iri: str) -> str:
         ag  = r.get("agent", "")
         ob  = r.get("object", "")
         reg = r.get("regulation", "")
-        if ag  and ag  in agents:      T.append(f"    norma:hasAgent       :{agents[ag]} ;")
-        if ob  and ob  in objects:     T.append(f"    norma:actsOn         :{objects[ob]} ;")
+        if ag  and ag  in agents:      T.append(f"    norma:hasLegalAgent  :{agents[ag]} ;")
+        if ob  and ob  in objects:     T.append(f"    norma:hasObject      :{objects[ob]} ;")
         if reg and reg in regulations: T.append(f"    norma:hasLegalSource :{regulations[reg]} ;")
 
         _close(T)
@@ -468,8 +490,6 @@ def to_turtle(records: list[dict], source: str, base_iri: str) -> str:
             T.append(f"    norma:trueBranchLabel  {lit(r['true_branch'])} ;")
         if r.get("false_branch"):
             T.append(f"    norma:falseBranchLabel {lit(r['false_branch'])} ;")
-        if r.get("cross_refs"):
-            T.append(f"    norma:crossRefsGateway {lit(r['cross_refs'])} ;")
         if r.get("confidence"):
             T.append(f"    norma:confidenceScore {lit(r['confidence'], 'xsd:decimal')} ;")
         if r.get("annotator"):

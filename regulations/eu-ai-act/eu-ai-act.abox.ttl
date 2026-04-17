@@ -14,7 +14,7 @@
 
 # ── Agents ───────────────────────────────────────────────────────
 :Agent_AI_owner
-    a owl:NamedIndividual, norma:Agent ;
+    a owl:NamedIndividual, norma:LegalAgent ;
     rdfs:label "AI owner"@en .
 
 # ── Legal Objects ────────────────────────────────────────────────
@@ -39,7 +39,7 @@
     a owl:NamedIndividual, <https://w3id.org/norma-ontology#Obligation> ;
     rdfs:label "Marking obligation"@en ;
     norma:deonticId "OBL_1"^^xsd:string ;
-    norma:action "Marking obligation"^^xsd:string ;
+    norma:actionText "Marking obligation"^^xsd:string ;
     norma:annotator "Juana"^^xsd:string ;
     norma:fromRegulation "EU AI Act"^^xsd:string ;
     norma:fromArticle "4"^^xsd:string ;
@@ -49,18 +49,18 @@
     norma:sourceURI "hhtps://"^^xsd:anyURI ;
     norma:hasBindingForce <https://w3id.org/norma-ontology#HardLaw> ;
     norma:hasNormStatus <https://w3id.org/norma-ontology#Active> ;
-    norma:hasRiskLevel <https://w3id.org/norma-ontology#HighRisk> ;
+    norma:hasComplianceCriticality <https://w3id.org/norma-ontology#High> ;
     norma:hasExtractionMethod <https://w3id.org/norma-ontology#ManualLawyer> ;
     norma:hasReviewStatus <https://w3id.org/norma-ontology#PendingReview> ;
-    norma:hasAgent       :Agent_AI_owner ;
-    norma:actsOn         :Object_generate_content ;
+    norma:hasLegalAgent  :Agent_AI_owner ;
+    norma:hasObject      :Object_generate_content ;
     norma:hasLegalSource :Regulation_EU_AI_Act.
 
 :REC_1
     a owl:NamedIndividual, <https://w3id.org/norma-ontology#Recommendation> ;
     rdfs:label "Volutary codes\nof conduct"@en ;
     norma:deonticId "REC_1"^^xsd:string ;
-    norma:action "Adopt volutary codes of conduct"^^xsd:string ;
+    norma:actionText "Adopt volutary codes of conduct"^^xsd:string ;
     norma:annotator "Juana"^^xsd:string ;
     norma:fromRegulation "EU AI Act"^^xsd:string ;
     norma:fromArticle "5"^^xsd:string ;
@@ -70,11 +70,11 @@
     norma:sourceURI "hhtps://..."^^xsd:anyURI ;
     norma:hasBindingForce <https://w3id.org/norma-ontology#SoftLaw> ;
     norma:hasNormStatus <https://w3id.org/norma-ontology#Active> ;
-    norma:hasRiskLevel <https://w3id.org/norma-ontology#LowRisk> ;
+    norma:hasComplianceCriticality <https://w3id.org/norma-ontology#Low> ;
     norma:hasExtractionMethod <https://w3id.org/norma-ontology#ManualLawyer> ;
     norma:hasReviewStatus <https://w3id.org/norma-ontology#PendingReview> ;
-    norma:hasAgent       :Agent_AI_owner ;
-    norma:actsOn         :Object_generate_content ;
+    norma:hasLegalAgent  :Agent_AI_owner ;
+    norma:hasObject      :Object_generate_content ;
     norma:hasLegalSource :Regulation_EU_AI_Act.
 
 # ── Legal Conditions (Gateways) ──────────────────────────────────────
