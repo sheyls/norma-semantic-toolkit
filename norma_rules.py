@@ -2,7 +2,7 @@
 """
 norma_rules.py
 ==============
-NORMA Rule Extraction — BPMN file → DDL + SWRL/OWL + LegalRuleML.
+NORMA Rule Extraction — BPMN file →  SWRL/OWL.
 
 Builds a reduced directed graph from an annotated BPMN file, enumerates
 all start→end paths via DFS (one path = one execution scenario = one rule),

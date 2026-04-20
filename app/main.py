@@ -51,6 +51,7 @@ from norma.parsing.bpmn_parser import parse_bpmn_to_reduced_graph
 from norma.rules.extractor import enumerate_paths_and_build_ir
 from norma.rules.ir import RuleIR
 from norma.exporters.swrl import export_rules_to_owl
+from norma.exporters.human_readable import rule_ir_to_human_readable
 from norma.utils import to_symbol
 
 try:
@@ -231,6 +232,33 @@ async def get_swrl(pack: str):
     if not p["swrl_owl"]:
         raise HTTPException(404, "No SWRL file for this pack")
     return PlainTextResponse(p["swrl_owl"], media_type="application/rdf+xml")
+
+
+@app.get("/api/pack/{pack}/rules")
+async def pack_rules_human_readable(pack: str):
+    """
+    Return all rules for this pack in SWRL human-readable syntax.
+
+    Each entry includes the rule ID, source BPMN file, the condition set
+    (body), and the human-readable string in the standard SWRL notation:
+        antecedent ⇒ consequent
+    where atoms are conjoined with ∧ and variables are written as ?x.
+    """
+    p = _require_pack(pack)
+    result = []
+    for rule in p["rules_ir"]:
+        result.append({
+            "rid":            rule.rid,
+            "source":         rule.source,
+            "is_conditional": bool(rule.conditions),
+            "conditions":     [
+                {"predicate": c.predicate.name, "value": c.value}
+                for c in rule.conditions
+            ],
+            "human_readable":         rule_ir_to_human_readable(rule, multiline=False),
+            "human_readable_compact": rule_ir_to_human_readable(rule, multiline=False, compact=True),
+        })
+    return {"pack": pack, "rule_count": len(result), "rules": result}
 
 
 @app.get("/api/pack/{pack}/download/abox")

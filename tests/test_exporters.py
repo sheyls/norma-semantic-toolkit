@@ -5,8 +5,6 @@ Verifies that the exporter produces syntactically correct OWL/XML,
 uses the correct IRI namespaces, and emits the right structural
 markers for Protégé / OWL-reasoner consumption.
 
-Note: DDL and LegalRuleML exporters are not in the current pipeline;
-only the SWRL OWL/XML exporter is tested here.
 """
 
 import pytest

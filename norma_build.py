@@ -190,9 +190,7 @@ def build_rules(
 ) -> None:
     """
     Step 3: Run DFS rule extraction on every BPMN file in bpmn_dir and write:
-      - <pack_name>.ddl.txt       (Defeasible Logic rules)
       - <pack_name>.swrl.owl      (SWRL/OWL, imports the ABox)
-      - <pack_name>.legalruleml.xml
     """
     if not _RULES_AVAILABLE:
         print("[!] norma.rules not available — skipping rule extraction.")
