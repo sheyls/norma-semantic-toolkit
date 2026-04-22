@@ -123,8 +123,8 @@ class NormalizationReport:
 def _canonical(label: str) -> str:
     """Produce a canonical comparison key from a label."""
     s = label.lower().strip()
-    s = re.sub(r"[_\-\.\,\;\:\/\\]", " ", s)   # punctuation → space
-    s = re.sub(r"\s+", " ", s)                   # collapse whitespace
+    s = re.sub(r"[_\-\.\,\;\:\/\\?!\(\)]", " ", s)  # punctuation → space (incl. ?)
+    s = re.sub(r"\s+", " ", s).strip()
     return s
 
 
@@ -250,31 +250,47 @@ def normalize(
     report             : NormalizationReport with all decisions and warnings
     """
     # Load overrides
-    override: Dict[str, Dict[str, str]] = {"regulation": {}, "agent": {}, "object": {}}
+    override: Dict[str, Dict[str, str]] = {
+        "regulation": {}, "agent": {}, "object": {}, "action": {},
+        "deontic_id": {}, "condition_statement": {},
+    }
+    confirmed_separate: List[List[str]] = []
     if override_file and Path(override_file).exists():
         with open(override_file) as f:
             loaded = json.load(f)
         for key in override:
             override[key].update(loaded.get(key, {}))
+        confirmed_separate = loaded.get("_confirmed_separate", [])
 
     report = NormalizationReport()
 
-    # Build normalization maps per field
-    reg_map = _normalize_field(records, "regulation", "regulation", report, override["regulation"], threshold)
-    ag_map  = _normalize_field(records, "agent",      "agent",      report, override["agent"],       threshold)
-    ob_map  = _normalize_field(records, "object",     "object",     report, override["object"],      threshold)
+    # Build normalization maps — all fields that mint distinct KG individuals
+    reg_map    = _normalize_field(records, "regulation",         "regulation",         report, override.get("regulation", {}),         threshold)
+    ag_map     = _normalize_field(records, "agent",              "agent",              report, override.get("agent", {}),              threshold)
+    ob_map     = _normalize_field(records, "object",             "object",             report, override.get("object", {}),             threshold)
+    action_map = _normalize_field(records, "action",             "action",             report, override.get("action", {}),             threshold)
+    did_map    = _normalize_field(records, "deontic_id",         "deontic_id",         report, override.get("deontic_id", {}),         threshold)
+    cond_map   = _normalize_field(records, "condition_statement","condition_statement", report, override.get("condition_statement", {}), threshold)
 
     # Apply maps to records
     normalized = []
     for r in records:
         nr = dict(r)
-        if nr.get("regulation") in reg_map:
-            nr["regulation"] = reg_map[nr["regulation"]]
-        if nr.get("agent")      in ag_map:
-            nr["agent"]      = ag_map[nr["agent"]]
-        if nr.get("object")     in ob_map:
-            nr["object"]     = ob_map[nr["object"]]
+        if nr.get("regulation")         in reg_map:    nr["regulation"]         = reg_map[nr["regulation"]]
+        if nr.get("agent")              in ag_map:     nr["agent"]              = ag_map[nr["agent"]]
+        if nr.get("object")             in ob_map:     nr["object"]             = ob_map[nr["object"]]
+        if nr.get("action")             in action_map: nr["action"]             = action_map[nr["action"]]
+        if nr.get("deontic_id")         in did_map:    nr["deontic_id"]         = did_map[nr["deontic_id"]]
+        if nr.get("condition_statement") in cond_map:  nr["condition_statement"] = cond_map[nr["condition_statement"]]
         normalized.append(nr)
+
+    # Suppress warnings for pairs the user has confirmed are intentionally different
+    if confirmed_separate:
+        sep_sets = [frozenset(p) for p in confirmed_separate]
+        report.warnings = [
+            w for w in report.warnings
+            if frozenset(w.labels) not in sep_sets
+        ]
 
     return normalized, report
 
@@ -288,18 +304,24 @@ def save_override_template(
     found in records. The user can edit the values to force specific
     canonical forms, then pass the file to normalize().
     """
-    regs = sorted({r.get("regulation","") for r in records if r.get("regulation")})
-    ags  = sorted({r.get("agent","")      for r in records if r.get("agent")})
-    obs  = sorted({r.get("object","")     for r in records if r.get("object")})
+    regs  = sorted({r.get("regulation","")         for r in records if r.get("regulation")})
+    ags   = sorted({r.get("agent","")              for r in records if r.get("agent")})
+    obs   = sorted({r.get("object","")             for r in records if r.get("object")})
+    acts  = sorted({r.get("action","")             for r in records if r.get("action")})
+    dids  = sorted({r.get("deontic_id","")         for r in records if r.get("deontic_id")})
+    conds = sorted({r.get("condition_statement","") for r in records if r.get("condition_statement")})
 
     template = {
         "_instructions": (
             "Map each raw label (key) to its canonical form (value). "
             "Leave value empty or equal to key to keep as-is."
         ),
-        "regulation": {r: r for r in regs},
-        "agent":      {a: a for a in ags},
-        "object":     {o: o for o in obs},
+        "regulation":         {r: r for r in regs},
+        "agent":              {a: a for a in ags},
+        "object":             {o: o for o in obs},
+        "action":             {a: a for a in acts},
+        "deontic_id":         {d: d for d in dids},
+        "condition_statement": {c: c for c in conds},
     }
 
     Path(out_file).write_text(json.dumps(template, indent=2, ensure_ascii=False))

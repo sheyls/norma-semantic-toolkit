@@ -320,11 +320,14 @@ def build_rule_ir_from_path(
                 )
 
             elif e.guard in {"Yes", "No"}:
-                actor, pred = _split_actor_predicate(nodes[e.src].name)
+                # Use the full gateway name via to_symbol for consistent predicate naming
+                # (same as the gw_conditionStatement path above, avoids duplicate nodes)
+                gw_name   = nodes[e.src].name or ""
+                statement = to_symbol(gw_name) if gw_name else "unnamed"
                 conds.append(
                     Condition(
-                        predicate=rules(pred),
-                        subject=v(actor),
+                        predicate=rules(statement),
+                        subject=v("x"),
                         value=(e.guard == "Yes"),
                     )
                 )

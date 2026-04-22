@@ -62,6 +62,12 @@ except ImportError:
     def auto_deontic_id(dtype: str, bpmn_name: str, bpmn_id: str) -> str:  # type: ignore[misc]
         return bpmn_id
 
+try:
+    from norma.kg.normalizer import normalize as _normalize_entities
+    _NORMALIZER_AVAILABLE = True
+except ImportError:
+    _NORMALIZER_AVAILABLE = False
+
 # ── pyoxigraph ────────────────────────────────────────────────────────────────
 try:
     import pyoxigraph as ox
@@ -104,15 +110,22 @@ async def load_packs() -> None:
         if not reg_dir.is_dir():
             continue
 
-        abox_iri  = f"https://w3id.org/norma-abox/{reg_dir.name}"
-        bpmn_dir  = reg_dir / "bpmn"
+        abox_iri       = f"https://w3id.org/norma-abox/{reg_dir.name}"
+        bpmn_dir       = reg_dir / "bpmn"
+        entity_override = reg_dir / "entities.json"
         abox_ttl: Optional[str] = None
 
         # ── Prefer building ABox live from all BPMN files in bpmn/ ──────────
+        norm_report = None
         if _KG_AVAILABLE and bpmn_dir.is_dir() and any(bpmn_dir.glob("*.bpmn")):
             try:
                 elements, _ = parse_bpmn_folder(bpmn_dir)
-                records  = to_json(elements)
+                records = to_json(elements)
+                if _NORMALIZER_AVAILABLE:
+                    records, norm_report = _normalize_entities(
+                        records,
+                        override_file=str(entity_override) if entity_override.exists() else None,
+                    )
                 abox_ttl = to_turtle(records, str(bpmn_dir), abox_iri)
             except Exception as exc:
                 print(f"[norma] Warning: ABox build failed for {reg_dir.name}: {exc}")
@@ -126,7 +139,7 @@ async def load_packs() -> None:
         if not abox_ttl:
             continue
 
-        rules_ir, task_props = _rules_from_bpmn_dir(reg_dir)
+        rules_ir, task_props = _rules_from_bpmn_dir(reg_dir, override_path=entity_override)
         swrl_file = next(reg_dir.glob("*.swrl.owl"), None)
         store = _build_store(abox_ttl) if _OX_AVAILABLE else None
 
@@ -136,14 +149,50 @@ async def load_packs() -> None:
             "store":      store,
             "rules_ir":   rules_ir,
             "task_props": task_props or {},
+            "norm_report": norm_report,
+            "reg_dir":     str(reg_dir),
         }
         print(f"[norma] Loaded: {reg_dir.name} — {len(rules_ir)} rule(s)")
 
 
-def _rules_from_bpmn_dir(reg_dir: Path):
+# Maps normalizer field names → raw Zeebe property keys in task_props
+_TASK_PROP_NORM_MAP: dict = {
+    "agent":              "compliance_agent",
+    "action":             "compliance_action",
+    "object":             "compliance_object",
+    "regulation":         "compliance_regulation",
+    "deontic_id":         "compliance_deonticId",
+    "condition_statement": "gw_conditionStatement",
+}
+
+
+def _apply_override_to_task_props(task_props: dict, override: dict) -> dict:
+    """Apply entity normalisation overrides to raw Zeebe task_props in-place (returns new dict)."""
+    result: dict = {}
+    for elem_id, props in task_props.items():
+        new_props = dict(props)
+        for norm_field, prop_key in _TASK_PROP_NORM_MAP.items():
+            raw = new_props.get(prop_key, "")
+            if raw and norm_field in override:
+                canonical = override[norm_field].get(raw)
+                if canonical:
+                    new_props[prop_key] = canonical
+        result[elem_id] = new_props
+    return result
+
+
+def _rules_from_bpmn_dir(reg_dir: Path, override_path: Optional[Path] = None):
     bpmn_dir = reg_dir / "bpmn"
     if not bpmn_dir.is_dir():
         return [], {}
+
+    # Load entity override so condition predicates and norm labels are canonical
+    override: dict = {}
+    if override_path and override_path.exists():
+        loaded = json.loads(override_path.read_text(encoding="utf-8"))
+        for key in _TASK_PROP_NORM_MAP:
+            override[key] = loaded.get(key, {})
+
     rules_ir: list = []
     all_task_props: dict = {}
     for bpmn_file in sorted(bpmn_dir.glob("*.bpmn")):
@@ -153,6 +202,9 @@ def _rules_from_bpmn_dir(reg_dir: Path):
             # Tag every element with its source file so the UI can show it
             for props in task_props.values():
                 props.setdefault("_bpmn_source", bpmn_file.name)
+            # Apply entity normalisation before rule extraction
+            if override:
+                task_props = _apply_override_to_task_props(task_props, override)
             all_task_props.update(task_props)
             _, ir, _ = enumerate_paths_and_build_ir(
                 nodes=nodes,
@@ -870,6 +922,181 @@ async def update_norm(pack: str, norm_id: str, request: Request):
             updated.append(field_key)
 
     return {"norm_id": norm_id, "updated": updated}
+
+
+# =============================================================================
+# Entity registry / reconciliation
+# =============================================================================
+
+def _rebuild_reg_pack(pack_name: str, reg_dir: Path) -> None:
+    """Rebuild an in-memory pack from disk after the entities override changes."""
+    abox_iri = f"https://w3id.org/norma-abox/{pack_name}"
+    bpmn_dir = reg_dir / "bpmn"
+    abox_ttl: Optional[str] = None
+    norm_report = None
+
+    if _KG_AVAILABLE and bpmn_dir.is_dir() and any(bpmn_dir.glob("*.bpmn")):
+        try:
+            elements, _ = parse_bpmn_folder(bpmn_dir)
+            records = to_json(elements)
+            if _NORMALIZER_AVAILABLE:
+                op = reg_dir / "entities.json"
+                records, norm_report = _normalize_entities(
+                    records,
+                    override_file=str(op) if op.exists() else None,
+                )
+            abox_ttl = to_turtle(records, str(bpmn_dir), abox_iri)
+        except Exception as exc:
+            print(f"[norma] Rebuild failed for {pack_name}: {exc}")
+
+    if not abox_ttl:
+        abox_file = next(reg_dir.glob("*.abox.ttl"), None)
+        if abox_file:
+            abox_ttl = abox_file.read_text(encoding="utf-8")
+
+    if not abox_ttl:
+        return
+
+    entity_override = reg_dir / "entities.json"
+    rules_ir, task_props = _rules_from_bpmn_dir(reg_dir, override_path=entity_override)
+    swrl_file = next(reg_dir.glob("*.swrl.owl"), None)
+    store = _build_store(abox_ttl) if _OX_AVAILABLE else None
+
+    existing = _packs.get(pack_name, {})
+    existing.update({
+        "abox_ttl":    abox_ttl,
+        "swrl_owl":    swrl_file.read_text(encoding="utf-8") if swrl_file else existing.get("swrl_owl"),
+        "store":       store,
+        "rules_ir":    rules_ir,
+        "task_props":  task_props or {},
+        "norm_report": norm_report,
+        "reg_dir":     str(reg_dir),
+    })
+    _packs[pack_name] = existing
+
+
+@app.get("/api/pack/{pack}/entities")
+async def pack_entities(pack: str):
+    """Return entity normalization report + current override registry for this pack."""
+    p = _require_pack(pack)
+    reg_dir_str = p.get("reg_dir")
+    norm_report = p.get("norm_report")
+
+    override: dict = {
+        "regulation": {}, "agent": {}, "object": {}, "action": {},
+        "deontic_id": {}, "condition_statement": {}, "_confirmed_separate": [],
+    }
+    if reg_dir_str:
+        ef = Path(reg_dir_str) / "entities.json"
+        if ef.exists():
+            override = json.loads(ef.read_text(encoding="utf-8"))
+
+    decisions = []
+    warnings  = []
+    if norm_report:
+        for d in norm_report.decisions:
+            decisions.append({
+                "field":      d.field,
+                "raw_labels": d.raw_labels,
+                "winner":     d.winner,
+                "reason":     d.reason,
+                "confidence": d.confidence,
+            })
+        for w in norm_report.warnings:
+            warnings.append({
+                "field":      w.field,
+                "labels":     w.labels,
+                "message":    w.message,
+                "suggestion": w.suggestion,
+            })
+
+    # Collect all unique raw values per field directly from task_props
+    task_props = p.get("task_props", {})
+    all_values: dict = {field: set() for field in _TASK_PROP_NORM_MAP}
+    for props in task_props.values():
+        for norm_field, prop_key in _TASK_PROP_NORM_MAP.items():
+            v = props.get(prop_key, "").strip()
+            if v:
+                all_values[norm_field].add(v)
+    all_values_sorted = {k: sorted(v) for k, v in all_values.items() if v}
+
+    return {
+        "pack":        pack,
+        "decisions":   decisions,
+        "warnings":    warnings,
+        "override":    override,
+        "all_values":  all_values_sorted,
+        "has_reg_dir": bool(reg_dir_str),
+    }
+
+
+@app.post("/api/pack/{pack}/entities")
+async def update_entities(pack: str, body: dict):
+    """
+    Save a merge or confirm-separate decision to entities.json, then rebuild.
+
+    Body for merge:
+        {"action": "merge", "field": "agent", "label_a": "AI provider",
+         "label_b": "AI Provider", "canonical": "AI Provider"}
+
+    Body for confirm_separate:
+        {"action": "confirm_separate", "label_a": "Provider", "label_b": "Deployer"}
+    """
+    p = _require_pack(pack)
+    reg_dir_str = p.get("reg_dir")
+    if not reg_dir_str:
+        raise HTTPException(400, "This pack has no associated regulation directory (uploaded packs are not persistent)")
+
+    reg_dir = Path(reg_dir_str)
+    ef = reg_dir / "entities.json"
+
+    current: dict = {
+        "regulation": {}, "agent": {}, "object": {}, "action": {},
+        "deontic_id": {}, "condition_statement": {}, "_confirmed_separate": [],
+    }
+    if ef.exists():
+        current = json.loads(ef.read_text(encoding="utf-8"))
+    for key in ("regulation", "agent", "object", "action", "deontic_id", "condition_statement"):
+        current.setdefault(key, {})
+    current.setdefault("_confirmed_separate", [])
+
+    action = body.get("action")
+    if action == "merge":
+        field     = body.get("field", "")
+        label_a   = body.get("label_a", "")
+        label_b   = body.get("label_b", "")
+        canonical = body.get("canonical", "")
+        if not (field and label_a and label_b and canonical):
+            raise HTTPException(400, "merge requires field, label_a, label_b, canonical")
+        if field not in ("regulation", "agent", "object", "action", "deontic_id", "condition_statement"):
+            raise HTTPException(400, f"Unknown field: {field}")
+        current[field][label_a] = canonical
+        current[field][label_b] = canonical
+        # Remove from confirmed_separate if it was there
+        pair = sorted([label_a, label_b])
+        current["_confirmed_separate"] = [p for p in current["_confirmed_separate"] if sorted(p) != pair]
+
+    elif action == "confirm_separate":
+        label_a = body.get("label_a", "")
+        label_b = body.get("label_b", "")
+        if not (label_a and label_b):
+            raise HTTPException(400, "confirm_separate requires label_a, label_b")
+        pair = sorted([label_a, label_b])
+        if pair not in [sorted(x) for x in current["_confirmed_separate"]]:
+            current["_confirmed_separate"].append(pair)
+
+    elif action == "remove_override":
+        field   = body.get("field", "")
+        label   = body.get("label", "")
+        if field in current and label in current[field]:
+            del current[field][label]
+
+    else:
+        raise HTTPException(400, f"Unknown action: {action}")
+
+    ef.write_text(json.dumps(current, indent=2, ensure_ascii=False), encoding="utf-8")
+    _rebuild_reg_pack(pack, reg_dir)
+    return {"ok": True, "pack": pack}
 
 
 @app.get("/api/sparql-presets")

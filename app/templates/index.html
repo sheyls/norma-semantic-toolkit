@@ -427,6 +427,17 @@ body.app-open #site-footer{display:none}
 .result-banner{border-radius:var(--r-lg);padding:14px 20px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px}
 .result-banner.found{background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46}
 .result-banner.none{background:var(--s3);border:1px solid var(--bdr);color:var(--txt2)}
+.eval-tabs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:12px 0 4px}
+.eval-tab{font-size:11px;font-weight:700;padding:5px 13px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);color:var(--txt2);cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.eval-tab:hover{border-color:var(--p);color:var(--p)}
+.eval-tab.active{border-color:var(--p);color:var(--p);background:var(--p-lt)}
+.eval-tab .et-cnt{display:inline-block;margin-left:4px;font-size:10px;background:var(--bdr2);color:var(--txt2);border-radius:10px;padding:0 6px;line-height:1.6}
+.eval-tab.active .et-cnt{background:var(--p-lt);color:var(--p)}
+.eval-cards{display:flex;flex-direction:column;gap:12px}
+.norm-card.hidden{display:none}
+.nc-link{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:600;color:var(--p);background:var(--p-lt);border:1px solid transparent;border-radius:5px;padding:3px 9px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:border-color .15s}
+.nc-link:hover{border-color:var(--p)}
+.nc-law-link{color:var(--p);font-weight:700;text-decoration:none;margin-left:4px}.nc-law-link:hover{text-decoration:underline}
 .norm-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r-lg);overflow:hidden}
 .norm-card.obl{border-left:4px solid var(--obl)}
 .norm-card.rec{border-left:4px solid var(--rec)}
@@ -619,6 +630,57 @@ body.app-open #site-footer{display:none}
 .rb-approved{background:var(--grn-lt);color:#065F46}
 .rb-pending{background:#FFFBEB;color:#92400E}
 .rb-none{background:var(--s3);color:var(--txt3)}
+
+/* ══════════════════════════════════════════════════
+   ENTITY REGISTRY PANEL
+══════════════════════════════════════════════════ */
+.ent-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt2);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ent-section-title svg{opacity:.5}
+.ent-empty{font-size:13px;color:var(--txt3);font-style:italic;padding:6px 0}
+
+/* warning cards (flagged near-matches) */
+.ent-warn{background:var(--surf);border:1px solid #FCD34D;border-left:4px solid #F59E0B;border-radius:var(--r-lg);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.ent-warn-labels{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ent-label{font-size:13px;font-weight:700;font-family:monospace;background:var(--s2);border:1px solid var(--bdr);border-radius:5px;padding:3px 10px;color:var(--ink)}
+.ent-sim{font-size:11px;color:#92400E;background:#FFFBEB;border:1px solid #FDE68A;border-radius:4px;padding:2px 8px;font-weight:600}
+.ent-field-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:4px}
+.ent-field-agent{background:#EFF6FF;color:#1D4ED8}
+.ent-field-object{background:#F0FDF4;color:#15803D}
+.ent-field-regulation{background:#FAF5FF;color:#7C3AED}
+.ent-field-action{background:#FFF7ED;color:#C2410C}
+.ent-manual-form{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0}
+.ent-field-norm{background:#FDF2F8;color:#9D174D}
+.ent-field-cond{background:#ECFEFF;color:#0E7490}
+.ent-warn-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ent-merge-form{display:flex;align-items:center;gap:6px;flex:1;min-width:200px}
+.ent-merge-sel{border:1px solid var(--bdr);border-radius:5px;font-size:12px;font-family:inherit;color:var(--ink);padding:4px 8px;background:var(--surf);outline:none;cursor:pointer}
+.ent-merge-sel:focus{border-color:var(--p)}
+.ent-btn-merge{font-size:12px;font-weight:600;padding:5px 14px;border-radius:6px;border:none;background:var(--p);color:#fff;cursor:pointer;font-family:inherit;white-space:nowrap}
+.ent-btn-merge:hover{background:var(--p-dk)}
+.ent-btn-sep{font-size:12px;font-weight:600;padding:5px 14px;border-radius:6px;border:1.5px solid var(--bdr);background:var(--surf);color:var(--txt2);cursor:pointer;font-family:inherit;white-space:nowrap}
+.ent-btn-sep:hover{border-color:var(--txt2);color:var(--ink)}
+
+/* decision rows (auto-merged) */
+.ent-decision{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surf);border:1px solid var(--bdr);border-radius:8px;flex-wrap:wrap}
+.ent-decision-raws{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+.ent-raw{font-size:11px;font-family:monospace;background:var(--s3);border:1px solid var(--bdr);border-radius:4px;padding:2px 7px;color:var(--txt2)}
+.ent-arrow{color:var(--txt3);font-size:12px}
+.ent-winner{font-size:12px;font-weight:700;font-family:monospace;color:var(--p)}
+.ent-reason{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--txt3);background:var(--s2);border-radius:4px;padding:2px 7px}
+
+/* override registry */
+.ent-registry{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r-lg);overflow:hidden}
+.ent-registry-hd{padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--txt2)}
+.ent-registry-hd:hover{background:var(--s3)}
+.ent-registry-body{display:none;padding:0 14px 12px}
+.ent-registry-body.open{display:block}
+.ent-reg-field{margin-top:10px}
+.ent-reg-field-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt3);margin-bottom:4px}
+.ent-reg-row{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:12px}
+.ent-reg-key{font-family:monospace;color:var(--txt2)}
+.ent-reg-val{font-family:monospace;color:var(--p);font-weight:600}
+.ent-reg-del{font-size:10px;color:var(--txt3);cursor:pointer;padding:1px 5px;border-radius:3px;border:1px solid transparent}
+.ent-reg-del:hover{border-color:var(--obl);color:var(--obl)}
 
 /* ══════════════════════════════════════════════════
    GRAPH VISUALIZATION PANEL
@@ -1240,6 +1302,13 @@ body.app-open #site-footer{display:none}
           Norm Annotations
         </div>
 
+        <div class="ws-nav-item" data-panel="entities" onclick="showPanel('entities')">
+          <span class="ws-nav-ico">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="4" r="2"/><circle cx="11" cy="4" r="2"/><circle cx="8" cy="12" r="2"/><path d="M5 6v1.5a2.5 2.5 0 002.5 2.5h1A2.5 2.5 0 0011 7.5V6"/><line x1="7" y1="4" x2="9" y2="4" stroke-dasharray="2 1"/></svg>
+          </span>
+          Entity Registry
+        </div>
+
         <div class="ws-nav-divider"></div>
         <div class="ws-sb-lbl" style="padding:6px 8px 4px;font-size:9px">Knowledge</div>
 
@@ -1530,6 +1599,22 @@ body.app-open #site-footer{display:none}
         </div>
       </div>
 
+      <!-- ─── ENTITY REGISTRY ─── -->
+      <div class="ws-panel" id="wsp-entities" style="flex-direction:column">
+        <div class="panel-hd">
+          <div class="panel-hd-left">
+            <div class="panel-title">Entity Registry</div>
+            <div class="panel-sub">Detect and resolve referential inconsistencies — same legal entity, different labels</div>
+          </div>
+          <div class="panel-hd-right">
+            <button class="btn btn-sm btn-ol" onclick="loadEntities()" title="Refresh">↺ Refresh</button>
+          </div>
+        </div>
+        <div style="flex:1;min-height:0;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:20px" id="ent-body">
+          <div class="empty-state"><div class="empty-icon">🔗</div><div class="empty-title">Select a regulation pack</div><div class="empty-desc">Entity consistency analysis will appear here</div></div>
+        </div>
+      </div>
+
       <!-- ─── KG GRAPH ─── -->
       <div class="ws-panel" id="wsp-graph">
         <div class="panel-hd">
@@ -1808,6 +1893,7 @@ function selectPack(name) {
   clearSq();
   _graphLoaded = false; // mark graph stale so it reloads on next visit
   _nvData = [];         // clear norms cache so it reloads for the new pack
+  _entData = null;      // clear entities cache
 }
 
 function refreshPanels() {
@@ -1852,9 +1938,10 @@ function showPanel(name) {
   const target = document.getElementById(`wsp-${name}`);
   if (target) { target.classList.add('active'); target.style.display = 'flex'; }
 
-  if (name === 'graph'   && activePack) loadGraph();
-  if (name === 'norms'   && activePack) loadNorms();
-  if (name === 'rules'   && activePack) loadRules();
+  if (name === 'graph'    && activePack) loadGraph();
+  if (name === 'norms'    && activePack) loadNorms();
+  if (name === 'rules'    && activePack) loadRules();
+  if (name === 'entities' && activePack) loadEntities();
   if (name === 'ontology') renderOntologyPanel();
 }
 
@@ -2010,41 +2097,54 @@ function renderResults(norms, el) {
     return;
   }
 
-  const count = norms.length;
-
   const TYPE_META = {
-    obligation:    { cls: 'obl',  label: 'Obligation' },
-    prohibition:   { cls: 'prh',  label: 'Prohibition' },
-    permission:    { cls: 'perm', label: 'Permission' },
-    recommendation:{ cls: 'rec',  label: 'Recommendation' },
-    fact:          { cls: 'fact', label: 'Fact' }
+    obligation:      { cls: 'obl',  label: 'Obligation' },
+    prohibition:     { cls: 'prh',  label: 'Prohibition' },
+    permission:      { cls: 'perm', label: 'Permission' },
+    recommendation:  { cls: 'rec',  label: 'Recommendation' },
+    fact:            { cls: 'fact', label: 'Fact' }
   };
 
-  let html = `<div class="result-banner found">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 1.5L2 4v3.5C2 11 4.6 13.5 8 14.5 11.4 13.5 14 11 14 7.5V4L8 1.5z"/><path d="M5.5 8l2 2 3.5-3.5"/></svg>
-    ${count} applicable norm${count!==1?'s':''} found for this scenario
+  // Count per type for tab badges
+  const typeCounts = {};
+  for (const n of norms) {
+    const t = String(n.deontic_type || '').toLowerCase() || 'fact';
+    typeCounts[t] = (typeCounts[t] || 0) + 1;
+  }
+
+  const TAB_ORDER = ['obligation','prohibition','permission','recommendation','fact'];
+  const presentTypes = TAB_ORDER.filter(t => typeCounts[t]);
+
+  // Build tab bar (only show tabs for types that are present)
+  const tabsHtml = `<div class="eval-tabs" id="eval-tabs">
+    <button class="eval-tab active" data-tab="all" onclick="switchEvalTab('all',this)">
+      All <span class="et-cnt">${norms.length}</span>
+    </button>
+    ${presentTypes.map(t => {
+      const meta = TYPE_META[t];
+      return `<button class="eval-tab" data-tab="${t}" onclick="switchEvalTab('${t}',this)">
+        ${meta.label} <span class="et-cnt">${typeCounts[t]}</span>
+      </button>`;
+    }).join('')}
   </div>`;
 
-  for (const n of norms) {
+  // Build cards
+  const cardsHtml = norms.map(n => {
     const rawType = String(n.deontic_type || '').toLowerCase();
-    const meta = TYPE_META[rawType] || { cls: 'fact', label: n.deontic_type || 'Norm' };
-
-    const cls = meta.cls;
-    const typeL = meta.label;
-
+    const meta    = TYPE_META[rawType] || { cls: 'fact', label: n.deontic_type || 'Norm' };
+    const cls     = meta.cls;
+    const typeL   = meta.label;
     const riskRaw = (n.risk_level || '').toLowerCase();
-    const riskCl =
-      riskRaw.includes('high') || riskRaw.includes('critical') ? 'hi' : 'lo';
+    const riskCl  = riskRaw.includes('high') || riskRaw.includes('critical') ? 'hi' : 'lo';
+    const riskL   = (n.risk_level || '').replace('Risk','').trim() || '—';
+    const forceL  = (n.binding_force || '').replace(/([A-Z])/g,' $1').trim() || '—';
 
-    const riskL  = (n.risk_level || '').replace('Risk','').trim() || '—';
-    const forceL = (n.binding_force || '').replace(/([A-Z])/g,' $1').trim() || '—';
-
-    html += `
-    <div class="norm-card ${cls}">
+    return `<div class="norm-card ${cls}" data-norm-type="${rawType || 'fact'}">
       <div class="nc-top">
         <span class="nc-type ${cls}">${typeL}</span>
         <div class="nc-title">${esc(n.action || n.norm_id)}</div>
         <span class="nc-id">${esc(n.norm_id)}</span>
+        <button class="nc-link" onclick="goToNorm('${esc(n.norm_id)}')">View annotation →</button>
       </div>
       <div class="nc-body">
         <div class="nc-attrs">
@@ -2053,16 +2153,58 @@ function renderResults(norms, el) {
           <div class="attr-pill"><div class="attr-lbl">Binding Force</div><div class="attr-val ${cls+'-clr'}">${esc(forceL)}</div></div>
           <div class="attr-pill"><div class="attr-lbl">Risk Level</div><div class="attr-val ${riskCl}">${esc(riskL)} Risk</div></div>
           ${n.regulation ? `<div class="attr-pill"><div class="attr-lbl">Regulation</div><div class="attr-val">${esc(n.regulation)}</div></div>` : ''}
-          ${n.article ? `<div class="attr-pill"><div class="attr-lbl">Article</div><div class="attr-val">Art. ${esc(n.article)}${n.paragraph ? ' §'+esc(n.paragraph) : ''}</div></div>` : ''}
+          ${n.article ? `<div class="attr-pill"><div class="attr-lbl">Article</div><div class="attr-val">Art. ${esc(n.article)}${n.paragraph ? ' §'+esc(n.paragraph) : ''}${n.source_uri ? ` <a href="${esc(n.source_uri)}" target="_blank" rel="noopener" class="nc-law-link" title="Open legislation">↗</a>` : ''}</div></div>` : ''}
+          ${!n.article && n.source_uri ? `<div class="attr-pill"><div class="attr-lbl">Source</div><div class="attr-val"><a href="${esc(n.source_uri)}" target="_blank" rel="noopener" class="nc-law-link">Open legislation ↗</a></div></div>` : ''}
         </div>
         <div class="nc-trigger">
           Triggered by: ${n.conditions.map(c => `<b>${esc(c.predicate.replace(/_/g,' '))}</b> = <b>${c.value ? 'Yes' : 'No'}</b>`).join(', ')}
         </div>
       </div>
     </div>`;
-  }
+  }).join('');
 
-  el.innerHTML = html;
+  el.innerHTML = `
+    <div class="result-banner found">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 1.5L2 4v3.5C2 11 4.6 13.5 8 14.5 11.4 13.5 14 11 14 7.5V4L8 1.5z"/><path d="M5.5 8l2 2 3.5-3.5"/></svg>
+      ${norms.length} applicable norm${norms.length!==1?'s':''} found for this scenario
+    </div>
+    ${presentTypes.length > 1 ? tabsHtml : ''}
+    <div class="eval-cards" id="eval-cards">${cardsHtml}</div>`;
+}
+
+function switchEvalTab(tab, btn) {
+  document.querySelectorAll('#eval-tabs .eval-tab').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('#eval-cards .norm-card').forEach(card => {
+    card.classList.toggle('hidden', tab !== 'all' && card.dataset.normType !== tab);
+  });
+}
+
+async function goToNorm(normId) {
+  showPanel('norms');
+  // Wait for norms to load if not yet loaded
+  if (!_nvData.length) {
+    await loadNorms();
+  }
+  // Find card by norm_id index
+  const idx = _nvData.findIndex(n => n.norm_id === normId);
+  if (idx === -1) return;
+  const uid = `nvc-${idx}`;
+  // Scroll to the card
+  const card = document.getElementById(uid);
+  if (!card) return;
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Open the body if not already open
+  const body = document.getElementById(`body-${uid}`);
+  const tog  = document.getElementById(`tog-${uid}`);
+  if (body && !body.classList.contains('open')) {
+    body.classList.add('open');
+    if (tog) tog.classList.add('open');
+  }
+  // Flash highlight
+  card.style.transition = 'box-shadow .2s, outline .2s';
+  card.style.outline = '2px solid var(--p)';
+  card.style.boxShadow = '0 0 0 4px var(--p-lt)';
+  setTimeout(() => { card.style.outline = ''; card.style.boxShadow = ''; }, 1800);
 }
 function resetEval() {
   answers = {};
@@ -2072,6 +2214,248 @@ function resetEval() {
   document.querySelectorAll('.q-card').forEach(c => c.classList.remove('done'));
   setHTML('eval-results', '');
   updateProgress();
+}
+
+// ── Entity Registry ───────────────────────────────────────────────────────────
+let _entData = null;
+
+async function loadEntities() {
+  if (!activePack) return;
+  const body = document.getElementById('ent-body');
+  if (!body) return;
+  body.innerHTML = '<div style="padding:12px;color:var(--txt3);font-size:13px"><span class="spin">⟳</span> Analysing entity labels…</div>';
+  try {
+    const r = await fetch(`/api/pack/${activePack}/entities`);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    _entData = await r.json();
+    renderEntities();
+  } catch(e) {
+    body.innerHTML = alertHtml('err', e.message);
+  }
+}
+
+function renderEntities() {
+  const body = document.getElementById('ent-body');
+  if (!body || !_entData) return;
+
+  const { decisions, warnings, override, has_reg_dir } = _entData;
+
+  const FIELD_CLS = {
+    agent:               'ent-field-agent',
+    object:              'ent-field-object',
+    regulation:          'ent-field-regulation',
+    action:              'ent-field-action',
+    deontic_id:          'ent-field-norm',
+    condition_statement: 'ent-field-cond',
+  };
+  const FIELD_LBL = {
+    agent:               'Agent',
+    object:              'Object',
+    regulation:          'Regulation',
+    action:              'Action',
+    deontic_id:          'Norm ID',
+    condition_statement: 'Condition',
+  };
+
+  let html = '';
+
+  // ── Section: Flagged near-matches ─────────────────────────────────────────
+  html += `<div>
+    <div class="ent-section-title">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 2L1 12h12L7 2z"/><line x1="7" y1="6" x2="7" y2="9"/><circle cx="7" cy="11" r=".5" fill="currentColor"/></svg>
+      Flagged near-matches${warnings.length ? ` <span style="background:#FEF3C7;color:#92400E;font-size:10px;padding:1px 7px;border-radius:10px;font-weight:700">${warnings.length}</span>` : ''}
+    </div>`;
+
+  if (!warnings.length) {
+    html += `<div class="ent-empty">No near-matches detected — all entity labels are consistent.</div>`;
+  } else {
+    html += warnings.map((w, i) => {
+      const fcls = FIELD_CLS[w.field] || 'ent-field-agent';
+      const flbl = FIELD_LBL[w.field] || w.field;
+      const sim  = w.message.match(/(\d+%)/)?.[1] || '';
+      const opts = w.labels.map(l => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
+      return `
+      <div class="ent-warn" id="ewarn-${i}">
+        <div class="ent-warn-labels">
+          <span class="ent-field-badge ${fcls}">${flbl}</span>
+          <span class="ent-label">${esc(w.labels[0])}</span>
+          <span style="color:var(--txt3);font-size:12px">≈</span>
+          <span class="ent-label">${esc(w.labels[1])}</span>
+          ${sim ? `<span class="ent-sim">${sim} similar</span>` : ''}
+        </div>
+        <div class="ent-warn-actions">
+          <div class="ent-merge-form">
+            <span style="font-size:12px;color:var(--txt2)">Merge as:</span>
+            <select class="ent-merge-sel" id="esel-${i}">
+              ${opts}
+            </select>
+            <button class="ent-btn-merge" onclick="doMerge(${i},'${esc(w.field)}','${esc(w.labels[0])}','${esc(w.labels[1])}')">Merge</button>
+          </div>
+          <button class="ent-btn-sep" onclick="doConfirmSep(${i},'${esc(w.labels[0])}','${esc(w.labels[1])}')">Keep Separate</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  html += `</div>`;
+
+  // ── Section: Auto-merged ──────────────────────────────────────────────────
+  html += `<div>
+    <div class="ent-section-title">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="2 7 6 11 12 3"/></svg>
+      Auto-canonicalized${decisions.length ? ` <span style="background:#D1FAE5;color:#065F46;font-size:10px;padding:1px 7px;border-radius:10px;font-weight:700">${decisions.length}</span>` : ''}
+    </div>`;
+
+  if (!decisions.length) {
+    html += `<div class="ent-empty">No automatic merges were performed.</div>`;
+  } else {
+    html += decisions.map(d => {
+      const fcls = FIELD_CLS[d.field] || 'ent-field-agent';
+      const flbl = FIELD_LBL[d.field] || d.field;
+      const rawsHtml = d.raw_labels.map(r => `<span class="ent-raw">${esc(r)}</span>`).join('');
+      return `<div class="ent-decision">
+        <span class="ent-field-badge ${fcls}">${flbl}</span>
+        <div class="ent-decision-raws">${rawsHtml}</div>
+        <span class="ent-arrow">→</span>
+        <span class="ent-winner">${esc(d.winner)}</span>
+        <span class="ent-reason">${esc(d.reason)}</span>
+      </div>`;
+    }).join('');
+  }
+  html += `</div>`;
+
+  // ── Section: Manual merge ─────────────────────────────────────────────────
+  const { all_values = {} } = _entData;
+  const ALL_FIELDS = ['agent','object','regulation','action','deontic_id','condition_statement'];
+
+  const fieldOpts = ALL_FIELDS.map(f =>
+    `<option value="${f}">${FIELD_LBL[f]}</option>`
+  ).join('');
+
+  html += `<div>
+    <div class="ent-section-title">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 7h10M7 2l5 5-5 5"/></svg>
+      Manual Merge
+      <span style="font-size:10px;color:var(--txt3);font-weight:400;text-transform:none;letter-spacing:0">— for semantically equivalent entries the fuzzy detector didn't catch</span>
+    </div>
+    <div class="ent-manual-form" id="ent-manual-form">
+      <select class="ent-merge-sel" id="em-field" onchange="updateManualDropdowns()" style="min-width:130px">${fieldOpts}</select>
+      <select class="ent-merge-sel" id="em-from" style="flex:1;min-width:160px"><option value="">— select source —</option></select>
+      <span style="color:var(--txt3);font-size:13px;font-weight:700;flex-shrink:0">→</span>
+      <select class="ent-merge-sel" id="em-to" style="flex:1;min-width:160px"><option value="">— select canonical —</option></select>
+      <button class="ent-btn-merge" onclick="doManualMerge()">Add Merge</button>
+    </div>
+  </div>`;
+
+  // ── Section: Override registry ────────────────────────────────────────────
+  const hasOverrides = ALL_FIELDS.some(k => Object.keys(override[k]||{}).length > 0);
+  const confirmed = (override._confirmed_separate || []);
+
+  html += `<div class="ent-registry">
+    <div class="ent-registry-hd" onclick="toggleEntRegistry(this)">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="2" width="10" height="8" rx="1"/><path d="M4 5h4M4 7h2"/></svg>
+      Override Registry
+      <span style="margin-left:auto;font-size:10px;color:var(--txt3)">${hasOverrides || confirmed.length ? 'has entries' : 'empty'} · click to expand</span>
+    </div>
+    <div class="ent-registry-body" id="ent-reg-body">`;
+
+  if (!has_reg_dir) {
+    html += `<p style="font-size:12px;color:var(--txt3);padding:8px 0">This pack was uploaded and has no persistent registry. Only file-system packs support the entity override file.</p>`;
+  } else if (!hasOverrides && !confirmed.length) {
+    html += `<p class="ent-empty" style="padding:8px 0">No manual overrides yet. Use the Merge buttons above to add entries.</p>`;
+  } else {
+    for (const field of ALL_FIELDS) {
+      const entries = Object.entries(override[field] || {});
+      if (!entries.length) continue;
+      html += `<div class="ent-reg-field">
+        <div class="ent-reg-field-title">${FIELD_LBL[field]}</div>`;
+      html += entries.map(([k, v]) =>
+        `<div class="ent-reg-row">
+          <span class="ent-reg-key">"${esc(k)}"</span>
+          <span style="color:var(--txt3)">→</span>
+          <span class="ent-reg-val">"${esc(v)}"</span>
+          <span class="ent-reg-del" onclick="doRemoveOverride('${esc(field)}','${esc(k)}')" title="Remove">✕</span>
+        </div>`
+      ).join('');
+      html += `</div>`;
+    }
+    if (confirmed.length) {
+      html += `<div class="ent-reg-field">
+        <div class="ent-reg-field-title">Confirmed Separate</div>`;
+      html += confirmed.map(pair =>
+        `<div class="ent-reg-row">
+          <span class="ent-reg-key">"${esc(pair[0])}"</span>
+          <span style="color:var(--txt3)">≠</span>
+          <span class="ent-reg-key">"${esc(pair[1])}"</span>
+        </div>`
+      ).join('');
+      html += `</div>`;
+    }
+  }
+
+  html += `</div></div>`;
+
+  body.innerHTML = html;
+  // Populate manual merge dropdowns with the first field's values
+  updateManualDropdowns();
+}
+
+function toggleEntRegistry(hd) {
+  const b = document.getElementById('ent-reg-body');
+  if (b) b.classList.toggle('open');
+}
+
+async function _entPost(payload) {
+  const r = await fetch(`/api/pack/${activePack}/entities`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!r.ok) { const t = await r.text(); throw new Error(t); }
+  _entData = null;
+  await loadEntities();
+}
+
+async function doMerge(idx, field, labelA, labelB) {
+  const sel = document.getElementById(`esel-${idx}`);
+  const canonical = sel ? sel.value : labelA;
+  try {
+    await _entPost({ action: 'merge', field, label_a: labelA, label_b: labelB, canonical });
+  } catch(e) { alert('Merge failed: ' + e.message); }
+}
+
+async function doConfirmSep(idx, labelA, labelB) {
+  try {
+    await _entPost({ action: 'confirm_separate', label_a: labelA, label_b: labelB });
+  } catch(e) { alert('Failed: ' + e.message); }
+}
+
+async function doRemoveOverride(field, label) {
+  try {
+    await _entPost({ action: 'remove_override', field, label });
+  } catch(e) { alert('Failed: ' + e.message); }
+}
+
+function updateManualDropdowns() {
+  const field   = document.getElementById('em-field')?.value;
+  const fromSel = document.getElementById('em-from');
+  const toSel   = document.getElementById('em-to');
+  if (!fromSel || !toSel || !_entData) return;
+  const vals = (_entData.all_values || {})[field] || [];
+  const opts = `<option value="">— select —</option>` +
+    vals.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  fromSel.innerHTML = opts;
+  toSel.innerHTML   = opts;
+}
+
+async function doManualMerge() {
+  const field    = document.getElementById('em-field')?.value;
+  const label_a  = document.getElementById('em-from')?.value;
+  const label_b  = document.getElementById('em-to')?.value;
+  if (!field || !label_a || !label_b) { alert('Select a field, source, and canonical value.'); return; }
+  if (label_a === label_b) { alert('Source and canonical are the same — nothing to merge.'); return; }
+  try {
+    await _entPost({ action: 'merge', field, label_a, label_b, canonical: label_b });
+  } catch(e) { alert('Merge failed: ' + e.message); }
 }
 
 // ── SPARQL ────────────────────────────────────────────────────────────────────
@@ -2360,7 +2744,86 @@ function renderNorms() {
         </span>
       </div>
       <div class="nv-body" id="body-${uid}">
-        ...
+        <div class="nv-groups">
+
+          <!-- GROUP 1: Norm Content -->
+          <div class="nv-group">
+            <div class="nv-group-hd"><span class="nv-group-ico">⚖️</span>Norm Content</div>
+            <div class="nv-group-fields">
+              ${fld('Norm ID',         rd(n.norm_id, 'nv-rdval-mono'))}
+              ${fld('Deontic Type',    rd(n.deontic_type || '—'))}
+              ${n.norm_statement ? fld('Norm Statement', rd(n.norm_statement), true) : ''}
+              ${n.agent          ? fld('Agent',          rd(n.agent)) : ''}
+              ${n.action         ? fld('Action',         rd(n.action)) : ''}
+              ${n.object         ? fld('Object',         rd(n.object)) : ''}
+              ${n.binding_force  ? fld('Binding Force',  rd(n.binding_force)) : ''}
+              ${n.fact_statement ? fld('Fact Statement', rd(n.fact_statement), true) : ''}
+            </div>
+          </div>
+
+          <!-- GROUP 2: Legal Conditions (gateway path) -->
+          ${(n.conditions.length || n.gw_condition_statement) ? `
+          <div class="nv-group">
+            <div class="nv-group-hd"><span class="nv-group-ico">🔀</span>Legal Conditions</div>
+            ${n.conditions.length ? `<div class="nv-conditions">${condChips}</div>` : ''}
+            ${n.gw_condition_statement || n.gw_true_branch || n.gw_false_branch ? `
+            <div class="nv-group-fields">
+              ${n.gw_condition_statement ? fld('Condition Statement', rd(n.gw_condition_statement), true) : ''}
+              ${n.gw_true_branch  ? fld('True Branch',  rd(n.gw_true_branch)) : ''}
+              ${n.gw_false_branch ? fld('False Branch', rd(n.gw_false_branch)) : ''}
+            </div>` : ''}
+          </div>` : ''}
+
+          <!-- GROUP 3: Legal Source -->
+          <div class="nv-group">
+            <div class="nv-group-hd"><span class="nv-group-ico">📜</span>Legal Source</div>
+            <div class="nv-group-fields">
+              ${n.regulation     ? fld('Regulation', rd(n.regulation)) : ''}
+              ${n.article        ? fld('Article',    rd(n.article)) : ''}
+              ${n.paragraph      ? fld('Paragraph',  rd(n.paragraph)) : ''}
+              ${n.original_text  ? fld('Original Text', rd(n.original_text), true) : ''}
+              ${n.regulation_uri ? fld('Regulation URI', `<span class="nv-field-val uri">${esc(n.regulation_uri)}</span>`, true) : ''}
+            </div>
+          </div>
+
+          <!-- GROUP 4: Scope & Temporal -->
+          ${(n.trigger_condition || n.jurisdiction || n.effective_date || n.deadline || n.status) ? `
+          <div class="nv-group">
+            <div class="nv-group-hd"><span class="nv-group-ico">🗓️</span>Scope &amp; Temporal</div>
+            <div class="nv-group-fields">
+              ${n.trigger_condition ? fld('Trigger Condition', rd(n.trigger_condition), true) : ''}
+              ${n.jurisdiction      ? fld('Jurisdiction',      rd(n.jurisdiction)) : ''}
+              ${n.effective_date    ? fld('Effective Date',    rd(n.effective_date)) : ''}
+              ${n.deadline          ? fld('Deadline',          rd(n.deadline)) : ''}
+              ${n.status            ? fld('Status',            rd(n.status)) : ''}
+            </div>
+          </div>` : ''}
+
+          <!-- GROUP 5: Consequences & Exceptions -->
+          ${(n.exception || n.sanction || n.risk_level) ? `
+          <div class="nv-group">
+            <div class="nv-group-hd"><span class="nv-group-ico">⚠️</span>Consequences &amp; Exceptions</div>
+            <div class="nv-group-fields">
+              ${n.exception   ? fld('Exception',   rd(n.exception), true) : ''}
+              ${n.sanction    ? fld('Sanction',    rd(n.sanction), true) : ''}
+              ${n.risk_level  ? fld('Risk Level',  rd(n.risk_level)) : ''}
+            </div>
+          </div>` : ''}
+
+          <!-- GROUP 6: Annotation Metadata -->
+          <div class="nv-group">
+            <div class="nv-group-hd"><span class="nv-group-ico">🏷️</span>Annotation Metadata</div>
+            <div class="nv-group-fields">
+              ${n.annotator          ? fld('Annotator',          rd(n.annotator)) : ''}
+              ${n.annotation_date    ? fld('Annotation Date',    rd(n.annotation_date)) : ''}
+              ${n.last_review_date   ? fld('Last Review Date',   rd(n.last_review_date)) : ''}
+              ${n.extraction_method  ? fld('Extraction Method',  rd(n.extraction_method)) : ''}
+              ${n.confidence         ? fld('Confidence',         rd(n.confidence)) : ''}
+              ${fld('Legal Review', rd(lrL))}
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>`;
   });

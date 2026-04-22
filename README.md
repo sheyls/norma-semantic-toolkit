@@ -16,6 +16,7 @@ Annotated BPMN  →  Knowledge Graph (ABox/TBox)  →  SWRL rules + SPARQL + RES
 - [NORMA Annotation Template — Field Reference](#norma-annotation-template--field-reference)
 - [NORMA Ontology (TBox)](#norma-ontology-tbox)
 - [Knowledge Graph (ABox)](#knowledge-graph-abox)
+- [Entity Reconciliation & Referential Consistency](#entity-reconciliation--referential-consistency)
 - [SWRL Rules](#swrl-rules)
 - [SPARQL Queries](#sparql-queries)
 - [Web Application](#web-application)
@@ -47,6 +48,7 @@ norma/
     extractor.py            ← Reduced graph → RuleIR (DFS path enumeration)
   exporters/
     swrl.py                 ← RuleIR → SWRL/OWL XML
+    human_readable.py       ← RuleIR → human-readable SWRL syntax
   utils.py                  ← to_symbol() and other helpers
 norma_build.py              ← CLI: KG pipeline (batch use)
 norma_rules.py              ← CLI: standalone SWRL rule extraction
@@ -57,6 +59,7 @@ regulations/
   eu-ai-act/
     bpmn/                   ← *.bpmn files go here
     eu-ai-act.abox.ttl      ← pre-built ABox (fallback)
+    entities.json           ← entity reconciliation overrides (auto-created)
 camunda-template/
   camunda8-compliance-template.json   ← Camunda Modeler element template
 app/
@@ -358,13 +361,182 @@ python norma_build.py regulations/eu-ai-act/ --override overrides.json
 
 ### Normalization
 
-When the same regulation or agent is written inconsistently across files ("IA Act", "ia act", "EU AI Act"), the normalizer resolves variants to a single canonical label before generating the ABox. The similarity threshold is configurable (default 0.82).
+When the same regulation or agent is written inconsistently across files ("IA Act", "ia act", "EU AI Act"), the normalizer resolves variants to a single canonical label before generating the ABox. The similarity threshold is configurable (default 0.82). See [Entity Reconciliation & Referential Consistency](#entity-reconciliation--referential-consistency) for the full reconciliation system, including the Entity Registry UI panel and manual merge workflow.
 
 ### Visualizing the KG
 
 - **NORMA web app**: open the *Knowledge Graph* panel to see the D3.js force-directed graph. Click any node to inspect its properties.
 - **Protégé**: open `norma-ontology-v1.rdf` as the TBox, then File → Merge Ontology → select the ABox Turtle file.
 - **Apache Jena / Fuseki**: load both TBox and ABox; SPARQL 1.1 endpoint available.
+
+---
+
+## Entity Reconciliation & Referential Consistency
+
+### The Problem
+
+Annotated BPMN files are produced by multiple people over time. The same legal entity is frequently written in different ways across files:
+
+```
+"AI Provider"  /  "AI provider"  /  "ai_provider"
+"EU AI Act"    /  "IA act"       /  "aiact"
+"Does the AI system generate synthetic content?"  /  "Generation of syntetic content?"
+```
+
+Each unique string would otherwise mint a separate named individual in the knowledge graph, breaking owl:sameAs reasoning, inflating the graph, and producing incorrect compliance check results. The reconciliation system prevents this entirely.
+
+### Scope — All Six KG-creating Fields
+
+Every field that mints a named individual is subject to reconciliation. There are six such fields:
+
+| Field | KG individual pattern | Annotation property |
+|-------|-----------------------|---------------------|
+| `agent` | `Agent_{slug}` | `compliance_agent` |
+| `object` | `Object_{slug}` | `compliance_object` |
+| `regulation` | `Regulation_{slug}` | `compliance_regulation` |
+| `action` | *(actionText data property)* | `compliance_action` |
+| `deontic_id` | norm individual IRI | `compliance_deonticId` |
+| `condition_statement` | `Condition_{slug}` + SWRL predicate | `gw_conditionStatement` |
+
+### Three-Layer Resolution
+
+#### Layer 1 — Automatic canonical matching (silent)
+
+The normalizer (`norma/kg/normalizer.py`) converts every raw label to a **canonical comparison key**: lowercase, all punctuation characters (including `?`, `!`, `(`, `)`) replaced by space, whitespace collapsed. Two labels with the same canonical key are automatically merged under the most-frequent variant. No human intervention needed.
+
+```
+"Generation of syntetic content?"  →  canonical: "generation of syntetic content"
+"Generation_of_syntetic_content"   →  canonical: "generation of syntetic content"
+→ Silently merged. One individual.
+```
+
+A built-in alias table (`KNOWN_ALIASES`) handles regulation name variants:
+
+| Raw value | Canonical |
+|-----------|-----------|
+| `ia act`, `ai act`, `aiact` | `EU AI Act` |
+| `gdpr` | `GDPR` |
+| `dsa`, `digital services act` | `DSA` |
+| `dma`, `digital markets act` | `DMA` |
+| `nis2`, `nis 2` | `NIS 2` |
+
+#### Layer 2 — Fuzzy near-match detection (warns, does not auto-merge)
+
+Pairs of canonical winners with a similarity ratio ≥ 0.82 (SequenceMatcher) are flagged as potential duplicates. These appear as warnings in the **Entity Registry** panel. The annotator decides whether to merge them or confirm they are intentionally different.
+
+#### Layer 3 — Manual merge (for semantically equivalent but textually different labels)
+
+Labels below the fuzzy threshold that are semantically the same ("Marking obligation" ↔ "Mark synthetic content", 45% similarity) require a human decision. The **Manual Merge** section in the Entity Registry panel provides field + value dropdowns for this.
+
+### The `entities.json` Override File
+
+Each regulation pack can have an `entities.json` file at `regulations/{pack}/entities.json`. This file persists all reconciliation decisions and is reloaded at every startup and rebuild.
+
+```json
+{
+  "regulation": {},
+  "agent": {},
+  "object": {},
+  "action": {
+    "Adopt volutary codes of conduct": "Adopt voluntary code of conduct",
+    "Mark synthetic content": "Marking obligation"
+  },
+  "deontic_id": {},
+  "condition_statement": {
+    "Generation of syntetic content?": "Does the AI system generate synthetic content?",
+    "Does the AI system generate synthetic content?": "Does the AI system generate synthetic content?"
+  },
+  "_confirmed_separate": [
+    ["Entity A", "Entity B"]
+  ]
+}
+```
+
+Each key in a field object maps a raw label (as it appears in the BPMN annotation) to its canonical form. The `_confirmed_separate` list holds pairs of labels that have been reviewed and confirmed as intentionally distinct — their fuzzy-match warning is permanently suppressed.
+
+### Propagation — ABox Build and Compliance Check
+
+Normalization is applied at **two independent points** in the pipeline to guarantee consistency:
+
+1. **ABox build** (`to_json` → `normalize()` → `to_turtle`): canonical labels are used when minting all named individuals. Duplicate individuals are never created.
+
+2. **Rule extraction** (`_apply_override_to_task_props`): the same overrides are applied to the raw Zeebe task property dictionaries before `enumerate_paths_and_build_ir`. This ensures that SWRL rule predicates, condition node names, and the compliance check endpoint all use the same canonical labels as the ABox.
+
+Without step 2, the ABox would contain a single canonical individual while the compliance check would still evaluate rules against the original raw strings, producing mismatches and false negatives.
+
+### Entity Registry UI Panel
+
+The **Entity Registry** panel in the web application (nav: between Norm Annotations and Knowledge Graph) has three sections:
+
+**Flagged Matches** — pairs detected by fuzzy similarity. Each warning card shows:
+- The two candidate labels with a colour-coded field badge (agent / object / regulation / action / norm / condition)
+- The similarity percentage
+- A **Merge →** button (keeps the right-hand label as canonical)
+- A **Keep separate** button (adds the pair to `_confirmed_separate`)
+
+**Auto-merged** — records of labels that were automatically resolved by canonical matching or the alias table. Shows the raw labels, the winner, and the resolution reason (`exact_canonical` / `alias` / `frequency` / `manual`). Each entry has a **Remove** button to undo the override.
+
+**Manual Merge** — for pairs below the fuzzy threshold. Select a field, then choose the source label (to replace) and the target label (canonical form) from dropdowns populated with all actual values present in the pack. Submitting writes the override to `entities.json` and rebuilds the pack.
+
+### API Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/pack/{pack}/entities` | Returns `decisions`, `warnings`, `override`, `all_values`, `has_reg_dir` |
+| `POST` | `/api/pack/{pack}/entities` | Handles `merge`, `confirm_separate`, `remove_override` actions |
+
+**GET response structure:**
+```json
+{
+  "decisions": [
+    { "field": "action", "raw_labels": ["Adopt volutary codes of conduct", "Adopt voluntary code of conduct"],
+      "winner": "Adopt voluntary code of conduct", "reason": "frequency", "confidence": 1.0 }
+  ],
+  "warnings": [
+    { "field": "action", "labels": ["Mark synthetic content", "Marking obligation"],
+      "message": "High similarity (45%) — may be the same entity.", "suggestion": "..." }
+  ],
+  "override": { "action": { "Mark synthetic content": "Marking obligation" }, ... },
+  "all_values": { "agent": ["AI Provider", "Deployer"], "action": [...], ... },
+  "has_reg_dir": true
+}
+```
+
+**POST request body for a merge:**
+```json
+{ "action": "merge", "field": "action", "from": "Mark synthetic content", "to": "Marking obligation" }
+```
+
+**POST request body to confirm a pair is intentionally separate:**
+```json
+{ "action": "confirm_separate", "label_a": "Entity A", "label_b": "Entity B" }
+```
+
+**POST request body to remove an override:**
+```json
+{ "action": "remove_override", "field": "action", "label": "Mark synthetic content" }
+```
+
+All POST operations write `entities.json` and immediately rebuild the pack (ABox + SWRL + rules) so changes are visible in all other panels without restarting the app.
+
+### CLI (batch use)
+
+```bash
+# Generate a reconciliation override template pre-populated with all unique values
+python norma_build.py regulations/eu-ai-act/ --template overrides.json
+
+# Apply a hand-edited override file
+python norma_build.py regulations/eu-ai-act/ --override overrides.json
+
+# Build without any normalization (not recommended for multi-file packs)
+python norma_build.py regulations/eu-ai-act/ --no-normalize
+```
+
+The normalizer can also be used standalone:
+
+```bash
+python -m norma.kg.normalizer eu-ai-act.json --override entities.json --out eu-ai-act.normalized.json
+```
 
 ---
 
@@ -542,6 +714,7 @@ Open `http://localhost:8000`. The app **automatically builds the knowledge graph
 | **Home** | Landing page — overview, architecture, pack summary |
 | **Upload** | Upload a `.bpmn` file to create a new pack on-the-fly |
 | **Norm Annotations** | Browse every annotated BPMN element with all template fields. Supports in-browser editing (changes are in-memory). |
+| **Entity Registry** | Referential consistency panel. Shows auto-merged labels, fuzzy-match warnings, and a manual merge form. All decisions are written to `entities.json` and the pack is rebuilt immediately. |
 | **Knowledge Graph** | D3.js force-directed graph of the ABox. Nodes are colour-coded by type (norms, agents, objects, sources, conditions). Click a node to inspect its properties. |
 | **SPARQL** | Full SPARQL 1.1 editor with preset library, results table, and raw JSON toggle |
 | **ABox** | Turtle source viewer + download buttons (`.ttl` and `.rdf`) |
@@ -594,6 +767,13 @@ A rule matches when **all** its conditions are answered and satisfied. Each uniq
 | `GET` | `/api/sparql/{pack}` | SPARQL 1.1 query via `?query=` param |
 | `POST` | `/api/sparql/{pack}` | SPARQL 1.1 query via request body |
 | `GET` | `/api/sparql-presets` | Curated preset query library |
+
+#### Entity reconciliation
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/pack/{pack}/entities` | Normalization report: decisions, warnings, current override map, all raw values per field |
+| `POST` | `/api/pack/{pack}/entities` | Merge labels, confirm a pair as separate, or remove an override; rebuilds pack on every call |
 
 #### Upload and tools
 
