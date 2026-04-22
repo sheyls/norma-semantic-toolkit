@@ -6,7 +6,7 @@ gateway ordering, and Zeebe compliance properties.
 """
 
 import pytest
-from norma.parsing.bpmn_parser import parse_bpmn_to_reduced_graph, parse_bpmn_full
+from norma_engine.parsing.bpmn_parser import parse_bpmn_to_reduced_graph, parse_bpmn_full
 
 
 class TestParseBpmnFull:

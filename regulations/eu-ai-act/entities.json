@@ -3,15 +3,10 @@
   "agent": {},
   "object": {},
   "action": {
-    "Adopt voluntary code of conduct": "Adopt voluntary code of conduct",
-    "Adopt volutary codes of conduct": "Adopt voluntary code of conduct",
-    "Mark synthetic content": "Marking obligation",
-    "Marking obligation": "Marking obligation"
+    "Adopt voluntary code of conduct": "Adopt volutary codes of conduct",
+    "Adopt volutary codes of conduct": "Adopt volutary codes of conduct"
   },
   "_confirmed_separate": [],
   "deontic_id": {},
-  "condition_statement": {
-    "Generation of syntetic content?": "Does the AI system generate synthetic content?",
-    "Does the AI system generate synthetic content?": "Does the AI system generate synthetic content?"
-  }
+  "condition_statement": {}
 }

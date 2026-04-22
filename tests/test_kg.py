@@ -9,7 +9,8 @@ records and Turtle ABox, with particular focus on:
 """
 
 import pytest
-from norma.kg.builder import parse_bpmn, to_json, to_turtle
+from norma_engine.kg.builder import parse_bpmn, to_json, to_turtle
+from norma_engine.kg.normalizer import normalize
 import xml.etree.ElementTree as ET
 import io
 
@@ -113,8 +114,90 @@ class TestToTurtle:
         assert "norma:LegalAgent" in ttl
         assert 'rdfs:label "AI owner"@en' in ttl
 
+    def test_action_individual_declared(self, sample_bpmn_xml):
+        ttl = self._turtle(sample_bpmn_xml)
+        assert "norma:LegalAction" in ttl
+        assert 'rdfs:label "mark synthetic content"@en' in ttl
+
+    def test_uses_ontology_legal_object_property(self, sample_bpmn_xml):
+        ttl = self._turtle(sample_bpmn_xml)
+        assert "norma:hasLegalObject" in ttl
+        assert "norma:hasObject" not in ttl
+
     def test_articles_aggregated_under_one_source(self, sample_bpmn_xml):
         """Art. 50 and Art. 95 must both appear under the single LegalSource."""
         ttl = self._turtle(sample_bpmn_xml)
         assert '"50"^^xsd:string' in ttl
         assert '"95"^^xsd:string' in ttl
+
+    def test_reuses_first_norm_instance_when_signature_matches(self):
+        records = [
+            {
+                "bpmn_id": "Task_A",
+                "bpmn_name": "First obligation",
+                "element_type": "task",
+                "deontic_type": "obligation",
+                "deontic_id": "OBL_First",
+                "norm_statement": "Providers must comply",
+                "agent": "AI provider",
+                "action": "comply",
+                "object": "AI system",
+                "trigger_condition": "",
+                "fact_statement": "",
+                "binding_force": "hard_law",
+                "norm_status": "active",
+                "risk_level": "high",
+                "extraction_method": "",
+                "review_status": "",
+                "jurisdiction": "",
+                "effective_date": "",
+                "deadline": "",
+                "exception": "",
+                "sanction": "",
+                "annotator": "",
+                "regulation": "EU AI Act",
+                "article": "50",
+                "paragraph": "1",
+                "confidence": "",
+                "annotation_date": "",
+                "last_review_date": "",
+                "regulation_uri": "",
+            },
+            {
+                "bpmn_id": "Task_B",
+                "bpmn_name": "Second obligation",
+                "element_type": "task",
+                "deontic_type": "obligation",
+                "deontic_id": "OBL_Second",
+                "norm_statement": "Providers must comply",
+                "agent": "AI provider",
+                "action": "comply",
+                "object": "AI system",
+                "trigger_condition": "",
+                "fact_statement": "",
+                "binding_force": "hard_law",
+                "norm_status": "active",
+                "risk_level": "high",
+                "extraction_method": "",
+                "review_status": "",
+                "jurisdiction": "",
+                "effective_date": "",
+                "deadline": "",
+                "exception": "",
+                "sanction": "",
+                "annotator": "",
+                "regulation": "EU AI Act",
+                "article": "50",
+                "paragraph": "1",
+                "confidence": "",
+                "annotation_date": "",
+                "last_review_date": "",
+                "regulation_uri": "",
+            },
+        ]
+        normalized, _ = normalize(records)
+        assert normalized[0]["deontic_id"] == "OBL_First"
+        assert normalized[1]["deontic_id"] == "OBL_First"
+
+        ttl = to_turtle(normalized, "test_source", BASE_IRI)
+        assert ttl.count("a owl:NamedIndividual, <https://w3id.org/norma-ontology#Obligation>") == 1

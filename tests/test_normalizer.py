@@ -6,7 +6,7 @@ warning generation, manual override application, and threshold behaviour.
 """
 
 import pytest
-from norma.kg.normalizer import normalize, save_override_template
+from norma_engine.kg.normalizer import normalize, save_override_template
 import json, tempfile, os
 
 

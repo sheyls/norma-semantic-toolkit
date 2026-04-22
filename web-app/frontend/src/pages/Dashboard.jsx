@@ -1,0 +1,1424 @@
+import { useEffect, useMemo, useState } from "react";
+import {
+  evaluatePack,
+  getAboxDownloadUrl,
+  getAboxRdfDownloadUrl,
+  getPackAbox,
+  getPackConditions,
+  getPackEntities,
+  getPackGraph,
+  getPackNorms,
+  getPacks,
+  getPackRules,
+  getPackSwrl,
+  getSparqlPresets,
+  getSwrlDownloadUrl,
+  getTemplateDownloadUrl,
+  rebuildPack,
+  runSparql,
+  appendBpmnToPack,
+  uploadBpmn,
+} from "../api/api";
+import GraphForce from "../components/GraphForce";
+import Sidebar from "../components/Sidebar";
+
+const ONTOLOGY_ITEMS = [
+  "LegalNorm -> Obligation, Prohibition, Permission, Recommendation, NegativeRecommendation",
+  "LegalCondition for gateway predicates and branch labels",
+  "LegalAgent and LegalObject as reusable ABox entities",
+  "BindingForce and ComplianceCriticality for legal classification",
+];
+
+const NORM_SECTIONS = [
+  {
+    id: "content",
+    label: "Norm Content",
+    fields: [
+      { key: "norm_statement", label: "Norm statement", type: "textarea" },
+      { key: "agent", label: "Agent (Who)" },
+      { key: "action", label: "Legal action (What)" },
+      { key: "object", label: "Legal object (On what)" },
+      { key: "fact_statement", label: "Constitutive rule / Fact", type: "textarea" },
+      { key: "binding_force", label: "Binding force" },
+      { key: "risk_level", label: "Compliance criticality" },
+    ],
+  },
+  {
+    id: "condition",
+    label: "Legal Condition (gateway only)",
+    fields: [
+      { key: "gw_condition_statement", label: "Condition statement" },
+      { key: "gw_true_branch", label: "True branch label" },
+      { key: "gw_false_branch", label: "False branch label" },
+    ],
+  },
+  {
+    id: "source",
+    label: "Legal Source",
+    fields: [
+      { key: "regulation", label: "Regulation" },
+      { key: "article", label: "Article / Section" },
+      { key: "paragraph", label: "Paragraph / Subsection" },
+      { key: "original_text", label: "Original legal text", type: "textarea" },
+      { key: "regulation_uri", label: "Regulation URI (EUR-Lex)" },
+    ],
+  },
+  {
+    id: "scope",
+    label: "Scope & Temporal",
+    fields: [
+      { key: "trigger_condition", label: "Trigger condition" },
+      { key: "jurisdiction", label: "Jurisdiction" },
+      { key: "effective_date", label: "Effective date" },
+      { key: "deadline", label: "Deadline / Sunset date" },
+      { key: "status", label: "Norm status" },
+    ],
+  },
+  {
+    id: "consequences",
+    label: "Consequences & Exceptions",
+    fields: [
+      { key: "exception", label: "Exception / Carve-out", type: "textarea" },
+      { key: "sanction", label: "Sanction / Consequence", type: "textarea" },
+    ],
+  },
+  {
+    id: "metadata",
+    label: "Annotation Metadata",
+    fields: [
+      { key: "extraction_method", label: "Extraction method" },
+      { key: "confidence", label: "Confidence score" },
+      { key: "legal_review", label: "Legal review status" },
+      { key: "annotator", label: "Annotator" },
+      { key: "annotation_date", label: "Annotation date" },
+      { key: "last_review_date", label: "Last reviewed date" },
+    ],
+  },
+];
+
+const URI_PREFIXES = [
+  ["https://w3id.org/norma-ontology#", "norma:"],
+  ["https://w3id.org/norma-abox/", "abox:"],
+  ["http://www.w3.org/2001/XMLSchema#", "xsd:"],
+  ["http://www.w3.org/2000/01/rdf-schema#", "rdfs:"],
+  ["http://www.w3.org/2002/07/owl#", "owl:"],
+];
+
+function shortenUri(uri) {
+  for (const [full, prefix] of URI_PREFIXES) {
+    if (uri.startsWith(full)) return prefix + uri.slice(full.length);
+  }
+  return uri;
+}
+
+function slugify(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-");
+}
+
+function humanizeUnderscoredText(value) {
+  return String(value || "")
+    .replace(/_/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function humanizeNormId(value) {
+  return humanizeUnderscoredText(String(value || "").replace(/^(OBL|PROH|PERM|REC|NEGREC|FACT|GW)_/i, ""));
+}
+
+function titleCaseLabel(value) {
+  const text = humanizeUnderscoredText(value);
+  if (!text) {
+    return "";
+  }
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function getReadableNormLabel(norm) {
+  return titleCaseLabel(norm.norm_statement || norm.gw_condition_statement || humanizeNormId(norm.norm_id));
+}
+
+function isGatewayNorm(norm) {
+  return (
+    Boolean(norm.gw_condition_statement) ||
+    String(norm.element_type || "").toLowerCase().includes("gateway") ||
+    String(norm.deontic_type || "").toLowerCase() === "gateway"
+  );
+}
+
+export default function Dashboard() {
+  const [packs, setPacks] = useState([]);
+  const [selectedPack, setSelectedPack] = useState("");
+  const [activeView, setActiveView] = useState("overview");
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [evalTypeFilter, setEvalTypeFilter] = useState("all");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isRebuilding, setIsRebuilding] = useState(false);
+  const [isRunningEval, setIsRunningEval] = useState(false);
+  const [isRunningSparql, setIsRunningSparql] = useState(false);
+  const [focusedNormId, setFocusedNormId] = useState("");
+
+  const [rules, setRules] = useState([]);
+  const [norms, setNorms] = useState([]);
+  const [conditions, setConditions] = useState([]);
+  const [answers, setAnswers] = useState({});
+  const [evaluation, setEvaluation] = useState([]);
+  const [entities, setEntities] = useState(null);
+  const [graph, setGraph] = useState({ nodes: [], edges: [] });
+  const [presets, setPresets] = useState([]);
+  const [sparqlQuery, setSparqlQuery] = useState("");
+  const [sparqlResult, setSparqlResult] = useState(null);
+  const [normSearch, setNormSearch] = useState("");
+  const [normTypeFilter, setNormTypeFilter] = useState("all");
+  const [artifactText, setArtifactText] = useState("");
+  const [artifactLoading, setArtifactLoading] = useState(false);
+  const [swrlText, setSwrlText] = useState("");
+  const [swrlLoading, setSwrlLoading] = useState(false);
+  const [reloadToken, setReloadToken] = useState(0);
+  const [graphSearch, setGraphSearch] = useState("");
+  const [pasteName, setPasteName] = useState("uploaded-pack");
+  const [pasteXml, setPasteXml] = useState("");
+
+  useEffect(() => {
+    async function loadInitialData() {
+      try {
+        const [packData, presetData] = await Promise.all([getPacks(), getSparqlPresets()]);
+        setPacks(packData);
+        setPresets(presetData.presets || []);
+        if (presetData.presets?.[0]?.query) {
+          setSparqlQuery(presetData.presets[0].query);
+        }
+        if (packData[0]?.name) {
+          setSelectedPack(packData[0].name);
+        }
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+
+    loadInitialData();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedPack) {
+      setRules([]);
+      setNorms([]);
+      setConditions([]);
+      setEntities(null);
+      setGraph({ nodes: [], edges: [] });
+      setEvaluation([]);
+      setAnswers({});
+      setArtifactText("");
+      return;
+    }
+
+    async function loadPackData() {
+      try {
+        setError("");
+        setNotice("");
+        const [rulesData, normsData, conditionsData, entitiesData, graphData] = await Promise.all([
+          getPackRules(selectedPack),
+          getPackNorms(selectedPack),
+          getPackConditions(selectedPack),
+          getPackEntities(selectedPack),
+          getPackGraph(selectedPack),
+        ]);
+
+        setRules(rulesData.rules || []);
+        setNorms(normsData.norms || []);
+        setConditions(conditionsData.conditions || []);
+        setEntities(entitiesData);
+        setGraph(graphData);
+        setEvaluation([]);
+        setAnswers({});
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+
+    loadPackData();
+  }, [selectedPack, reloadToken]);
+
+  useEffect(() => {
+    if (!selectedPack) {
+      return;
+    }
+
+    async function loadArtifact() {
+      setArtifactLoading(true);
+      try {
+        const text = await getPackAbox(selectedPack);
+        setArtifactText(text);
+      } catch (err) {
+        setArtifactText(`Unable to load ABox content.\n\n${err.message}`);
+      } finally {
+        setArtifactLoading(false);
+      }
+    }
+
+    loadArtifact();
+  }, [selectedPack, reloadToken]);
+
+  useEffect(() => {
+    if (!selectedPack) {
+      setSwrlText("");
+      return;
+    }
+
+    async function loadSwrl() {
+      setSwrlLoading(true);
+      try {
+        const text = await getPackSwrl(selectedPack);
+        setSwrlText(text);
+      } catch (err) {
+        setSwrlText(`Unable to load SWRL OWL/XML content.\n\n${err.message}`);
+      } finally {
+        setSwrlLoading(false);
+      }
+    }
+
+    loadSwrl();
+  }, [selectedPack]);
+
+  const selectedPackSummary = useMemo(
+    () => packs.find((pack) => pack.name === selectedPack) || null,
+    [packs, selectedPack],
+  );
+
+  const answeredCount = Object.keys(answers).length;
+
+  const filteredNorms = useMemo(() => {
+    const query = normSearch.trim().toLowerCase();
+    return norms.filter((norm) => {
+      const type = String(norm.deontic_type || "").toLowerCase() || "gateway";
+      if (normTypeFilter !== "all" && type !== normTypeFilter) {
+        return false;
+      }
+      if (!query) {
+        return true;
+      }
+      const haystack = [
+        norm.norm_id,
+        norm.action,
+        norm.agent,
+        norm.object,
+        norm.regulation,
+        norm.article,
+        norm.norm_statement,
+        norm.annotator,
+        norm.gw_condition_statement,
+      ]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(query);
+    });
+  }, [norms, normSearch, normTypeFilter]);
+
+  const filteredGraph = useMemo(() => {
+    const query = graphSearch.trim().toLowerCase();
+    if (!query) {
+      return { nodes: graph.nodes, edges: graph.edges };
+    }
+
+    const normalizeSearch = (value) =>
+      String(value || "")
+        .toLowerCase()
+        .replace(/\bia\b/g, "ai")
+        .replace(/[_-]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const queryTokens = normalizeSearch(query).split(" ").filter(Boolean);
+
+    const matchesNode = (node) => {
+      const haystack = normalizeSearch(
+        [
+          node.id,
+          node.label,
+          node.type,
+          node.regulation,
+          node.article,
+          node.paragraph,
+          node.source,
+          node.deontic_id,
+          node.norm_statement,
+          node.condition_statement,
+          node.trigger_condition,
+          node.agent,
+          node.action,
+          node.object,
+          node.true_branch,
+          node.false_branch,
+          node.bpmn_source,
+          node.original_text,
+        ]
+          .filter(Boolean)
+          .join(" "),
+      );
+      return queryTokens.every((token) => haystack.includes(token));
+    };
+
+    const matchedIds = new Set(graph.nodes.filter(matchesNode).map((node) => node.id));
+    const visibleIds = new Set(matchedIds);
+    const neighborIds = new Set();
+
+    graph.edges.forEach((edge) => {
+      const edgeText = normalizeSearch(`${edge.label || ""} ${edge.source} ${edge.target}`);
+      const edgeMatches = queryTokens.every((token) => edgeText.includes(token));
+      if (matchedIds.has(edge.source) || matchedIds.has(edge.target) || edgeMatches) {
+        if (matchedIds.has(edge.source) || edgeMatches) {
+          neighborIds.add(edge.target);
+        }
+        if (matchedIds.has(edge.target) || edgeMatches) {
+          neighborIds.add(edge.source);
+        }
+      }
+    });
+
+    neighborIds.forEach((id) => visibleIds.add(id));
+
+    return {
+      nodes: graph.nodes.filter((node) => visibleIds.has(node.id)),
+      edges: graph.edges.filter(
+        (edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target),
+      ),
+    };
+  }, [graph.nodes, graph.edges, graphSearch]);
+
+  const filteredGraphNodes = filteredGraph.nodes;
+  const filteredGraphEdges = filteredGraph.edges;
+  const filteredGraphComponentCount = useMemo(() => {
+    if (!filteredGraphNodes.length) return 0;
+
+    const adjacency = new Map(filteredGraphNodes.map((node) => [node.id, new Set()]));
+    filteredGraphEdges.forEach((edge) => {
+      if (adjacency.has(edge.source) && adjacency.has(edge.target)) {
+        adjacency.get(edge.source).add(edge.target);
+        adjacency.get(edge.target).add(edge.source);
+      }
+    });
+
+    const visited = new Set();
+    let componentCount = 0;
+
+    filteredGraphNodes.forEach((node) => {
+      if (visited.has(node.id)) return;
+      componentCount += 1;
+      const stack = [node.id];
+      visited.add(node.id);
+
+      while (stack.length) {
+        const current = stack.pop();
+        for (const neighbor of adjacency.get(current) || []) {
+          if (visited.has(neighbor)) continue;
+          visited.add(neighbor);
+          stack.push(neighbor);
+        }
+      }
+    });
+
+    return componentCount;
+  }, [filteredGraphNodes, filteredGraphEdges]);
+
+  const filteredEvaluation = useMemo(() => {
+    if (evalTypeFilter === "all") return evaluation;
+    return evaluation.filter(
+      (item) => String(item.deontic_type || "").toLowerCase() === evalTypeFilter,
+    );
+  }, [evaluation, evalTypeFilter]);
+
+  const quickEntityCandidates = useMemo(() => {
+    return (entities?.warnings || []).map((warning, index) => ({
+      id: `${warning.field}-${index}`,
+      field: warning.field,
+      labelA: warning.labels?.[0] || "",
+      labelB: warning.labels?.[1] || "",
+      message: warning.message,
+    }));
+  }, [entities]);
+
+  const normDuplicateCandidates = useMemo(() => entities?.norm_duplicates || [], [entities]);
+
+  async function refreshPacks(nextSelectedPack = selectedPack) {
+    const packData = await getPacks();
+    setPacks(packData);
+    if (nextSelectedPack && packData.some((pack) => pack.name === nextSelectedPack)) {
+      setSelectedPack(nextSelectedPack);
+    } else if (packData[0]?.name) {
+      setSelectedPack(packData[0].name);
+    }
+  }
+
+  async function processUpload(file, mode = "new") {
+    setIsUploading(true);
+    setError("");
+    setNotice("");
+    try {
+      const uploaded =
+        mode === "append" && selectedPack ? await appendBpmnToPack(selectedPack, file) : await uploadBpmn(file);
+      await refreshPacks(uploaded.pack);
+      setActiveView("overview");
+      if (mode === "append" && selectedPack) {
+        const samePack = uploaded.pack === selectedPack;
+        setNotice(
+          samePack
+            ? `Added "${uploaded.added_bpmn || file.name}" to pack "${uploaded.pack}".`
+            : `Created workspace pack "${uploaded.pack}" from "${selectedPack}" and added "${uploaded.added_bpmn || file.name}".`,
+        );
+      } else {
+        setNotice(`Pack "${uploaded.pack}" processed successfully.`);
+      }
+      if (pasteXml.trim()) {
+        setPasteXml("");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  async function handleUpload(event) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    await processUpload(file, "new");
+    event.target.value = "";
+  }
+
+  async function handleAppendUpload(event) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    await processUpload(file, "append");
+    event.target.value = "";
+  }
+
+  function openPackCreator() {
+    setActiveView("overview");
+  }
+
+  async function handlePasteUpload() {
+    const xml = pasteXml.trim();
+    if (!xml) {
+      setError("Paste BPMN XML before uploading.");
+      return;
+    }
+    const filename = `${slugify(pasteName || "pasted-pack") || "pasted-pack"}.bpmn`;
+    const file = new File([xml], filename, { type: "application/xml" });
+    await processUpload(file);
+  }
+
+  async function handleRunEvaluation() {
+    if (!selectedPack) {
+      return;
+    }
+    setIsRunningEval(true);
+    setError("");
+    try {
+      const result = await evaluatePack(selectedPack, answers);
+      setEvaluation(result.matched_rules || []);
+      setEvalTypeFilter("all");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsRunningEval(false);
+    }
+  }
+
+  async function handleRunSparql() {
+    if (!selectedPack || !sparqlQuery.trim()) {
+      return;
+    }
+    setIsRunningSparql(true);
+    setError("");
+    try {
+      const result = await runSparql(selectedPack, sparqlQuery);
+      setSparqlResult(result);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsRunningSparql(false);
+    }
+  }
+
+  async function handleRebuildPack() {
+    if (!selectedPack) {
+      return;
+    }
+    setIsRebuilding(true);
+    setError("");
+    setNotice("");
+    try {
+      const result = await rebuildPack(selectedPack);
+      await refreshPacks(selectedPack);
+      setReloadToken((current) => current + 1);
+      setNotice(`Pack "${result.pack}" rebuilt successfully from ${result.rebuild_source}.`);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsRebuilding(false);
+    }
+  }
+
+  function jumpToNorm(normId) {
+    setFocusedNormId(normId);
+    setActiveView("norms");
+  }
+
+  function renderOverview() {
+    return (
+      <div className="workspace-grid workspace-grid--overview">
+        <section className="panel panel--soft">
+          <div className="section-intro">
+            <p className="eyebrow">Current pack</p>
+            <h2>{selectedPack || "Select a regulation pack from the left sidebar"}</h2>
+            <p className="section-copy">
+              Keep the workflow simple: choose a pack, answer the compliance questions, review the
+              extracted norms, and move to semantic artifacts only when you need more detail.
+            </p>
+          </div>
+          <div className="summary-list">
+            <div className="summary-list__row">
+              <span>Loaded packs</span>
+              <strong>{packs.length}</strong>
+            </div>
+            <div className="summary-list__row">
+              <span>Conditions</span>
+              <strong>{conditions.length}</strong>
+            </div>
+            <div className="summary-list__row">
+              <span>Norms</span>
+              <strong>{norms.length}</strong>
+            </div>
+            <div className="summary-list__row">
+              <span>Current evaluation matches</span>
+              <strong>{evaluation.length}</strong>
+            </div>
+            <div className="summary-list__row">
+              <span>Indexed rules</span>
+              <strong>{selectedPackSummary?.rule_count || 0}</strong>
+            </div>
+            <div className="summary-list__row">
+              <span>Regeneration</span>
+              <strong>{selectedPackSummary?.can_rebuild ? "Available" : "Upload-only pack"}</strong>
+            </div>
+          </div>
+          {selectedPackSummary?.can_rebuild ? (
+            <div className="section-actions">
+              <button className="button button--ghost" type="button" onClick={handleRebuildPack} disabled={isRebuilding}>
+                {isRebuilding ? "Rebuilding..." : "Rebuild selected pack"}
+              </button>
+            </div>
+          ) : null}
+        </section>
+
+        <section className="panel panel--soft">
+          <div className="section-intro">
+            <p className="eyebrow">Create Pack</p>
+            <h2>Create a new regulation pack for exploration</h2>
+            <p className="section-copy">
+              Start a new test pack by uploading a `.bpmn` file directly, or paste BPMN XML below
+              when you want to prototype quickly without preparing a separate file first.
+            </p>
+          </div>
+          <div
+            className="dropzone"
+            onDragOver={(event) => {
+              event.preventDefault();
+              event.currentTarget.classList.add("is-over");
+            }}
+            onDragLeave={(event) => {
+              event.currentTarget.classList.remove("is-over");
+            }}
+            onDrop={(event) => {
+              event.preventDefault();
+              event.currentTarget.classList.remove("is-over");
+              const file = event.dataTransfer.files?.[0];
+              if (file) {
+                processUpload(file, "new");
+              }
+            }}
+          >
+            <strong>Drop a `.bpmn` file here</strong>
+            <span>or use the quick upload action in the left sidebar</span>
+          </div>
+          <div className="form-grid">
+            <label>
+              <span>New pack name</span>
+              <input value={pasteName} onChange={(event) => setPasteName(event.target.value)} />
+            </label>
+            <div className="upload-actions">
+              <button className="button button--primary" type="button" onClick={handlePasteUpload} disabled={isUploading}>
+                {isUploading ? "Processing..." : "Create pack from pasted BPMN"}
+              </button>
+              <a className="button button--ghost" href={getTemplateDownloadUrl()}>
+                Download Camunda template
+              </a>
+            </div>
+          </div>
+          <textarea
+            className="editor editor--small"
+            value={pasteXml}
+            onChange={(event) => setPasteXml(event.target.value)}
+            placeholder="Paste BPMN XML here to create a new regulation pack directly from the workspace."
+          />
+        </section>
+      </div>
+    );
+  }
+
+  function renderArtifacts() {
+    return (
+      <section className="panel">
+        <div className="panel__head">
+          <div>
+            <p className="eyebrow">Knowledge Base</p>
+            <h2>Package ABox</h2>
+            <p className="section-copy">
+              This area is the package knowledge base for the selected pack. Use the graph tab for
+              the visual graph explorer and the rules tab for SWRL rule syntax.
+            </p>
+          </div>
+        </div>
+        <div className="action-grid">
+          <a className="action-card" href={selectedPack ? getAboxDownloadUrl(selectedPack) : "#"}>
+            <strong>Download ABox Turtle</strong>
+            <span> Raw Turtle serialization.</span>
+          </a>
+          <a className="action-card" href={selectedPack ? getAboxRdfDownloadUrl(selectedPack) : "#"}>
+            <strong>Download ABox RDF/XML</strong>
+            <span> RDF/XML conversion.</span>
+          </a>
+        </div>
+        <pre className="result-box">{artifactLoading ? "Loading knowledge base..." : artifactText || "No ABox content loaded."}</pre>
+      </section>
+    );
+  }
+
+  function renderRules() {
+    const humanReadableText = rules.length
+      ? rules
+          .map((rule, index) => {
+            const fallbackId = `rule-${index + 1}`;
+            const formula = String(rule.human_readable_compact || rule.human_readable || "No readable rule text available.")
+              .replace(/^r\d+:\s*/, "");
+            return `${rule.rid || fallbackId}\n${formula}`;
+          })
+          .join("\n\n")
+      : "No rules available for this pack.";
+
+    return (
+      <section className="panel">
+        <div className="panel__head">
+          <div>
+            <p className="eyebrow">Rules</p>
+            <h2>Human-readable rules and OWL syntax</h2>
+            <p className="section-copy">
+              The left window keeps the rule paths readable. The right window shows the SWRL
+              OWL/XML generated for the selected pack.
+            </p>
+          </div>
+        </div>
+        <div className="action-grid">
+          <div className="action-card action-card--static">
+            <strong>Human-readable rules</strong>
+            <span> Compact rule paths for quick inspection of the selected pack.</span>
+          </div>
+          <a className="action-card" href={selectedPack ? getSwrlDownloadUrl(selectedPack) : "#"}>
+            <strong>Download SWRL</strong>
+            <span> OWL/XML serialization for the generated SWRL rules.</span>
+          </a>
+        </div>
+        <div className="rules-grid rules-grid--stacked">
+          <section className="list-card rules-panel">
+            <div className="result-box result-box--tall rules-readable-text">{humanReadableText}</div>
+          </section>
+
+          <section className="list-card rules-panel">
+            <div className="rules-panel__head">
+              <strong>OWL syntax</strong>
+            </div>
+            <pre className="result-box result-box--tall rules-code">
+              {swrlLoading ? "Loading SWRL OWL/XML..." : swrlText || "No SWRL content loaded."}
+            </pre>
+          </section>
+        </div>
+      </section>
+    );
+  }
+
+  function renderEvaluator() {
+    const typeCounts = evaluation.reduce((acc, item) => {
+      const key = String(item.deontic_type || "other").toLowerCase();
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+
+    const evalTypeTabs = [
+      { id: "all", label: "All", count: evaluation.length },
+      { id: "obligation", label: "Obligations", count: typeCounts.obligation || 0 },
+      { id: "prohibition", label: "Prohibitions", count: typeCounts.prohibition || 0 },
+      { id: "permission", label: "Permissions", count: typeCounts.permission || 0 },
+      { id: "recommendation", label: "Recommendations", count: typeCounts.recommendation || 0 },
+    ].filter((tab) => tab.id === "all" || tab.count > 0);
+
+    return (
+      <section className="panel">
+        <div className="panel__head">
+          <div>
+            <p className="eyebrow">Evaluator</p>
+            <h2>Condition-driven norm determination</h2>
+          </div>
+          <div className="pill-row">
+            <button className="button button--cta" type="button" onClick={handleRunEvaluation} disabled={isRunningEval}>
+              {isRunningEval ? "Evaluating…" : "Check applicable norms"}
+            </button>
+            {answeredCount > 0 && (
+              <button
+                className="pill"
+                type="button"
+                onClick={() => { setAnswers({}); setEvaluation([]); setEvalTypeFilter("all"); }}
+              >
+                Reset
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="progress-card">
+          <div className="progress-card__head">
+            <strong>Question progress</strong>
+            <span>
+              {answeredCount} / {conditions.length}
+            </span>
+          </div>
+          <div className="progress-bar">
+            <span style={{ width: `${conditions.length ? (answeredCount / conditions.length) * 100 : 0}%` }} />
+          </div>
+        </div>
+
+        <div className="qa-grid">
+          {conditions.map((condition, index) => (
+            <div className={`question-card ${answers[condition.predicate] !== undefined ? "is-done" : ""}`} key={condition.predicate}>
+              <div className="question-card__meta">Condition {index + 1} of {conditions.length}</div>
+              <strong>{condition.label}</strong>
+              <small>{condition.predicate}</small>
+              <div className="pill-row">
+                <button
+                  type="button"
+                  className={`pill ${answers[condition.predicate] === true ? "is-selected" : ""}`}
+                  onClick={() => setAnswers((current) => ({ ...current, [condition.predicate]: true }))}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className={`pill ${answers[condition.predicate] === false ? "is-selected" : ""}`}
+                  onClick={() => setAnswers((current) => ({ ...current, [condition.predicate]: false }))}
+                >
+                  No
+                </button>
+                {answers[condition.predicate] !== undefined && (
+                  <button
+                    type="button"
+                    className="pill"
+                    onClick={() =>
+                      setAnswers((current) => {
+                        const next = { ...current };
+                        delete next[condition.predicate];
+                        return next;
+                      })
+                    }
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {evaluation.length > 0 && (
+          <div className="eval-type-tabs">
+            {evalTypeTabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                className={`pill ${evalTypeFilter === tab.id ? "is-selected" : ""}`}
+                onClick={() => setEvalTypeFilter(tab.id)}
+              >
+                {tab.label}
+                <span className="tab-count">{tab.count}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="stack-list">
+          {filteredEvaluation.map((item) => (
+            <article className="list-card" key={`${item.rule_id}-${item.norm_id}`}>
+              <div className="list-card__head">
+                <strong>{getReadableNormLabel(item)}</strong>
+                <span className={`deontic-badge deontic-badge--${String(item.deontic_type || "norm").toLowerCase()}`}>
+                  {item.deontic_type || "Norm"}
+                </span>
+              </div>
+              <p>
+                <strong>{humanizeUnderscoredText(item.agent) || "Unknown agent"}</strong>
+                {item.action ? ` · ${humanizeUnderscoredText(item.action)}` : ""}
+                {item.object ? ` · ${humanizeUnderscoredText(item.object)}` : ""}
+              </p>
+              <div className="norm-pills">
+                {item.binding_force && <span className="norm-pill">{humanizeUnderscoredText(item.binding_force)}</span>}
+                {item.risk_level && <span className="norm-pill">{humanizeUnderscoredText(item.risk_level)}</span>}
+                {item.regulation && <span className="norm-pill">{item.regulation}</span>}
+                {item.article && <span className="norm-pill">Art. {item.article}</span>}
+                {item.paragraph && <span className="norm-pill">§ {item.paragraph}</span>}
+                {item.source_uri && (
+                  <a href={item.source_uri} target="_blank" rel="noopener noreferrer" className="norm-pill law-link">
+                    ↗ legislation
+                  </a>
+                )}
+              </div>
+              {item.conditions?.length > 0 && (
+                <div className="triggered-by">
+                  <span className="triggered-by__label">Triggered by:</span>
+                  {item.conditions.map((c) => (
+                  <span key={c.predicate} className={`cond-chip cond-chip--${c.value ? "yes" : "no"}`}>
+                      {humanizeUnderscoredText(c.predicate)} = {c.value ? "Yes" : "No"}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="inline-meta">
+                <span />
+                <button className="pill" type="button" onClick={() => jumpToNorm(item.norm_id)}>
+                  View annotation →
+                </button>
+              </div>
+            </article>
+          ))}
+          {filteredEvaluation.length === 0 && evaluation.length > 0 ? (
+            <div className="table__empty">No {evalTypeFilter} norms matched.</div>
+          ) : null}
+          {evaluation.length === 0 ? (
+            <div className="table__empty">Answer the conditions and run the evaluator to see applicable norms.</div>
+          ) : null}
+        </div>
+      </section>
+    );
+  }
+
+  function renderSparqlResults() {
+    if (!sparqlResult) return <p className="muted" style={{ marginTop: 12 }}>No query run yet.</p>;
+
+    // ASK query
+    if (typeof sparqlResult === "object" && "boolean" in sparqlResult) {
+      return (
+        <div className={`sparql-ask ${sparqlResult.boolean ? "is-true" : "is-false"}`}>
+          ASK → <strong>{sparqlResult.boolean ? "true" : "false"}</strong>
+        </div>
+      );
+    }
+
+    // SELECT query
+    if (sparqlResult?.head?.vars && sparqlResult?.results?.bindings) {
+      const vars = sparqlResult.head.vars;
+      const rows = sparqlResult.results.bindings;
+      return (
+        <div className="sparql-result-wrap">
+          <p className="sparql-count">{rows.length} result{rows.length !== 1 ? "s" : ""}</p>
+          <div className="sparql-table-scroll">
+            <table className="sparql-table">
+              <thead>
+                <tr>{vars.map((v) => <th key={v}>{v}</th>)}</tr>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => (
+                  <tr key={i}>
+                    {vars.map((v) => {
+                      const cell = row[v];
+                      if (!cell) return <td key={v} />;
+                      if (cell.type === "uri") {
+                        const short = shortenUri(cell.value);
+                        return (
+                          <td key={v}>
+                            <span className="sq-uri" title={cell.value}>{short}</span>
+                          </td>
+                        );
+                      }
+                      return (
+                        <td key={v}>
+                          <span className="sq-lit">{cell.value}</span>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    // CONSTRUCT / DESCRIBE / raw text
+    return <pre className="result-box">{typeof sparqlResult === "string" ? sparqlResult : JSON.stringify(sparqlResult, null, 2)}</pre>;
+  }
+
+  function renderSparql() {
+    return (
+      <section className="panel">
+        <div className="panel__head">
+          <div>
+            <p className="eyebrow">SPARQL</p>
+            <h2>Query the pack graph</h2>
+          </div>
+          <div className="pill-row">
+            <button className="button button--primary" type="button" onClick={handleRunSparql} disabled={isRunningSparql}>
+              {isRunningSparql ? "Running…" : "Run query"}
+            </button>
+            {sparqlResult && (
+              <button className="pill" type="button" onClick={() => setSparqlResult(null)}>
+                Clear
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="preset-row">
+          {presets.map((preset) => (
+            <button
+              key={preset.id}
+              type="button"
+              className="pill"
+              title={preset.description}
+              onClick={() => setSparqlQuery(preset.query)}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+        <textarea
+          className="editor"
+          value={sparqlQuery}
+          onChange={(event) => setSparqlQuery(event.target.value)}
+          placeholder="Write a SPARQL 1.1 query…"
+        />
+        {renderSparqlResults()}
+      </section>
+    );
+  }
+
+  function renderNorms() {
+    function renderFieldValue(norm, field) {
+      const value = norm[field.key];
+      if (!value) {
+        return <div className="norm-readonly__empty">Not provided</div>;
+      }
+      if (field.type === "textarea") {
+        return <div className="norm-readonly norm-readonly--long">{value}</div>;
+      }
+      return <div className="norm-readonly">{value}</div>;
+    }
+
+    return (
+      <section className="panel">
+        <div className="panel__head">
+          <div>
+            <p className="eyebrow">Visual Exploration</p>
+            <h2>Read-only norm exploration</h2>
+            <p className="section-copy">
+              This view is now a user-facing explorer for annotations and extracted norms. Editing
+              has been removed from the web app so the screen stays focused on inspection,
+              traceability, and navigation.
+            </p>
+          </div>
+          <span className="muted" style={{ fontSize: "0.85rem", alignSelf: "center" }}>
+            {filteredNorms.length} of {norms.length}
+          </span>
+        </div>
+
+        <div className="norm-toolbar">
+          <input
+            className="norm-search"
+            value={normSearch}
+            onChange={(event) => setNormSearch(event.target.value)}
+            placeholder="Search id, action, agent, regulation, article…"
+          />
+          <div className="pill-row">
+            {["all", "obligation", "prohibition", "permission", "recommendation", "fact"].map((t) => (
+              <button
+                key={t}
+                type="button"
+                className={`pill ${normTypeFilter === t ? "is-selected" : ""}`}
+                onClick={() => setNormTypeFilter(t)}
+              >
+                {t === "all" ? "All" : t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="stack-list">
+          {filteredNorms.map((norm) => {
+            const gatewayNorm = isGatewayNorm(norm);
+            const visibleSections = gatewayNorm
+              ? NORM_SECTIONS.filter((section) => section.id === "condition")
+              : NORM_SECTIONS.filter((section) => section.id !== "condition");
+
+            return (
+              <article
+                className={`list-card norm-card ${focusedNormId === norm.norm_id ? "is-focused" : ""}`}
+                key={norm.norm_id}
+                ref={(el) => {
+                  if (focusedNormId === norm.norm_id && el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }
+                }}
+              >
+                <div className="list-card__head">
+                  <strong>{getReadableNormLabel(norm)}</strong>
+                  <span className={`deontic-badge deontic-badge--${String(norm.deontic_type || "fact").toLowerCase()}`}>
+                    {norm.deontic_type || norm.element_type || "gateway"}
+                  </span>
+                </div>
+                <p>
+                  {titleCaseLabel(
+                    norm.action ||
+                      norm.gw_condition_statement ||
+                      norm.norm_statement ||
+                      humanizeNormId(norm.norm_id),
+                  ) || "—"}
+                </p>
+                <div className="norm-meta-grid">
+                  <span>{norm.bpmn_source || "unknown source"}</span>
+                  <span>{norm.regulation || "—"}</span>
+                  <span>{norm.article ? `Art. ${norm.article}` : "—"}</span>
+                  <span>
+                    {norm.conditions?.length ? (
+                      norm.conditions.map((c) => (
+                        <span key={c.predicate} className={`cond-chip cond-chip--${c.value ? "yes" : "no"}`}>
+                          {humanizeUnderscoredText(c.label || c.predicate)} = {c.value ? "Yes" : "No"}
+                        </span>
+                      ))
+                    ) : (
+                      "unconditional"
+                    )}
+                  </span>
+                </div>
+
+                {visibleSections.map((section) => (
+                  <details className="norm-section" key={section.id}>
+                    <summary className="norm-section__header">{section.label}</summary>
+                    <div className="form-grid form-grid--wide norm-section__body">
+                      {section.fields.map((field) => (
+                        <label key={field.key}>
+                          <span>{field.label}</span>
+                          {renderFieldValue(norm, field)}
+                        </label>
+                      ))}
+                    </div>
+                  </details>
+                ))}
+              </article>
+            );
+          })}
+          {filteredNorms.length === 0 ? (
+            <div className="table__empty">No norms match the current search and filter.</div>
+          ) : null}
+        </div>
+      </section>
+    );
+  }
+
+  function renderEntitiesPanel() {
+    return (
+      <section className="panel">
+        <div className="panel__head">
+          <div>
+            <p className="eyebrow">Entities</p>
+            <h2>Entity review</h2>
+            <p className="section-copy">
+              This workspace is now read-only for entity and KG consistency checks. Merge decisions
+              and canonical maintenance should live in a separate legal KG maintenance application,
+              not in the end-user app.
+            </p>
+          </div>
+        </div>
+
+        <div className="workspace-grid">
+          <article className="list-card">
+            <strong>Potential duplicate norms</strong>
+            <div className="stack-list stack-list--compact">
+              {normDuplicateCandidates.map((candidate, index) => (
+                <div className="decision-card" key={`${candidate.left_norm_id}-${candidate.right_norm_id}-${index}`}>
+                  <div className="inline-meta">
+                    <span className={`deontic-badge deontic-badge--${String(candidate.deontic_type || "fact").toLowerCase()}`}>
+                      {candidate.deontic_type || "norm"}
+                    </span>
+                    <span className="sim-score">score {Math.round((candidate.score || 0) * 100)}%</span>
+                  </div>
+                  <strong>{titleCaseLabel(candidate.left_label || candidate.left_norm_id)}</strong>
+                  <span style={{ fontSize: 11, color: "var(--muted)" }}>vs</span>
+                  <strong>{titleCaseLabel(candidate.right_label || candidate.right_norm_id)}</strong>
+                  <p className="decision-card__text">
+                    {[candidate.regulation, candidate.article ? `Art. ${candidate.article}` : "", candidate.left_source, candidate.right_source]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </p>
+                  <p className="decision-card__text">{(candidate.reasons || []).join(" · ")}</p>
+                  <div className="inline-meta" style={{ marginTop: 10 }}>
+                    <button className="pill" type="button" onClick={() => jumpToNorm(candidate.left_norm_id)}>
+                      Open first norm
+                    </button>
+                    <button className="pill" type="button" onClick={() => jumpToNorm(candidate.right_norm_id)}>
+                      Open second norm
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {normDuplicateCandidates.length === 0 ? (
+                <div className="table__empty">No duplicate norm candidates detected right now.</div>
+              ) : null}
+            </div>
+          </article>
+
+          <article className="list-card">
+            <strong>Flagged near-matches</strong>
+            <p className="decision-card__text">
+              These labels look close enough to deserve review, but users cannot merge them from
+              this application.
+            </p>
+            <div className="stack-list stack-list--compact">
+              {quickEntityCandidates.map((candidate) => (
+                <div className="decision-card" key={candidate.id}>
+                  <div className="inline-meta">
+                    <span className={`field-badge field-badge--${candidate.field}`}>{candidate.field}</span>
+                    <span className="sim-score">{candidate.message.match(/\d+%/)?.[0] || ""}</span>
+                  </div>
+                  <strong>{candidate.labelA}</strong>
+                  <span style={{ fontSize: 11, color: "var(--muted)" }}>vs</span>
+                  <strong>{candidate.labelB}</strong>
+                  <p className="decision-card__text">{candidate.message}</p>
+                </div>
+              ))}
+              {quickEntityCandidates.length === 0 ? <div className="table__empty">No near-match warnings right now.</div> : null}
+            </div>
+          </article>
+        </div>
+
+        <div className="workspace-grid">
+          <article className="list-card">
+            <strong>Canonicalization summary</strong>
+            <p className="decision-card__text">
+              These are the automatic normalization decisions currently applied during pack rebuild.
+            </p>
+            <div className="stack-list stack-list--compact">
+              {(entities?.decisions || []).map((decision, index) => (
+                <div className="decision-card" key={`${decision.field}-${index}`}>
+                  <div className="inline-meta">
+                    <span className={`field-badge field-badge--${decision.field}`}>{decision.field}</span>
+                    <span className="sim-score">{decision.reason}</span>
+                  </div>
+                  <strong>{decision.raw_labels?.[0] || decision.winner}</strong>
+                  {decision.raw_labels?.slice(1).map((label) => (
+                    <p className="decision-card__text" key={label}>
+                      {label} → {decision.winner}
+                    </p>
+                  ))}
+                </div>
+              ))}
+              {(entities?.decisions || []).length === 0 ? <div className="table__empty">No canonicalization decisions recorded for this pack.</div> : null}
+            </div>
+          </article>
+          <article className="list-card">
+            <strong>Maintenance boundary</strong>
+            <p className="decision-card__text">
+              This open-source web app is intended for browsing, checking, and reviewing the legal
+              knowledge graph. Direct merge actions have been removed from the user interface.
+            </p>
+            <div className="stack-list stack-list--compact">
+              <div className="decision-card">
+                <strong>Main user app</strong>
+                <p className="decision-card__text">
+                  Review packs, inspect duplicate warnings, open norms, run compliance checks, and
+                  explore the semantic graph.
+                </p>
+              </div>
+              <div className="decision-card">
+                <strong>Separate KG maintenance app</strong>
+                <p className="decision-card__text">
+                  Handle canonical merges, override decisions, provenance-aware reconciliation, and
+                  legal knowledge base maintenance with stronger access control.
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    );
+  }
+
+  function renderGraphPanel() {
+    return (
+      <section className="panel">
+        <div className="panel__head">
+          <div>
+            <p className="eyebrow">Graph</p>
+            <h2>Visual knowledge graph</h2>
+            <p className="section-copy">
+              This visual representation comes from the ontology-backed RDF store for the selected
+              pack. Hover a node to inspect its semantic details, or click it to keep the details
+              panel open while you explore the graph. Separate groups mean the current KG has
+              multiple disconnected components, not that the visualisation lost a link.
+            </p>
+          </div>
+          <div className="graph-legend">
+            {[
+              { type: "Obligation", color: "#a64a1d" },
+              { type: "Prohibition", color: "#6b1f0e" },
+              { type: "Permission", color: "#225c63" },
+              { type: "Recommendation", color: "#3d7c84" },
+              { type: "LegalAgent", color: "#1b2131" },
+              { type: "LegalObject", color: "#626b7e" },
+              { type: "LegalCondition", color: "#b45309" },
+            ].map((item) => (
+              <span key={item.type} className="legend-item">
+                <span className="legend-dot" style={{ background: item.color }} />
+                {item.type}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="form-grid">
+          <label>
+            <span>Search graph</span>
+            <input value={graphSearch} onChange={(event) => setGraphSearch(event.target.value)} placeholder="Search resource URIs, labels, or semantic types" />
+          </label>
+        </div>
+
+        <div className="graph-board">
+          {filteredGraphNodes.length === 0 ? (
+            <div className="table__empty" style={{ padding: 40 }}>
+              No graph data for this pack or search returned no matches.
+            </div>
+          ) : (
+            <GraphForce nodes={filteredGraphNodes} edges={filteredGraphEdges} />
+          )}
+        </div>
+
+        <article className="graph-summary">
+          <div className="graph-summary__item">
+            <span>Visible nodes</span>
+            <strong>{filteredGraphNodes.length}</strong>
+          </div>
+          <div className="graph-summary__item">
+            <span>Visible links</span>
+            <strong>{filteredGraphEdges.length}</strong>
+          </div>
+          <div className="graph-summary__item">
+            <span>Connected groups</span>
+            <strong>{filteredGraphComponentCount}</strong>
+          </div>
+          <div className="graph-summary__item graph-summary__item--wide">
+            <span>View</span>
+            <strong>
+              Focus on the visual graph first. Search reduces the view to the matching neighborhood,
+              and disconnected groups are arranged in separate zones so the KG is easier to read.
+            </strong>
+          </div>
+        </article>
+      </section>
+    );
+  }
+
+  function renderOntology() {
+    return (
+      <section className="panel">
+        <div className="panel__head">
+          <div>
+            <p className="eyebrow">Ontology</p>
+            <h2>TBox reference</h2>
+          </div>
+        </div>
+        <div className="workspace-grid">
+          <article className="list-card">
+            <strong>Core classes</strong>
+            <div className="stack-list">
+              {ONTOLOGY_ITEMS.map((item) => (
+                <article className="decision-card" key={item}>
+                  <p>{item}</p>
+                </article>
+              ))}
+            </div>
+          </article>
+          <article className="list-card">
+            <strong>Testing checklist</strong>
+            <div className="stack-list">
+              <article className="decision-card">
+                <p>Upload or load a pack, inspect rules, view ABox/SWRL, run evaluator, query SPARQL, and edit a norm.</p>
+              </article>
+              <article className="decision-card">
+                <p>Use entity warnings to merge labels and confirm the pack reloads with updated registry state.</p>
+              </article>
+            </div>
+          </article>
+        </div>
+      </section>
+    );
+  }
+
+  function renderActiveView() {
+    switch (activeView) {
+      case "evaluator":
+        return renderEvaluator();
+      case "norms":
+        return renderNorms();
+      case "artifacts":
+        return renderArtifacts();
+      case "rules":
+        return renderRules();
+      case "sparql":
+        return renderSparql();
+      case "entities":
+        return renderEntitiesPanel();
+      case "graph":
+        return renderGraphPanel();
+      case "ontology":
+        return renderOntology();
+      default:
+        return renderOverview();
+    }
+  }
+
+  return (
+    <div className="dashboard">
+      <Sidebar
+        packs={packs}
+        selectedPack={selectedPack}
+        onSelectPack={setSelectedPack}
+        activeView={activeView}
+        onSelectView={setActiveView}
+        onOpenPackCreator={openPackCreator}
+        onUploadFile={handleUpload}
+        onAppendFile={handleAppendUpload}
+        isUploading={isUploading}
+      />
+
+      <main className="dashboard__content">
+        {error ? <div className="alert alert--error">{error}</div> : null}
+        {notice ? <div className="alert alert--info">{notice}</div> : null}
+
+        {renderActiveView()}
+      </main>
+    </div>
+  );
+}

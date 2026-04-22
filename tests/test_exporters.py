@@ -12,9 +12,9 @@ import tempfile
 import os
 import xml.etree.ElementTree as ET
 
-from norma.parsing.bpmn_parser import parse_bpmn_to_reduced_graph
-from norma.rules.extractor import enumerate_paths_and_build_ir
-from norma.exporters.swrl import export_rules_to_owl
+from norma_engine.parsing.bpmn_parser import parse_bpmn_to_reduced_graph
+from norma_engine.rules.extractor import enumerate_paths_and_build_ir
+from norma_engine.exporters.swrl import export_rules_to_owl
 
 RULES_IRI = "http://test.org/norma/rules"
 ABOX_IRI  = "http://test.org/norma"
