@@ -1,6 +1,6 @@
 # NORMA — Normative Ontology for Regulatory Machine-readable Annotations
 
-NORMA transforms BPMN processes annotated with legal norms into a semantic knowledge graph (OWL 2 + SWRL). It is a **norm determination engine** — given annotated BPMN files, NORMA determines which obligations, prohibitions, and permissions apply to a given legal role under a given set of conditions.
+NORMA transforms BPMN processes annotated with legal norms into a semantic knowledge graph (OWL 2 + SWRL). It supports **norm determination**: given annotated BPMN files, NORMA derives condition-aware rules that can be used to inspect which obligations, prohibitions, permissions, recommendations, and constitutive facts apply under a stated set of gateway conditions.
 
 ```
 Annotated BPMN  →  Knowledge Graph (ABox/TBox)  →  SWRL rules + SPARQL + REST API
@@ -11,6 +11,7 @@ Annotated BPMN  →  Knowledge Graph (ABox/TBox)  →  SWRL rules + SPARQL + RES
 ## Table of Contents
 
 - [Requirements](#requirements)
+- [Research Artifact and FAIR Status](#research-artifact-and-fair-status)
 - [Repository Structure](#repository-structure)
 - [Camunda Element Template](#camunda-element-template)
 - [NORMA Annotation Template — Field Reference](#norma-annotation-template--field-reference)
@@ -22,22 +23,69 @@ Annotated BPMN  →  Knowledge Graph (ABox/TBox)  →  SWRL rules + SPARQL + RES
 - [Web Application](#web-application)
 - [Quick Start](#quick-start)
 - [Example — EU AI Act](#example--eu-ai-act)
-- [Licence](#licence)
+- [Citation](#citation)
+- [License](#license)
 
 ---
 
 ## Requirements
 
 - Python 3.10+
+- Node.js 20+ if running the React/Vite frontend locally
+- Docker Compose if using the containerized development stack
 - [Camunda Modeler 8](https://camunda.com/platform/modeler/) (to annotate BPMN files)
-- `pip install fastapi uvicorn pyoxigraph jinja2 python-multipart`
+- Core engine development: `pip install -e .[dev]`
+- Web backend dependencies: `pip install -r web-app/backend/requirements.txt`
+
+---
+
+## Research Artifact and FAIR Status
+
+This repository is intended to accompany a research paper and to serve as a reusable semantic resource for BPMN-based regulatory annotation and norm determination.
+
+### Artifact Inventory
+
+| Artifact | Location | Purpose |
+|----------|----------|---------|
+| NORMA ontology | `ontology/norma-ontology-v1.ttl`, `ontology/norma-ontology-v1.rdf` | TBox/schema for the generated regulatory knowledge graph |
+| Core engine | `norma_engine/` | BPMN parsing, ABox generation, normalization, rule extraction, and exporters |
+| Camunda template | `camunda-template/camunda8-compliance-template.json` | Structured legal annotation model for Camunda Modeler |
+| Example regulation pack | `regulations/eu-ai-act/` | BPMN source material and generated pack artifacts |
+| Web application | `web-app/` | FastAPI + React interface for inspection, SPARQL, graph visualization, and evaluation |
+| Tests | `tests/` | Regression tests for parsing, KG construction, normalization, rules, and exporters |
+
+### FAIR Summary
+
+| FAIR principle | Current support |
+|----------------|-----------------|
+| Findable | The ontology uses the persistent namespace `https://w3id.org/norma-ontology`; the package metadata names the project as `norma-engine`. A repository DOI should be minted through Zenodo before publication. |
+| Accessible | Source code, ontology files, BPMN examples, and templates are stored directly in the repository. The web app exposes artifacts through REST endpoints and downloads. |
+| Interoperable | Outputs use RDF/Turtle, RDF/XML, OWL, SWRL, SPARQL, BPMN, and JSON. The ontology aligns with external vocabularies such as PROV-O, ELI, ORG, SKOS, Dublin Core Terms, FOAF, BIBO, and VANN where used. |
+| Reusable | The repository includes `LICENSE` and `CITATION.cff`; setup commands, CLI entrypoints, tests, and example packs are documented. Before archival publication, mint the final DOI and tag the exact artifact release used in the paper. |
+
+### Reproducibility Checklist
+
+For a paper artifact release, the recommended minimal reproduction path is:
+
+1. Install the engine with `pip install -e .[dev]`.
+2. Run `pytest`.
+3. Build the example pack with `norma-build regulations/eu-ai-act/`.
+4. Generate rules for the example BPMN with `norma-rules "regulations/eu-ai-act/bpmn/Biometrics Diagram.bpmn"`.
+5. Start the web backend and frontend.
+6. Open the web app, select `eu-ai-act`, and inspect Norm Review, Rules, Knowledge Base, Graph Visualization, Ontology, and SPARQL.
+
+Publication TODOs:
+
+- mint and record the final Zenodo DOI
+- replace DOI placeholders in ontology metadata before final release
+- tag the exact software/artifact version used in the paper
 
 ---
 
 ## Repository Structure
 
 ```
-norma/
+norma_engine/
   parsing/
     bpmn_parser.py          ← BPMN XML → reduced directed graph
   kg/
@@ -50,8 +98,9 @@ norma/
     swrl.py                 ← RuleIR → SWRL/OWL XML
     human_readable.py       ← RuleIR → human-readable SWRL syntax
   utils.py                  ← to_symbol() and other helpers
-norma_build.py              ← CLI: KG pipeline (batch use)
-norma_rules.py              ← CLI: standalone SWRL rule extraction
+  cli/
+    build.py                ← CLI: KG pipeline (installed as norma-build)
+    rules.py                ← CLI: standalone SWRL extraction (installed as norma-rules)
 ontology/
   norma-ontology-v1.ttl     ← TBox in Turtle (canonical)
   norma-ontology-v1.rdf     ← TBox in RDF/XML (for Protégé / OWLAPI tools)
@@ -62,10 +111,25 @@ regulations/
     entities.json           ← entity reconciliation overrides (auto-created)
 camunda-template/
   camunda8-compliance-template.json   ← Camunda Modeler element template
-app/
-  main.py                   ← FastAPI web application (auto-builds at startup)
-  sparql_presets.py         ← Curated preset SPARQL queries
-  templates/index.html      ← Single-page UI
+web-app/
+  backend/
+    main.py                 ← FastAPI API entrypoint
+    services/
+      pipeline.py           ← Bridge from web app to norma_engine
+      storage.py            ← Pack registry, rebuild, upload, evaluation services
+      graphdb.py            ← pyoxigraph RDF/SPARQL helpers
+    database.py             ← SQLite setup for app runtime metadata
+    persistence.py          ← Persistence helpers
+    sparql_presets.py       ← Curated preset SPARQL queries
+  frontend/
+    src/
+      pages/Dashboard.jsx   ← Main workspace UI
+      components/GraphForce.jsx ← D3 force graph visualization
+      api/api.js            ← Frontend API client
+    package.json            ← React/Vite/D3 dependencies and scripts
+  backend/data/             ← Local runtime data, not canonical source assets
+docker-compose.yml          ← Local backend + frontend development stack
+pyproject.toml              ← Package metadata for norma_engine
 ```
 
 ---
@@ -88,13 +152,13 @@ The template is also available as a download from the web application: **Tools �
 
 ---
 
-# NORMA Annotation Template — Field Reference
+## NORMA Annotation Template — Field Reference
 
 The NORMA annotation template is applied directly inside Camunda Modeler to BPMN tasks and exclusive gateways. Each annotated element becomes a node in the NORMA knowledge graph. This section describes every field in the template, organised by section, explaining what it captures and why it is necessary.
 
 ---
 
-## Element Type
+### Element Type
 
 The template applies to two structurally different kinds of BPMN elements, and the first field makes that distinction explicit.
 
@@ -102,7 +166,7 @@ The template applies to two structurally different kinds of BPMN elements, and t
 
 ---
 
-## Norm Content
+### Norm Content
 
 This section captures the substantive content of the norm. It is the semantic core of the annotation — the information that defines what the law prescribes, to whom, on what, and with what legal weight.
 
@@ -122,7 +186,7 @@ This section captures the substantive content of the norm. It is the semantic co
 
 ---
 
-## Legal Condition
+### Legal Condition
 
 This section is active only when the element is an exclusive gateway. It captures the legal condition that determines which branch of the process applies and therefore which norms are relevant.
 
@@ -134,7 +198,7 @@ This section is active only when the element is an exclusive gateway. It capture
 
 ---
 
-## Scope and Temporal
+### Scope and Temporal
 
 This section defines the boundaries of the norm's applicability — territorial, temporal, and circumstantial. It allows the system to filter norms by context and to manage the temporal evolution of regulation.
 
@@ -150,7 +214,7 @@ This section defines the boundaries of the norm's applicability — territorial,
 
 ---
 
-## Consequences and Exceptions
+### Consequences and Exceptions
 
 This section captures information about the consequences of non-compliance and the exceptions to the norm's applicability. It does not participate directly in automatic reasoning but is essential for the operational use of the knowledge graph.
 
@@ -162,7 +226,7 @@ This section captures information about the consequences of non-compliance and t
 
 ---
 
-## Legal Source
+### Legal Source
 
 This section captures the legislative provenance of the norm — where it comes from, where exactly it sits in the legal text, and how to access the source. It is the section that guarantees the traceability of the system.
 
@@ -178,7 +242,7 @@ This section captures the legislative provenance of the norm — where it comes 
 
 ---
 
-## Annotation Metadata
+### Annotation Metadata
 
 This section does not describe the norm itself but the annotation. It captures who produced it, how, with what degree of certainty, and in what governance state it currently sits.
 
@@ -216,7 +280,7 @@ The TBox is in `ontology/` in two serialisation formats:
 The TBox has two layers:
 
 - **Shortcut literal layer** — the set of data properties used by the pipeline. These carry plain-text values read directly from BPMN annotation fields (e.g., `norma:agentText`, `norma:fromArticle`). This layer is always populated by the pipeline.
-- **Extended semantic layer** — a richer vocabulary aligned with PROV-O, ELI (European Legislation Identifier), and OWL-Time. This layer supports federation with legal data ecosystems but is not instantiated by the pipeline.
+- **Extended semantic layer** — a richer vocabulary aligned with PROV-O, ELI (European Legislation Identifier), the W3C Organization Ontology, SKOS, Dublin Core Terms, FOAF, BIBO, and VANN where those vocabularies are used. This layer supports federation with legal and provenance data ecosystems but is not fully instantiated by the current pipeline.
 
 The TBox is derived strictly from the element template:
 - **Dropdown fields** → OWL classes + `owl:NamedIndividual` (oneOf enumeration)
@@ -335,7 +399,7 @@ The same agent, object, or regulation appearing across multiple BPMN files withi
 
 ### Startup Auto-Build
 
-The **web application auto-builds the ABox and extracts all rules at startup** — no manual build step is required. On startup, `app/main.py` scans every subfolder of `regulations/`:
+The **web application auto-builds the ABox and extracts all rules at startup** — no manual build step is required. On startup, `web-app/backend/main.py` calls the storage layer, which scans every subfolder of `regulations/`:
 
 1. Reads all `*.bpmn` files in `regulations/{pack}/bpmn/`
 2. Builds the ABox live via `parse_bpmn_folder` → `to_json` → `to_turtle`
@@ -349,23 +413,23 @@ If the live build fails, the app falls back to a pre-built `*.abox.ttl` file in 
 
 ```bash
 # Build a regulation pack → generates <pack>.json + <pack>.abox.ttl
-python norma_build.py regulations/eu-ai-act/
+norma-build regulations/eu-ai-act/
 
 # Skip entity label normalization
-python norma_build.py regulations/eu-ai-act/ --no-normalize
+norma-build regulations/eu-ai-act/ --no-normalize
 
 # Generate a normalization override template, then apply it
-python norma_build.py regulations/eu-ai-act/ --template overrides.json
-python norma_build.py regulations/eu-ai-act/ --override overrides.json
+norma-build regulations/eu-ai-act/ --template overrides.json
+norma-build regulations/eu-ai-act/ --override overrides.json
 ```
 
 ### Normalization
 
-When the same regulation or agent is written inconsistently across files ("IA Act", "ia act", "EU AI Act"), the normalizer resolves variants to a single canonical label before generating the ABox. The similarity threshold is configurable (default 0.82). See [Entity Reconciliation & Referential Consistency](#entity-reconciliation--referential-consistency) for the full reconciliation system, including the Entity Registry UI panel and manual merge workflow.
+When the same regulation or agent is written inconsistently across files ("IA Act", "ia act", "EU AI Act"), the normalizer resolves variants to a single canonical label before generating the ABox. The similarity threshold is configurable (default 0.82). See [Entity Reconciliation & Referential Consistency](#entity-reconciliation--referential-consistency) for the full reconciliation system, including the Entities UI panel and manual merge workflow.
 
 ### Visualizing the KG
 
-- **NORMA web app**: open the *Knowledge Graph* panel to see the D3.js force-directed graph. Click any node to inspect its properties.
+- **NORMA web app**: open the *Graph Visualization* panel to see the D3.js force-directed graph. Click any node to inspect its properties.
 - **Protégé**: open `norma-ontology-v1.rdf` as the TBox, then File → Merge Ontology → select the ABox Turtle file.
 - **Apache Jena / Fuseki**: load both TBox and ABox; SPARQL 1.1 endpoint available.
 
@@ -402,7 +466,7 @@ Every field that mints a named individual is subject to reconciliation. There ar
 
 #### Layer 1 — Automatic canonical matching (silent)
 
-The normalizer (`norma/kg/normalizer.py`) converts every raw label to a **canonical comparison key**: lowercase, all punctuation characters (including `?`, `!`, `(`, `)`) replaced by space, whitespace collapsed. Two labels with the same canonical key are automatically merged under the most-frequent variant. No human intervention needed.
+The normalizer (`norma_engine/kg/normalizer.py`) converts every raw label to a **canonical comparison key**: lowercase, all punctuation characters (including `?`, `!`, `(`, `)`) replaced by space, whitespace collapsed. Two labels with the same canonical key are automatically merged under the most-frequent variant. No human intervention needed.
 
 ```
 "Generation of syntetic content?"  →  canonical: "generation of syntetic content"
@@ -466,7 +530,7 @@ Without step 2, the ABox would contain a single canonical individual while the c
 
 ### Entity Registry UI Panel
 
-The **Entity Registry** panel in the web application (nav: between Norm Annotations and Knowledge Graph) has three sections:
+The **Entities** panel in the web application supports semantic consistency review and has three sections:
 
 **Flagged Matches** — pairs detected by fuzzy similarity. Each warning card shows:
 - The two candidate labels with a colour-coded field badge (agent / object / regulation / action / norm / condition)
@@ -523,19 +587,19 @@ All POST operations write `entities.json` and immediately rebuild the pack (ABox
 
 ```bash
 # Generate a reconciliation override template pre-populated with all unique values
-python norma_build.py regulations/eu-ai-act/ --template overrides.json
+norma-build regulations/eu-ai-act/ --template overrides.json
 
 # Apply a hand-edited override file
-python norma_build.py regulations/eu-ai-act/ --override overrides.json
+norma-build regulations/eu-ai-act/ --override overrides.json
 
 # Build without any normalization (not recommended for multi-file packs)
-python norma_build.py regulations/eu-ai-act/ --no-normalize
+norma-build regulations/eu-ai-act/ --no-normalize
 ```
 
 The normalizer can also be used standalone:
 
 ```bash
-python -m norma.kg.normalizer eu-ai-act.json --override entities.json --out eu-ai-act.normalized.json
+python -m norma_engine.kg.normalizer eu-ai-act.json --override entities.json --out eu-ai-act.normalized.json
 ```
 
 ---
@@ -580,7 +644,7 @@ This handles both default Camunda labels ("Yes"/"No") and custom branch labels (
 
 ### Rule Intermediate Representation
 
-`RuleIR` (`norma/rules/ir.py`) is the internal representation of one rule:
+`RuleIR` (`norma_engine/rules/ir.py`) is the internal representation of one rule:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -590,7 +654,7 @@ This handles both default Camunda labels ("Yes"/"No") and custom branch labels (
 | `data_atoms` | `Tuple[DataAtom, ...]` | SWRL head — data-property assertions |
 | `class_atoms` | `Tuple[ClassAtom, ...]` | SWRL head — rdf:type assertions for norm individuals |
 | `actions` | `Tuple[Action, ...]` | Auxiliary summary labels (not exported to SWRL) |
-| `source` | `str` | Source BPMN filename (e.g., `test.bpmn`) |
+| `source` | `str` | Source BPMN filename (e.g., `Biometrics Diagram.bpmn`) |
 
 Each `Condition` has a `predicate` (the `gw_conditionStatement` slug, kind `"rules"`), a `subject` (variable, kind `"var"`), and a boolean `value`.
 
@@ -602,10 +666,10 @@ Each `ClassAtom` has a `class_ref` (kind `"tbox"`, e.g., `"Obligation"`) and a `
 
 ```bash
 # Produces <file>.swrl.owl next to the input BPMN
-python norma_rules.py regulations/eu-ai-act/bpmn/test.bpmn
+norma-rules "regulations/eu-ai-act/bpmn/Biometrics Diagram.bpmn"
 
 # Explicit output path
-python norma_rules.py regulations/eu-ai-act/bpmn/test.bpmn outputs/rules.swrl.owl
+norma-rules "regulations/eu-ai-act/bpmn/Biometrics Diagram.bpmn" outputs/rules.swrl.owl
 ```
 
 ### Loading SWRL Rules in Protégé
@@ -681,7 +745,7 @@ WHERE {
 
 ### Extending the Preset Library
 
-Add entries to `app/sparql_presets.py`:
+Add entries to `web-app/backend/sparql_presets.py`:
 
 ```python
 {
@@ -698,27 +762,303 @@ The UI picks them up automatically on next load.
 
 ## Web Application
 
-### Starting the App
+The current web application lives in `web-app/` and is intentionally separated from the core engine. It is not a second implementation of the semantic logic. It is an application layer that calls `norma_engine`, reads the root assets, stores local runtime state, and exposes the results through a browser UI.
 
-```bash
-# From the project root
-uvicorn app.main:app --reload
+### Technology Stack
+
+| Layer | Technology | Role |
+|-------|------------|------|
+| Frontend | React 18 + Vite | Interactive workspace UI |
+| Graph visualization | D3 | Force-directed ABox graph |
+| Backend API | FastAPI | REST API for packs, artifacts, evaluation, SPARQL, upload, and rebuild |
+| RDF/SPARQL | pyoxigraph | In-memory or local RDF store support for querying generated graphs |
+| Runtime metadata | SQLite | App-local metadata and runtime state |
+| Core engine | `norma_engine` | BPMN parsing, KG construction, rule extraction, exporters |
+| Development orchestration | Docker Compose | Optional local backend/frontend stack |
+
+### Current App Layout
+
+```text
+web-app/
+  backend/
+    main.py                  FastAPI route definitions and startup hook
+    database.py              SQLite connection/setup
+    persistence.py           Runtime persistence helpers
+    models.py                Backend data models
+    sparql_presets.py        Curated query library
+    services/
+      pipeline.py            Calls norma_engine and converts pipeline outputs
+      storage.py             Pack loading, rebuild, uploads, evaluation, artifacts
+      graphdb.py             pyoxigraph parsing, querying, and RDF download helpers
+    data/
+      bpmn/                  Runtime BPMN copies/uploads
+      graph-stores/          Runtime graph-store material
+      uploads/               Uploaded pack material
+      norma.sqlite3          Local SQLite runtime database
+  frontend/
+    src/
+      api/api.js             Typed-ish API wrapper used by React screens
+      pages/Home.jsx         Landing page
+      pages/Dashboard.jsx    Main workspace and all semantic panels
+      components/Sidebar.jsx Pack/view navigation
+      components/GraphForce.jsx D3 graph component
+      styles.css             Application styling
 ```
 
-Open `http://localhost:8000`. The app **automatically builds the knowledge graph and extracts all rules** for every regulation pack found in `regulations/` at startup. No separate build step is needed.
+### Dependency Direction
+
+The app is deliberately layered:
+
+```text
+web-app/frontend
+  -> web-app/backend API
+    -> web-app/backend/services
+      -> norma_engine
+      -> ontology/
+      -> regulations/
+      -> camunda-template/
+```
+
+The reverse direction should not happen. `norma_engine`, `ontology`, `regulations`, and `camunda-template` are core/root assets. They should not import or depend on the web app.
+
+### Source Data vs Runtime Data
+
+The repository has two different kinds of data:
+
+| Location | Meaning | Should be canonical? |
+|----------|---------|----------------------|
+| `regulations/` | Regulation packs and source BPMN material | Yes |
+| `ontology/` | NORMA TBox | Yes |
+| `camunda-template/` | Annotation template | Yes |
+| `web-app/backend/data/` | Runtime DB, uploads, local stores, generated app state | No |
+
+This distinction matters for deployment and reproducibility. The legal/semantic source of truth should remain in the root assets. The web app data folder is application runtime state.
+
+### How the Backend Starts
+
+The FastAPI entrypoint is:
+
+```text
+web-app/backend/main.py
+```
+
+On startup, the backend calls `load_regulation_packs()` from `web-app/backend/services/storage.py`. That service discovers packs, builds or loads semantic artifacts, and keeps an in-memory registry of the currently available regulation packs.
+
+The backend also resolves the monorepo root automatically. If `norma_engine` is not installed as a package, `main.py` checks `NORMA_CORE_ROOT` and then the repository root so the app can still import the core engine during local development.
+
+### Backend Responsibilities
+
+`web-app/backend/main.py` defines the HTTP surface, but most logic is delegated into services:
+
+| File | Responsibility |
+|------|----------------|
+| `services/pipeline.py` | Runs the semantic pipeline by calling `norma_engine`; produces ABox, SWRL, human-readable rules, norms, conditions, graph data |
+| `services/storage.py` | Loads packs, manages current pack state, handles uploads/appends, rebuilds packs, serves artifacts, evaluates conditions |
+| `services/graphdb.py` | Converts Turtle to RDF/XML, loads/query RDF with pyoxigraph, formats SPARQL responses |
+| `database.py` | Creates/opens the SQLite database used by the app runtime |
+| `persistence.py` | Persists app-level runtime records |
+| `sparql_presets.py` | Provides curated SPARQL examples for the UI |
+
+### Frontend Responsibilities
+
+The frontend is a React/Vite application. The main user workspace is concentrated in:
+
+```text
+web-app/frontend/src/pages/Dashboard.jsx
+```
+
+This file coordinates:
+
+- selected regulation pack
+- active panel/view
+- fetched norms, conditions, rules, ABox, SWRL, graph data, and SPARQL results
+- upload and append flows
+- rebuild actions
+- client-side filters for norms and graph nodes
+- provenance visibility in the graph
+- evaluator answers and applicable norm results
+
+The force-directed graph is isolated in:
+
+```text
+web-app/frontend/src/components/GraphForce.jsx
+```
+
+It receives graph nodes and edges from the backend and handles:
+
+- D3 simulation layout
+- zoom/reset behavior
+- node hover and click inspection
+- graph detail panel
+- provenance-aware graph readability through data passed from `Dashboard.jsx`
+
+### App Runtime Flow
+
+The web app flow is:
+
+```text
+User opens React UI
+  -> Dashboard requests /api/packs
+  -> Backend loads pack summaries from storage registry
+  -> User selects a pack
+  -> Dashboard requests norms, rules, ABox, SWRL, graph, conditions, entities
+  -> Backend serves generated artifacts or rebuilds them through pipeline.py
+  -> UI renders semantic panels and graph exploration
+```
+
+For rebuilds:
+
+```text
+POST /api/pack/{pack}/rebuild
+  -> storage.py locates pack source data
+  -> pipeline.py calls norma_engine
+  -> ABox, rules, graph, norms, and SPARQL store are refreshed
+  -> Dashboard reloads pack data
+```
+
+For uploads:
+
+```text
+POST /api/upload
+  -> uploaded BPMN is stored under runtime data
+  -> a new pack is created
+  -> pipeline.py builds artifacts
+  -> pack appears in the sidebar
+```
+
+For appending BPMN to an existing pack:
+
+```text
+POST /api/pack/{pack}/append
+  -> BPMN is added to that pack's runtime/source set
+  -> pack is rebuilt
+  -> UI reloads the semantic artifacts
+```
+
+### Starting the App Locally
+
+Run the backend:
+
+```bash
+cd web-app
+pip install -r backend/requirements.txt
+uvicorn backend.main:app --reload --app-dir .
+```
+
+Run the frontend:
+
+```bash
+cd web-app/frontend
+npm install
+npm run dev
+```
+
+Open:
+
+- backend API: `http://localhost:8000`
+- frontend UI: `http://localhost:5173`
+
+The Vite development server proxies `/api` to the backend through `VITE_PROXY_TARGET`.
+
+### Starting with Docker Compose
+
+From the repository root:
+
+```bash
+docker compose up
+```
+
+This starts:
+
+- `backend` on port `8000`
+- `frontend` on port `5173`
+
+The compose file mounts the repository into both containers, so local code changes are reflected during development.
+
+### Environment Configuration
+
+Configuration lives in:
+
+```text
+web-app/.env.example
+```
+
+Important variables:
+
+| Variable | Meaning |
+|----------|---------|
+| `VITE_PROXY_TARGET` | Frontend dev proxy target, normally `http://localhost:8000` |
+| `VITE_API_BASE` | Optional explicit API base URL for the frontend |
+| `NORMA_DATA_DIR` | Backend runtime data directory |
+| `NORMA_CORE_ROOT` | Optional path to a core repo checkout if `norma_engine` is not installed |
+| `NORMA_REGULATIONS_DIR` | Optional override for regulation source packs |
+| `NORMA_ONTOLOGY_PATH` | Optional override for the ontology file |
+| `NORMA_CAMUNDA_TEMPLATE_PATH` | Optional override for the Camunda template |
+
+Inside this monorepo, these paths resolve automatically. You only need overrides if you intentionally move assets or deploy the web app separately from the root repository.
 
 ### UI Panels
 
 | Panel | What it does |
 |-------|-------------|
-| **Home** | Landing page — overview, architecture, pack summary |
-| **Upload** | Upload a `.bpmn` file to create a new pack on-the-fly |
-| **Norm Annotations** | Browse every annotated BPMN element with all template fields. Supports in-browser editing (changes are in-memory). |
-| **Entity Registry** | Referential consistency panel. Shows auto-merged labels, fuzzy-match warnings, and a manual merge form. All decisions are written to `entities.json` and the pack is rebuilt immediately. |
-| **Knowledge Graph** | D3.js force-directed graph of the ABox. Nodes are colour-coded by type (norms, agents, objects, sources, conditions). Click a node to inspect its properties. |
-| **SPARQL** | Full SPARQL 1.1 editor with preset library, results table, and raw JSON toggle |
-| **ABox** | Turtle source viewer + download buttons (`.ttl` and `.rdf`) |
-| **Camunda Template** | Download link + installation guide + full field reference |
+| **Overview** | Current pack summary, upload/append/create flows, and high-level pack statistics |
+| **Norm Review** | Read-only exploration of extracted norms, facts, and gateways with template-field detail |
+| **Evaluator** | Condition questionnaire that evaluates which norms apply for a given scenario |
+| **Rules** | Human-readable rule syntax and SWRL-oriented review surface |
+| **Knowledge Base / ABox** | Turtle/RDF artifact viewer and downloads |
+| **Ontology** | TBox summary, namespace information, external ontology notes, and documentation link |
+| **Graph Visualization** | D3 force graph of the pack ABox, with optional provenance mode |
+| **SPARQL** | SPARQL query editor with curated presets |
+| **Entities** | Duplicate/near-match review and semantic consistency checks |
+
+### Graph Visualization Logic
+
+The graph tab is fed by:
+
+```text
+GET /api/pack/{pack}/graph
+```
+
+The backend returns D3-ready nodes and edges derived from the pack ABox. The frontend then:
+
+- filters graph data by search query
+- hides `AnnotationActivity` and `AnnotatorAgent` by default
+- exposes a provenance switch to include those provenance nodes when needed
+- renders disconnected components as separate visual groups
+- lets the user hover or click a node to inspect semantic details
+
+This graph is a visualization of semantic resources. If two components are disconnected, that means the current ABox does not contain a relation connecting them. It is not only a visual layout issue.
+
+### Evaluation Logic
+
+The evaluator is driven by gateway conditions:
+
+```text
+GET /api/pack/{pack}/conditions
+POST /api/pack/{pack}/evaluate
+```
+
+The frontend renders each condition as a yes/no question. The backend compares the submitted boolean assignment against the extracted Rule IR. A rule applies only when all required conditions are answered and match the rule body. Returned norms are deduplicated so the same norm does not appear multiple times when it is reachable through multiple matching paths.
+
+### Rebuild and Artifact Logic
+
+The rebuild endpoint is:
+
+```text
+POST /api/pack/{pack}/rebuild
+```
+
+Rebuild refreshes:
+
+- parsed BPMN data
+- normalized entities
+- ABox Turtle
+- RDF/SPARQL store
+- Rule IR
+- SWRL export
+- human-readable rule text
+- graph JSON
+- norm and condition payloads used by the frontend
 
 ### API Endpoints
 
@@ -726,10 +1066,12 @@ Open `http://localhost:8000`. The app **automatically builds the knowledge graph
 
 | Method | Path | Description |
 |--------|------|-------------|
-| `GET` | `/` | Web application (HTML) |
+| `GET` | `/api/health` | Backend health and capability check |
 | `GET` | `/api/packs` | List all loaded regulation packs |
 | `GET` | `/api/pack/{pack}/abox` | ABox Turtle source text |
 | `GET` | `/api/pack/{pack}/swrl` | SWRL OWL/XML text (if pre-generated) |
+| `GET` | `/api/pack/{pack}/rules` | Human-readable and structured rule payload |
+| `POST` | `/api/pack/{pack}/rebuild` | Rebuild pack artifacts |
 | `GET` | `/api/pack/{pack}/download/abox` | Download ABox as Turtle (`.ttl`) |
 | `GET` | `/api/pack/{pack}/download/abox-rdf` | Download ABox as RDF/XML (`.rdf`) |
 | `GET` | `/api/pack/{pack}/download/swrl` | Download SWRL OWL file |
@@ -739,7 +1081,7 @@ Open `http://localhost:8000`. The app **automatically builds the knowledge graph
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/api/pack/{pack}/norms` | All annotated elements — every template field, plus minimal triggering conditions |
-| `PATCH` | `/api/pack/{pack}/norm/{norm_id}` | Update template fields for one norm (in-memory) |
+| `PATCH` | `/api/pack/{pack}/norm/{norm_id}` | Update template fields for one norm if enabled by the backend service |
 
 #### Norm evaluation
 
@@ -773,18 +1115,31 @@ A rule matches when **all** its conditions are answered and satisfied. Each uniq
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/api/pack/{pack}/entities` | Normalization report: decisions, warnings, current override map, all raw values per field |
-| `POST` | `/api/pack/{pack}/entities` | Merge labels, confirm a pair as separate, or remove an override; rebuilds pack on every call |
+| `POST` | `/api/pack/{pack}/entities` | Update entity decisions if enabled by the backend service |
 
 #### Upload and tools
 
 | Method | Path | Description |
 |--------|------|-------------|
 | `POST` | `/api/upload` | Upload a `.bpmn` file — builds ABox + SWRL on-the-fly |
+| `POST` | `/api/pack/{pack}/append` | Append a `.bpmn` file to an existing pack and rebuild |
 | `GET` | `/api/download/template` | Download Camunda element template JSON |
 
-### Norm Annotations Endpoint Detail
+### Norm Review Endpoint Detail
 
 `GET /api/pack/{pack}/norms` returns one entry per annotated BPMN element. The `conditions` field of each norm entry shows the **minimal triggering conditions**: the intersection of condition-sets across all rules that contain that norm. Only conditions that are required on every path leading to the norm are shown — this gives the tightest condition set that always triggers the norm regardless of which path is taken.
+
+### Why the Web App Matters Architecturally
+
+The web app is not only a demo UI. It is the integration layer where the semantic pipeline becomes inspectable:
+
+- it shows whether BPMN parsing produced the expected norms and gateways
+- it shows whether the ABox aligns with the ontology
+- it exposes SWRL and human-readable rules side by side
+- it allows SPARQL inspection of the generated RDF
+- it makes disconnected graph components visible
+- it separates the main semantic graph from optional provenance nodes
+- it gives conference/review audiences a concrete way to validate the end-to-end semantic story
 
 ---
 
@@ -811,18 +1166,28 @@ regulations/my-regulation/bpmn/my-norms.bpmn
 
 ### Step 3 — Start the web application
 
+Backend:
+
 ```bash
-uvicorn app.main:app --reload
+cd web-app
+uvicorn backend.main:app --reload --app-dir .
 ```
 
-Open `http://localhost:8000`. The app detects the new BPMN file at startup, builds the knowledge graph, and extracts all rules automatically. No separate build step is needed.
+Frontend:
+
+```bash
+cd web-app/frontend
+npm run dev
+```
+
+Open `http://localhost:5174`. The backend detects regulation packs at startup, builds the knowledge graph, and extracts all rules automatically. No separate build step is needed.
 
 ### Step 4 — Explore in the web app
 
-- **Norm Annotations** panel: browse every annotated element with all template fields.
-- **Knowledge Graph** panel: interactive force-directed graph.
+- **Norm Review** panel: browse every annotated element with all template fields.
+- **Graph Visualization** panel: interactive force-directed graph.
 - **SPARQL** panel: run queries against the SPARQL store.
-- **Conditions** → **Evaluate**: select which gateway conditions hold and see which norms apply.
+- **Evaluator** panel: select which gateway conditions hold and see which norms apply.
 
 ---
 
@@ -832,25 +1197,43 @@ Ready-to-use BPMN files are in `regulations/eu-ai-act/bpmn/`:
 
 | File | Content |
 |------|---------|
-| `test.bpmn` | Full annotated example with multiple norms, gateways, and conditions |
-| `art50-art95.bpmn` | Art. 50 transparency obligations and Art. 95 codes of practice |
+| `Biometrics Diagram.bpmn` | Annotated EU AI Act example with biometric-system conditions, norms, and source metadata |
 
 Start the app and the EU AI Act pack loads automatically:
 
 ```bash
-uvicorn app.main:app --reload
+cd web-app
+uvicorn backend.main:app --reload --app-dir .
 # → [norma] Loaded: eu-ai-act — N rule(s)
 ```
 
 To generate the SWRL file independently:
 
 ```bash
-python norma_rules.py regulations/eu-ai-act/bpmn/test.bpmn
-# → regulations/eu-ai-act/bpmn/test.swrl.owl
+norma-rules "regulations/eu-ai-act/bpmn/Biometrics Diagram.bpmn"
+# → regulations/eu-ai-act/bpmn/Biometrics Diagram.swrl.owl
 ```
 
 ---
 
-## Licence
+## Citation
 
-CC BY 4.0 — Sheyla Leyva-Sánchez et al.
+If you use NORMA in academic work, cite the accompanying paper and the archived software artifact. Repository-level citation metadata is provided in `CITATION.cff`.
+
+Suggested BibTeX placeholder until the paper DOI and archive DOI are minted:
+
+```bibtex
+@software{norma_2026,
+  title = {NORMA: Normative Ontology for Regulatory Machine-readable Annotations},
+  author = {Leyva-Sánchez, Sheyla and others},
+  year = {2026},
+  version = {1.0.0},
+  url = {https://w3id.org/norma-ontology}
+}
+```
+
+## License
+
+This repository is licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**. See `LICENSE`.
+
+Before final publication, confirm whether the same license applies uniformly to all repository assets: source code, ontology, BPMN examples, generated artifacts, documentation, and the Camunda template.
