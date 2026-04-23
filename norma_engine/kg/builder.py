@@ -132,6 +132,17 @@ def lit(value: str, dtype: str = "xsd:string") -> str:
     return f'"{esc(value)}"^^{dtype}'
 
 
+_ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def _is_iso_date(value: str) -> bool:
+    return bool(_ISO_DATE_RE.match((value or "").strip()))
+
+
+def _date_or_string_literal(value: str) -> str:
+    return lit(value, "xsd:date" if _is_iso_date(value) else "xsd:string")
+
+
 # =============================================================================
 # Turtle triple helpers
 # =============================================================================
@@ -338,6 +349,7 @@ def to_turtle(
     agents:      dict[str, str] = {}
     actions:     dict[str, str] = {}
     objects:     dict[str, str] = {}
+    annotators:  dict[str, str] = {}
     regulations: dict[str, str] = {}
     conditions:  dict[tuple[str, str, str, str, str], str] = {}
     norm_locals: dict[str, str] = {}
@@ -349,12 +361,16 @@ def to_turtle(
             act = r.get("action", "")
             ob  = r.get("object", "")
             reg = r.get("regulation", "")
+            ann = r.get("annotator", "")
             if ag  and ag  not in agents:      agents[ag]      = f"Agent_{slug(ag)}"
             if act and act not in actions:     actions[act]     = f"Action_{slug(act)}"
             if ob  and ob  not in objects:     objects[ob]     = f"Object_{slug(ob)}"
+            if ann and ann not in annotators:  annotators[ann]  = f"Annotator_{slug(ann)}"
             if reg and reg not in regulations: regulations[reg] = f"Regulation_{slug(reg)}"
         elif r["element_type"] == "exclusiveGateway":
             reg = r.get("regulation", "")
+            ann = r.get("annotator", "")
+            if ann and ann not in annotators: annotators[ann] = f"Annotator_{slug(ann)}"
             if reg and reg not in regulations: regulations[reg] = f"Regulation_{slug(reg)}"
             key = (
                 r.get("condition_statement", r["bpmn_name"]),
@@ -500,6 +516,17 @@ def to_turtle(
             _close(T)
             lines += T + [""]
 
+    # ── Annotator Agents ───────────────────────────────────────────────────────
+    if annotators:
+        lines.append("# ── Annotator Agents ─────────────────────────────────────────────")
+        for label, local in annotators.items():
+            lines += [
+                f":{local}",
+                "    a owl:NamedIndividual, norma:AnnotatorAgent ;",
+                f'    rdfs:label "{esc(label)}"@en .',
+                "",
+            ]
+
     # ── Norms (tasks) ─────────────────────────────────────────────────────────
     lines.append("# ── Norms ────────────────────────────────────────────────────────────")
     emitted_norms: set[str] = set()
@@ -532,22 +559,18 @@ def to_turtle(
         _dp(T, "jurisdiction",     r.get("jurisdiction", ""))
         _dp(T, "exception",        r.get("exception", ""))
         _dp(T, "sanction",         r.get("sanction", ""))
-        _dp(T, "annotator",        r.get("annotator", ""))
         _dp(T, "fromRegulation",   r.get("regulation", ""))
         _dp(T, "fromArticle",      r.get("article", ""))
         _dp(T, "fromParagraph",    r.get("paragraph", ""))
 
         for prop, key in [
             ("effectiveDate",   "effective_date"),
-            ("deadline",        "deadline"),
-            ("annotationDate",  "annotation_date"),
             ("lastReviewDate",  "last_review_date"),
         ]:
             if r.get(key):
-                T.append(f"    norma:{prop} {lit(r[key], 'xsd:date')} ;")
-
-        if r.get("confidence"):
-            T.append(f"    norma:confidenceScore {lit(r['confidence'], 'xsd:decimal')} ;")
+                T.append(f"    norma:{prop} {_date_or_string_literal(r[key])} ;")
+        if r.get("deadline"):
+            T.append(f"    norma:deadline {lit(r['deadline'])} ;")
         if r.get("regulation_uri"):
             T.append(f'    norma:sourceURI "{esc(r["regulation_uri"])}"^^xsd:anyURI ;')
 
@@ -566,7 +589,14 @@ def to_turtle(
         if ag  and ag  in agents:      T.append(f"    norma:hasLegalAgent  :{agents[ag]} ;")
         if act and act in actions:     T.append(f"    norma:hasLegalAction :{actions[act]} ;")
         if ob  and ob  in objects:     T.append(f"    norma:hasLegalObject :{objects[ob]} ;")
-        if reg and reg in regulations: T.append(f"    norma:hasLegalSource :{regulations[reg]} ;")
+        if reg and reg in regulations:
+            T.append(f"    norma:hasLegalSource :{regulations[reg]} ;")
+            T.append(f"    norma:wasDerivedFromSource :{regulations[reg]} ;")
+        annotator = r.get("annotator", "")
+        if annotator and annotator in annotators:
+            T.append(f"    norma:wasAttributedToAnnotator :{annotators[annotator]} ;")
+        if annotator or r.get("annotation_date") or r.get("confidence"):
+            T.append(f"    norma:wasGeneratedByAnnotationActivity :AnnotationActivity_{local} ;")
 
         _close(T)
         lines += T + [""]
@@ -602,13 +632,6 @@ def to_turtle(
             T.append(f"    norma:trueBranchLabel  {lit(r['true_branch'])} ;")
         if r.get("false_branch"):
             T.append(f"    norma:falseBranchLabel {lit(r['false_branch'])} ;")
-        if r.get("confidence"):
-            T.append(f"    norma:confidenceScore {lit(r['confidence'], 'xsd:decimal')} ;")
-        if r.get("annotator"):
-            T.append(f"    norma:annotator {lit(r['annotator'])} ;")
-        if r.get("annotation_date"):
-            T.append(f"    norma:annotationDate {lit(r['annotation_date'], 'xsd:date')} ;")
-
         _op(T, "hasNormStatus",       NORM_STATUS, r, "norm_status")
         _op(T, "hasExtractionMethod", EXTRACTION,  r, "extraction_method")
         _op(T, "hasReviewStatus",     REVIEW,      r, "review_status")
@@ -616,9 +639,57 @@ def to_turtle(
         reg = r.get("regulation", "")
         if reg and reg in regulations:
             T.append(f"    norma:hasLegalSource :{regulations[reg]} ;")
+            T.append(f"    norma:wasDerivedFromSource :{regulations[reg]} ;")
+        annotator = r.get("annotator", "")
+        if annotator and annotator in annotators:
+            T.append(f"    norma:wasAttributedToAnnotator :{annotators[annotator]} ;")
+        if annotator or r.get("annotation_date") or r.get("confidence"):
+            T.append(f"    norma:wasGeneratedByAnnotationActivity :AnnotationActivity_{local} ;")
         for norm_local in sorted(triggered_norms.get(local, set())):
             T.append(f"    norma:triggersNorm :{norm_local} ;")
 
+        _close(T)
+        lines += T + [""]
+
+    # ── Annotation Activities ──────────────────────────────────────────────────
+    lines.append("# ── Annotation Activities ─────────────────────────────────────────")
+    for r in records:
+        if r["element_type"] == "task":
+            entity_local = slug(r.get("deontic_id") or r["bpmn_id"]) or slug(r["bpmn_id"])
+            activity_subject = r.get("deontic_id") or r["bpmn_name"] or r["bpmn_id"]
+        elif r["element_type"] == "exclusiveGateway":
+            cond = r.get("condition_statement", r["bpmn_name"])
+            key = (
+                cond,
+                r.get("true_branch", ""),
+                r.get("false_branch", ""),
+                r.get("regulation", ""),
+                r.get("article", ""),
+            )
+            entity_local = conditions.get(key, f"Condition_{slug(r['bpmn_id'])}")
+            activity_subject = cond or r["bpmn_name"] or r["bpmn_id"]
+        else:
+            continue
+
+        if not (r.get("annotator") or r.get("annotation_date") or r.get("confidence")):
+            continue
+
+        activity_local = f"AnnotationActivity_{entity_local}"
+        T = [
+            f":{activity_local}",
+            "    a owl:NamedIndividual, norma:AnnotationActivity ;",
+            f'    rdfs:label "Annotation activity for {esc(activity_subject)}"@en ;',
+        ]
+        if r.get("annotation_date"):
+            T.append(f"    norma:annotationDate {_date_or_string_literal(r['annotation_date'])} ;")
+        if r.get("confidence"):
+            T.append(f"    norma:confidenceScore {lit(r['confidence'], 'xsd:decimal')} ;")
+        annotator = r.get("annotator", "")
+        if annotator and annotator in annotators:
+            T.append(f"    norma:wasAssociatedWithAnnotator :{annotators[annotator]} ;")
+        reg = r.get("regulation", "")
+        if reg and reg in regulations:
+            T.append(f"    norma:usedLegalSource :{regulations[reg]} ;")
         _close(T)
         lines += T + [""]
 

@@ -15,6 +15,8 @@ const NODE_COLORS = {
   LegalCondition: "#b45309",
   LegalSource: "#6c5b7b",
   LegalSourceExpression: "#8d7ea3",
+  AnnotationActivity: "#0f766e",
+  AnnotatorAgent: "#374151",
   BindingForce: "#0d3b66",
   ComplianceCriticality: "#a63a50",
   NormStatus: "#5c6b73",
@@ -156,6 +158,14 @@ function nodeDetailRows(node) {
     rows.push({ label: "Linked source", value: node.source, tone: "code" });
   }
 
+  if (node.annotation_date) {
+    rows.push({ label: "Annotation date", value: node.annotation_date });
+  }
+
+  if (node.confidence) {
+    rows.push({ label: "Confidence", value: node.confidence });
+  }
+
   if (node.bpmn_source) {
     rows.push({ label: "BPMN source", value: node.bpmn_source });
   }
@@ -266,13 +276,13 @@ export default function GraphForce({ nodes, edges }) {
       .forceSimulation(nodesCopy)
       .force(
         "link",
-        d3.forceLink(edgesCopy).id((d) => d.id).distance(112).strength(0.72),
+        d3.forceLink(edgesCopy).id((d) => d.id).distance(156).strength(0.64),
       )
-      .force("charge", d3.forceManyBody().strength(-185))
+      .force("charge", d3.forceManyBody().strength(-290))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide(40))
-      .force("componentX", d3.forceX((d) => componentAnchors.get(d.id)?.x ?? width / 2).strength(0.22))
-      .force("componentY", d3.forceY((d) => componentAnchors.get(d.id)?.y ?? height / 2).strength(0.22));
+      .force("collision", d3.forceCollide(52))
+      .force("componentX", d3.forceX((d) => componentAnchors.get(d.id)?.x ?? width / 2).strength(0.14))
+      .force("componentY", d3.forceY((d) => componentAnchors.get(d.id)?.y ?? height / 2).strength(0.14));
 
     const componentHull = g
       .append("g")
@@ -342,16 +352,15 @@ export default function GraphForce({ nodes, edges }) {
     node
       .append("circle")
       .attr("r", 38)
-      .attr("fill", "rgba(255,255,255,0.84)")
-      .attr("stroke", "rgba(80,125,188,0.22)")
+      .attr("fill", "#ffffff")
+      .attr("stroke", "rgba(80,125,188,0.34)")
       .attr("stroke-width", 1.5);
 
     node
       .append("circle")
       .attr("r", 30)
       .attr("fill", (d) => nodeColor(d.type))
-      .attr("opacity", 0.96)
-      .attr("stroke", "rgba(255,255,255,0.92)")
+      .attr("stroke", "#ffffff")
       .attr("stroke-width", 3);
 
     const label = node
@@ -406,7 +415,7 @@ export default function GraphForce({ nodes, edges }) {
 
       const neighborIds = linkedNodeIds.get(focusId) || new Set();
 
-      node.attr("opacity", (d) => (d.id === focusId || neighborIds.has(d.id) ? 1 : 0.55));
+      node.attr("opacity", 1);
       link
         .attr("opacity", (d) => (d.source.id === focusId || d.target.id === focusId ? 1 : 0.4))
         .attr("stroke", (d) => (d.source.id === focusId || d.target.id === focusId ? "rgba(13,59,102,0.48)" : "rgba(13,59,102,0.16)"))
@@ -468,10 +477,10 @@ export default function GraphForce({ nodes, edges }) {
         if (!members.length) return;
         const xs = members.map((node) => node.x ?? 0);
         const ys = members.map((node) => node.y ?? 0);
-        const minX = Math.min(...xs) - 56;
-        const maxX = Math.max(...xs) + 56;
-        const minY = Math.min(...ys) - 64;
-        const maxY = Math.max(...ys) + 64;
+        const minX = Math.min(...xs) - 68;
+        const maxX = Math.max(...xs) + 68;
+        const minY = Math.min(...ys) - 76;
+        const maxY = Math.max(...ys) + 76;
         d3.select(this)
           .attr("x", minX)
           .attr("y", minY)
@@ -504,39 +513,21 @@ export default function GraphForce({ nodes, edges }) {
     }
   }
 
-  function clearPinnedNodes() {
-    pinnedNodesRef.current.clear();
-    const svgEl = svgRef.current;
-    if (!svgEl) return;
-    const groups = d3.select(svgEl).selectAll(".nodes g");
-    groups.each((d) => {
-      d.fx = null;
-      d.fy = null;
-    });
-  }
-
   const inspectorNode = hoveredNode || selectedNode;
-  const inspectorTitle = hoveredNode ? "Hover details" : selectedNode ? "Pinned details" : "Graph guide";
+  const inspectorTitle = hoveredNode ? "Hover details" : selectedNode ? "Pinned details" : "Details";
 
   return (
     <div className="graph-explorer">
       <div className="graph-explorer__canvas">
+        <div className="graph-explorer__actions">
           <button
             type="button"
             className="pill graph-reset-btn"
             onClick={resetView}
-            style={{ position: "absolute", top: 10, right: 10, zIndex: 5 }}
           >
             Reset view
           </button>
-          <button
-            type="button"
-            className="pill graph-release-btn"
-            onClick={clearPinnedNodes}
-            style={{ position: "absolute", top: 10, right: 102, zIndex: 5 }}
-          >
-            Release nodes
-          </button>
+        </div>
         <svg
           ref={svgRef}
           style={{ width: "100%", height: "580px", display: "block" }}
@@ -551,7 +542,7 @@ export default function GraphForce({ nodes, edges }) {
               Clear pin
             </button>
           ) : (
-            <span>{inspectorNode ? inspectorNode.type : "Move over a node"}</span>
+            <span>{inspectorNode ? inspectorNode.type : "Hover a node"}</span>
           )}
         </div>
         {inspectorNode ? (
@@ -571,10 +562,10 @@ export default function GraphForce({ nodes, edges }) {
           </>
         ) : (
           <div className="graph-details__empty">
-            <strong>Hover a node to inspect it</strong>
+            <strong>No node selected</strong>
             <p>
-              The right-hand panel shows the semantic details of the resource under the mouse. Click
-              a node if you want to keep it pinned while exploring the graph.
+              Hover a node to inspect its semantic details, or click one to keep it pinned while you
+              explore the graph.
             </p>
           </div>
         )}

@@ -557,9 +557,9 @@ norma:deadline
     a owl:DatatypeProperty, owl:FunctionalProperty ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
     rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:date ;
+    rdfs:range xsd:string ;
     rdfs:label "deadline"@en ;
-    rdfs:comment "Deadline, sunset date, or end date associated with the normative content."@en .
+    rdfs:comment "Deadline, sunset date, end date, or textual temporal constraint associated with the normative content."@en .
 
 norma:lastReviewDate
     a owl:DatatypeProperty, owl:FunctionalProperty ;

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Tuple, Optional
 from collections import deque
+import re
 
 from norma_engine.parsing.bpmn_parser import Node, ReducedEdge
 from norma_engine.kg.builder import auto_deontic_id
@@ -126,6 +127,75 @@ def _risk_level_ref(raw: str) -> Optional[Ref]:
     return tbox(target) if target else None
 
 
+def _norm_status_ref(raw: str) -> Optional[Ref]:
+    mapping = {
+        "active": "Active",
+        "under_review": "UnderReview",
+        "disputed": "Disputed",
+        "superseded": "Superseded",
+        "pending": "NotYetInForce",
+    }
+    key = to_symbol(raw or "").lower()
+    target = mapping.get(key)
+    return tbox(target) if target else None
+
+
+def _extraction_method_ref(raw: str) -> Optional[Ref]:
+    mapping = {
+        "manual_lawyer": "ManualLawyer",
+        "manual_analyst": "ManualAnalyst",
+        "llm": "LLMExtraction",
+        "pattern_matching": "PatternMatching",
+        "rule_based": "RuleBased",
+    }
+    key = to_symbol(raw or "").lower()
+    target = mapping.get(key)
+    return tbox(target) if target else None
+
+
+def _review_status_ref(raw: str) -> Optional[Ref]:
+    mapping = {
+        "approved": "Approved",
+        "pending": "PendingReview",
+        "none": "NotReviewed",
+    }
+    key = to_symbol(raw or "").lower()
+    target = mapping.get(key)
+    return tbox(target) if target else None
+
+
+_ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def _is_iso_date(value: str) -> bool:
+    return bool(_ISO_DATE_RE.match((value or "").strip()))
+
+
+def _add_string_data_atom(data: List[DataAtom], predicate_name: str, subject: Ref, value: str) -> None:
+    if value:
+        data.append(
+            DataAtom(
+                predicate=tbox(predicate_name),
+                subject=subject,
+                value=value,
+            )
+        )
+
+
+def _add_dateish_data_atom(data: List[DataAtom], predicate_name: str, subject: Ref, value: str) -> None:
+    if not value:
+        return
+    datatype = "xsd:date" if _is_iso_date(value) else "xsd:string"
+    data.append(
+        DataAtom(
+            predicate=tbox(predicate_name),
+            subject=subject,
+            value=value,
+            datatype=datatype,
+        )
+    )
+
+
 def _action_from_deontic_props(
     props: Dict[str, str],
     task_id: str,
@@ -145,13 +215,39 @@ def _action_from_deontic_props(
     uri = (props.get("compliance_regulationURI") or "").strip()
     risk = (props.get("compliance_riskLevel") or "").strip()
     bind = (props.get("compliance_bindingForce") or "").strip()
+    status = (props.get("compliance_status") or "").strip()
+    extraction_method = (props.get("compliance_extractionMethod") or "").strip()
+    review_status = (props.get("compliance_legalReview") or "").strip()
+    norm_statement = (props.get("compliance_normStatement") or "").strip()
+    fact_statement = (props.get("compliance_factStatement") or "").strip()
+    trigger_condition = (
+        props.get("compliance_triggerCondition")
+        or props.get("compliance_condition")
+        or ""
+    ).strip()
+    jurisdiction = (props.get("compliance_jurisdiction") or "").strip()
+    effective_date = (props.get("compliance_effectiveDate") or "").strip()
+    deadline = (props.get("compliance_deadline") or "").strip()
+    exception = (props.get("compliance_exception") or "").strip()
+    sanction = (props.get("compliance_sanction") or "").strip()
+    confidence = (props.get("compliance_confidence") or "").strip()
+    annotator = (props.get("compliance_annotator") or "").strip()
+    annotation_date = (props.get("compliance_annotationDate") or "").strip()
+    last_review_date = (props.get("compliance_lastReviewDate") or "").strip()
 
     node_id = to_symbol(did)
 
     agent_ref = abox(f"Agent_{agent}") if agent else None
     action_ref = abox(f"Action_{action_name}") if action_name else None
-    object_ref = abox(f"Object_{obj}")
+    object_ref = abox(f"Object_{obj}") if obj else None
     norm_ref = abox(node_id)
+    source_ref = abox(f"Regulation_{to_symbol(reg)}") if reg else None
+    annotator_ref = abox(f"Annotator_{to_symbol(annotator)}") if annotator else None
+    activity_ref = (
+        abox(f"AnnotationActivity_{node_id}")
+        if annotator or annotation_date or confidence
+        else None
+    )
 
     action_summary = Action(
         subject=agent_ref or norm_ref,
@@ -164,9 +260,9 @@ def _action_from_deontic_props(
     if agent_ref is not None:
         relations.append(
             RelationAtom(
-                predicate=tbox("isLegalAgentOf"),
-                subject=agent_ref,
-                object=norm_ref,
+                predicate=tbox("hasLegalAgent"),
+                subject=norm_ref,
+                object=agent_ref,
             )
         )
 
@@ -208,6 +304,86 @@ def _action_from_deontic_props(
             )
         )
 
+    status_ref = _norm_status_ref(status)
+    if status_ref is not None:
+        relations.append(
+            RelationAtom(
+                predicate=tbox("hasNormStatus"),
+                subject=norm_ref,
+                object=status_ref,
+            )
+        )
+
+    extraction_ref = _extraction_method_ref(extraction_method)
+    if extraction_ref is not None:
+        relations.append(
+            RelationAtom(
+                predicate=tbox("hasExtractionMethod"),
+                subject=norm_ref,
+                object=extraction_ref,
+            )
+        )
+
+    review_ref = _review_status_ref(review_status)
+    if review_ref is not None:
+        relations.append(
+            RelationAtom(
+                predicate=tbox("hasReviewStatus"),
+                subject=norm_ref,
+                object=review_ref,
+            )
+        )
+
+    if source_ref is not None:
+        relations.append(
+            RelationAtom(
+                predicate=tbox("hasLegalSource"),
+                subject=norm_ref,
+                object=source_ref,
+            )
+        )
+        relations.append(
+            RelationAtom(
+                predicate=tbox("wasDerivedFromSource"),
+                subject=norm_ref,
+                object=source_ref,
+            )
+        )
+
+    if annotator_ref is not None:
+        relations.append(
+            RelationAtom(
+                predicate=tbox("wasAttributedToAnnotator"),
+                subject=norm_ref,
+                object=annotator_ref,
+            )
+        )
+
+    if activity_ref is not None:
+        relations.append(
+            RelationAtom(
+                predicate=tbox("wasGeneratedByAnnotationActivity"),
+                subject=norm_ref,
+                object=activity_ref,
+            )
+        )
+        if annotator_ref is not None:
+            relations.append(
+                RelationAtom(
+                    predicate=tbox("wasAssociatedWithAnnotator"),
+                    subject=activity_ref,
+                    object=annotator_ref,
+                )
+            )
+        if source_ref is not None:
+            relations.append(
+                RelationAtom(
+                    predicate=tbox("usedLegalSource"),
+                    subject=activity_ref,
+                    object=source_ref,
+                )
+            )
+
     # Recover the human-readable labels before symbolisation
     agent_label_raw  = agent_raw
     action_label_raw = (props.get("compliance_action") or "").strip()
@@ -236,32 +412,24 @@ def _action_from_deontic_props(
         ),
     ]
 
+    _add_string_data_atom(data, "normStatement", norm_ref, norm_statement)
+    _add_string_data_atom(data, "factStatement", norm_ref, fact_statement)
+    _add_string_data_atom(data, "conditionTrigger", norm_ref, trigger_condition)
+    _add_string_data_atom(data, "jurisdiction", norm_ref, jurisdiction)
+    _add_string_data_atom(data, "exception", norm_ref, exception)
+    _add_string_data_atom(data, "sanction", norm_ref, sanction)
+    _add_dateish_data_atom(data, "effectiveDate", norm_ref, effective_date)
+    _add_string_data_atom(data, "deadline", norm_ref, deadline)
+    _add_dateish_data_atom(data, "lastReviewDate", norm_ref, last_review_date)
+
     if agent_label_raw:
-        data.append(
-            DataAtom(
-                predicate=tbox("agentText"),
-                subject=norm_ref,
-                value=agent_label_raw,
-            )
-        )
+        _add_string_data_atom(data, "agentText", norm_ref, agent_label_raw)
 
     if action_label_raw:
-        data.append(
-            DataAtom(
-                predicate=tbox("actionText"),
-                subject=norm_ref,
-                value=action_label_raw,
-            )
-        )
+        _add_string_data_atom(data, "actionText", norm_ref, action_label_raw)
 
     if object_label_raw:
-        data.append(
-            DataAtom(
-                predicate=tbox("objectText"),
-                subject=norm_ref,
-                value=object_label_raw,
-            )
-        )
+        _add_string_data_atom(data, "objectText", norm_ref, object_label_raw)
 
     if uri:
         data.append(
@@ -273,12 +441,64 @@ def _action_from_deontic_props(
             )
         )
 
+    if activity_ref is not None:
+        if confidence:
+            data.append(
+                DataAtom(
+                    predicate=tbox("confidenceScore"),
+                    subject=activity_ref,
+                    value=confidence,
+                    datatype="xsd:decimal",
+                )
+            )
+        _add_dateish_data_atom(data, "annotationDate", activity_ref, annotation_date)
+
     # ClassAtom: asserts the OWL class for this norm in the SWRL head,
     # so a reasoner can derive the deontic modality from the rule alone.
     norm_class = _DTYPE_CLASS.get(dtype, "RegulativeNorm")
-    class_atoms = (ClassAtom(class_ref=tbox(norm_class), subject=norm_ref),)
+    class_atoms_list: List[ClassAtom] = [
+        ClassAtom(class_ref=tbox(norm_class), subject=norm_ref),
+    ]
+    if annotator_ref is not None:
+        class_atoms_list.append(ClassAtom(class_ref=tbox("AnnotatorAgent"), subject=annotator_ref))
+    if activity_ref is not None:
+        class_atoms_list.append(ClassAtom(class_ref=tbox("AnnotationActivity"), subject=activity_ref))
+    if source_ref is not None:
+        class_atoms_list.append(ClassAtom(class_ref=tbox("LegalSource"), subject=source_ref))
 
-    return action_summary, tuple(relations), tuple(data), class_atoms
+    return action_summary, tuple(relations), tuple(data), tuple(class_atoms_list)
+
+
+def _condition_truth_value(
+    edge: ReducedEdge,
+    gateway_id: str,
+    gateway_props: Dict[str, str],
+    gateway_outgoing_index: Dict[str, Dict[str, int]],
+) -> Optional[bool]:
+    true_label = (gateway_props.get("gw_trueBranch") or "Yes").strip().lower()
+    false_label = (gateway_props.get("gw_falseBranch") or "No").strip().lower()
+    guard = (edge.guard or "").strip().lower()
+
+    if guard:
+        if guard == true_label:
+            return True
+        if guard == false_label:
+            return False
+        if guard in {"yes", "true", "1", "sim", "ja", "oui", "approved"}:
+            return True
+        if guard in {"no", "false", "0", "nao", "não", "nein", "non", "rejected"}:
+            return False
+
+    chosen_flow = edge.via_flows[0] if edge.via_flows else None
+    flow_positions = gateway_outgoing_index.get(gateway_id, {})
+    if chosen_flow and len(flow_positions) == 2:
+        pos = flow_positions.get(chosen_flow)
+        if pos == 0:
+            return True
+        if pos == 1:
+            return False
+
+    return None
 
 
 def build_rule_ir_from_path(
@@ -287,6 +507,7 @@ def build_rule_ir_from_path(
     rid: str,
     task_props: TaskProps,
     *,
+    gateway_outgoing_index: Optional[Dict[str, Dict[str, int]]] = None,
     allowed_deontic: Optional[set[str]] = None,
     ignore_non_compliance_tasks: bool = True,
 ) -> RuleIR:
@@ -305,39 +526,26 @@ def build_rule_ir_from_path(
             "recommendation_not",
             "fact",
         }
+    if gateway_outgoing_index is None:
+        gateway_outgoing_index = {}
 
     for e in path_edges:
         if nodes[e.src].type == "exclusiveGateway":
             gw_props = task_props.get(e.src, {})
+            value = _condition_truth_value(e, e.src, gw_props, gateway_outgoing_index)
 
             if gw_props.get("gw_conditionStatement"):
                 statement  = to_symbol(gw_props["gw_conditionStatement"])
-                true_label  = (gw_props.get("gw_trueBranch")  or "Yes").strip()
-                false_label = (gw_props.get("gw_falseBranch") or "No").strip()
-
-                if e.guard:
-                    g = e.guard.strip().lower()
-                    if g == true_label.lower():
-                        value = True
-                    elif g == false_label.lower():
-                        value = False
-                    else:
-                        # Flow label doesn't match the declared branch labels
-                        # (e.g. Camunda default "Yes"/"No" vs custom "Approved"/"Rejected").
-                        # Fall back to conventional positive/negative keywords.
-                        value = g in {"yes", "true", "1", "sim", "ja", "oui", "approved"}
-                else:
-                    value = False
-
-                conds.append(
-                    Condition(
-                        predicate=rules(statement),
-                        subject=v("x"),
-                        value=value,
+                if value is not None:
+                    conds.append(
+                        Condition(
+                            predicate=rules(statement),
+                            subject=v("x"),
+                            value=value,
+                        )
                     )
-                )
 
-            elif e.guard in {"Yes", "No"}:
+            elif value is not None:
                 # Use the full gateway name via to_symbol for consistent predicate naming
                 # (same as the gw_conditionStatement path above, avoids duplicate nodes)
                 gw_name   = nodes[e.src].name or ""
@@ -346,7 +554,7 @@ def build_rule_ir_from_path(
                     Condition(
                         predicate=rules(statement),
                         subject=v("x"),
-                        value=(e.guard == "Yes"),
+                        value=value,
                     )
                 )
 
@@ -479,7 +687,13 @@ def enumerate_paths_and_build_ir(
             if paths_out is not None:
                 paths_out.append(list(stack))
 
-            ir = build_rule_ir_from_path(stack, nodes, rid, task_props)
+            ir = build_rule_ir_from_path(
+                stack,
+                nodes,
+                rid,
+                task_props,
+                gateway_outgoing_index=gateway_outgoing_index,
+            )
             rules_ir.append(ir)
 
             if last_rule is not None:

@@ -65,6 +65,7 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 SELECT DISTINCT ?type ?label ?regulation ?article ?paragraph ?source
                 ?deonticId ?normStatement ?conditionStatement ?trigger
                 ?agentText ?actionText ?objectText ?trueBranch ?falseBranch
+                ?annotationDate ?confidenceScore
 WHERE {{
   BIND(<{node_uri}> AS ?node)
   ?node rdf:type ?type .
@@ -87,6 +88,8 @@ WHERE {{
   OPTIONAL {{ ?node norma:objectText ?objectText . }}
   OPTIONAL {{ ?node norma:trueBranchLabel ?trueBranch . }}
   OPTIONAL {{ ?node norma:falseBranchLabel ?falseBranch . }}
+  OPTIONAL {{ ?node norma:annotationDate ?annotationDate . }}
+  OPTIONAL {{ ?node norma:confidenceScore ?confidenceScore . }}
 }}
 ORDER BY ?type
 LIMIT 1
@@ -112,6 +115,8 @@ LIMIT 1
             "object": binding_value(row, "objectText"),
             "true_branch": binding_value(row, "trueBranch"),
             "false_branch": binding_value(row, "falseBranch"),
+            "annotation_date": binding_value(row, "annotationDate"),
+            "confidence": binding_value(row, "confidenceScore"),
         }
     return None
 
@@ -128,6 +133,7 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 SELECT DISTINCT ?node ?type ?label ?regulation ?article ?paragraph ?source
                 ?deonticId ?normStatement ?conditionStatement ?trigger
                 ?agentText ?actionText ?objectText ?trueBranch ?falseBranch
+                ?annotationDate ?confidenceScore
 WHERE {
   ?node rdf:type ?type .
   FILTER(STRSTARTS(STR(?node), "https://w3id.org/norma-abox/"))
@@ -150,6 +156,8 @@ WHERE {
   OPTIONAL { ?node norma:objectText ?objectText . }
   OPTIONAL { ?node norma:trueBranchLabel ?trueBranch . }
   OPTIONAL { ?node norma:falseBranchLabel ?falseBranch . }
+  OPTIONAL { ?node norma:annotationDate ?annotationDate . }
+  OPTIONAL { ?node norma:confidenceScore ?confidenceScore . }
 }
 ORDER BY ?type ?node
 """
@@ -164,7 +172,10 @@ WHERE {
     norma:hasLegalAgent norma:hasLegalAction norma:hasLegalObject
     norma:hasLegalSource norma:hasSourceExpression norma:triggersNorm
     norma:hasBindingForce norma:hasComplianceCriticality norma:hasNormStatus
-    norma:relatesTo norma:supersededBy
+    norma:hasExtractionMethod norma:hasReviewStatus
+    norma:wasGeneratedByAnnotationActivity norma:wasAttributedToAnnotator
+    norma:wasAssociatedWithAnnotator norma:usedLegalSource
+    norma:wasDerivedFromSource norma:relatesTo norma:supersededBy
   }
   ?source ?predicate ?target .
   FILTER(isIRI(?source) && isIRI(?target))
@@ -203,6 +214,8 @@ ORDER BY ?predicate ?source ?target
         object_text = binding_value(row, "objectText")
         true_branch = binding_value(row, "trueBranch")
         false_branch = binding_value(row, "falseBranch")
+        annotation_date = binding_value(row, "annotationDate")
+        confidence = binding_value(row, "confidenceScore")
         existing = nodes.get(node_id)
         if existing is None:
             nodes[node_id] = {
@@ -222,6 +235,8 @@ ORDER BY ?predicate ?source ?target
                 "object": object_text,
                 "true_branch": true_branch,
                 "false_branch": false_branch,
+                "annotation_date": annotation_date,
+                "confidence": confidence,
             }
         else:
             if not existing.get("label") and label:
@@ -252,6 +267,10 @@ ORDER BY ?predicate ?source ?target
                 existing["true_branch"] = true_branch
             if false_branch and not existing.get("false_branch"):
                 existing["false_branch"] = false_branch
+            if annotation_date and not existing.get("annotation_date"):
+                existing["annotation_date"] = annotation_date
+            if confidence and not existing.get("confidence"):
+                existing["confidence"] = confidence
 
     edge_results = store.query(edge_query)
     for row in edge_results:

@@ -69,8 +69,12 @@ class TestSWRLExporter:
 
     def test_tbox_properties_in_head(self, sample_bpmn_xml):
         content = _export(sample_bpmn_xml)
-        assert f"{TBOX_NS}isLegalAgentOf" in content
-        assert f"{TBOX_NS}hasObject"      in content
+        assert f"{TBOX_NS}hasLegalAgent" in content
+        assert f"{TBOX_NS}hasLegalObject" in content
+        assert f"{TBOX_NS}hasNormStatus" in content
+        assert f"{TBOX_NS}hasExtractionMethod" in content
+        assert f"{TBOX_NS}hasReviewStatus" in content
+        assert f"{TBOX_NS}hasLegalSource" in content
 
     def test_abox_individuals_in_head(self, sample_bpmn_xml):
         content = _export(sample_bpmn_xml)
@@ -99,3 +103,11 @@ class TestSWRLExporter:
         assert f"{TBOX_NS}deonticId" in content
         assert ">OBL_1<" in content
         assert ">REC_1<" in content
+
+    def test_semantic_template_data_is_exported(self, sample_bpmn_xml):
+        content = _export(sample_bpmn_xml)
+        assert f"{TBOX_NS}fromRegulation" in content
+        assert f"{TBOX_NS}fromArticle" in content
+        assert f"{TBOX_NS}annotationDate" in content
+        assert f"{TBOX_NS}confidenceScore" in content
+        assert f"{TBOX_NS}wasGeneratedByAnnotationActivity" in content

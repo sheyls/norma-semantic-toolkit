@@ -61,7 +61,7 @@ class RelationAtom:
     SWRL head object-property atom.
 
     Example:
-      norma:isLegalAgentOf(:Agent_AI_provider, :OBL_1)
+      norma:hasLegalAgent(:OBL_1, :Agent_AI_provider)
     """
     predicate: Ref   # usually Ref("tbox", ...)
     subject: Ref

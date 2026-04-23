@@ -124,6 +124,20 @@ class TestToTurtle:
         assert "norma:hasLegalObject" in ttl
         assert "norma:hasObject" not in ttl
 
+    def test_provenance_uses_annotation_activity_model(self, sample_bpmn_xml):
+        ttl = self._turtle(sample_bpmn_xml)
+        assert "norma:AnnotationActivity" in ttl
+        assert "norma:AnnotatorAgent" in ttl
+        assert "norma:wasGeneratedByAnnotationActivity" in ttl
+        assert "norma:wasAttributedToAnnotator" in ttl
+        assert "norma:wasAssociatedWithAnnotator" in ttl
+        assert "norma:annotator" not in ttl
+
+    def test_norms_link_to_legal_source_derivation(self, sample_bpmn_xml):
+        ttl = self._turtle(sample_bpmn_xml)
+        assert "norma:hasLegalSource" in ttl
+        assert "norma:wasDerivedFromSource" in ttl
+
     def test_articles_aggregated_under_one_source(self, sample_bpmn_xml):
         """Art. 50 and Art. 95 must both appear under the single LegalSource."""
         ttl = self._turtle(sample_bpmn_xml)

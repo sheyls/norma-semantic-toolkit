@@ -29,6 +29,59 @@ const ONTOLOGY_ITEMS = [
   "BindingForce and ComplianceCriticality for legal classification",
 ];
 
+const ONTOLOGY_DOCS_URL = "https://w3id.org/norma-ontology/documentation";
+
+const EXTERNAL_ONTOLOGIES = [
+  {
+    name: "PROV-O",
+    prefix: "prov:",
+    url: "http://www.w3.org/ns/prov#",
+    note: "Used for provenance modeling, especially annotation activities and annotator relations.",
+  },
+  {
+    name: "ELI",
+    prefix: "eli:",
+    url: "http://data.europa.eu/eli/ontology#",
+    note: "Used for legal resources and source-expression alignment.",
+  },
+  {
+    name: "W3C Organization Ontology",
+    prefix: "org:",
+    url: "http://www.w3.org/ns/org#",
+    note: "Used to align organizational legal agents.",
+  },
+  {
+    name: "SKOS",
+    prefix: "skos:",
+    url: "http://www.w3.org/2004/02/skos/core#",
+    note: "Used for deontic notations such as OBL, PRH, PER, and REC.",
+  },
+  {
+    name: "Dublin Core Terms",
+    prefix: "dcterms:",
+    url: "http://purl.org/dc/terms/",
+    note: "Used for ontology metadata such as title, dates, license, and citation.",
+  },
+  {
+    name: "FOAF",
+    prefix: "foaf:",
+    url: "http://xmlns.com/foaf/0.1/",
+    note: "Used for creator, contributor, publisher, and logo metadata.",
+  },
+  {
+    name: "BIBO",
+    prefix: "bibo:",
+    url: "http://purl.org/ontology/bibo/",
+    note: "Used for bibliographic publication metadata such as DOI and status.",
+  },
+  {
+    name: "VANN",
+    prefix: "vann:",
+    url: "http://purl.org/vocab/vann/",
+    note: "Used for preferred namespace metadata.",
+  },
+];
+
 const NORM_SECTIONS = [
   {
     id: "content",
@@ -96,7 +149,7 @@ const NORM_SECTIONS = [
   },
 ];
 
-const URI_PREFIXES = [
+const ONTOLOGY_PREFIXES = [
   ["https://w3id.org/norma-ontology#", "norma:"],
   ["https://w3id.org/norma-abox/", "abox:"],
   ["http://www.w3.org/2001/XMLSchema#", "xsd:"],
@@ -105,7 +158,7 @@ const URI_PREFIXES = [
 ];
 
 function shortenUri(uri) {
-  for (const [full, prefix] of URI_PREFIXES) {
+  for (const [full, prefix] of ONTOLOGY_PREFIXES) {
     if (uri.startsWith(full)) return prefix + uri.slice(full.length);
   }
   return uri;
@@ -180,6 +233,7 @@ export default function Dashboard() {
   const [swrlLoading, setSwrlLoading] = useState(false);
   const [reloadToken, setReloadToken] = useState(0);
   const [graphSearch, setGraphSearch] = useState("");
+  const [showGraphProvenance, setShowGraphProvenance] = useState(false);
   const [pasteName, setPasteName] = useState("uploaded-pack");
   const [pasteXml, setPasteXml] = useState("");
 
@@ -294,13 +348,23 @@ export default function Dashboard() {
   const filteredNorms = useMemo(() => {
     const query = normSearch.trim().toLowerCase();
     return norms.filter((norm) => {
-      const type = String(norm.deontic_type || "").toLowerCase() || "gateway";
-      if (normTypeFilter !== "all" && type !== normTypeFilter) {
-        return false;
+      const type = String(norm.deontic_type || "").toLowerCase();
+      const gatewayNorm = isGatewayNorm(norm);
+
+      if (normTypeFilter === "gateway") {
+        if (!gatewayNorm) {
+          return false;
+        }
+      } else if (normTypeFilter !== "all") {
+        if (type !== normTypeFilter) {
+          return false;
+        }
       }
+
       if (!query) {
         return true;
       }
+
       const haystack = [
         norm.norm_id,
         norm.action,
@@ -319,9 +383,20 @@ export default function Dashboard() {
   }, [norms, normSearch, normTypeFilter]);
 
   const filteredGraph = useMemo(() => {
+    const hiddenTypes = new Set(["AnnotationActivity", "AnnotatorAgent"]);
+    const visibleNodesBase = showGraphProvenance
+      ? graph.nodes
+      : graph.nodes.filter((node) => !hiddenTypes.has(node.type));
+    const visibleNodeIdsBase = new Set(visibleNodesBase.map((node) => node.id));
+    const visibleEdgesBase = showGraphProvenance
+      ? graph.edges
+      : graph.edges.filter(
+          (edge) => visibleNodeIdsBase.has(edge.source) && visibleNodeIdsBase.has(edge.target),
+        );
+
     const query = graphSearch.trim().toLowerCase();
     if (!query) {
-      return { nodes: graph.nodes, edges: graph.edges };
+      return { nodes: visibleNodesBase, edges: visibleEdgesBase };
     }
 
     const normalizeSearch = (value) =>
@@ -362,11 +437,11 @@ export default function Dashboard() {
       return queryTokens.every((token) => haystack.includes(token));
     };
 
-    const matchedIds = new Set(graph.nodes.filter(matchesNode).map((node) => node.id));
+    const matchedIds = new Set(visibleNodesBase.filter(matchesNode).map((node) => node.id));
     const visibleIds = new Set(matchedIds);
     const neighborIds = new Set();
 
-    graph.edges.forEach((edge) => {
+    visibleEdgesBase.forEach((edge) => {
       const edgeText = normalizeSearch(`${edge.label || ""} ${edge.source} ${edge.target}`);
       const edgeMatches = queryTokens.every((token) => edgeText.includes(token));
       if (matchedIds.has(edge.source) || matchedIds.has(edge.target) || edgeMatches) {
@@ -382,12 +457,12 @@ export default function Dashboard() {
     neighborIds.forEach((id) => visibleIds.add(id));
 
     return {
-      nodes: graph.nodes.filter((node) => visibleIds.has(node.id)),
-      edges: graph.edges.filter(
+      nodes: visibleNodesBase.filter((node) => visibleIds.has(node.id)),
+      edges: visibleEdgesBase.filter(
         (edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target),
       ),
     };
-  }, [graph.nodes, graph.edges, graphSearch]);
+  }, [graph.nodes, graph.edges, graphSearch, showGraphProvenance]);
 
   const filteredGraphNodes = filteredGraph.nodes;
   const filteredGraphEdges = filteredGraph.edges;
@@ -575,7 +650,7 @@ export default function Dashboard() {
   function renderOverview() {
     return (
       <div className="workspace-grid workspace-grid--overview">
-        <section className="panel panel--soft">
+        <section className="panel panel--soft pack-create-panel">
           <div className="section-intro">
             <p className="eyebrow">Current pack</p>
             <h2>{selectedPack || "Select a regulation pack from the left sidebar"}</h2>
@@ -621,7 +696,9 @@ export default function Dashboard() {
 
         <section className="panel panel--soft">
           <div className="section-intro">
-            <p className="eyebrow">Create Pack</p>
+            <div className="overview-pack-kicker">
+              + Create new pack
+            </div>
             <h2>Create a new regulation pack for exploration</h2>
             <p className="section-copy">
               Start a new test pack by uploading a `.bpmn` file directly, or paste BPMN XML below
@@ -649,18 +726,15 @@ export default function Dashboard() {
             <strong>Drop a `.bpmn` file here</strong>
             <span>or use the quick upload action in the left sidebar</span>
           </div>
-          <div className="form-grid">
-            <label>
+          <div className="form-grid pack-create-panel__grid">
+            <label className="pack-create-panel__field">
               <span>New pack name</span>
               <input value={pasteName} onChange={(event) => setPasteName(event.target.value)} />
             </label>
-            <div className="upload-actions">
+            <div className="upload-actions pack-create-panel__actions">
               <button className="button button--primary" type="button" onClick={handlePasteUpload} disabled={isUploading}>
                 {isUploading ? "Processing..." : "Create pack from pasted BPMN"}
               </button>
-              <a className="button button--ghost" href={getTemplateDownloadUrl()}>
-                Download Camunda template
-              </a>
             </div>
           </div>
           <textarea
@@ -1053,14 +1127,14 @@ export default function Dashboard() {
             placeholder="Search id, action, agent, regulation, article…"
           />
           <div className="pill-row">
-            {["all", "obligation", "prohibition", "permission", "recommendation", "fact"].map((t) => (
+            {["all", "obligation", "prohibition", "permission", "recommendation", "fact", "gateway"].map((t) => (
               <button
                 key={t}
                 type="button"
                 className={`pill ${normTypeFilter === t ? "is-selected" : ""}`}
                 onClick={() => setNormTypeFilter(t)}
               >
-                {t === "all" ? "All" : t.charAt(0).toUpperCase() + t.slice(1)}
+                {t === "all" ? "All" : t === "gateway" ? "Gateways" : t.charAt(0).toUpperCase() + t.slice(1)}
               </button>
             ))}
           </div>
@@ -1298,10 +1372,33 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="form-grid">
-          <label>
+        <div className="form-grid graph-controls">
+          <label className="graph-controls__search">
             <span>Search graph</span>
             <input value={graphSearch} onChange={(event) => setGraphSearch(event.target.value)} placeholder="Search resource URIs, labels, or semantic types" />
+          </label>
+          <label className="graph-controls__provenance">
+            <span>Provenance</span>
+            <div className="graph-controls__provenance-row">
+              <button
+                type="button"
+                className={`graph-switch ${showGraphProvenance ? "is-on" : ""}`}
+                onClick={() => setShowGraphProvenance((value) => !value)}
+                aria-pressed={showGraphProvenance}
+              >
+                <span className="graph-switch__track">
+                  <span className="graph-switch__thumb" />
+                </span>
+                <span className="graph-switch__label">
+                  {showGraphProvenance ? "On" : "Off"}
+                </span>
+              </button>
+              <small className="graph-controls__provenance-note">
+                {showGraphProvenance
+                  ? "Shows annotation activities and annotator agents."
+                  : "Hides annotation activities and annotator agents."}
+              </small>
+            </div>
           </label>
         </div>
 
@@ -1328,13 +1425,6 @@ export default function Dashboard() {
             <span>Connected groups</span>
             <strong>{filteredGraphComponentCount}</strong>
           </div>
-          <div className="graph-summary__item graph-summary__item--wide">
-            <span>View</span>
-            <strong>
-              Focus on the visual graph first. Search reduces the view to the matching neighborhood,
-              and disconnected groups are arranged in separate zones so the KG is easier to read.
-            </strong>
-          </div>
         </article>
       </section>
     );
@@ -1342,35 +1432,95 @@ export default function Dashboard() {
 
   function renderOntology() {
     return (
-      <section className="panel">
+      <section className="panel ontology-panel">
         <div className="panel__head">
-          <div>
+          <div className="ontology-panel__intro">
             <p className="eyebrow">Ontology</p>
             <h2>TBox reference</h2>
+            <p className="section-copy">
+              Review the core NORMA modeling layer used by the rules, ABox, and semantic graph.
+              This tab is meant as a quick orientation view while the full public ontology
+              documentation is being prepared.
+            </p>
+          </div>
+          <div className="ontology-panel__actions" />
+        </div>
+        <div className="ontology-panel__meta">
+          <a
+            className="ontology-panel__meta-item ontology-panel__meta-item--doc"
+            href={ONTOLOGY_DOCS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>Ontology documentation</span>
+            <strong>{ONTOLOGY_DOCS_URL}</strong>
+          </a>
+          <div className="ontology-panel__meta-item">
+            <span>Primary namespace</span>
+            <strong>`norma:` for NORMA classes and properties</strong>
+          </div>
+          <div className="ontology-panel__meta-item">
+            <span>Core alignments</span>
+            <strong>PROV-O, ELI, and W3C ORG</strong>
           </div>
         </div>
-        <div className="workspace-grid">
-          <article className="list-card">
-            <strong>Core classes</strong>
-            <div className="stack-list">
+        <div className="ontology-panel__sections">
+          <section className="ontology-panel__section">
+            <div className="ontology-panel__section-head">
+              <strong>Core NORMA classes</strong>
+            </div>
+            <p className="ontology-panel__section-copy">
+              These are the main categories the workspace exposes in the rules, ABox, and graph views.
+            </p>
+            <div className="ontology-panel__row-list">
               {ONTOLOGY_ITEMS.map((item) => (
-                <article className="decision-card" key={item}>
-                  <p>{item}</p>
+                <div className="ontology-panel__row" key={item}>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="ontology-panel__section">
+            <div className="ontology-panel__section-head">
+              <strong>External standards and vocabularies</strong>
+              <span className="ontology-panel__count">{EXTERNAL_ONTOLOGIES.length}</span>
+            </div>
+            <p className="ontology-panel__section-copy">
+              PROV-O, ELI, and W3C ORG are part of the semantic alignment layer. SKOS, Dublin Core,
+              FOAF, BIBO, and VANN are mainly used for classification and ontology metadata.
+            </p>
+            <div className="ontology-panel__table">
+              {EXTERNAL_ONTOLOGIES.map((item) => (
+                <article className="ontology-panel__table-row" key={item.url}>
+                  <div className="ontology-panel__table-main">
+                    <strong>{item.name}</strong>
+                    <span>{item.prefix}</span>
+                  </div>
+                  <code>{item.url}</code>
+                  <p>{item.note}</p>
                 </article>
               ))}
             </div>
-          </article>
-          <article className="list-card">
-            <strong>Testing checklist</strong>
-            <div className="stack-list">
-              <article className="decision-card">
-                <p>Upload or load a pack, inspect rules, view ABox/SWRL, run evaluator, query SPARQL, and edit a norm.</p>
-              </article>
-              <article className="decision-card">
-                <p>Use entity warnings to merge labels and confirm the pack reloads with updated registry state.</p>
-              </article>
+          </section>
+
+          <section className="ontology-panel__section">
+            <div className="ontology-panel__section-head">
+              <strong>How to read this notation</strong>
             </div>
-          </article>
+            <div className="ontology-panel__row-list">
+              <div className="ontology-panel__row">
+                <span>
+                  Prefixes such as <code>norma:</code>, <code>prov:</code>, and <code>xsd:</code> are compact labels used in RDF and OWL files instead of repeating full URIs every time.
+                </span>
+              </div>
+              <div className="ontology-panel__row">
+                <span>
+                  Use this tab as a quick reference to check whether the ABox, SWRL rules, graph view, and ontology are still aligned semantically.
+                </span>
+              </div>
+            </div>
+          </section>
         </div>
       </section>
     );

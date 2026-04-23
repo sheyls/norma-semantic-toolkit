@@ -294,10 +294,12 @@ def norm_to_dict(norm_id: str, rule: RuleIR) -> dict[str, Any]:
 
     object_label = dat("objectText")
     if not object_label:
-        raw = rel_obj("hasObject") or ""
+        raw = rel_obj("hasLegalObject") or rel_obj("hasObject") or ""
         object_label = raw.replace("Object_", "").replace("_", " ").strip() or None
 
-    agent_id = rel_subj("isLegalAgentOf")
+    agent_id = rel_obj("hasLegalAgent")
+    if not agent_id:
+        agent_id = rel_subj("isLegalAgentOf")
     dtype = next(
         (class_atom.class_ref.name for class_atom in rule.class_atoms if class_atom.subject.name == sym),
         None,

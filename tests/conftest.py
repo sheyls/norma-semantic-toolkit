@@ -37,6 +37,9 @@ SAMPLE_BPMN = """\
           <zeebe:property name="compliance_regulation"     value="EU AI Act" />
           <zeebe:property name="compliance_extractionMethod" value="manual_lawyer" />
           <zeebe:property name="compliance_legalReview"    value="approved" />
+          <zeebe:property name="compliance_annotationDate" value="2026-02-15" />
+          <zeebe:property name="compliance_confidence"     value="0.97" />
+          <zeebe:property name="compliance_annotator"      value="test" />
         </zeebe:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_s_gw</bpmn:incoming>
@@ -54,6 +57,7 @@ SAMPLE_BPMN = """\
           <zeebe:property name="compliance_elementType"    value="task" />
           <zeebe:property name="compliance_deonticType"    value="obligation" />
           <zeebe:property name="compliance_deonticId"      value="OBL_1" />
+          <zeebe:property name="compliance_normStatement"  value="AI owners must mark synthetic content." />
           <zeebe:property name="compliance_agent"          value="AI owner" />
           <zeebe:property name="compliance_action"         value="mark synthetic content" />
           <zeebe:property name="compliance_object"         value="AI generated content" />
@@ -67,6 +71,7 @@ SAMPLE_BPMN = """\
           <zeebe:property name="compliance_confidence"     value="0.95" />
           <zeebe:property name="compliance_legalReview"    value="approved" />
           <zeebe:property name="compliance_annotator"      value="test" />
+          <zeebe:property name="compliance_annotationDate" value="2026-02-15" />
         </zeebe:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_gw_obl</bpmn:incoming>
@@ -79,6 +84,7 @@ SAMPLE_BPMN = """\
           <zeebe:property name="compliance_elementType"    value="task" />
           <zeebe:property name="compliance_deonticType"    value="recommendation" />
           <zeebe:property name="compliance_deonticId"      value="REC_1" />
+          <zeebe:property name="compliance_normStatement"  value="AI owners should adopt voluntary codes." />
           <zeebe:property name="compliance_agent"          value="AI owner" />
           <zeebe:property name="compliance_action"         value="adopt voluntary codes" />
           <zeebe:property name="compliance_object"         value="generated content" />
@@ -92,6 +98,7 @@ SAMPLE_BPMN = """\
           <zeebe:property name="compliance_confidence"     value="0.90" />
           <zeebe:property name="compliance_legalReview"    value="approved" />
           <zeebe:property name="compliance_annotator"      value="test" />
+          <zeebe:property name="compliance_annotationDate" value="2026-02-15" />
         </zeebe:properties>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_gw_rec</bpmn:incoming>

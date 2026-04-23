@@ -12,8 +12,8 @@ specification (Section 2.2).
 Example output (single-line):
     r2: DoesTheAISystemGenerateSyntheticContent(?x, true) ⇒
         Obligation(:OBL_Mark_synthetic_content) ∧
-        isLegalAgentOf(:Agent_AI_provider, :OBL_Mark_synthetic_content) ∧
-        hasObject(:OBL_Mark_synthetic_content, :Object_audio_image_text_or_video_output) ∧
+        hasLegalAgent(:OBL_Mark_synthetic_content, :Agent_AI_provider) ∧
+        hasLegalObject(:OBL_Mark_synthetic_content, :Object_audio_image_text_or_video_output) ∧
         fromArticle(:OBL_Mark_synthetic_content, "50")
 """
 
