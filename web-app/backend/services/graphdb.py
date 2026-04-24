@@ -2,11 +2,15 @@ from __future__ import annotations
 
 import io
 import json
+import os
 from pathlib import Path
 from typing import Any, Optional
 
 from fastapi import HTTPException, Request
 from fastapi.responses import Response, StreamingResponse
+
+# Maximum accepted SPARQL query size in bytes. Override via NORMA_MAX_SPARQL_BYTES.
+MAX_SPARQL_QUERY_BYTES = int(os.getenv("NORMA_MAX_SPARQL_BYTES", str(64 * 1024)))
 
 try:
     import pyoxigraph as ox
@@ -293,13 +297,19 @@ ORDER BY ?predicate ?source ?target
 
 async def extract_sparql_query(request: Request) -> Optional[str]:
     if request.method == "GET":
-        return request.query_params.get("query")
-    content_type = request.headers.get("content-type", "")
-    if "application/x-www-form-urlencoded" in content_type:
-        form = await request.form()
-        return form.get("query")
-    body = await request.body()
-    return body.decode("utf-8") if body else None
+        query = request.query_params.get("query")
+    else:
+        content_type = request.headers.get("content-type", "")
+        if "application/x-www-form-urlencoded" in content_type:
+            form = await request.form()
+            query = form.get("query")
+        else:
+            body = await request.body()
+            query = body.decode("utf-8") if body else None
+
+    if query and len(query.encode("utf-8")) > MAX_SPARQL_QUERY_BYTES:
+        raise HTTPException(413, f"SPARQL query exceeds maximum allowed size ({MAX_SPARQL_QUERY_BYTES // 1024} KB)")
+    return query
 
 
 def sparql_response(results: Any) -> Response:

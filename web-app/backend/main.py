@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import os
 import sys
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 # `web-app` lives inside the monorepo and depends on the core `norma_engine`
@@ -25,6 +26,8 @@ if importlib.util.find_spec("norma_engine") is None:
 
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from backend.services.graphdb import OX_AVAILABLE, extract_sparql_query, rdf_download, sparql_response
 from backend.services.storage import (
@@ -50,19 +53,32 @@ from backend.services.storage import (
     update_norm,
 )
 
-app = FastAPI(title="NORMA API", version="0.2.0")
+# In production, set NORMA_ALLOWED_ORIGINS to a comma-separated list of allowed origins,
+# e.g. "https://norma.example.com,https://www.norma.example.com".
+# Defaults to "*" for local development convenience only.
+_raw_origins = os.getenv("NORMA_ALLOWED_ORIGINS", "").strip()
+ALLOWED_ORIGINS: list[str] = (
+    [o.strip() for o in _raw_origins.split(",") if o.strip()] if _raw_origins else ["*"]
+)
+
+# Maximum accepted upload size in bytes. Override via NORMA_MAX_UPLOAD_BYTES.
+MAX_UPLOAD_BYTES = int(os.getenv("NORMA_MAX_UPLOAD_BYTES", str(10 * 1024 * 1024)))
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    load_regulation_packs()
+    yield
+
+
+app = FastAPI(title="NORMA API", version="0.2.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_methods=["GET", "POST", "PATCH", "OPTIONS"],
+    allow_headers=["Content-Type", "Accept"],
 )
-
-
-@app.on_event("startup")
-async def startup_event() -> None:
-    load_regulation_packs()
 
 
 @app.get("/api/health")
@@ -153,7 +169,10 @@ async def sparql_endpoint(pack: str, request: Request):
 async def upload_bpmn(file: UploadFile = File(...)):
     if not (file.filename or "").endswith(".bpmn"):
         raise HTTPException(400, "Only .bpmn files are accepted")
-    xml = (await file.read()).decode("utf-8")
+    raw = await file.read(MAX_UPLOAD_BYTES + 1)
+    if len(raw) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, f"File exceeds maximum allowed size ({MAX_UPLOAD_BYTES // 1024 // 1024} MB)")
+    xml = raw.decode("utf-8")
     return create_uploaded_pack(file.filename or "upload.bpmn", xml)
 
 
@@ -161,7 +180,10 @@ async def upload_bpmn(file: UploadFile = File(...)):
 async def append_bpmn(pack: str, file: UploadFile = File(...)):
     if not (file.filename or "").endswith(".bpmn"):
         raise HTTPException(400, "Only .bpmn files are accepted")
-    xml = (await file.read()).decode("utf-8")
+    raw = await file.read(MAX_UPLOAD_BYTES + 1)
+    if len(raw) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, f"File exceeds maximum allowed size ({MAX_UPLOAD_BYTES // 1024 // 1024} MB)")
+    xml = raw.decode("utf-8")
     return append_bpmn_to_pack(pack, file.filename or "upload.bpmn", xml)
 
 
@@ -198,3 +220,17 @@ async def sparql_presets():
 @app.get("/api/download/template")
 async def download_template():
     return template_download()
+
+
+# ── Static frontend ────────────────────────────────────────────────────────────
+# Serve the Vite-built React app from the same process. All /api/* routes above
+# take priority. Unknown paths fall through to index.html so React Router works.
+_FRONTEND_DIST = APP_ROOT / "frontend" / "dist"
+
+if _FRONTEND_DIST.is_dir():
+    app.mount("/assets", StaticFiles(directory=str(_FRONTEND_DIST / "assets")), name="assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def spa_fallback(full_path: str):
+        index = _FRONTEND_DIST / "index.html"
+        return FileResponse(str(index))

@@ -203,42 +203,6 @@ def export_swrl(rules_ir: list[RuleIR], abox_iri: str, rules_iri: str) -> str:
         Path(tmp_swrl).unlink(missing_ok=True)
 
 
-def process_uploaded_bpmn(filename: str, xml: str) -> dict[str, Any]:
-    stem = Path(filename).stem
-    pack_name = stem.lower().replace(" ", "-").replace("_", "-")
-    abox_iri = f"https://w3id.org/norma-abox/{pack_name}"
-    rules_iri = f"{abox_iri}/rules"
-
-    nodes, edges, _, gw_index, task_props = parse_bpmn_to_reduced_graph(xml)
-    for props in task_props.values():
-        props.setdefault("_bpmn_source", filename)
-    _, raw_rules_ir, _ = enumerate_paths_and_build_ir(
-        nodes=nodes,
-        edges=edges,
-        gateway_outgoing_index=gw_index,
-        task_props=task_props,
-    )
-    rules_ir = [dataclasses.replace(rule, source=filename) for rule in raw_rules_ir]
-    swrl_owl = export_swrl(rules_ir, abox_iri=abox_iri, rules_iri=rules_iri)
-
-    abox_ttl: Optional[str] = None
-    if KG_AVAILABLE:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            bpmn_path = Path(tmpdir) / filename
-            bpmn_path.write_text(xml, encoding="utf-8")
-            elements, _ = parse_bpmn_folder(Path(tmpdir))
-            records = to_json(elements)
-            abox_ttl = to_turtle(records, str(bpmn_path.parent), abox_iri, rules_ir=rules_ir)
-
-    return {
-        "pack_name": pack_name,
-        "abox_ttl": abox_ttl,
-        "swrl_owl": swrl_owl,
-        "rules_ir": rules_ir,
-        "task_props": task_props,
-    }
-
-
 def pack_summary(name: str, pack: dict[str, Any]) -> dict[str, Any]:
     return {
         "name": name,

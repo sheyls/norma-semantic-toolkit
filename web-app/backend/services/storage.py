@@ -3,6 +3,7 @@ from __future__ import annotations
 import gc
 import io
 import json
+import logging
 import shutil
 from pathlib import Path
 from typing import Any
@@ -44,9 +45,10 @@ from backend.services.pipeline import (
     norm_to_dict,
     pack_graph_data,
     pack_summary,
-    process_uploaded_bpmn,
     rules_from_bpmn_dir,
 )
+
+log = logging.getLogger(__name__)
 
 
 def require_pack(name: str) -> dict[str, Any]:
@@ -81,11 +83,20 @@ def _ensure_runtime_pack_dirs(storage_dir: Path) -> Path:
     return bpmn_dir
 
 
+def _sanitize_filename(filename: str) -> str:
+    # Keep only the basename (drop any directory traversal component), then restrict
+    # characters to alphanumerics, dots, hyphens, and underscores.
+    name = Path(filename).name
+    safe = "".join(ch if (ch.isalnum() or ch in "._-") else "_" for ch in name)
+    return safe or "upload.bpmn"
+
+
 def _write_runtime_bpmn(storage_dir: Path, filename: str, xml: str) -> Path:
     bpmn_dir = _ensure_runtime_pack_dirs(storage_dir)
-    target = bpmn_dir / filename
-    stem = Path(filename).stem
-    suffix = Path(filename).suffix or ".bpmn"
+    safe_name = _sanitize_filename(filename)
+    target = bpmn_dir / safe_name
+    stem = Path(safe_name).stem
+    suffix = Path(safe_name).suffix or ".bpmn"
     index = 2
     while target.exists():
         target = bpmn_dir / f"{stem}-{index}{suffix}"
@@ -201,7 +212,7 @@ def rebuild_regulation_pack(pack_name: str, reg_dir: Path) -> None:
     try:
         abox_ttl, norm_report = build_abox_from_dir(reg_dir, abox_iri, override_file=entity_override)
     except Exception as exc:
-        print(f"[norma] Warning: ABox build failed for {pack_name}: {exc}")
+        log.warning("ABox build failed for %s: %s", pack_name, exc)
 
     if not abox_ttl:
         abox_file = next(reg_dir.glob("*.abox.ttl"), None)
@@ -214,7 +225,7 @@ def rebuild_regulation_pack(pack_name: str, reg_dir: Path) -> None:
     try:
         rules_ir, task_props = rules_from_bpmn_dir(reg_dir, override_path=entity_override)
     except Exception as exc:
-        print(f"[norma] Warning: rule extraction failed for {pack_name}: {exc}")
+        log.warning("Rule extraction failed for %s: %s", pack_name, exc)
         rules_ir, task_props = [], {}
 
     swrl_text = None
@@ -229,7 +240,7 @@ def rebuild_regulation_pack(pack_name: str, reg_dir: Path) -> None:
                 rules_iri=f"{abox_iri}/rules",
             )
         except Exception as exc:
-            print(f"[norma] Warning: SWRL export failed for {pack_name}: {exc}")
+            log.warning("SWRL export failed for %s: %s", pack_name, exc)
 
     store_path = _official_store_path(pack_name)
     if OX_AVAILABLE:
@@ -316,16 +327,20 @@ def conditions_for_pack(pack_name: str) -> dict[str, Any]:
     return {"conditions": list(seen.values())}
 
 
-def evaluate_pack(pack_name: str, answers: dict[str, bool]) -> dict[str, Any]:
+def evaluate_pack(pack_name: str, answers: Any) -> dict[str, Any]:
     pack = require_pack(pack_name)
+    if not isinstance(answers, dict):
+        raise HTTPException(422, "Request body must be a JSON object mapping condition names to booleans")
+    # Coerce all values to bool so JSON "true"/"false" strings and integers work transparently.
+    coerced: dict[str, bool] = {str(k): bool(v) for k, v in answers.items()}
     seen_norm_ids = set()
     matched = []
 
     for rule in pack["rules_ir"]:
         condition_names = {c.predicate.name for c in rule.conditions}
-        if not condition_names.issubset(answers.keys()):
+        if not condition_names.issubset(coerced.keys()):
             continue
-        if not all(answers[c.predicate.name] == c.value for c in rule.conditions):
+        if not all(coerced[c.predicate.name] == c.value for c in rule.conditions):
             continue
         for norm_id in norm_ids_in_rule(rule):
             if norm_id in seen_norm_ids:
