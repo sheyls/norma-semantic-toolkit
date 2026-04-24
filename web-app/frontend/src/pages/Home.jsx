@@ -2,71 +2,84 @@ import { Link } from "react-router-dom";
 import ccByLogo from "../assets/logos/cc-by-logo.png";
 import oegUpmLogo from "../assets/logos/oeg-upm-logo.png";
 
-const OUTPUT_LINKS = [
+const FEATURES = [
   {
-    title: "Knowledge base",
-    description: "Inspect the generated ABox and the regulation-backed semantic material.",
-    href: "/dashboard",
-    meta: "ABox, RDF, reusable entities",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+      </svg>
+    ),
+    title: "Knowledge Base",
+    description: "ABox instances generated from annotated BPMN and serialised as Turtle or RDF/XML.",
+    tag: "ABox · RDF",
   },
   {
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
+      </svg>
+    ),
     title: "Rules",
-    description: "Review the legal rules in both human-readable form and OWL/SWRL-oriented output.",
-    href: "/dashboard",
-    meta: "Norm logic, traceability, formal syntax",
+    description: "Human-readable rule paths and formal SWRL OWL/XML output for norm logic traceability.",
+    tag: "SWRL · OWL 2",
   },
   {
-    title: "Semantic graph",
-    description: "Explore the semantic knowledge graph with clearer visual structure and node details.",
-    href: "/dashboard",
-    meta: "Instances, relations, ontology-backed graph",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+      </svg>
+    ),
+    title: "Knowledge Graph",
+    description: "Interactive D3 force graph of ABox instances, relations, and ontology alignments.",
+    tag: "Graph · SPARQL",
   },
   {
-    title: "SPARQL workspace",
-    description: "Query the generated knowledge graph directly when you need deeper semantic inspection.",
-    href: "/dashboard",
-    meta: "Reusable presets and custom queries",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+      </svg>
+    ),
+    title: "SPARQL Queries",
+    description: "Query the generated knowledge graph directly with curated presets or custom queries.",
+    tag: "SPARQL 1.1",
   },
 ];
 
+const STACK = [
+  { label: "Compliance review" },
+  { label: "OWL 2 + SWRL" },
+  { label: "PROV-O · ELI · W3C ORG" },
+  { label: "Open source research" },
+];
+
 const REFERENCE_LINKS = [
-  {
-    label: "Web app repository",
-    href: "https://github.com/sheyls/deontic-rule-bpmn",
-  },
-  {
-    label: "NORMA ontology repository",
-    href: "https://github.com/norma-project/norma-ontology",
-  },
-  {
-    label: "CC BY 4.0 licence",
-    href: "https://creativecommons.org/licenses/by/4.0/",
-  },
-  {
-    label: "Ontology IRI",
-    href: "https://w3id.org/norma-ontology",
-  },
+  { label: "Semantic toolkit repository", href: "https://github.com/sheyls/norma-semantic-toolkit" },
+  { label: "NORMA ontology repository", href: "https://github.com/norma-project/norma-ontology" },
+  { label: "CC BY 4.0 licence", href: "https://creativecommons.org/licenses/by/4.0/" },
+  { label: "Ontology IRI (w3id)", href: "https://w3id.org/norma-ontology" },
 ];
 
 export default function Home() {
   return (
     <main className="home">
       <section className="home__frame">
+
+        {/* ── Hero ── */}
         <div className="home__hero">
           <div className="home__hero-copy">
-            <p className="eyebrow">NORMA Workspace</p>
-            <h1>NORMA: From Annotated BPMN to Normative Knowledge Graphs.</h1>
+            <p className="eyebrow">NORMA Semantic Toolkit</p>
+            <h1>From annotated BPMN to normative knowledge graphs.</h1>
             <p className="home__lead">
-              NORMA transforms legally annotated BPMN into semantic, linked normative knowledge. It
-              supports compliance analysis, but its main purpose is the conversion of annotated
-              process models into ontology-backed knowledge graphs, reusable rules, and queryable
-              semantic artifacts.
+              NORMA converts legally annotated process models into semantic, linked normative
+              knowledge — producing OWL 2 ABoxes, SWRL rules, and queryable RDF graphs aligned
+              to PROV-O, ELI, and W3C ORG.
             </p>
 
             <div className="hero__actions">
               <Link to="/dashboard" className="button button--hero-primary">
-                <span>Open workspace</span>
-                <strong>Start exploring NORMA</strong>
+                <span>Interactive workspace</span>
+                <strong>Open toolkit →</strong>
               </Link>
               <a
                 href="https://github.com/norma-project/norma-ontology"
@@ -80,60 +93,63 @@ export default function Home() {
             </div>
 
             <div className="home__ribbon">
-              <span>Compliance review</span>
-              <span>Semantic knowledge graph</span>
-              <span>Open-source research tooling</span>
+              {STACK.map((s) => <span key={s.label}>{s.label}</span>)}
             </div>
           </div>
 
           <div className="home__hero-panel">
             <div className="home__signal">
-              <span>Core workflow</span>
-              <strong>Annotated BPMN, ontology-backed conversion, rule extraction, graph inspection</strong>
+              <span>Input</span>
+              <strong>Annotated BPMN with legal metadata (Camunda element templates)</strong>
             </div>
             <div className="home__signal">
-              <span>Semantic outputs</span>
-              <strong>Knowledge base, rules, graph visualisation, ontology, SPARQL</strong>
+              <span>Pipeline</span>
+              <strong>ABox builder → SWRL extractor → RDF store → SPARQL endpoint</strong>
             </div>
             <div className="home__signal">
-              <span>Design principle</span>
-              <strong>One focused section at a time, with a consistent left-hand navigation</strong>
+              <span>Standards alignment</span>
+              <strong>OWL 2, SWRL, PROV-O, ELI, W3C ORG, SKOS — all open W3C vocabularies</strong>
             </div>
           </div>
         </div>
 
+        {/* ── Features ── */}
         <section className="home__section">
           <div className="section-heading">
             <div>
               <p className="eyebrow">Outputs</p>
-              <h2>Everything the workspace produces, linked from one place</h2>
+              <h2>Generated semantic artifacts in one workspace</h2>
             </div>
             <p className="section-copy">
-              The homepage now works as a stable project entry point, so users can understand the
-              semantic outputs before moving into the dashboard.
+              Every artifact is derived from the annotated BPMN and can be inspected, downloaded,
+              or queried directly from the dashboard.
             </p>
           </div>
 
           <div className="home__link-grid">
-            {OUTPUT_LINKS.map((item) => (
-              <Link key={item.title} to={item.href} className="home__link-card">
-                <span>{item.meta}</span>
-                <strong>{item.title}</strong>
-                <p>{item.description}</p>
+            {FEATURES.map((item) => (
+              <Link key={item.title} to="/dashboard" className="home__link-card">
+                <div className="home__link-card__icon">{item.icon}</div>
+                <div>
+                  <strong>{item.title}</strong>
+                  <p>{item.description}</p>
+                </div>
+                <span className="home__link-card__tag">{item.tag}</span>
               </Link>
             ))}
           </div>
         </section>
 
+        {/* ── About ── */}
         <section className="home__section home__section--about" id="about">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">About Us</p>
-              <h2>NORMA is an open research workspace for legal BPMN annotations and semantic compliance assets.</h2>
+              <p className="eyebrow">About</p>
+              <h2>Open research toolkit for legal BPMN annotations</h2>
             </div>
             <p className="section-copy">
-              This project brings together BPMN-based legal annotation, ontology engineering, and
-              semantic knowledge graph generation in a single workflow-oriented interface.
+              Developed at the Ontology Engineering Group, Universidad Politécnica de Madrid,
+              as part of research into legal knowledge graph generation from process models.
             </p>
           </div>
 
@@ -143,38 +159,36 @@ export default function Home() {
                 <img src={oegUpmLogo} alt="Ontology Engineering Group UPM logo" />
               </div>
               <div className="home__about-copy">
-                <p className="eyebrow">Affiliation</p>
-                <h3>Ontology Engineering Group, Universidad Politécnica de Madrid</h3>
-                <p>
-                  The interface is intended for users working with legal knowledge graphs, ontology
-                  engineering, and regulation-driven compliance workflows.
+                <p className="eyebrow" style={{ color: "rgba(147,197,253,0.82)" }}>Affiliation</p>
+                <h3 style={{ color: "white" }}>Ontology Engineering Group — UPM</h3>
+                <p style={{ color: "rgba(226,232,240,0.8)" }}>
+                  The toolkit targets users working with legal knowledge graphs, ontology
+                  engineering, and regulation-based semantic workflows.
                 </p>
               </div>
             </article>
 
             <article className="home__about-card">
               <p className="eyebrow">Maintainer</p>
-              <h3>Project authorship</h3>
+              <h3>Sheyla Leyva-Sánchez</h3>
               <p>
-                Sheyla Leyva-Sánchez is listed in the ontology metadata as creator, with NORMA
-                project contributors acknowledged as contributors.
+                Creator and primary contributor. NORMA project contributors are acknowledged
+                in the ontology metadata.
               </p>
               <div className="home__contact-list">
-                <a
-                  href="https://github.com/sheyls/deontic-rule-bpmn"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href="https://github.com/sheyls/norma-semantic-toolkit" target="_blank" rel="noreferrer">
                   Source repository
                 </a>
+                <a href="https://github.com/sheyls" target="_blank" rel="noreferrer">
+                  GitHub profile
+                </a>
                 <a
-                  href="https://github.com/sheyls"
+                  href="https://oa.upm.es/cgi/search/simple?q=leyva&_action_search=Search&_order=bytitle&basic_srchtype=ALL&sr=5"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Author GitHub profile
+                  Publications (UPM OA)
                 </a>
-                <span>Email address can be added once you choose the public contact to display.</span>
               </div>
             </article>
 
@@ -182,8 +196,8 @@ export default function Home() {
               <p className="eyebrow">Licence</p>
               <h3>CC BY 4.0</h3>
               <p>
-                The repository and ontology metadata point to a Creative Commons Attribution 4.0
-                licence, making the project easy to reuse with attribution.
+                Repository and ontology metadata reference a Creative Commons Attribution 4.0
+                licence, supporting reuse with appropriate attribution.
               </p>
               <a
                 href="https://creativecommons.org/licenses/by/4.0/"
@@ -191,7 +205,7 @@ export default function Home() {
                 target="_blank"
                 rel="noreferrer"
               >
-                <img src={ccByLogo} alt="Creative Commons BY 4.0 licence logo" className="license-badge__logo" />
+                <img src={ccByLogo} alt="CC BY 4.0" className="license-badge__logo" />
                 <span className="license-badge__text">CC BY 4.0</span>
               </a>
             </article>
@@ -209,6 +223,7 @@ export default function Home() {
             </article>
           </div>
         </section>
+
       </section>
     </main>
   );

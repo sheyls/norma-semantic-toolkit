@@ -514,7 +514,7 @@ export default function GraphForce({ nodes, edges }) {
   }
 
   const inspectorNode = hoveredNode || selectedNode;
-  const inspectorTitle = hoveredNode ? "Hover details" : selectedNode ? "Pinned details" : "Details";
+  const inspectorTitle = hoveredNode ? "Node details" : selectedNode ? "Selected node" : "Details";
 
   return (
     <div className="graph-explorer">
@@ -531,7 +531,7 @@ export default function GraphForce({ nodes, edges }) {
         <svg
           ref={svgRef}
           style={{ width: "100%", height: "580px", display: "block" }}
-          aria-label="Knowledge graph force layout"
+          aria-label="Knowledge graph layout"
         />
       </div>
       <aside className="graph-details graph-details--side">
@@ -539,7 +539,7 @@ export default function GraphForce({ nodes, edges }) {
           <strong>{inspectorTitle}</strong>
           {selectedNode ? (
             <button type="button" className="pill graph-pin-btn" onClick={() => setSelectedNode(null)}>
-              Clear pin
+              Clear selection
             </button>
           ) : (
             <span>{inspectorNode ? inspectorNode.type : "Hover a node"}</span>
@@ -564,7 +564,7 @@ export default function GraphForce({ nodes, edges }) {
           <div className="graph-details__empty">
             <strong>No node selected</strong>
             <p>
-              Hover a node to inspect its semantic details, or click one to keep it pinned while you
+              Hover a node to inspect its semantic details, or click one to keep it selected while you
               explore the graph.
             </p>
           </div>

@@ -13,7 +13,6 @@ import {
   getPackSwrl,
   getSparqlPresets,
   getSwrlDownloadUrl,
-  getTemplateDownloadUrl,
   rebuildPack,
   runSparql,
   appendBpmnToPack,
@@ -22,8 +21,20 @@ import {
 import GraphForce from "../components/GraphForce";
 import Sidebar from "../components/Sidebar";
 
+const VIEW_LABELS = {
+  overview: "Overview",
+  evaluator: "Norm Determination",
+  artifacts: "Knowledge Base",
+  rules: "Rules",
+  sparql: "SPARQL",
+  entities: "Entity Review",
+  graph: "KG Visualisation",
+  norms: "Norm Review",
+  ontology: "Ontology",
+};
+
 const ONTOLOGY_ITEMS = [
-  "LegalNorm -> Obligation, Prohibition, Permission, Recommendation, NegativeRecommendation",
+  "LegalNorm to Obligation, Prohibition, Permission, Recommendation, NegativeRecommendation",
   "LegalCondition for gateway predicates and branch labels",
   "LegalAgent and LegalObject as reusable ABox entities",
   "BindingForce and ComplianceCriticality for legal classification",
@@ -33,7 +44,7 @@ const ONTOLOGY_DOCS_URL = "https://w3id.org/norma-ontology/documentation";
 
 const EXTERNAL_ONTOLOGIES = [
   {
-    name: "PROV-O",
+    name: "PROV O",
     prefix: "prov:",
     url: "http://www.w3.org/ns/prov#",
     note: "Used for provenance modeling, especially annotation activities and annotator relations.",
@@ -42,7 +53,7 @@ const EXTERNAL_ONTOLOGIES = [
     name: "ELI",
     prefix: "eli:",
     url: "http://data.europa.eu/eli/ontology#",
-    note: "Used for legal resources and source-expression alignment.",
+    note: "Used for legal resources and source alignment.",
   },
   {
     name: "W3C Organization Ontology",
@@ -98,7 +109,7 @@ const NORM_SECTIONS = [
   },
   {
     id: "condition",
-    label: "Legal Condition (gateway only)",
+    label: "Legal Condition",
     fields: [
       { key: "gw_condition_statement", label: "Condition statement" },
       { key: "gw_true_branch", label: "True branch label" },
@@ -113,12 +124,12 @@ const NORM_SECTIONS = [
       { key: "article", label: "Article / Section" },
       { key: "paragraph", label: "Paragraph / Subsection" },
       { key: "original_text", label: "Original legal text", type: "textarea" },
-      { key: "regulation_uri", label: "Regulation URI (EUR-Lex)" },
+      { key: "regulation_uri", label: "Regulation URI" },
     ],
   },
   {
     id: "scope",
-    label: "Scope & Temporal",
+    label: "Scope and Time",
     fields: [
       { key: "trigger_condition", label: "Trigger condition" },
       { key: "jurisdiction", label: "Jurisdiction" },
@@ -131,7 +142,7 @@ const NORM_SECTIONS = [
     id: "consequences",
     label: "Consequences & Exceptions",
     fields: [
-      { key: "exception", label: "Exception / Carve-out", type: "textarea" },
+      { key: "exception", label: "Exception", type: "textarea" },
       { key: "sanction", label: "Sanction / Consequence", type: "textarea" },
     ],
   },
@@ -210,6 +221,8 @@ export default function Dashboard() {
   const [notice, setNotice] = useState("");
   const [evalTypeFilter, setEvalTypeFilter] = useState("all");
   const [isUploading, setIsUploading] = useState(false);
+  const [isLoadingPack, setIsLoadingPack] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isRebuilding, setIsRebuilding] = useState(false);
   const [isRunningEval, setIsRunningEval] = useState(false);
   const [isRunningSparql, setIsRunningSparql] = useState(false);
@@ -234,7 +247,7 @@ export default function Dashboard() {
   const [reloadToken, setReloadToken] = useState(0);
   const [graphSearch, setGraphSearch] = useState("");
   const [showGraphProvenance, setShowGraphProvenance] = useState(false);
-  const [pasteName, setPasteName] = useState("uploaded-pack");
+  const [pasteName, setPasteName] = useState("uploaded pack");
   const [pasteXml, setPasteXml] = useState("");
 
   useEffect(() => {
@@ -271,6 +284,7 @@ export default function Dashboard() {
     }
 
     async function loadPackData() {
+      setIsLoadingPack(true);
       try {
         setError("");
         setNotice("");
@@ -291,6 +305,8 @@ export default function Dashboard() {
         setAnswers({});
       } catch (err) {
         setError(err.message);
+      } finally {
+        setIsLoadingPack(false);
       }
     }
 
@@ -542,7 +558,7 @@ export default function Dashboard() {
         setNotice(
           samePack
             ? `Added "${uploaded.added_bpmn || file.name}" to pack "${uploaded.pack}".`
-            : `Created workspace pack "${uploaded.pack}" from "${selectedPack}" and added "${uploaded.added_bpmn || file.name}".`,
+            : `Created temporary pack "${uploaded.pack}" from "${selectedPack}" and added "${uploaded.added_bpmn || file.name}".`,
         );
       } else {
         setNotice(`Pack "${uploaded.pack}" processed successfully.`);
@@ -585,7 +601,7 @@ export default function Dashboard() {
       setError("Paste BPMN XML before uploading.");
       return;
     }
-    const filename = `${slugify(pasteName || "pasted-pack") || "pasted-pack"}.bpmn`;
+    const filename = `${slugify(pasteName || "pasted pack") || "pasted-pack"}.bpmn`;
     const file = new File([xml], filename, { type: "application/xml" });
     await processUpload(file);
   }
@@ -652,12 +668,29 @@ export default function Dashboard() {
       <div className="workspace-grid workspace-grid--overview">
         <section className="panel panel--soft pack-create-panel">
           <div className="section-intro">
-            <p className="eyebrow">Current pack</p>
+            <p className="eyebrow">Selected pack</p>
             <h2>{selectedPack || "Select a regulation pack from the left sidebar"}</h2>
             <p className="section-copy">
-              Keep the workflow simple: choose a pack, answer the compliance questions, review the
-              extracted norms, and move to semantic artifacts only when you need more detail.
+              Choose a pack, inspect the generated knowledge artifacts, review extracted norms, and
+              query the graph when deeper semantic inspection is needed.
             </p>
+          </div>
+          <div className="stat-grid">
+            <div className="stat-card">
+              <span className="stat-card__label">Norms</span>
+              <span className="stat-card__value">{norms.length}</span>
+              <span className="stat-card__sub">extracted annotations</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-card__label">Conditions</span>
+              <span className="stat-card__value">{conditions.length}</span>
+              <span className="stat-card__sub">gateway conditions</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-card__label">Rules</span>
+              <span className="stat-card__value">{selectedPackSummary?.rule_count || 0}</span>
+              <span className="stat-card__sub">indexed SWRL rules</span>
+            </div>
           </div>
           <div className="summary-list">
             <div className="summary-list__row">
@@ -665,30 +698,18 @@ export default function Dashboard() {
               <strong>{packs.length}</strong>
             </div>
             <div className="summary-list__row">
-              <span>Conditions</span>
-              <strong>{conditions.length}</strong>
-            </div>
-            <div className="summary-list__row">
-              <span>Norms</span>
-              <strong>{norms.length}</strong>
-            </div>
-            <div className="summary-list__row">
-              <span>Current evaluation matches</span>
-              <strong>{evaluation.length}</strong>
-            </div>
-            <div className="summary-list__row">
-              <span>Indexed rules</span>
-              <strong>{selectedPackSummary?.rule_count || 0}</strong>
+              <span>Applicable norms (last eval)</span>
+              <strong>{evaluation.length || "—"}</strong>
             </div>
             <div className="summary-list__row">
               <span>Regeneration</span>
-              <strong>{selectedPackSummary?.can_rebuild ? "Available" : "Upload-only pack"}</strong>
+              <strong>{selectedPackSummary?.can_rebuild ? "Available" : "Upload only"}</strong>
             </div>
           </div>
           {selectedPackSummary?.can_rebuild ? (
             <div className="section-actions">
               <button className="button button--ghost" type="button" onClick={handleRebuildPack} disabled={isRebuilding}>
-                {isRebuilding ? "Rebuilding..." : "Rebuild selected pack"}
+                {isRebuilding ? "Rebuilding..." : "Regenerate selected pack"}
               </button>
             </div>
           ) : null}
@@ -697,12 +718,12 @@ export default function Dashboard() {
         <section className="panel panel--soft">
           <div className="section-intro">
             <div className="overview-pack-kicker">
-              + Create new pack
+              Create new pack
             </div>
             <h2>Create a new regulation pack for exploration</h2>
             <p className="section-copy">
-              Start a new test pack by uploading a `.bpmn` file directly, or paste BPMN XML below
-              when you want to prototype quickly without preparing a separate file first.
+              Create a temporary regulation pack by uploading a BPMN file or by pasting BPMN XML.
+              The generated artifacts can then be inspected like any other pack.
             </p>
           </div>
           <div
@@ -723,8 +744,8 @@ export default function Dashboard() {
               }
             }}
           >
-            <strong>Drop a `.bpmn` file here</strong>
-            <span>or use the quick upload action in the left sidebar</span>
+            <strong>Drop a BPMN file here</strong>
+            <span>or import a BPMN file from the sidebar</span>
           </div>
           <div className="form-grid pack-create-panel__grid">
             <label className="pack-create-panel__field">
@@ -741,7 +762,7 @@ export default function Dashboard() {
             className="editor editor--small"
             value={pasteXml}
             onChange={(event) => setPasteXml(event.target.value)}
-            placeholder="Paste BPMN XML here to create a new regulation pack directly from the workspace."
+            placeholder="Paste BPMN XML here to create a temporary regulation pack."
           />
         </section>
       </div>
@@ -754,21 +775,21 @@ export default function Dashboard() {
         <div className="panel__head">
           <div>
             <p className="eyebrow">Knowledge Base</p>
-            <h2>Package ABox</h2>
+            <h2>Pack ABox</h2>
             <p className="section-copy">
-              This area is the package knowledge base for the selected pack. Use the graph tab for
-              the visual graph explorer and the rules tab for SWRL rule syntax.
+              This section shows the generated ABox for the selected pack. It is the RDF
+              instantiation produced from the annotated BPMN and the NORMA ontology.
             </p>
           </div>
         </div>
         <div className="action-grid">
           <a className="action-card" href={selectedPack ? getAboxDownloadUrl(selectedPack) : "#"}>
             <strong>Download ABox Turtle</strong>
-            <span> Raw Turtle serialization.</span>
+            <span>Turtle serialization of the generated ABox.</span>
           </a>
           <a className="action-card" href={selectedPack ? getAboxRdfDownloadUrl(selectedPack) : "#"}>
             <strong>Download ABox RDF/XML</strong>
-            <span> RDF/XML conversion.</span>
+            <span>RDF XML serialization for tools that need that format.</span>
           </a>
         </div>
         <pre className="result-box">{artifactLoading ? "Loading knowledge base..." : artifactText || "No ABox content loaded."}</pre>
@@ -793,21 +814,21 @@ export default function Dashboard() {
         <div className="panel__head">
           <div>
             <p className="eyebrow">Rules</p>
-            <h2>Human-readable rules and OWL syntax</h2>
+            <h2>Readable rules and OWL syntax</h2>
             <p className="section-copy">
-              The left window keeps the rule paths readable. The right window shows the SWRL
-              OWL/XML generated for the selected pack.
+              This section shows the generated rule layer in two forms: a readable explanation and
+              the formal OWL XML serialization of the SWRL rules.
             </p>
           </div>
         </div>
         <div className="action-grid">
           <div className="action-card action-card--static">
-            <strong>Human-readable rules</strong>
-            <span> Compact rule paths for quick inspection of the selected pack.</span>
+            <strong>Readable rules</strong>
+            <span>Compact rule paths for quick inspection of the selected pack.</span>
           </div>
           <a className="action-card" href={selectedPack ? getSwrlDownloadUrl(selectedPack) : "#"}>
             <strong>Download SWRL</strong>
-            <span> OWL/XML serialization for the generated SWRL rules.</span>
+            <span>OWL XML serialization for the generated SWRL rules.</span>
           </a>
         </div>
         <div className="rules-grid rules-grid--stacked">
@@ -848,11 +869,11 @@ export default function Dashboard() {
         <div className="panel__head">
           <div>
             <p className="eyebrow">Evaluator</p>
-            <h2>Condition-driven norm determination</h2>
+            <h2>Condition based norm determination</h2>
           </div>
           <div className="pill-row">
             <button className="button button--cta" type="button" onClick={handleRunEvaluation} disabled={isRunningEval}>
-              {isRunningEval ? "Evaluating…" : "Check applicable norms"}
+              {isRunningEval ? "Evaluating..." : "Determine applicable norms"}
             </button>
             {answeredCount > 0 && (
               <button
@@ -911,7 +932,7 @@ export default function Dashboard() {
                       })
                     }
                   >
-                    ✕
+                    Clear
                   </button>
                 )}
               </div>
@@ -957,7 +978,7 @@ export default function Dashboard() {
                 {item.paragraph && <span className="norm-pill">§ {item.paragraph}</span>}
                 {item.source_uri && (
                   <a href={item.source_uri} target="_blank" rel="noopener noreferrer" className="norm-pill law-link">
-                    ↗ legislation
+                    Open legislation
                   </a>
                 )}
               </div>
@@ -974,7 +995,7 @@ export default function Dashboard() {
               <div className="inline-meta">
                 <span />
                 <button className="pill" type="button" onClick={() => jumpToNorm(item.norm_id)}>
-                  View annotation →
+                  View annotation
                 </button>
               </div>
             </article>
@@ -997,7 +1018,7 @@ export default function Dashboard() {
     if (typeof sparqlResult === "object" && "boolean" in sparqlResult) {
       return (
         <div className={`sparql-ask ${sparqlResult.boolean ? "is-true" : "is-false"}`}>
-          ASK → <strong>{sparqlResult.boolean ? "true" : "false"}</strong>
+          ASK result: <strong>{sparqlResult.boolean ? "true" : "false"}</strong>
         </div>
       );
     }
@@ -1043,7 +1064,7 @@ export default function Dashboard() {
       );
     }
 
-    // CONSTRUCT / DESCRIBE / raw text
+    // CONSTRUCT, DESCRIBE, or raw text
     return <pre className="result-box">{typeof sparqlResult === "string" ? sparqlResult : JSON.stringify(sparqlResult, null, 2)}</pre>;
   }
 
@@ -1053,7 +1074,7 @@ export default function Dashboard() {
         <div className="panel__head">
           <div>
             <p className="eyebrow">SPARQL</p>
-            <h2>Query the pack graph</h2>
+            <h2>Query the selected knowledge graph</h2>
           </div>
           <div className="pill-row">
             <button className="button button--primary" type="button" onClick={handleRunSparql} disabled={isRunningSparql}>
@@ -1083,7 +1104,7 @@ export default function Dashboard() {
           className="editor"
           value={sparqlQuery}
           onChange={(event) => setSparqlQuery(event.target.value)}
-          placeholder="Write a SPARQL 1.1 query…"
+          placeholder="Write a SPARQL 1.1 query..."
         />
         {renderSparqlResults()}
       </section>
@@ -1107,11 +1128,10 @@ export default function Dashboard() {
         <div className="panel__head">
           <div>
             <p className="eyebrow">Visual Exploration</p>
-            <h2>Read-only norm exploration</h2>
+            <h2>Norm exploration</h2>
             <p className="section-copy">
-              This view is now a user-facing explorer for annotations and extracted norms. Editing
-              has been removed from the web app so the screen stays focused on inspection,
-              traceability, and navigation.
+              This view presents the extracted norm and condition annotations for the selected
+              pack. It is designed for inspection, traceability, and navigation.
             </p>
           </div>
           <span className="muted" style={{ fontSize: "0.85rem", alignSelf: "center" }}>
@@ -1124,7 +1144,7 @@ export default function Dashboard() {
             className="norm-search"
             value={normSearch}
             onChange={(event) => setNormSearch(event.target.value)}
-            placeholder="Search id, action, agent, regulation, article…"
+            placeholder="Search ID, action, agent, regulation, or article..."
           />
           <div className="pill-row">
             {["all", "obligation", "prohibition", "permission", "recommendation", "fact", "gateway"].map((t) => (
@@ -1169,12 +1189,12 @@ export default function Dashboard() {
                       norm.gw_condition_statement ||
                       norm.norm_statement ||
                       humanizeNormId(norm.norm_id),
-                  ) || "—"}
+                  ) || "Not provided"}
                 </p>
                 <div className="norm-meta-grid">
                   <span>{norm.bpmn_source || "unknown source"}</span>
-                  <span>{norm.regulation || "—"}</span>
-                  <span>{norm.article ? `Art. ${norm.article}` : "—"}</span>
+                  <span>{norm.regulation || "Not provided"}</span>
+                  <span>{norm.article ? `Art. ${norm.article}` : "Not provided"}</span>
                   <span>
                     {norm.conditions?.length ? (
                       norm.conditions.map((c) => (
@@ -1220,9 +1240,9 @@ export default function Dashboard() {
             <p className="eyebrow">Entities</p>
             <h2>Entity review</h2>
             <p className="section-copy">
-              This workspace is now read-only for entity and KG consistency checks. Merge decisions
-              and canonical maintenance should live in a separate legal KG maintenance application,
-              not in the end-user app.
+              This view summarizes entity and KG consistency checks. Merge decisions and canonical
+              maintenance should belong to a separate legal KG maintenance application, not to the
+              public exploration interface.
             </p>
           </div>
         </div>
@@ -1265,7 +1285,7 @@ export default function Dashboard() {
           </article>
 
           <article className="list-card">
-            <strong>Flagged near-matches</strong>
+            <strong>Flagged similar labels</strong>
             <p className="decision-card__text">
               These labels look close enough to deserve review, but users cannot merge them from
               this application.
@@ -1283,7 +1303,7 @@ export default function Dashboard() {
                   <p className="decision-card__text">{candidate.message}</p>
                 </div>
               ))}
-              {quickEntityCandidates.length === 0 ? <div className="table__empty">No near-match warnings right now.</div> : null}
+              {quickEntityCandidates.length === 0 ? <div className="table__empty">No similar label warnings right now.</div> : null}
             </div>
           </article>
         </div>
@@ -1292,7 +1312,7 @@ export default function Dashboard() {
           <article className="list-card">
             <strong>Canonicalization summary</strong>
             <p className="decision-card__text">
-              These are the automatic normalization decisions currently applied during pack rebuild.
+              These are the automatic normalization decisions currently applied during pack regeneration.
             </p>
             <div className="stack-list stack-list--compact">
               {(entities?.decisions || []).map((decision, index) => (
@@ -1304,7 +1324,7 @@ export default function Dashboard() {
                   <strong>{decision.raw_labels?.[0] || decision.winner}</strong>
                   {decision.raw_labels?.slice(1).map((label) => (
                     <p className="decision-card__text" key={label}>
-                      {label} → {decision.winner}
+                      {label} resolves to {decision.winner}
                     </p>
                   ))}
                 </div>
@@ -1315,21 +1335,21 @@ export default function Dashboard() {
           <article className="list-card">
             <strong>Maintenance boundary</strong>
             <p className="decision-card__text">
-              This open-source web app is intended for browsing, checking, and reviewing the legal
-              knowledge graph. Direct merge actions have been removed from the user interface.
+              This open source interface is intended for browsing, checking, and reviewing the legal
+              knowledge graph. Direct merge actions are intentionally outside this user interface.
             </p>
             <div className="stack-list stack-list--compact">
               <div className="decision-card">
                 <strong>Main user app</strong>
                 <p className="decision-card__text">
-                  Review packs, inspect duplicate warnings, open norms, run compliance checks, and
+                  Review packs, inspect duplicate warnings, open norms, run norm determination, and
                   explore the semantic graph.
                 </p>
               </div>
               <div className="decision-card">
                 <strong>Separate KG maintenance app</strong>
                 <p className="decision-card__text">
-                  Handle canonical merges, override decisions, provenance-aware reconciliation, and
+                  Handle canonical merges, override decisions, provenance aware reconciliation, and
                   legal knowledge base maintenance with stronger access control.
                 </p>
               </div>
@@ -1348,10 +1368,9 @@ export default function Dashboard() {
             <p className="eyebrow">Graph</p>
             <h2>Visual knowledge graph</h2>
             <p className="section-copy">
-              This visual representation comes from the ontology-backed RDF store for the selected
-              pack. Hover a node to inspect its semantic details, or click it to keep the details
-              panel open while you explore the graph. Separate groups mean the current KG has
-              multiple disconnected components, not that the visualisation lost a link.
+              This visual representation comes from the RDF store for the selected pack. It shows
+              ABox instances and the relations materialized in the KG. Hover a node to inspect its
+              details or click it to keep the details panel open.
             </p>
           </div>
           <div className="graph-legend">
@@ -1375,7 +1394,7 @@ export default function Dashboard() {
         <div className="form-grid graph-controls">
           <label className="graph-controls__search">
             <span>Search graph</span>
-            <input value={graphSearch} onChange={(event) => setGraphSearch(event.target.value)} placeholder="Search resource URIs, labels, or semantic types" />
+            <input value={graphSearch} onChange={(event) => setGraphSearch(event.target.value)} placeholder="Search IRIs, labels, or semantic types" />
           </label>
           <label className="graph-controls__provenance">
             <span>Provenance</span>
@@ -1405,7 +1424,7 @@ export default function Dashboard() {
         <div className="graph-board">
           {filteredGraphNodes.length === 0 ? (
             <div className="table__empty" style={{ padding: 40 }}>
-              No graph data for this pack or search returned no matches.
+              No graph data is available for this pack, or the search returned no matches.
             </div>
           ) : (
             <GraphForce nodes={filteredGraphNodes} edges={filteredGraphEdges} />
@@ -1438,9 +1457,8 @@ export default function Dashboard() {
             <p className="eyebrow">Ontology</p>
             <h2>TBox reference</h2>
             <p className="section-copy">
-              Review the core NORMA modeling layer used by the rules, ABox, and semantic graph.
-              This tab is meant as a quick orientation view while the full public ontology
-              documentation is being prepared.
+              Review the core NORMA modeling layer used by the rules, ABox, and visual KG.
+              This tab is a compact orientation view for the ontology used by the toolkit.
             </p>
           </div>
           <div className="ontology-panel__actions" />
@@ -1461,7 +1479,7 @@ export default function Dashboard() {
           </div>
           <div className="ontology-panel__meta-item">
             <span>Core alignments</span>
-            <strong>PROV-O, ELI, and W3C ORG</strong>
+            <strong>PROV O, ELI, and W3C ORG</strong>
           </div>
         </div>
         <div className="ontology-panel__sections">
@@ -1470,7 +1488,7 @@ export default function Dashboard() {
               <strong>Core NORMA classes</strong>
             </div>
             <p className="ontology-panel__section-copy">
-              These are the main categories the workspace exposes in the rules, ABox, and graph views.
+              These are the main categories exposed in the rules, ABox, and graph views.
             </p>
             <div className="ontology-panel__row-list">
               {ONTOLOGY_ITEMS.map((item) => (
@@ -1487,7 +1505,7 @@ export default function Dashboard() {
               <span className="ontology-panel__count">{EXTERNAL_ONTOLOGIES.length}</span>
             </div>
             <p className="ontology-panel__section-copy">
-              PROV-O, ELI, and W3C ORG are part of the semantic alignment layer. SKOS, Dublin Core,
+              PROV O, ELI, and W3C ORG are part of the semantic alignment layer. SKOS, Dublin Core,
               FOAF, BIBO, and VANN are mainly used for classification and ontology metadata.
             </p>
             <div className="ontology-panel__table">
@@ -1516,7 +1534,7 @@ export default function Dashboard() {
               </div>
               <div className="ontology-panel__row">
                 <span>
-                  Use this tab as a quick reference to check whether the ABox, SWRL rules, graph view, and ontology are still aligned semantically.
+                  Use this tab as a quick reference to check whether the ABox, SWRL rules, graph view, and ontology are aligned semantically.
                 </span>
               </div>
             </div>
@@ -1554,20 +1572,93 @@ export default function Dashboard() {
       <Sidebar
         packs={packs}
         selectedPack={selectedPack}
-        onSelectPack={setSelectedPack}
+        onSelectPack={(pack) => { setSelectedPack(pack); setSidebarOpen(false); }}
         activeView={activeView}
-        onSelectView={setActiveView}
-        onOpenPackCreator={openPackCreator}
+        onSelectView={(view) => { setActiveView(view); setSidebarOpen(false); }}
+        onOpenPackCreator={() => { openPackCreator(); setSidebarOpen(false); }}
         onUploadFile={handleUpload}
         onAppendFile={handleAppendUpload}
         isUploading={isUploading}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
 
+      {/* Mobile backdrop */}
+      {sidebarOpen && (
+        <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)} />
+      )}
+
       <main className="dashboard__content">
+        {/* Mobile header — only visible on small screens via CSS */}
+        <header className="mobile-header">
+          <div className="mobile-header__brand">
+            <span className="mobile-header__logo">N</span>
+            <div>
+              <div>NORMA</div>
+              <div className="mobile-header__view">{VIEW_LABELS[activeView] || "Overview"}</div>
+            </div>
+          </div>
+          <div className="mobile-header__actions">
+            <button type="button" className="hamburger" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
+        </header>
+
+        {/* Desktop topbar */}
+        <div className="topbar">
+          <div className="topbar__breadcrumb">
+            <span className="topbar__root">NORMA</span>
+            {selectedPack && (
+              <>
+                <span className="topbar__sep">›</span>
+                <span className="topbar__pack">{selectedPack}</span>
+              </>
+            )}
+            <span className="topbar__sep">›</span>
+            <span className="topbar__view">{VIEW_LABELS[activeView] || "Overview"}</span>
+          </div>
+          <div className="topbar__right">
+            {selectedPackSummary ? (
+              <>
+                <span
+                  className={`topbar__badge ${selectedPackSummary.can_rebuild ? "topbar__badge--official" : "topbar__badge--temporary"}`}
+                >
+                  {selectedPackSummary.can_rebuild ? "Official" : "Temporary"}
+                </span>
+                <span className="topbar__badge topbar__badge--rules">
+                  {selectedPackSummary.rule_count} rules
+                </span>
+              </>
+            ) : null}
+          </div>
+        </div>
+
         {error ? <div className="alert alert--error">{error}</div> : null}
         {notice ? <div className="alert alert--info">{notice}</div> : null}
 
-        {renderActiveView()}
+        {isLoadingPack ? (
+          <div className="loading-row">
+            <span className="spinner" />
+            Loading pack data…
+          </div>
+        ) : !selectedPack && activeView !== "overview" ? (
+          <div className="no-pack-banner">
+            <div className="no-pack-banner__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="21 8 21 21 3 21 3 8" />
+                <rect x="1" y="3" width="22" height="5" />
+                <line x1="10" y1="12" x2="14" y2="12" />
+              </svg>
+            </div>
+            <h3>No pack selected</h3>
+            <p>Select a regulation pack from the sidebar or create a new one from the Overview page to start exploring.</p>
+          </div>
+        ) : (
+          renderActiveView()
+        )}
       </main>
     </div>
   );
