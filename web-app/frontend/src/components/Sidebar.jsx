@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { NavLink } from "react-router-dom";
+import normaLogo from "../assets/logos/norma-logo.png";
 
 /* Minimal inline SVG icon — Feather-style, 24-unit grid */
 function NavIcon({ d, children, ...rest }) {
@@ -173,7 +174,7 @@ export default function Sidebar({
     <aside className={`sidebar${isOpen ? " is-mobile-open" : ""}`}>
       {/* Brand */}
       <div className="sidebar__brand">
-        <span className="sidebar__logo">N</span>
+        <img className="sidebar__logo" src={normaLogo} alt="NORMA logo" />
         <div style={{ flex: 1, minWidth: 0 }}>
           <strong>NORMA</strong>
           <p>Semantic toolkit</p>

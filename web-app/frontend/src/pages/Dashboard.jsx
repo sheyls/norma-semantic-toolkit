@@ -56,12 +56,6 @@ const EXTERNAL_ONTOLOGIES = [
     note: "Used for legal resources and source alignment.",
   },
   {
-    name: "W3C Organization Ontology",
-    prefix: "org:",
-    url: "http://www.w3.org/ns/org#",
-    note: "Used to align organizational legal agents.",
-  },
-  {
     name: "SKOS",
     prefix: "skos:",
     url: "http://www.w3.org/2004/02/skos/core#",
@@ -77,7 +71,7 @@ const EXTERNAL_ONTOLOGIES = [
     name: "FOAF",
     prefix: "foaf:",
     url: "http://xmlns.com/foaf/0.1/",
-    note: "Used for creator, contributor, publisher, and logo metadata.",
+    note: "Used for legal agents plus creator, contributor, publisher, and logo metadata.",
   },
   {
     name: "BIBO",
@@ -1479,7 +1473,7 @@ export default function Dashboard() {
           </div>
           <div className="ontology-panel__meta-item">
             <span>Core alignments</span>
-            <strong>PROV O, ELI, and W3C ORG</strong>
+            <strong>PROV O, ELI, and FOAF</strong>
           </div>
         </div>
         <div className="ontology-panel__sections">
@@ -1505,8 +1499,8 @@ export default function Dashboard() {
               <span className="ontology-panel__count">{EXTERNAL_ONTOLOGIES.length}</span>
             </div>
             <p className="ontology-panel__section-copy">
-              PROV O, ELI, and W3C ORG are part of the semantic alignment layer. SKOS, Dublin Core,
-              FOAF, BIBO, and VANN are mainly used for classification and ontology metadata.
+              PROV O, ELI, and FOAF are part of the semantic alignment layer. SKOS, Dublin Core,
+              BIBO, and VANN are mainly used for classification and ontology metadata.
             </p>
             <div className="ontology-panel__table">
               {EXTERNAL_ONTOLOGIES.map((item) => (

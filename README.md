@@ -60,7 +60,7 @@ This repository is intended to accompany a research paper and to serve as a reus
 |----------------|-----------------|
 | Findable | The ontology uses the persistent namespace `https://w3id.org/norma-ontology`; the package metadata names the project as `norma-engine`. A repository DOI should be minted through Zenodo before publication. |
 | Accessible | Source code, ontology files, BPMN examples, and templates are stored directly in the repository. The web app exposes artifacts through REST endpoints and downloads. |
-| Interoperable | Outputs use RDF/Turtle, RDF/XML, OWL, SWRL, SPARQL, BPMN, and JSON. The ontology aligns with external vocabularies such as PROV-O, ELI, ORG, SKOS, Dublin Core Terms, FOAF, BIBO, and VANN where used. |
+| Interoperable | Outputs use RDF/Turtle, RDF/XML, OWL, SWRL, SPARQL, BPMN, and JSON. The ontology aligns with external vocabularies such as PROV-O, ELI, FOAF, SKOS, Dublin Core Terms, BIBO, and VANN where used. |
 | Reusable | The repository includes `LICENSE` and `CITATION.cff`; setup commands, CLI entrypoints, tests, and example packs are documented. Before archival publication, mint the final DOI and tag the exact artifact release used in the paper. |
 
 ### Reproducibility Checklist
@@ -280,7 +280,7 @@ The TBox is in `ontology/` in two serialisation formats:
 The TBox has two layers:
 
 - **Shortcut literal layer** — the set of data properties used by the pipeline. These carry plain-text values read directly from BPMN annotation fields (e.g., `norma:agentText`, `norma:fromArticle`). This layer is always populated by the pipeline.
-- **Extended semantic layer** — a richer vocabulary aligned with PROV-O, ELI (European Legislation Identifier), the W3C Organization Ontology, SKOS, Dublin Core Terms, FOAF, BIBO, and VANN where those vocabularies are used. This layer supports federation with legal and provenance data ecosystems but is not fully instantiated by the current pipeline.
+- **Extended semantic layer** — a richer vocabulary aligned with PROV-O, ELI (European Legislation Identifier), FOAF, SKOS, Dublin Core Terms, BIBO, and VANN where those vocabularies are used. This layer supports federation with legal and provenance data ecosystems but is not fully instantiated by the current pipeline.
 
 The TBox is derived strictly from the element template:
 - **Dropdown fields** → OWL classes + `owl:NamedIndividual` (oneOf enumeration)

@@ -146,6 +146,32 @@ h1 {
   padding: 12px 2px 6px;
 }
 
+.home__brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 8px 14px 8px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(80, 125, 188, 0.12);
+}
+
+.home__brand-mark__logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+.home__brand-mark span {
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--brand-dark);
+}
+
 .home__hero-panel {
   position: relative;
   overflow: hidden;
@@ -555,15 +581,11 @@ h1 {
 .sidebar__logo {
   width: 36px;
   height: 36px;
-  border-radius: 10px;
-  background: var(--brand);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 0.95rem;
+  display: block;
+  object-fit: contain;
   flex-shrink: 0;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 12px rgba(59, 111, 212, 0.4);
+  background: transparent;
+  padding: 0;
 }
 
 .sidebar__brand strong {

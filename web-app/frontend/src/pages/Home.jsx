@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import ccByLogo from "../assets/logos/cc-by-logo.png";
+import normaLogo from "../assets/logos/norma-logo.png";
 import oegUpmLogo from "../assets/logos/oeg-upm-logo.png";
 
 const FEATURES = [
@@ -49,7 +50,7 @@ const FEATURES = [
 const STACK = [
   { label: "Compliance review" },
   { label: "OWL 2 + SWRL" },
-  { label: "PROV-O · ELI · W3C ORG" },
+  { label: "PROV-O · ELI · FOAF" },
   { label: "Open source research" },
 ];
 
@@ -68,12 +69,15 @@ export default function Home() {
         {/* ── Hero ── */}
         <div className="home__hero">
           <div className="home__hero-copy">
-            <p className="eyebrow">NORMA Semantic Toolkit</p>
+            <div className="home__brand-mark" aria-hidden="true">
+              <img src={normaLogo} alt="" className="home__brand-mark__logo" />
+              <span>NORMA Semantic toolkit</span>
+            </div>
             <h1>From annotated BPMN to normative knowledge graphs.</h1>
             <p className="home__lead">
               NORMA converts legally annotated process models into semantic, linked normative
               knowledge — producing OWL 2 ABoxes, SWRL rules, and queryable RDF graphs aligned
-              to PROV-O, ELI, and W3C ORG.
+              to PROV-O, ELI, and FOAF.
             </p>
 
             <div className="hero__actions">
@@ -108,7 +112,7 @@ export default function Home() {
             </div>
             <div className="home__signal">
               <span>Standards alignment</span>
-              <strong>OWL 2, SWRL, PROV-O, ELI, W3C ORG, SKOS — all open W3C vocabularies</strong>
+              <strong>OWL 2, SWRL, PROV-O, ELI, FOAF, SKOS — all open W3C vocabularies</strong>
             </div>
           </div>
         </div>
