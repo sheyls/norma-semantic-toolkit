@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use NORMA in academic work, please cite this software artifact and the accompanying paper."
+title: "NORMA..."
+version: "1.0.0"
+date-released: "2026-04-23"
+authors:
+  - family-names: "Leyva-Sánchez"
+    given-names: "Sheyla"
+license: "CC-BY-4.0"
+url: "https://w3id.org/norma-ontology"
+abstract: "NORMA transforms BPMN processes annotated with legal norms into ontology aligned knowledge graph artifacts, SWRL rules, SPARQL queryable data, and web based semantic exploration views."

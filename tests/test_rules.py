@@ -6,9 +6,9 @@ assignment (true/false branch), and superiority relation generation.
 """
 
 import pytest
-from norma.parsing.bpmn_parser import parse_bpmn_to_reduced_graph
-from norma.rules.extractor import enumerate_paths_and_build_ir
-from norma.rules.ir import Ref
+from norma_engine.parsing.bpmn_parser import parse_bpmn_to_reduced_graph
+from norma_engine.rules.extractor import enumerate_paths_and_build_ir
+from norma_engine.rules.ir import Ref
 
 
 def _run(sample_bpmn_xml):
@@ -82,6 +82,39 @@ class TestRuleIR:
         for rule in rules:
             assert len(rule.relations) > 0
 
+    def test_uses_legal_action_and_object_relations(self, sample_bpmn_xml):
+        _, rules, _ = _run(sample_bpmn_xml)
+        predicates = {
+            rel.predicate.name
+            for rule in rules
+            for rel in rule.relations
+        }
+        assert "hasLegalAgent" in predicates
+        assert "hasLegalAction" in predicates
+        assert "hasLegalObject" in predicates
+        assert "hasObject" not in predicates
+        assert "isLegalAgentOf" not in predicates
+
+    def test_rule_atoms_include_template_semantics(self, sample_bpmn_xml):
+        _, rules, _ = _run(sample_bpmn_xml)
+        relation_predicates = {
+            rel.predicate.name
+            for rule in rules
+            for rel in rule.relations
+        }
+        data_predicates = {
+            dat.predicate.name
+            for rule in rules
+            for dat in rule.data_atoms
+        }
+        assert "hasNormStatus" in relation_predicates
+        assert "hasExtractionMethod" in relation_predicates
+        assert "hasReviewStatus" in relation_predicates
+        assert "hasLegalSource" in relation_predicates
+        assert "wasGeneratedByAnnotationActivity" in relation_predicates
+        assert "normStatement" in data_predicates or "factStatement" in data_predicates
+        assert "confidenceScore" in data_predicates
+
     def test_data_atoms_include_deontic_id(self, sample_bpmn_xml):
         _, rules, _ = _run(sample_bpmn_xml)
         for rule in rules:
@@ -91,6 +124,29 @@ class TestRuleIR:
             ]
             assert len(deontic_ids) == 1
             assert deontic_ids[0] in {"OBL_1", "REC_1"}
+
+    def test_missing_agent_does_not_create_placeholder_agent(self, sample_bpmn_xml):
+        xml = sample_bpmn_xml.replace(
+            '<zeebe:property name="compliance_agent"          value="AI owner" />',
+            "",
+            1,
+        )
+        _, rules, _ = _run(xml)
+        obligation_rule = next(
+            r for r in rules
+            if any(d.value == "OBL_1" for d in r.data_atoms if d.predicate == Ref("tbox", "deonticId"))
+        )
+        relation_predicates = {rel.predicate.name for rel in obligation_rule.relations}
+        relation_objects = {rel.object.name for rel in obligation_rule.relations}
+        assert "hasLegalAgent" not in relation_predicates
+        assert "Agent_x" not in relation_objects
+
+    def test_custom_gateway_branch_labels_are_mapped(self, sample_bpmn_xml):
+        xml = sample_bpmn_xml.replace('name="Yes"', 'name="Approved"', 1).replace('name="No"', 'name="Rejected"', 1)
+        xml = xml.replace('value="Yes"', 'value="Approved"', 1).replace('value="No"', 'value="Rejected"', 1)
+        _, rules, _ = _run(xml)
+        condition_values = {r.conditions[0].value for r in rules}
+        assert condition_values == {True, False}
 
 
 class TestSuperiority:

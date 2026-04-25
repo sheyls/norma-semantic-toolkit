@@ -10,6 +10,8 @@ build/
 .venv/
 venv/
 env/
+.pytest_cache/
+.vite/
 
 # macOS
 .DS_Store
@@ -27,6 +29,13 @@ outputs/*.txt
 # IDE
 .vscode/
 .idea/
+
+# Web app generated/runtime files
+web-app/frontend/node_modules/
+web-app/frontend/dist/
+web-app/backend/data/norma.sqlite3
+web-app/backend/data/graph-stores/
+web-app/backend/data/uploads/
 
 # OWL/Protégé catalog files (machine-specific paths)
 catalog-v001.xml

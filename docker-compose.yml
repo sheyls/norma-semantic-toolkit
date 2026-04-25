@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  backend:
+    image: python:3.11-slim
+    working_dir: /workspace/web-app
+    command: sh -c "pip install --no-cache-dir -r backend/requirements.txt && uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - .:/workspace
+    ports:
+      - "8000:8000"
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /workspace/web-app/frontend
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    volumes:
+      - .:/workspace
+      - frontend_node_modules:/workspace/web-app/frontend/node_modules
+    environment:
+      VITE_PROXY_TARGET: http://backend:8000
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+
+volumes:
+  frontend_node_modules:
