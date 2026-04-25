@@ -1,757 +1,1041 @@
-@prefix norma:   <https://w3id.org/norma-ontology#> .
-@prefix owl:     <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+# Namespace: https://w3id.org/norma-ontology#
+
+@prefix bibo: <http://purl.org/ontology/bibo/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix vann:    <http://purl.org/vocab/vann/> .
-@prefix prov:    <http://www.w3.org/ns/prov#> .
-@prefix eli:     <http://data.europa.eu/eli/ontology#> .
-@prefix org:     <http://www.w3.org/ns/org#> .
-@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
-@prefix bibo:    <http://purl.org/ontology/bibo/> .
-@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix eli: <http://data.europa.eu/eli/ontology#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix norma: <https://w3id.org/norma-ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#################################################################
-# 0. ONTOLOGY DECLARATION
-# Placeholders to replace before publication: bibo:doi, foaf:logo,
-# dcterms:source, and the citation string once a DOI is minted.
-#################################################################
+# =============================================================================
+# Ontology metadata
+# =============================================================================
 
-<https://w3id.org/norma-ontology>
-    a owl:Ontology ;
-
-    # --- Identification -------------------------------------------------
-    owl:versionIRI   <https://w3id.org/norma-ontology/1.2> ;
-    owl:versionInfo  "1.2" ;
-    owl:priorVersion <https://w3id.org/norma-ontology/1.1> ;
-
-    dcterms:title       "NORMA — Normative Ontology for Regulatory Machine-readable Annotations"@en ;
+<https://w3id.org/norma-ontology> a owl:Ontology ;
+    rdfs:label "NORMA ontology"@en ;
     dcterms:alternative "NORMA Ontology"@en ;
-    rdfs:label          "NORMA ontology"@en ;
-    rdfs:comment        "Publication-quality ontology aligned to the NORMA annotation model and BPMN legal compliance workflow."@en ;
-
-    # --- Description ----------------------------------------------------
-    dcterms:description """Ontology for representing machine-readable legal norm annotations derived from BPMN workflow models in the NORMA pipeline. The ontology models regulative norms (obligations, prohibitions, permissions, and recommendations) and constitutive rules expressing legal responsibilities, along with legal conditions, legal sources, legal agents, legal objects, provenance metadata and lifecycle status. It aligns with PROV-O (provenance), ELI (legal resources), and the W3C Organization Ontology (organizational agents). Version 1.2 adds full FAIR bibliographic metadata; version 1.1 simplified v1.0 by removing the unused OWL-Time layer and the ExtractionActivity/ReviewActivity specialisations, and by relocating `hasSourceExpression` to match ELI's resource-to-expression pattern."""@en ;
-
-    # --- Dates ----------------------------------------------------------
-    dcterms:created  "2026-04-15"^^xsd:date ;
-    dcterms:issued   "2026-04-17"^^xsd:date ;
-    dcterms:modified "2026-04-17"^^xsd:date ;
-
-    # --- Authorship -----------------------------------------------------
-    dcterms:creator [
-        a foaf:Person ;
-        foaf:name "Sheyla Leyva-Sánchez"
-    ] ;
-    dcterms:contributor [
-        a foaf:Person ;
-        foaf:name "NORMA project contributors"
-    ] ;
-    dcterms:publisher [
-        a foaf:Organization ;
-        foaf:name "NORMA project"
-    ] ;
-
-    # --- Rights and language -------------------------------------------
-    dcterms:license  <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:bibliographicCitation "Leyva-Sánchez, S. et al. (2026). NORMA: Normative Ontology for Regulatory Machine-readable Annotations (Version 1.0) [Ontology]. https://w3id.org/norma-ontology/1.0"@en ;
+    dcterms:contributor [ a foaf:Person ;
+            foaf:name "NORMA project contributors" ] ;
+    dcterms:created "2026-04-15"^^xsd:date ;
+    dcterms:creator [ a foaf:Person ;
+            foaf:name "Sheyla Leyva-Sánchez" ] ;
+    dcterms:description "Ontology for representing machine-readable legal norm annotations derived from BPMN workflow models in the NORMA pipeline. The ontology models regulative norms (obligations, prohibitions, permissions, and recommendations) and constitutive rules expressing legal responsibilities, along with legal conditions, legal sources, legal agents, legal objects, provenance metadata and lifecycle status. It aligns with PROV-O (provenance), ELI (legal resources), and FOAF (agents and project metadata). Legal conditions are connected to normative content via a W3C n-ary relation pattern (TriggerEvent) that associates each condition outcome with the specific normative content it activates."@en ;
+    dcterms:issued "2026-04-17"^^xsd:date ;
     dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
-
-    # --- Status ---------------------------------------------------------
-    bibo:status "Published"@en ;
-
-    # --- Citation and identifiers --------------------------------------
-    dcterms:bibliographicCitation "Leyva-Sánchez, S. et al. (2026). NORMA: Normative Ontology for Regulatory Machine-readable Annotations (Version 1.2) [Ontology]. https://w3id.org/norma-ontology/1.2"@en ;
-    # TODO: replace with real DOI after first release (e.g. Zenodo).
-    bibo:doi "10.5281/zenodo.XXXXXXX" ;
-
-    # --- Resources ------------------------------------------------------
-    # TODO: replace with the hosted logo URL once available.
-    foaf:logo <https://w3id.org/norma-ontology/assets/logo.png> ;
-    # TODO: replace with canonical source repository or paper URL.
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:modified "2026-04-25"^^xsd:date ;
+    dcterms:publisher [ a foaf:Organization ;
+            foaf:name "NORMA project" ] ;
     dcterms:source <https://github.com/norma-project/norma-ontology> ;
-
-    # --- Namespace convention ------------------------------------------
+    dcterms:title "NORMA: Normative Ontology for Regulatory Machine-readable Annotations"@en ;
+    bibo:doi "10.5281/zenodo.19765302" ;
+    bibo:status "Published"@en ;
     vann:preferredNamespacePrefix "norma" ;
-    vann:preferredNamespaceUri    "https://w3id.org/norma-ontology#" ;
+    vann:preferredNamespaceUri "https://w3id.org/norma-ontology#" ;
+    rdfs:comment "Publication-quality ontology aligned to the NORMA annotation model and BPMN legal compliance workflow."@en ;
+    rdfs:seeAlso <https://www.w3.org/TR/swbp-n-aryRelations/> ;
+    owl:imports <http://data.europa.eu/eli/ontology>,
+        <http://www.w3.org/ns/prov-o>,
+        foaf: ;
+    owl:versionIRI <https://w3id.org/norma-ontology/1.0> ;
+    owl:versionInfo "1.0" ;
+    foaf:logo <https://w3id.org/norma-ontology/assets/logo.png> .
 
-    # --- Imports --------------------------------------------------------
-    owl:imports <http://www.w3.org/ns/prov-o> ;
-    owl:imports <http://data.europa.eu/eli/ontology#> ;
-    owl:imports <http://www.w3.org/ns/org#> .
 
-#################################################################
-# 1. CORE CLASSES
-#################################################################
+# =============================================================================
+# Core class hierarchy and conceptual model
+# =============================================================================
 
-norma:NormativeContent
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subClassOf prov:Entity ;
+norma:NormativeContent a owl:Class ;
     rdfs:label "Normative Content"@en ;
-    rdfs:comment "An informational entity that expresses machine-readable legal-normative content extracted or formulated from a legal source, either a regulative norm or a constitutive rule."@en .
-
-norma:RegulativeNorm
-    a owl:Class ;
+    rdfs:comment "An informational entity that expresses machine-readable legal-normative content extracted or formulated from a legal source, either a regulative norm or a constitutive rule. Jurisdiction is represented only with eli:jurisdiction, whose value must be an eli:AdministrativeArea. If no authoritative URI is available yet, use a local provisional resource typed as eli:AdministrativeArea and provide its rdfs:label."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subClassOf norma:NormativeContent ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom eli:AdministrativeArea ;
+            owl:onProperty eli:jurisdiction ],
+        prov:Entity ;
+    skos:scopeNote "Do not attach jurisdiction strings directly to NormativeContent. For extracted labels such as \"Spain\" or \"California\", mint a local jurisdiction resource, type it as eli:AdministrativeArea, attach the extracted text as rdfs:label, and later align or replace it with an authoritative URI when available."@en .
+
+norma:RegulativeNorm a owl:Class ;
     rdfs:label "Regulative Norm"@en ;
-    rdfs:comment "A normative content item that regulates conduct by prescribing, prohibiting, permitting, or recommending a legal action."@en .
-
-norma:ConstitutiveRule
-    a owl:Class ;
+    rdfs:comment "A normative content item that regulates conduct by prescribing, prohibiting, permitting, or recommending a legal action."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
     rdfs:subClassOf norma:NormativeContent ;
+    owl:disjointWith norma:ConstitutiveRule .
+
+norma:ConstitutiveRule a owl:Class ;
     rdfs:label "Constitutive Rule"@en ;
-    rdfs:comment "A normative content item that defines, classifies, or constitutes a legal concept, status, or institutional fact."@en .
-
-norma:LegalCondition
-    a owl:Class ;
+    rdfs:comment "A normative content item that defines, classifies, or constitutes a legal concept, status, or institutional fact."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:label "Legal Condition"@en ;
-    rdfs:comment "A legally relevant condition, fact pattern, or decision criterion whose satisfaction determines whether normative content becomes applicable or is triggered."@en .
+    rdfs:subClassOf norma:NormativeContent .
 
-norma:LegalSource
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subClassOf eli:LegalResource ;
-    rdfs:label "Legal Source"@en ;
-    rdfs:comment "A legal resource (in the ELI sense: a work-level identity) from which normative content is extracted, cited, or traced."@en .
-
-norma:LegalSourceExpression
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subClassOf eli:LegalExpression ;
-    rdfs:label "Legal Source Expression"@en ;
-    rdfs:comment "A concrete legal expression of a LegalSource — a specific language, consolidation, or published version of the underlying legal resource. Follows the ELI work/expression pattern: a LegalSource is realised by one or more LegalSourceExpressions via `norma:hasSourceExpression` (subproperty of `eli:is_realized_by`)."@en .
-
-norma:LegalAgent
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:label "Legal Agent"@en ;
-    rdfs:comment "An entity that bears the legally relevant role of subject of a regulative norm: the party that is obliged, prohibited, permitted, or recommended to perform a legal action."@en .
-
-norma:OrganizationalLegalAgent
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subClassOf norma:LegalAgent , org:Organization ;
-    rdfs:label "Organizational Legal Agent"@en ;
-    rdfs:comment "A legal agent that is also an organization in the sense of the W3C Organization Ontology."@en .
-
-norma:LegalAction
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:label "Legal Action"@en ;
-    rdfs:comment "A normalized legal action that is prescribed, prohibited, permitted, or recommended by a regulative norm. NORMA pipeline consumers may work with the literal shortcut `norma:actionText` for low-ceremony use and mint LegalAction individuals only when the knowledge graph needs action-level reuse across norms."@en .
-
-norma:LegalObject
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:label "Legal Object"@en ;
-    rdfs:comment "The entity, resource, person, document, system, content, or data item toward which the regulated action is directed."@en .
-
-#################################################################
-# 1.1 PROVENANCE CLASSES
-#################################################################
-
-norma:AnnotationActivity
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subClassOf prov:Activity ;
-    rdfs:label "Annotation Activity"@en ;
-    rdfs:comment "A provenance activity that produces a NORMA annotation (i.e. a NormativeContent) from one or more LegalSources. This is the single, non-specialised activity class in NORMA 1.1; prior extraction/review subclasses were dropped as unused."@en .
-
-norma:AnnotatorAgent
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subClassOf prov:Agent ;
-    rdfs:label "Annotator Agent"@en ;
-    rdfs:comment "A provenance agent responsible for creating, reviewing, or attesting to a NORMA annotation. May represent a person (legal expert, analyst), a software system (LLM extractor, rule engine), or an organization. For finer-grained typing use the corresponding PROV-O subclasses (prov:Person, prov:SoftwareAgent, prov:Organization). Integrity constraint (not OWL-enforced): for a given NormativeContent, `prov:wasAttributedTo` and `prov:wasAssociatedWith` (via its generating AnnotationActivity) should resolve to the same agent; validate with SHACL."@en .
-
-#################################################################
-# 1.2 DISJOINTNESS
-#################################################################
-
-[ a owl:AllDisjointClasses ;
-  owl:members (
-    norma:NormativeContent
-    norma:LegalCondition
-    norma:LegalSource
-    norma:LegalAction
-    norma:LegalObject
-    norma:LegalAgent
-  )
-] .
-
-norma:RegulativeNorm owl:disjointWith norma:ConstitutiveRule .
-
-#################################################################
-# 2. DEONTIC HIERARCHY
-#
-# Note: the short codes (OBL, PRH, PER, REC, REC_NOT) are encoded
-# with skos:notation rather than dcterms:identifier, because
-# dcterms:identifier is intended for the identity of a resource,
-# not for a classification label attached to a class.
-#################################################################
-
-norma:Obligation
-    a owl:Class ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subClassOf norma:RegulativeNorm ;
-    skos:notation "OBL" ;
+norma:Obligation a owl:Class ;
     rdfs:label "Obligation"@en ;
-    rdfs:comment "A regulative norm stating that a legal action is required."@en .
-
-norma:Prohibition
-    a owl:Class ;
+    rdfs:comment "A regulative norm stating that a legal action is required."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
     rdfs:subClassOf norma:RegulativeNorm ;
-    skos:notation "PRH" ;
+    skos:notation "OBL" .
+
+norma:Prohibition a owl:Class ;
     rdfs:label "Prohibition"@en ;
-    rdfs:comment "A regulative norm stating that a legal action is forbidden."@en .
-
-norma:Permission
-    a owl:Class ;
+    rdfs:comment "A regulative norm stating that a legal action is forbidden."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
     rdfs:subClassOf norma:RegulativeNorm ;
-    skos:notation "PER" ;
+    skos:notation "PRH" .
+
+norma:Permission a owl:Class ;
     rdfs:label "Permission"@en ;
-    rdfs:comment "A regulative norm stating that a legal action is allowed."@en .
-
-norma:Recommendation
-    a owl:Class ;
+    rdfs:comment "A regulative norm stating that a legal action is allowed."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
     rdfs:subClassOf norma:RegulativeNorm ;
-    skos:notation "REC" ;
+    skos:notation "PER" .
+
+norma:Recommendation a owl:Class ;
     rdfs:label "Recommendation"@en ;
-    rdfs:comment "A regulative norm stating that a legal action is recommended."@en .
-
-norma:NegativeRecommendation
-    a owl:Class ;
+    rdfs:comment "A regulative norm stating that a legal action is recommended."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
     rdfs:subClassOf norma:RegulativeNorm ;
-    skos:notation "REC_NOT" ;
+    skos:notation "REC" .
+
+norma:NegativeRecommendation a owl:Class ;
     rdfs:label "Negative Recommendation"@en ;
-    rdfs:comment "A regulative norm stating that a legal action is discouraged."@en .
-
-[ a owl:AllDisjointClasses ;
-  owl:members (
-    norma:Obligation
-    norma:Prohibition
-    norma:Permission
-    norma:Recommendation
-    norma:NegativeRecommendation
-  )
-] .
-
-#################################################################
-# 3. CONTROLLED VOCABULARIES
-#################################################################
-
-### 3.1 Norm status
-
-norma:NormStatus
-    a owl:Class ;
+    rdfs:comment "A regulative norm stating that a legal action is discouraged."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:label "Norm Status"@en ;
-    rdfs:comment "Lifecycle status of a normative content item."@en ;
-    owl:equivalentClass [
-        a owl:Class ;
-        owl:oneOf (
-            norma:Active
-            norma:UnderReview
-            norma:Disputed
-            norma:Superseded
-            norma:NotYetInForce
-        )
-    ] .
+    rdfs:subClassOf norma:RegulativeNorm ;
+    skos:notation "REC_NOT" .
 
-norma:Active            a owl:NamedIndividual, norma:NormStatus ; rdfs:label "Active"@en ;             rdfs:comment "Currently in force or active."@en .
-norma:UnderReview       a owl:NamedIndividual, norma:NormStatus ; rdfs:label "Under Review"@en ;       rdfs:comment "Under legal, editorial, or analytical review."@en .
-norma:Disputed          a owl:NamedIndividual, norma:NormStatus ; rdfs:label "Disputed"@en ;           rdfs:comment "Legally or interpretively disputed."@en .
-norma:Superseded        a owl:NamedIndividual, norma:NormStatus ; rdfs:label "Superseded"@en ;         rdfs:comment "Replaced by another norm."@en .
-norma:NotYetInForce     a owl:NamedIndividual, norma:NormStatus ; rdfs:label "Not Yet In Force"@en ;   rdfs:comment "Published or known but not yet effective."@en .
+norma:LegalCondition a owl:Class ;
+    rdfs:label "Legal Condition"@en ;
+    rdfs:comment "A legally relevant condition, fact pattern, or decision criterion whose evaluated outcome determines whether normative content becomes applicable or is triggered. Branch-specific activation is represented using the n-ary TriggerEvent pattern via norma:hasTrigger."@en ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> .
 
-### 3.2 Compliance criticality
-
-norma:ComplianceCriticality
-    a owl:Class ;
+norma:TriggerEvent a owl:Class ;
+    rdfs:label "Trigger Event"@en ;
+    rdfs:comment "Reified instance of the triggering relation between a legal condition, one evaluated condition outcome, and one activated normative content item. Represents true, false, and other branch-specific activations without using separate branch-label datatype properties. Follows Pattern 1 / Use Case 1 of the W3C Working Group Note Defining N-ary Relations on the Semantic Web."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:label "Compliance Criticality"@en ;
-    rdfs:comment "Criticality level associated with non-compliance with a regulative norm."@en ;
-    owl:equivalentClass [
-        a owl:Class ;
-        owl:oneOf ( norma:Critical norma:High norma:Medium norma:Low )
-    ] .
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onClass norma:ConditionOutcome ;
+            owl:onProperty norma:hasOutcome ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
+        [ a owl:Restriction ;
+            owl:onClass norma:NormativeContent ;
+            owl:onProperty norma:activatesNorm ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ] .
 
-norma:Critical  a owl:NamedIndividual, norma:ComplianceCriticality ; rdfs:label "Critical"@en .
-norma:High      a owl:NamedIndividual, norma:ComplianceCriticality ; rdfs:label "High"@en .
-norma:Medium    a owl:NamedIndividual, norma:ComplianceCriticality ; rdfs:label "Medium"@en .
-norma:Low       a owl:NamedIndividual, norma:ComplianceCriticality ; rdfs:label "Low"@en .
+norma:LegalAction a owl:Class ;
+    rdfs:label "Legal Action"@en ;
+    rdfs:comment "A normalized legal action that is prescribed, prohibited, permitted, or recommended by a regulative norm. NORMA pipeline consumers may work with the literal shortcut `norma:actionText` for low-ceremony use and mint LegalAction individuals only when the knowledge graph needs action-level reuse across norms."@en ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> .
 
-### 3.3 Extraction method
+norma:LegalObject a owl:Class ;
+    rdfs:label "Legal Object"@en ;
+    rdfs:comment "The entity, resource, person, document, system, content, or data item toward which the regulated action is directed."@en ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> .
 
-norma:ExtractionMethod
-    a owl:Class ;
+norma:LegalAgent a owl:Class ;
+    rdfs:label "Legal Agent"@en ;
+    rdfs:comment "An entity that bears the legally relevant role of subject of a regulative norm: the party that is obliged, prohibited, permitted, or recommended to perform a legal action. Instances should be further typed using foaf:Person, foaf:Organization, or foaf:Group to express whether the agent is a natural person, a legal entity (e.g. an AI provider, deployer, or operator), or a collective."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:label "Extraction Method"@en ;
-    rdfs:comment "Method used to produce the annotation."@en ;
-    owl:equivalentClass [
-        a owl:Class ;
-        owl:oneOf (
-            norma:ManualLawyer
-            norma:ManualAnalyst
-            norma:LLMExtraction
-            norma:PatternMatching
-            norma:RuleBased
-        )
-    ] .
+    rdfs:subClassOf foaf:Agent .
 
-norma:ManualLawyer    a owl:NamedIndividual, norma:ExtractionMethod ; rdfs:label "Manual annotation (lawyer)"@en .
-norma:ManualAnalyst   a owl:NamedIndividual, norma:ExtractionMethod ; rdfs:label "Manual annotation (analyst)"@en .
-norma:LLMExtraction   a owl:NamedIndividual, norma:ExtractionMethod ; rdfs:label "LLM extraction"@en .
-norma:PatternMatching a owl:NamedIndividual, norma:ExtractionMethod ; rdfs:label "Pattern matching"@en .
-norma:RuleBased       a owl:NamedIndividual, norma:ExtractionMethod ; rdfs:label "Rule-based extraction"@en .
-
-### 3.4 Review status
-
-norma:ReviewStatus
-    a owl:Class ;
+norma:AnnotatorAgent a owl:Class ;
+    rdfs:label "Annotator Agent"@en ;
+    rdfs:comment "A provenance agent responsible for creating, reviewing, or attesting to a NORMA annotation. May represent a person (legal expert, analyst), a software system (LLM extractor, rule engine), or an organization. For finer-grained typing use the corresponding PROV-O subclasses (prov:Person, prov:SoftwareAgent, prov:Organization). Integrity constraint (not OWL-enforced): for a given NormativeContent, `prov:wasAttributedTo` and `prov:wasAssociatedWith` (via its generating AnnotationActivity) should resolve to the same agent; validate with SHACL."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:label "Review Status"@en ;
-    rdfs:comment "Legal review status of an annotation."@en ;
-    owl:equivalentClass [
-        a owl:Class ;
-        owl:oneOf ( norma:Approved norma:PendingReview norma:NotReviewed )
-    ] .
+    rdfs:subClassOf prov:Agent .
 
-norma:Approved      a owl:NamedIndividual, norma:ReviewStatus ; rdfs:label "Approved"@en .
-norma:PendingReview a owl:NamedIndividual, norma:ReviewStatus ; rdfs:label "Pending Review"@en .
-norma:NotReviewed   a owl:NamedIndividual, norma:ReviewStatus ; rdfs:label "Not Reviewed"@en .
-
-### 3.5 Binding force
-
-norma:BindingForce
-    a owl:Class ;
+norma:LegalSource a owl:Class ;
+    rdfs:label "Legal Source"@en ;
+    rdfs:comment "A legal resource (in the ELI sense: a work-level identity) from which normative content is extracted, cited, or traced."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:subClassOf eli:LegalResource .
+
+norma:LegalSourceExpression a owl:Class ;
+    rdfs:label "Legal Source Expression"@en ;
+    rdfs:comment "A concrete legal expression of a LegalSource: a specific language, consolidation, or published version of the underlying legal resource. Follows the ELI work/expression pattern: a LegalSource is realised by one or more LegalSourceExpressions via `norma:hasSourceExpression` (subproperty of `eli:is_realized_by`)."@en ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:subClassOf eli:LegalExpression .
+
+norma:AnnotationActivity a owl:Class ;
+    rdfs:label "Annotation Activity"@en ;
+    rdfs:comment "A provenance activity that produces a NORMA annotation (i.e. a NormativeContent) from one or more LegalSources."@en ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:subClassOf prov:Activity .
+
+norma:BindingForce a owl:Class ;
     rdfs:label "Binding Force"@en ;
     rdfs:comment "Binding force of a norm."@en ;
-    owl:equivalentClass [
-        a owl:Class ;
-        owl:oneOf ( norma:HardLaw norma:SoftLaw norma:InternalPolicy norma:Contractual )
-    ] .
-
-norma:HardLaw         a owl:NamedIndividual, norma:BindingForce ; rdfs:label "Hard Law"@en .
-norma:SoftLaw         a owl:NamedIndividual, norma:BindingForce ; rdfs:label "Soft Law"@en .
-norma:InternalPolicy  a owl:NamedIndividual, norma:BindingForce ; rdfs:label "Internal Policy"@en .
-norma:Contractual     a owl:NamedIndividual, norma:BindingForce ; rdfs:label "Contractual"@en .
-
-#################################################################
-# 4. OBJECT PROPERTIES
-#################################################################
-
-### 4.1 Norm structure (regulative norm arguments)
-
-norma:hasLegalAgent
-    a owl:ObjectProperty ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:RegulativeNorm ;
-    rdfs:range norma:LegalAgent ;
-    rdfs:label "has legal agent"@en ;
-    rdfs:comment "Links a regulative norm to its norm-bearing legal agent (the subject obliged, prohibited, permitted, or recommended)."@en .
+    rdfs:subClassOf skos:Concept .
 
-norma:hasLegalAction
-    a owl:ObjectProperty ;
+norma:ComplianceCriticality a owl:Class ;
+    rdfs:label "Compliance Criticality"@en ;
+    rdfs:comment "Criticality level associated with non-compliance with a regulative norm."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:RegulativeNorm ;
-    rdfs:range norma:LegalAction ;
-    rdfs:label "has legal action"@en ;
-    rdfs:comment "Links a regulative norm to the legal action it regulates. The NORMA pipeline may instead use the literal shortcut `norma:actionText`; both forms are permitted."@en .
+    rdfs:subClassOf skos:Concept .
 
-norma:hasLegalObject
-    a owl:ObjectProperty ;
+norma:ConditionOutcome a owl:Class ;
+    rdfs:label "Condition Outcome"@en ;
+    rdfs:comment "A controlled outcome value produced by evaluating a LegalCondition. It is modelled as an extensible SKOS concept class so binary branches, multi-way gateway branches, exception branches, and decision-table outcomes can all be represented consistently."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:RegulativeNorm ;
-    rdfs:range norma:LegalObject ;
-    rdfs:label "has legal object"@en ;
-    rdfs:comment "Links a regulative norm to the legal object of the action it regulates."@en .
+    rdfs:subClassOf skos:Concept .
 
-### 4.2 Legal source linkage
-
-norma:hasLegalSource
-    a owl:ObjectProperty ;
+norma:ExtractionMethod a owl:Class ;
+    rdfs:label "Extraction Method"@en ;
+    rdfs:comment "Method used to produce the annotation."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range norma:LegalSource ;
-    rdfs:label "has legal source"@en ;
-    rdfs:comment "Links normative content to the legal source (work-level resource) from which it is extracted."@en .
+    rdfs:subClassOf skos:Concept .
 
-norma:hasSourceExpression
-    a owl:ObjectProperty ;
+norma:NormStatus a owl:Class ;
+    rdfs:label "Norm Status"@en ;
+    rdfs:comment "Lifecycle status of a normative content item."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subPropertyOf eli:is_realized_by ;
-    rdfs:domain norma:LegalSource ;
-    rdfs:range norma:LegalSourceExpression ;
-    rdfs:label "has source expression"@en ;
-    rdfs:comment "Links a LegalSource (ELI work-level) to a specific LegalSourceExpression (language, version, consolidation). Subproperty of `eli:is_realized_by` to preserve ELI semantics. (Confirm the exact property IRI against the current ELI ontology release before publishing.)"@en .
+    rdfs:subClassOf skos:Concept .
 
-### 4.3 Condition triggering and norm-to-norm relations
-
-norma:triggersNorm
-    a owl:ObjectProperty ;
+norma:ReviewStatus a owl:Class ;
+    rdfs:label "Review Status"@en ;
+    rdfs:comment "Legal review status of an annotation."@en ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:LegalCondition ;
+    rdfs:subClassOf skos:Concept .
+
+
+# =============================================================================
+# Object properties
+# =============================================================================
+
+norma:activatesNorm a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "activates norm"@en ;
+    rdfs:comment "Links a trigger event to the normative content it activates. Declared functional because each trigger event activates exactly one normative content item. Declared as a subproperty of rdf:value to mark the activated norm as the main value of the reified n-ary relation."@en ;
+    rdfs:domain norma:TriggerEvent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
     rdfs:range norma:NormativeContent ;
-    rdfs:label "triggers norm"@en ;
-    rdfs:comment "Links a legal condition to the normative content it triggers when satisfied."@en .
+    rdfs:subPropertyOf rdf:value ;
+    owl:inverseOf norma:isActivatedByTriggerEvent .
 
-norma:relatesTo
-    a owl:ObjectProperty, owl:SymmetricProperty ;
+norma:generatedNormativeContent a owl:ObjectProperty ;
+    rdfs:label "generated normative content"@en ;
+    rdfs:comment "Links an annotation activity to normative content that it generated."@en ;
+    rdfs:domain norma:AnnotationActivity ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
     rdfs:range norma:NormativeContent ;
-    rdfs:label "relates to"@en ;
-    rdfs:comment "Generic symmetric association between two normative content items (e.g. cross-references, thematic links). Prefer more specific properties when available."@en .
+    owl:inverseOf norma:wasGeneratedByAnnotationActivity .
 
-norma:supersededBy
-    a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range norma:NormativeContent ;
-    rdfs:label "superseded by"@en ;
-    rdfs:comment "Links a superseded normative content item to the single item that replaces it. Pairs with the `norma:Superseded` NormStatus value. (Note: declared FunctionalProperty; relax this if your domain allows a norm to be split across multiple successors.)"@en .
-
-### 4.4 Controlled-vocabulary links
-
-norma:hasNormStatus
-    a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range norma:NormStatus ;
-    rdfs:label "has norm status"@en ;
-    rdfs:comment "Associates a normative content item with exactly one lifecycle status."@en .
-
-norma:hasComplianceCriticality
-    a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:RegulativeNorm ;
-    rdfs:range norma:ComplianceCriticality ;
-    rdfs:label "has compliance criticality"@en ;
-    rdfs:comment "Associates a regulative norm with exactly one compliance-criticality value."@en .
-
-norma:hasExtractionMethod
-    a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range norma:ExtractionMethod ;
-    rdfs:label "has extraction method"@en ;
-    rdfs:comment "Associates a normative content item with the method used to produce its annotation."@en .
-
-norma:hasReviewStatus
-    a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range norma:ReviewStatus ;
-    rdfs:label "has review status"@en ;
-    rdfs:comment "Associates a normative content item with one review status."@en .
-
-norma:hasBindingForce
-    a owl:ObjectProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:RegulativeNorm ;
-    rdfs:range norma:BindingForce ;
+norma:hasBindingForce a owl:FunctionalProperty,
+        owl:ObjectProperty ;
     rdfs:label "has binding force"@en ;
-    rdfs:comment "Associates a regulative norm with exactly one binding-force value."@en .
-
-### 4.5 PROV-O alignment (typed subproperties)
-#
-# NORMA uses PROV-O directly for provenance. The following subproperties
-# exist only to carry NORMA-specific domain/range restrictions for
-# pipeline validation; equivalent statements using the parent PROV-O
-# properties are semantically equivalent.
-
-norma:wasAttributedToAnnotator
-    a owl:ObjectProperty ;
+    rdfs:comment "Associates a regulative norm with exactly one binding-force value."@en ;
+    rdfs:domain norma:RegulativeNorm ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subPropertyOf prov:wasAttributedTo ;
+    rdfs:range norma:BindingForce ;
+    owl:inverseOf norma:isBindingForceOf .
+
+norma:hasComplianceCriticality a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "has compliance criticality"@en ;
+    rdfs:comment "Associates a regulative norm with exactly one compliance-criticality value."@en ;
+    rdfs:domain norma:RegulativeNorm ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:ComplianceCriticality ;
+    owl:inverseOf norma:isComplianceCriticalityOf .
+
+norma:hasExtractionMethod a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "has extraction method"@en ;
+    rdfs:comment "Associates a normative content item with the method used to produce its annotation."@en ;
     rdfs:domain norma:NormativeContent ;
-    rdfs:range norma:AnnotatorAgent ;
-    rdfs:label "was attributed to annotator"@en ;
-    rdfs:comment "Links normative content to the annotator agent responsible for it."@en .
-
-norma:wasGeneratedByAnnotationActivity
-    a owl:ObjectProperty ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subPropertyOf prov:wasGeneratedBy ;
+    rdfs:range norma:ExtractionMethod ;
+    owl:inverseOf norma:isExtractionMethodOf .
+
+norma:hasLegalAction a owl:ObjectProperty ;
+    rdfs:label "has legal action"@en ;
+    rdfs:comment "Links a regulative norm to the legal action it regulates. The NORMA pipeline may instead use the literal shortcut `norma:actionText`; both forms are permitted."@en ;
+    rdfs:domain norma:RegulativeNorm ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:LegalAction ;
+    owl:inverseOf norma:isLegalActionOf .
+
+norma:hasLegalAgent a owl:ObjectProperty ;
+    rdfs:label "has legal agent"@en ;
+    rdfs:comment "Links a regulative norm to its norm-bearing legal agent (the subject obliged, prohibited, permitted, or recommended)."@en ;
+    rdfs:domain norma:RegulativeNorm ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:LegalAgent ;
+    owl:inverseOf norma:isLegalAgentOf .
+
+norma:hasLegalObject a owl:ObjectProperty ;
+    rdfs:label "has legal object"@en ;
+    rdfs:comment "Links a regulative norm to the legal object of the action it regulates."@en ;
+    rdfs:domain norma:RegulativeNorm ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:LegalObject ;
+    owl:inverseOf norma:isLegalObjectOf .
+
+norma:hasLegalSource a owl:ObjectProperty ;
+    rdfs:label "has legal source"@en ;
+    rdfs:comment "Links normative content to the legal source (work-level resource) from which it is extracted."@en ;
     rdfs:domain norma:NormativeContent ;
-    rdfs:range norma:AnnotationActivity ;
-    rdfs:label "was generated by annotation activity"@en ;
-    rdfs:comment "Links normative content to the annotation activity that generated it."@en .
-
-norma:usedLegalSource
-    a owl:ObjectProperty ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subPropertyOf prov:used ;
-    rdfs:domain norma:AnnotationActivity ;
     rdfs:range norma:LegalSource ;
+    owl:inverseOf norma:isLegalSourceOf .
+
+norma:hasNormStatus a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "has norm status"@en ;
+    rdfs:comment "Associates a normative content item with exactly one lifecycle status."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormStatus ;
+    owl:inverseOf norma:isNormStatusOf .
+
+norma:hasOutcome a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "has outcome"@en ;
+    rdfs:comment "Links a trigger event to the condition outcome that characterises it, for example the true branch, false branch, or another controlled outcome. Declared functional because each trigger event has exactly one outcome."@en ;
+    rdfs:domain norma:TriggerEvent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:ConditionOutcome ;
+    owl:inverseOf norma:isOutcomeOfTriggerEvent .
+
+norma:hasReviewStatus a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "has review status"@en ;
+    rdfs:comment "Associates a normative content item with one review status."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:ReviewStatus ;
+    owl:inverseOf norma:isReviewStatusOf .
+
+norma:hasSourceExpression a owl:ObjectProperty ;
+    rdfs:label "has source expression"@en ;
+    rdfs:comment "Links a LegalSource (ELI work-level) to a specific LegalSourceExpression (language, version, consolidation). Subproperty of `eli:is_realized_by` to preserve ELI semantics."@en ;
+    rdfs:domain norma:LegalSource ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:LegalSourceExpression ;
+    rdfs:subPropertyOf eli:is_realized_by ;
+    owl:inverseOf norma:isSourceExpressionOf .
+
+norma:hasTrigger a owl:ObjectProperty ;
+    rdfs:label "has trigger"@en ;
+    rdfs:comment "Links a legal condition to one of its trigger events. A condition may have several trigger events, for example one trigger event for the true branch and one trigger event for the false branch."@en ;
+    rdfs:domain norma:LegalCondition ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:TriggerEvent ;
+    owl:inverseOf norma:isTriggerOfCondition .
+
+norma:isActivatedByTriggerEvent a owl:ObjectProperty ;
+    rdfs:label "is activated by trigger event"@en ;
+    rdfs:comment "Links normative content to a trigger event that activates it."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:TriggerEvent ;
+    owl:inverseOf norma:activatesNorm .
+
+norma:isAnnotatorOf a owl:ObjectProperty ;
+    rdfs:label "is annotator of"@en ;
+    rdfs:comment "Links an annotator agent to normative content attributed to that annotator."@en ;
+    rdfs:domain norma:AnnotatorAgent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent ;
+    owl:inverseOf norma:wasAttributedToAnnotator .
+
+norma:isBindingForceOf a owl:ObjectProperty ;
+    rdfs:label "is binding force of"@en ;
+    rdfs:comment "Links a binding-force value to regulative norms classified with that value."@en ;
+    rdfs:domain norma:BindingForce ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:RegulativeNorm ;
+    owl:inverseOf norma:hasBindingForce .
+
+norma:isComplianceCriticalityOf a owl:ObjectProperty ;
+    rdfs:label "is compliance criticality of"@en ;
+    rdfs:comment "Links a compliance-criticality value to regulative norms classified with that value."@en ;
+    rdfs:domain norma:ComplianceCriticality ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:RegulativeNorm ;
+    owl:inverseOf norma:hasComplianceCriticality .
+
+norma:isExtractionMethodOf a owl:ObjectProperty ;
+    rdfs:label "is extraction method of"@en ;
+    rdfs:comment "Links an extraction method to normative content produced using that method."@en ;
+    rdfs:domain norma:ExtractionMethod ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent ;
+    owl:inverseOf norma:hasExtractionMethod .
+
+norma:isLegalActionOf a owl:ObjectProperty ;
+    rdfs:label "is legal action of"@en ;
+    rdfs:comment "Links a legal action to the regulative norm that regulates it."@en ;
+    rdfs:domain norma:LegalAction ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:RegulativeNorm ;
+    owl:inverseOf norma:hasLegalAction .
+
+norma:isLegalAgentOf a owl:ObjectProperty ;
+    rdfs:label "is legal agent of"@en ;
+    rdfs:comment "Links a legal agent to the regulative norm for which it is the norm-bearing subject."@en ;
+    rdfs:domain norma:LegalAgent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:RegulativeNorm ;
+    owl:inverseOf norma:hasLegalAgent .
+
+norma:isLegalObjectOf a owl:ObjectProperty ;
+    rdfs:label "is legal object of"@en ;
+    rdfs:comment "Links a legal object to the regulative norm in which it is regulated."@en ;
+    rdfs:domain norma:LegalObject ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:RegulativeNorm ;
+    owl:inverseOf norma:hasLegalObject .
+
+norma:isLegalSourceOf a owl:ObjectProperty ;
+    rdfs:label "is legal source of"@en ;
+    rdfs:comment "Links a legal source to normative content extracted or derived from it."@en ;
+    rdfs:domain norma:LegalSource ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent ;
+    owl:inverseOf norma:hasLegalSource .
+
+norma:isNormStatusOf a owl:ObjectProperty ;
+    rdfs:label "is norm status of"@en ;
+    rdfs:comment "Links a norm-status value to normative content carrying that lifecycle status."@en ;
+    rdfs:domain norma:NormStatus ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent ;
+    owl:inverseOf norma:hasNormStatus .
+
+norma:isOutcomeOfTriggerEvent a owl:ObjectProperty ;
+    rdfs:label "is outcome of trigger event"@en ;
+    rdfs:comment "Links a condition outcome to trigger events characterised by that outcome."@en ;
+    rdfs:domain norma:ConditionOutcome ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:TriggerEvent ;
+    owl:inverseOf norma:hasOutcome .
+
+norma:isReviewStatusOf a owl:ObjectProperty ;
+    rdfs:label "is review status of"@en ;
+    rdfs:comment "Links a review-status value to normative content carrying that status."@en ;
+    rdfs:domain norma:ReviewStatus ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent ;
+    owl:inverseOf norma:hasReviewStatus .
+
+norma:isSourceExpressionOf a owl:ObjectProperty ;
+    rdfs:label "is source expression of"@en ;
+    rdfs:comment "Links a legal source expression to the legal source it realizes or expresses."@en ;
+    rdfs:domain norma:LegalSourceExpression ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:LegalSource ;
+    owl:inverseOf norma:hasSourceExpression .
+
+norma:isSourceForDerivedNormativeContent a owl:ObjectProperty ;
+    rdfs:label "is source for derived normative content"@en ;
+    rdfs:comment "Links a legal source to normative content derived from it."@en ;
+    rdfs:domain norma:LegalSource ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent ;
+    owl:inverseOf norma:wasDerivedFromSource .
+
+norma:isTriggerOfCondition a owl:ObjectProperty ;
+    rdfs:label "is trigger of condition"@en ;
+    rdfs:comment "Links a trigger event back to the legal condition whose branch or outcome it represents."@en ;
+    rdfs:domain norma:TriggerEvent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:LegalCondition ;
+    owl:inverseOf norma:hasTrigger .
+
+norma:isTriggeredByCondition a owl:ObjectProperty ;
+    rdfs:label "is triggered by condition"@en ;
+    rdfs:comment "Links normative content to the legal condition that triggers it."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:LegalCondition ;
+    owl:inverseOf norma:triggersNorm .
+
+norma:relatesTo a owl:ObjectProperty,
+        owl:SymmetricProperty ;
+    rdfs:label "relates to"@en ;
+    rdfs:comment "Generic symmetric association between two normative content items (e.g. cross-references, thematic links). Prefer more specific properties when available."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent .
+
+norma:supersededBy a owl:FunctionalProperty,
+        owl:ObjectProperty ;
+    rdfs:label "superseded by"@en ;
+    rdfs:comment "Links a superseded normative content item to the single item that replaces it. Pairs with the `norma:Superseded` NormStatus value. (Note: declared FunctionalProperty; relax this if your domain allows a norm to be split across multiple successors.)"@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent ;
+    owl:inverseOf norma:supersedes .
+
+norma:supersedes a owl:ObjectProperty ;
+    rdfs:label "supersedes"@en ;
+    rdfs:comment "Links normative content to an earlier normative content item that it replaces."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent ;
+    owl:inverseOf norma:supersededBy .
+
+norma:triggersNorm a owl:ObjectProperty ;
+    rdfs:label "triggers norm"@en ;
+    rdfs:comment "Shortcut: links a legal condition to a normative content item whenever the condition has a trigger event that activates that norm. Implemented as the OWL 2 property chain hasTrigger ∘ activatesNorm. The outcome branch is not recoverable from this shortcut alone; clients that need the true, false, or other branch outcome must traverse the reified TriggerEvent node."@en ;
+    rdfs:domain norma:LegalCondition ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:NormativeContent ;
+    owl:inverseOf norma:isTriggeredByCondition ;
+    owl:propertyChainAxiom ( norma:hasTrigger norma:activatesNorm ) .
+
+norma:usedLegalSource a owl:ObjectProperty ;
     rdfs:label "used legal source"@en ;
-    rdfs:comment "Links an annotation activity to the legal source it used as input."@en .
-
-norma:wasAssociatedWithAnnotator
-    a owl:ObjectProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subPropertyOf prov:wasAssociatedWith ;
+    rdfs:comment "Links an annotation activity to the legal source it used as input."@en ;
     rdfs:domain norma:AnnotationActivity ;
-    rdfs:range norma:AnnotatorAgent ;
-    rdfs:label "was associated with annotator"@en ;
-    rdfs:comment "Links an annotation activity to the annotator agent that performed it."@en .
-
-norma:wasDerivedFromSource
-    a owl:ObjectProperty ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:subPropertyOf prov:wasDerivedFrom ;
-    rdfs:domain norma:NormativeContent ;
     rdfs:range norma:LegalSource ;
+    rdfs:subPropertyOf prov:used ;
+    owl:inverseOf norma:wasUsedByAnnotationActivity .
+
+norma:wasAnnotatorAssociatedWithActivity a owl:ObjectProperty ;
+    rdfs:label "was annotator associated with activity"@en ;
+    rdfs:comment "Links an annotator agent to an annotation activity with which the agent was associated."@en ;
+    rdfs:domain norma:AnnotatorAgent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:AnnotationActivity ;
+    owl:inverseOf norma:wasAssociatedWithAnnotator .
+
+norma:wasAssociatedWithAnnotator a owl:ObjectProperty ;
+    rdfs:label "was associated with annotator"@en ;
+    rdfs:comment "Links an annotation activity to the annotator agent that performed it."@en ;
+    rdfs:domain norma:AnnotationActivity ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:AnnotatorAgent ;
+    rdfs:subPropertyOf prov:wasAssociatedWith ;
+    owl:inverseOf norma:wasAnnotatorAssociatedWithActivity .
+
+norma:wasAttributedToAnnotator a owl:ObjectProperty ;
+    rdfs:label "was attributed to annotator"@en ;
+    rdfs:comment "Links normative content to the annotator agent responsible for it."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:AnnotatorAgent ;
+    rdfs:subPropertyOf prov:wasAttributedTo ;
+    owl:inverseOf norma:isAnnotatorOf .
+
+norma:wasDerivedFromSource a owl:ObjectProperty ;
     rdfs:label "was derived from source"@en ;
-    rdfs:comment "Links normative content to the legal source from which it was derived (entity-to-entity derivation shortcut)."@en .
-
-#################################################################
-# 5. DATATYPE PROPERTIES
-#################################################################
-
-### 5.1 NormativeContent
-
-norma:deonticId
-    a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:comment "Links normative content to the legal source from which it was derived (entity-to-entity derivation shortcut)."@en ;
     rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:string ;
-    rdfs:label "deontic ID"@en ;
-    rdfs:comment "Unique identifier for a norm or constitutive rule within a regulation pack. The NORMA pipeline generates it from the modality prefix and the BPMN element label (e.g. OBL_Mark_AI_generated_content). Uniqueness is a pipeline invariant, not an OWL one; to enforce global uniqueness across graphs, declare InverseFunctionalProperty or add a SHACL uniqueness constraint."@en .
-
-norma:normStatement
-    a owl:DatatypeProperty ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range norma:LegalSource ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    owl:inverseOf norma:isSourceForDerivedNormativeContent .
+
+norma:wasGeneratedByAnnotationActivity a owl:ObjectProperty ;
+    rdfs:label "was generated by annotation activity"@en ;
+    rdfs:comment "Links normative content to the annotation activity that generated it."@en ;
     rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:string ;
-    rdfs:label "norm statement"@en ;
-    rdfs:comment "Human-readable restatement of the norm or rule."@en .
-
-norma:jurisdiction
-    a owl:DatatypeProperty ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:string ;
-    rdfs:label "jurisdiction"@en ;
-    rdfs:comment "Jurisdiction or legal scope of the normative content."@en .
+    rdfs:range norma:AnnotationActivity ;
+    rdfs:subPropertyOf prov:wasGeneratedBy ;
+    owl:inverseOf norma:generatedNormativeContent .
 
-norma:effectiveDate
-    a owl:DatatypeProperty, owl:FunctionalProperty ;
+norma:wasUsedByAnnotationActivity a owl:ObjectProperty ;
+    rdfs:label "was used by annotation activity"@en ;
+    rdfs:comment "Links a legal source to the annotation activity that used it as input."@en ;
+    rdfs:domain norma:LegalSource ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:date ;
-    rdfs:label "effective date"@en ;
-    rdfs:comment "Date from which the normative content is effective."@en .
+    rdfs:range norma:AnnotationActivity ;
+    owl:inverseOf norma:usedLegalSource .
 
-norma:deadline
-    a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:string ;
-    rdfs:label "deadline"@en ;
-    rdfs:comment "Deadline, sunset date, end date, or textual temporal constraint associated with the normative content."@en .
 
-norma:lastReviewDate
-    a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:date ;
-    rdfs:label "last review date"@en ;
-    rdfs:comment "Date of the most recent legal or editorial review of this annotation. A lifecycle property of the norm itself, not of the activity that created it."@en .
+# =============================================================================
+# Datatype properties
+# =============================================================================
 
-### 5.1.1 Denormalised source locators (shortcut layer)
-
-norma:fromRegulation
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:string ;
-    rdfs:label "from regulation"@en ;
-    rdfs:comment "Denormalised regulation name copied from the linked LegalSource for convenient querying and SWRL rule generation."@en .
-
-norma:fromArticle
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:string ;
-    rdfs:label "from article"@en ;
-    rdfs:comment "Denormalised article identifier copied from the linked LegalSource."@en .
-
-norma:fromParagraph
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:string ;
-    rdfs:label "from paragraph"@en ;
-    rdfs:comment "Denormalised paragraph identifier copied from the linked LegalSource."@en .
-
-norma:sourceURI
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:NormativeContent ;
-    rdfs:range xsd:anyURI ;
-    rdfs:label "source URI"@en ;
-    rdfs:comment "Denormalised URI copied from the linked LegalSource."@en .
-
-### 5.2 RegulativeNorm (raw template text)
-
-norma:agentText
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:RegulativeNorm ;
-    rdfs:range xsd:string ;
-    rdfs:label "agent text"@en ;
-    rdfs:comment "Raw textual form of the legal agent as entered in the annotation template."@en .
-
-norma:actionText
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:RegulativeNorm ;
-    rdfs:range xsd:string ;
+norma:actionText a owl:DatatypeProperty ;
     rdfs:label "action text"@en ;
-    rdfs:comment "Raw textual form of the regulated action as entered in the annotation template."@en .
-
-norma:objectText
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:comment "Raw textual form of the regulated action as entered in the annotation template."@en ;
     rdfs:domain norma:RegulativeNorm ;
-    rdfs:range xsd:string ;
-    rdfs:label "object text"@en ;
-    rdfs:comment "Raw textual form of the legal object as entered in the annotation template."@en .
-
-norma:conditionTrigger
-    a owl:DatatypeProperty ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:agentText a owl:DatatypeProperty ;
+    rdfs:label "agent text"@en ;
+    rdfs:comment "Raw textual form of the legal agent as entered in the annotation template."@en ;
     rdfs:domain norma:RegulativeNorm ;
-    rdfs:range xsd:string ;
-    rdfs:label "condition trigger"@en ;
-    rdfs:comment "Raw textual description of the condition under which the norm applies."@en .
-
-norma:exception
-    a owl:DatatypeProperty ;
     rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:RegulativeNorm ;
-    rdfs:range xsd:string ;
-    rdfs:label "exception"@en ;
-    rdfs:comment "Exception or carve-out under which the norm does not apply."@en .
+    rdfs:range xsd:string .
 
-norma:sanction
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:RegulativeNorm ;
-    rdfs:range xsd:string ;
-    rdfs:label "sanction"@en ;
-    rdfs:comment "Sanction or consequence associated with non-compliance."@en .
-
-### 5.3 ConstitutiveRule
-
-norma:factStatement
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:ConstitutiveRule ;
-    rdfs:range xsd:string ;
-    rdfs:label "fact statement"@en ;
-    rdfs:comment "Plain-language statement of the constitutive rule."@en .
-
-### 5.4 LegalCondition
-
-norma:conditionStatement
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:LegalCondition ;
-    rdfs:range xsd:string ;
-    rdfs:label "condition statement"@en ;
-    rdfs:comment "Plain-language formulation of the legal condition evaluated at a BPMN gateway."@en .
-
-norma:trueBranchLabel
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:LegalCondition ;
-    rdfs:range xsd:string ;
-    rdfs:label "true branch label"@en ;
-    rdfs:comment "Label of the outgoing branch when the condition holds."@en .
-
-norma:falseBranchLabel
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:LegalCondition ;
-    rdfs:range xsd:string ;
-    rdfs:label "false branch label"@en ;
-    rdfs:comment "Label of the outgoing branch when the condition does not hold."@en .
-
-### 5.5 LegalSource
-
-norma:regulationName
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:LegalSource ;
-    rdfs:range xsd:string ;
-    rdfs:label "regulation name"@en ;
-    rdfs:comment "Name of the legal or regulatory source."@en .
-
-norma:articleNumber
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:LegalSource ;
-    rdfs:range xsd:string ;
-    rdfs:label "article number"@en ;
-    rdfs:comment "Article, section, or equivalent unit number. Not functional: a single LegalSource may cover multiple articles."@en .
-
-norma:paragraphNumber
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:LegalSource ;
-    rdfs:range xsd:string ;
-    rdfs:label "paragraph number"@en ;
-    rdfs:comment "Paragraph, subsection, or equivalent granular locator. Not functional."@en .
-
-norma:originalText
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:LegalSource ;
-    rdfs:range xsd:string ;
-    rdfs:label "original text"@en ;
-    rdfs:comment "Verbatim legal text from the legal source."@en .
-
-norma:regulationURI
-    a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:LegalSource ;
-    rdfs:range xsd:anyURI ;
-    rdfs:label "regulation URI"@en ;
-    rdfs:comment "URI identifying the legal source."@en .
-
-### 5.6 AnnotationActivity
-
-norma:annotationDate
-    a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
-    rdfs:domain norma:AnnotationActivity ;
-    rdfs:range xsd:date ;
+norma:annotationDate a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
     rdfs:label "annotation date"@en ;
-    rdfs:comment "Date on which the annotation activity took place. Convenience shortcut; for instant-level precision use `prov:startedAtTime`/`prov:endedAtTime` from PROV-O (both are valid on prov:Activity, unlike prov:generatedAtTime which is defined on prov:Entity)."@en .
-
-norma:confidenceScore
-    a owl:DatatypeProperty, owl:FunctionalProperty ;
-    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:comment "Date on which the annotation activity took place. Convenience shortcut; for instant-level precision use `prov:startedAtTime`/`prov:endedAtTime` from PROV-O (both are valid on prov:Activity, unlike prov:generatedAtTime which is defined on prov:Entity)."@en ;
     rdfs:domain norma:AnnotationActivity ;
-    rdfs:range [
-        a rdfs:Datatype ;
-        owl:onDatatype xsd:decimal ;
-        owl:withRestrictions (
-            [ xsd:minInclusive "0.0"^^xsd:decimal ]
-            [ xsd:maxInclusive "1.0"^^xsd:decimal ]
-        )
-    ] ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:date .
+
+norma:articleNumber a owl:DatatypeProperty ;
+    rdfs:label "article number"@en ;
+    rdfs:comment "Article, section, or equivalent unit number. Not functional: a single LegalSource may cover multiple articles."@en ;
+    rdfs:domain norma:LegalSource ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:conditionStatement a owl:DatatypeProperty ;
+    rdfs:label "condition statement"@en ;
+    rdfs:comment "Plain-language formulation of the legal condition evaluated at a BPMN gateway."@en ;
+    rdfs:domain norma:LegalCondition ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:conditionTrigger a owl:DatatypeProperty ;
+    rdfs:label "condition trigger"@en ;
+    rdfs:comment "Raw textual description of the condition under which the norm applies."@en ;
+    rdfs:domain norma:RegulativeNorm ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:confidenceScore a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
     rdfs:label "confidence score"@en ;
-    rdfs:comment "Confidence score the annotation activity assigned to its output, constrained to the closed interval [0,1]. Placed on the activity rather than the annotation entity to attribute uncertainty to the extraction process; downstream consumers traverse `prov:wasGeneratedBy` to reach it."@en .
+    rdfs:comment "Confidence score the annotation activity assigned to its output, constrained to the closed interval [0,1]. Placed on the activity rather than the annotation entity to attribute uncertainty to the extraction process; downstream consumers traverse `prov:wasGeneratedBy` to reach it."@en ;
+    rdfs:domain norma:AnnotationActivity ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range [ a rdfs:Datatype ;
+            owl:onDatatype xsd:decimal ;
+            owl:withRestrictions ( [ xsd:minInclusive 0.0 ] [ xsd:maxInclusive 1.0 ] ) ] .
+
+norma:deadline a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "deadline"@en ;
+    rdfs:comment "Deadline, sunset date, end date, or textual temporal constraint associated with the normative content."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:deonticId a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "deontic ID"@en ;
+    rdfs:comment "Unique identifier for a norm or constitutive rule within a regulation pack. The NORMA pipeline generates it from the modality prefix and the BPMN element label (e.g. OBL_Mark_AI_generated_content). Uniqueness is a pipeline invariant, not an OWL one; to enforce global uniqueness across graphs, declare InverseFunctionalProperty or add a SHACL uniqueness constraint."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:effectiveDate a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "effective date"@en ;
+    rdfs:comment "Date from which the normative content is effective."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:date .
+
+norma:exception a owl:DatatypeProperty ;
+    rdfs:label "exception"@en ;
+    rdfs:comment "Exception or carve-out under which the norm does not apply."@en ;
+    rdfs:domain norma:RegulativeNorm ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:factStatement a owl:DatatypeProperty ;
+    rdfs:label "fact statement"@en ;
+    rdfs:comment "Plain-language statement of the constitutive rule."@en ;
+    rdfs:domain norma:ConstitutiveRule ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:fromArticle a owl:DatatypeProperty ;
+    rdfs:label "from article"@en ;
+    rdfs:comment "Denormalised article identifier copied from the linked LegalSource."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:fromParagraph a owl:DatatypeProperty ;
+    rdfs:label "from paragraph"@en ;
+    rdfs:comment "Denormalised paragraph identifier copied from the linked LegalSource."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:fromRegulation a owl:DatatypeProperty ;
+    rdfs:label "from regulation"@en ;
+    rdfs:comment "Denormalised regulation name copied from the linked LegalSource for convenient querying and SWRL rule generation."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:lastReviewDate a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "last review date"@en ;
+    rdfs:comment "Date of the most recent legal or editorial review of this annotation. A lifecycle property of the norm itself, not of the activity that created it."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:date .
+
+norma:normStatement a owl:DatatypeProperty ;
+    rdfs:label "norm statement"@en ;
+    rdfs:comment "Human-readable restatement of the norm or rule."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:objectText a owl:DatatypeProperty ;
+    rdfs:label "object text"@en ;
+    rdfs:comment "Raw textual form of the legal object as entered in the annotation template."@en ;
+    rdfs:domain norma:RegulativeNorm ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:originalText a owl:DatatypeProperty ;
+    rdfs:label "original text"@en ;
+    rdfs:comment "Verbatim legal text from the legal source."@en ;
+    rdfs:domain norma:LegalSource ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:paragraphNumber a owl:DatatypeProperty ;
+    rdfs:label "paragraph number"@en ;
+    rdfs:comment "Paragraph, subsection, or equivalent granular locator. Not functional."@en ;
+    rdfs:domain norma:LegalSource ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:regulationName a owl:DatatypeProperty ;
+    rdfs:label "regulation name"@en ;
+    rdfs:comment "Name of the legal or regulatory source."@en ;
+    rdfs:domain norma:LegalSource ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:regulationURI a owl:DatatypeProperty,
+        owl:FunctionalProperty ;
+    rdfs:label "regulation URI"@en ;
+    rdfs:comment "URI identifying the legal source."@en ;
+    rdfs:domain norma:LegalSource ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:anyURI .
+
+norma:sanction a owl:DatatypeProperty ;
+    rdfs:label "sanction"@en ;
+    rdfs:comment "Sanction or consequence associated with non-compliance."@en ;
+    rdfs:domain norma:RegulativeNorm ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:string .
+
+norma:sourceURI a owl:DatatypeProperty ;
+    rdfs:label "source URI"@en ;
+    rdfs:comment "Denormalised URI copied from the linked LegalSource."@en ;
+    rdfs:domain norma:NormativeContent ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    rdfs:range xsd:anyURI .
+
+
+# =============================================================================
+# Controlled vocabulary individuals
+# =============================================================================
+
+norma:Active a owl:NamedIndividual,
+        skos:Concept,
+        norma:NormStatus ;
+    rdfs:label "Active"@en ;
+    rdfs:comment "Currently in force or active."@en ;
+    skos:inScheme norma:NormStatusScheme ;
+    skos:notation "ACTIVE" ;
+    skos:prefLabel "Active"@en ;
+    skos:topConceptOf norma:NormStatusScheme .
+
+norma:NotYetInForce a owl:NamedIndividual,
+        skos:Concept,
+        norma:NormStatus ;
+    rdfs:label "Not Yet In Force"@en ;
+    rdfs:comment "Published or known but not yet effective."@en ;
+    skos:inScheme norma:NormStatusScheme ;
+    skos:notation "NOT_YET_IN_FORCE" ;
+    skos:prefLabel "Not Yet In Force"@en ;
+    skos:topConceptOf norma:NormStatusScheme .
+
+norma:Superseded a owl:NamedIndividual,
+        skos:Concept,
+        norma:NormStatus ;
+    rdfs:label "Superseded"@en ;
+    rdfs:comment "Replaced by another norm."@en ;
+    skos:inScheme norma:NormStatusScheme ;
+    skos:notation "SUPERSEDED" ;
+    skos:prefLabel "Superseded"@en ;
+    skos:topConceptOf norma:NormStatusScheme .
+
+norma:NotReviewed a owl:NamedIndividual,
+        skos:Concept,
+        norma:ReviewStatus ;
+    rdfs:label "Not Reviewed"@en ;
+    rdfs:comment "Review status indicating that the normative content has not yet been reviewed."@en ;
+    skos:inScheme norma:ReviewStatusScheme ;
+    skos:notation "NOT_REVIEWED" ;
+    skos:prefLabel "Not Reviewed"@en ;
+    skos:topConceptOf norma:ReviewStatusScheme .
+
+norma:PendingReview a owl:NamedIndividual,
+        skos:Concept,
+        norma:ReviewStatus ;
+    rdfs:label "Pending Review"@en ;
+    rdfs:comment "Review status indicating that the annotation is waiting for review."@en ;
+    skos:inScheme norma:ReviewStatusScheme ;
+    skos:notation "PENDING_REVIEW" ;
+    skos:prefLabel "Pending Review"@en ;
+    skos:topConceptOf norma:ReviewStatusScheme .
+
+norma:UnderReview a owl:NamedIndividual,
+        skos:Concept,
+        norma:NormStatus ;
+    rdfs:label "Under Review"@en ;
+    rdfs:comment "Under legal, editorial, or analytical review."@en ;
+    skos:inScheme norma:NormStatusScheme ;
+    skos:notation "UNDER_REVIEW" ;
+    skos:prefLabel "Under Review"@en ;
+    skos:topConceptOf norma:NormStatusScheme .
+
+norma:Approved a owl:NamedIndividual,
+        skos:Concept,
+        norma:ReviewStatus ;
+    rdfs:label "Approved"@en ;
+    rdfs:comment "Review status indicating that the annotation has been validated and accepted."@en ;
+    skos:inScheme norma:ReviewStatusScheme ;
+    skos:notation "APPROVED" ;
+    skos:prefLabel "Approved"@en ;
+    skos:topConceptOf norma:ReviewStatusScheme .
+
+norma:Disputed a owl:NamedIndividual,
+        skos:Concept,
+        norma:NormStatus ;
+    rdfs:label "Disputed"@en ;
+    rdfs:comment "Legally or interpretively disputed."@en ;
+    skos:inScheme norma:NormStatusScheme ;
+    skos:notation "DISPUTED" ;
+    skos:prefLabel "Disputed"@en ;
+    skos:topConceptOf norma:NormStatusScheme .
+
+norma:TrueOutcome a owl:NamedIndividual,
+        skos:Concept,
+        norma:ConditionOutcome ;
+    rdfs:label "True Outcome"@en ;
+    rdfs:comment "Condition outcome indicating that the condition holds, corresponding to a true or yes branch."@en ;
+    skos:inScheme norma:ConditionOutcomeScheme ;
+    skos:notation "TRUE" ;
+    skos:prefLabel "True outcome"@en ;
+    skos:topConceptOf norma:ConditionOutcomeScheme .
+
+norma:FalseOutcome a owl:NamedIndividual,
+        skos:Concept,
+        norma:ConditionOutcome ;
+    rdfs:label "False Outcome"@en ;
+    rdfs:comment "Condition outcome indicating that the condition does not hold, corresponding to a false or no branch."@en ;
+    skos:inScheme norma:ConditionOutcomeScheme ;
+    skos:notation "FALSE" ;
+    skos:prefLabel "False outcome"@en ;
+    skos:topConceptOf norma:ConditionOutcomeScheme .
+
+norma:HardLaw a owl:NamedIndividual,
+        skos:Concept,
+        norma:BindingForce ;
+    rdfs:label "Hard Law"@en ;
+    rdfs:comment "Binding force category for legally binding instruments such as statutes, regulations, or enforceable legal acts."@en ;
+    skos:inScheme norma:BindingForceScheme ;
+    skos:notation "HARD_LAW" ;
+    skos:prefLabel "Hard Law"@en ;
+    skos:topConceptOf norma:BindingForceScheme .
+
+norma:SoftLaw a owl:NamedIndividual,
+        skos:Concept,
+        norma:BindingForce ;
+    rdfs:label "Soft Law"@en ;
+    rdfs:comment "Binding force category for non-binding guidance, recommendations, codes of conduct, or policy instruments."@en ;
+    skos:inScheme norma:BindingForceScheme ;
+    skos:notation "SOFT_LAW" ;
+    skos:prefLabel "Soft Law"@en ;
+    skos:topConceptOf norma:BindingForceScheme .
+
+norma:Contractual a owl:NamedIndividual,
+        skos:Concept,
+        norma:BindingForce ;
+    rdfs:label "Contractual"@en ;
+    rdfs:comment "Binding force category for obligations, permissions, or constraints arising from a contract or agreement."@en ;
+    skos:inScheme norma:BindingForceScheme ;
+    skos:notation "CONTRACTUAL" ;
+    skos:prefLabel "Contractual"@en ;
+    skos:topConceptOf norma:BindingForceScheme .
+
+norma:InternalPolicy a owl:NamedIndividual,
+        skos:Concept,
+        norma:BindingForce ;
+    rdfs:label "Internal Policy"@en ;
+    rdfs:comment "Binding force category for internal organizational policies, procedures, or governance rules."@en ;
+    skos:inScheme norma:BindingForceScheme ;
+    skos:notation "INTERNAL_POLICY" ;
+    skos:prefLabel "Internal Policy"@en ;
+    skos:topConceptOf norma:BindingForceScheme .
+
+norma:Critical a owl:NamedIndividual,
+        skos:Concept,
+        norma:ComplianceCriticality ;
+    rdfs:label "Critical"@en ;
+    rdfs:comment "Compliance criticality level indicating that non-compliance may cause severe legal, financial, operational, or safety consequences."@en ;
+    skos:inScheme norma:ComplianceCriticalityScheme ;
+    skos:notation "CRITICAL" ;
+    skos:prefLabel "Critical"@en ;
+    skos:topConceptOf norma:ComplianceCriticalityScheme .
+
+norma:High a owl:NamedIndividual,
+        skos:Concept,
+        norma:ComplianceCriticality ;
+    rdfs:label "High"@en ;
+    rdfs:comment "Compliance criticality level indicating a high level of legal, operational, or business risk in case of non-compliance."@en ;
+    skos:inScheme norma:ComplianceCriticalityScheme ;
+    skos:notation "HIGH" ;
+    skos:prefLabel "High"@en ;
+    skos:topConceptOf norma:ComplianceCriticalityScheme .
+
+norma:Medium a owl:NamedIndividual,
+        skos:Concept,
+        norma:ComplianceCriticality ;
+    rdfs:label "Medium"@en ;
+    rdfs:comment "Compliance criticality level indicating moderate compliance risk or impact."@en ;
+    skos:inScheme norma:ComplianceCriticalityScheme ;
+    skos:notation "MEDIUM" ;
+    skos:prefLabel "Medium"@en ;
+    skos:topConceptOf norma:ComplianceCriticalityScheme .
+
+norma:Low a owl:NamedIndividual,
+        skos:Concept,
+        norma:ComplianceCriticality ;
+    rdfs:label "Low"@en ;
+    rdfs:comment "Compliance criticality level indicating limited compliance risk or impact."@en ;
+    skos:inScheme norma:ComplianceCriticalityScheme ;
+    skos:notation "LOW" ;
+    skos:prefLabel "Low"@en ;
+    skos:topConceptOf norma:ComplianceCriticalityScheme .
+
+norma:LLMExtraction a owl:NamedIndividual,
+        skos:Concept,
+        norma:ExtractionMethod ;
+    rdfs:label "LLM extraction"@en ;
+    rdfs:comment "Extraction method indicating that the annotation was produced using a large language model."@en ;
+    skos:inScheme norma:ExtractionMethodScheme ;
+    skos:notation "LLM_EXTRACTION" ;
+    skos:prefLabel "LLM extraction"@en ;
+    skos:topConceptOf norma:ExtractionMethodScheme .
+
+norma:RuleBased a owl:NamedIndividual,
+        skos:Concept,
+        norma:ExtractionMethod ;
+    rdfs:label "Rule-based extraction"@en ;
+    rdfs:comment "Extraction method indicating that the annotation was produced by deterministic rules."@en ;
+    skos:inScheme norma:ExtractionMethodScheme ;
+    skos:notation "RULE_BASED" ;
+    skos:prefLabel "Rule-based extraction"@en ;
+    skos:topConceptOf norma:ExtractionMethodScheme .
+
+norma:PatternMatching a owl:NamedIndividual,
+        skos:Concept,
+        norma:ExtractionMethod ;
+    rdfs:label "Pattern matching"@en ;
+    rdfs:comment "Extraction method indicating that annotation content was produced by matching textual or structural patterns."@en ;
+    skos:inScheme norma:ExtractionMethodScheme ;
+    skos:notation "PATTERN_MATCHING" ;
+    skos:prefLabel "Pattern matching"@en ;
+    skos:topConceptOf norma:ExtractionMethodScheme .
+
+norma:ManualAnalyst a owl:NamedIndividual,
+        skos:Concept,
+        norma:ExtractionMethod ;
+    rdfs:label "Manual annotation (analyst)"@en ;
+    rdfs:comment "Extraction method indicating that the annotation was created manually by a non-lawyer analyst."@en ;
+    skos:inScheme norma:ExtractionMethodScheme ;
+    skos:notation "MANUAL_ANALYST" ;
+    skos:prefLabel "Manual annotation (analyst)"@en ;
+    skos:topConceptOf norma:ExtractionMethodScheme .
+
+norma:ManualLawyer a owl:NamedIndividual,
+        skos:Concept,
+        norma:ExtractionMethod ;
+    rdfs:label "Manual annotation (lawyer)"@en ;
+    rdfs:comment "Extraction method indicating that the annotation was created manually by a legal expert."@en ;
+    skos:inScheme norma:ExtractionMethodScheme ;
+    skos:notation "MANUAL_LAWYER" ;
+    skos:prefLabel "Manual annotation (lawyer)"@en ;
+    skos:topConceptOf norma:ExtractionMethodScheme .
+
+
+# =============================================================================
+# Global disjointness axioms
+# =============================================================================
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( norma:NormativeContent norma:LegalCondition norma:LegalSource norma:LegalAction norma:LegalObject norma:LegalAgent ) .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( norma:Obligation norma:Prohibition norma:Permission norma:Recommendation norma:NegativeRecommendation ) .
+
+
+# =============================================================================
+# Other declarations
+# =============================================================================
+
+norma:BindingForceScheme a skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    skos:definition "SKOS concept scheme grouping binding-force values used by NORMA regulative norms."@en ;
+    skos:hasTopConcept norma:Contractual,
+        norma:HardLaw,
+        norma:InternalPolicy,
+        norma:SoftLaw ;
+    skos:prefLabel "Binding force scheme"@en .
+
+norma:ComplianceCriticalityScheme a skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    skos:definition "SKOS concept scheme grouping compliance criticality values used by NORMA regulative norms."@en ;
+    skos:hasTopConcept norma:Critical,
+        norma:High,
+        norma:Low,
+        norma:Medium ;
+    skos:prefLabel "Compliance criticality scheme"@en .
+
+norma:ConditionOutcomeScheme a skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    skos:definition "Extensible SKOS scheme grouping condition outcome values used by NORMA trigger events."@en ;
+    skos:hasTopConcept norma:FalseOutcome,
+        norma:TrueOutcome ;
+    skos:prefLabel "Condition outcome scheme"@en .
+
+norma:ExtractionMethodScheme a skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    skos:definition "SKOS concept scheme grouping annotation extraction method values used by NORMA."@en ;
+    skos:hasTopConcept norma:LLMExtraction,
+        norma:ManualAnalyst,
+        norma:ManualLawyer,
+        norma:PatternMatching,
+        norma:RuleBased ;
+    skos:prefLabel "Extraction method scheme"@en .
+
+norma:NormStatusScheme a skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    skos:definition "SKOS concept scheme grouping lifecycle status values used by NORMA normative content."@en ;
+    skos:hasTopConcept norma:Active,
+        norma:Disputed,
+        norma:NotYetInForce,
+        norma:Superseded,
+        norma:UnderReview ;
+    skos:prefLabel "Norm status scheme"@en .
+
+norma:ReviewStatusScheme a skos:ConceptScheme ;
+    rdfs:isDefinedBy <https://w3id.org/norma-ontology> ;
+    skos:definition "SKOS concept scheme grouping review status values used by NORMA annotations."@en ;
+    skos:hasTopConcept norma:Approved,
+        norma:NotReviewed,
+        norma:PendingReview ;
+    skos:prefLabel "Review status scheme"@en .
