@@ -1,0 +1,1278 @@
+<https://w3id.org/norma-ontology> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Ontology> .
+<https://w3id.org/norma-ontology> <http://www.w3.org/2002/07/owl#versionIRI> <https://w3id.org/norma-ontology/1.0> .
+<https://w3id.org/norma-ontology> <http://www.w3.org/2002/07/owl#imports> <http://data.europa.eu/eli/ontology> .
+<https://w3id.org/norma-ontology> <http://www.w3.org/2002/07/owl#imports> <http://www.w3.org/ns/prov-o> .
+<https://w3id.org/norma-ontology> <http://www.w3.org/2002/07/owl#imports> <http://xmlns.com/foaf/0.1/> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/alternative> "NORMA Ontology"@en .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/bibliographicCitation> "Leyva-Sánchez, S. et al. (2026). NORMA: Normative Ontology for Regulatory Machine-readable Annotations (Version 1.0) [Ontology]. https://w3id.org/norma-ontology/1.0"@en .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/contributor> _:genid1 .
+_:genid1 <http://xmlns.com/foaf/0.1/name> "NORMA project contributors" .
+_:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/created> "2026-04-15"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/creator> _:genid2 .
+_:genid2 <http://xmlns.com/foaf/0.1/name> "Sheyla Leyva-Sánchez" .
+_:genid2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/description> "Ontology for representing machine-readable legal norm annotations derived from BPMN workflow models in the NORMA pipeline. The ontology models regulative norms (obligations, prohibitions, permissions, and recommendations) and constitutive rules expressing legal responsibilities, along with legal conditions, legal sources, legal agents, legal objects, provenance metadata and lifecycle status. It aligns with PROV-O (provenance), ELI (legal resources), and FOAF (agents and project metadata). Legal conditions are connected to normative content via a W3C n-ary relation pattern (TriggerEvent) that associates each condition outcome with the specific normative content it activates."@en .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/issued> "2026-04-17"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/language> <http://id.loc.gov/vocabulary/iso639-1/en> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/license> <https://creativecommons.org/licenses/by/4.0/> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/modified> "2026-04-25"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/publisher> _:genid3 .
+_:genid3 <http://xmlns.com/foaf/0.1/name> "NORMA project" .
+_:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Organization> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/source> <https://github.com/norma-project/norma-ontology> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/title> "NORMA: Normative Ontology for Regulatory Machine-readable Annotations"@en .
+<https://w3id.org/norma-ontology> <http://purl.org/ontology/bibo/doi> "10.5281/zenodo.19765302" .
+<https://w3id.org/norma-ontology> <http://purl.org/ontology/bibo/status> "Published"@en .
+<https://w3id.org/norma-ontology> <http://purl.org/vocab/vann/preferredNamespacePrefix> "norma" .
+<https://w3id.org/norma-ontology> <http://purl.org/vocab/vann/preferredNamespaceUri> "https://w3id.org/norma-ontology#" .
+<https://w3id.org/norma-ontology> <http://www.w3.org/2000/01/rdf-schema#comment> "Publication-quality ontology aligned to the NORMA annotation model and BPMN legal compliance workflow."@en .
+<https://w3id.org/norma-ontology> <http://www.w3.org/2000/01/rdf-schema#label> "NORMA ontology"@en .
+<https://w3id.org/norma-ontology> <http://www.w3.org/2000/01/rdf-schema#seeAlso> <https://www.w3.org/TR/swbp-n-aryRelations/> .
+<https://w3id.org/norma-ontology> <http://www.w3.org/2002/07/owl#versionInfo> "1.0" .
+# 
+# 
+# #################################################################
+# #
+# #    Annotation properties
+# #
+# #################################################################
+# 
+# 
+# http://purl.org/dc/terms/alternative
+<http://purl.org/dc/terms/alternative> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/bibliographicCitation
+<http://purl.org/dc/terms/bibliographicCitation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/created
+<http://purl.org/dc/terms/created> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/issued
+<http://purl.org/dc/terms/issued> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/language
+<http://purl.org/dc/terms/language> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/license
+<http://purl.org/dc/terms/license> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/modified
+<http://purl.org/dc/terms/modified> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/publisher
+<http://purl.org/dc/terms/publisher> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/source
+<http://purl.org/dc/terms/source> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/ontology/bibo/doi
+<http://purl.org/ontology/bibo/doi> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/ontology/bibo/status
+<http://purl.org/ontology/bibo/status> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/vocab/vann/preferredNamespaceUri
+<http://purl.org/vocab/vann/preferredNamespaceUri> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Object Properties
+# #
+# #################################################################
+# 
+# 
+# http://www.w3.org/1999/02/22-rdf-syntax-ns#value
+<http://www.w3.org/1999/02/22-rdf-syntax-ns#value> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+# 
+# https://w3id.org/norma-ontology#activatesNorm
+<https://w3id.org/norma-ontology#activatesNorm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#activatesNorm> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> .
+<https://w3id.org/norma-ontology#activatesNorm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#activatesNorm> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#TriggerEvent> .
+<https://w3id.org/norma-ontology#activatesNorm> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#activatesNorm> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a trigger event to the normative content it activates. Declared functional because each trigger event activates exactly one normative content item. Declared as a subproperty of rdf:value to mark the activated norm as the main value of the reified n-ary relation."@en .
+<https://w3id.org/norma-ontology#activatesNorm> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#activatesNorm> <http://www.w3.org/2000/01/rdf-schema#label> "activates norm"@en .
+# 
+# https://w3id.org/norma-ontology#generatedNormativeContent
+<https://w3id.org/norma-ontology#generatedNormativeContent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#generatedNormativeContent> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity> .
+<https://w3id.org/norma-ontology#generatedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#AnnotationActivity> .
+<https://w3id.org/norma-ontology#generatedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#generatedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#comment> "Links an annotation activity to normative content that it generated."@en .
+<https://w3id.org/norma-ontology#generatedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#generatedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#label> "generated normative content"@en .
+# 
+# https://w3id.org/norma-ontology#hasBindingForce
+<https://w3id.org/norma-ontology#hasBindingForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasBindingForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#hasBindingForce> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#hasBindingForce> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#BindingForce> .
+<https://w3id.org/norma-ontology#hasBindingForce> <http://www.w3.org/2000/01/rdf-schema#comment> "Associates a regulative norm with exactly one binding-force value."@en .
+<https://w3id.org/norma-ontology#hasBindingForce> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasBindingForce> <http://www.w3.org/2000/01/rdf-schema#label> "has binding force"@en .
+# 
+# https://w3id.org/norma-ontology#hasComplianceCriticality
+<https://w3id.org/norma-ontology#hasComplianceCriticality> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasComplianceCriticality> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#isComplianceCriticalityOf> .
+<https://w3id.org/norma-ontology#hasComplianceCriticality> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#hasComplianceCriticality> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#hasComplianceCriticality> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#ComplianceCriticality> .
+<https://w3id.org/norma-ontology#hasComplianceCriticality> <http://www.w3.org/2000/01/rdf-schema#comment> "Associates a regulative norm with exactly one compliance-criticality value."@en .
+<https://w3id.org/norma-ontology#hasComplianceCriticality> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasComplianceCriticality> <http://www.w3.org/2000/01/rdf-schema#label> "has compliance criticality"@en .
+# 
+# https://w3id.org/norma-ontology#hasExtractionMethod
+<https://w3id.org/norma-ontology#hasExtractionMethod> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasExtractionMethod> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#hasExtractionMethod> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#hasExtractionMethod> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#ExtractionMethod> .
+<https://w3id.org/norma-ontology#hasExtractionMethod> <http://www.w3.org/2000/01/rdf-schema#comment> "Associates a normative content item with the method used to produce its annotation."@en .
+<https://w3id.org/norma-ontology#hasExtractionMethod> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasExtractionMethod> <http://www.w3.org/2000/01/rdf-schema#label> "has extraction method"@en .
+# 
+# https://w3id.org/norma-ontology#hasLegalAction
+<https://w3id.org/norma-ontology#hasLegalAction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasLegalAction> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#hasLegalAction> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalAction> .
+<https://w3id.org/norma-ontology#hasLegalAction> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a regulative norm to the legal action it regulates. The NORMA pipeline may instead use the literal shortcut `norma:actionText`; both forms are permitted."@en .
+<https://w3id.org/norma-ontology#hasLegalAction> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasLegalAction> <http://www.w3.org/2000/01/rdf-schema#label> "has legal action"@en .
+# 
+# https://w3id.org/norma-ontology#hasLegalAgent
+<https://w3id.org/norma-ontology#hasLegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasLegalAgent> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#hasLegalAgent> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalAgent> .
+<https://w3id.org/norma-ontology#hasLegalAgent> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a regulative norm to its norm-bearing legal agent (the subject obliged, prohibited, permitted, or recommended)."@en .
+<https://w3id.org/norma-ontology#hasLegalAgent> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasLegalAgent> <http://www.w3.org/2000/01/rdf-schema#label> "has legal agent"@en .
+# 
+# https://w3id.org/norma-ontology#hasLegalObject
+<https://w3id.org/norma-ontology#hasLegalObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasLegalObject> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#hasLegalObject> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalObject> .
+<https://w3id.org/norma-ontology#hasLegalObject> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a regulative norm to the legal object of the action it regulates."@en .
+<https://w3id.org/norma-ontology#hasLegalObject> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasLegalObject> <http://www.w3.org/2000/01/rdf-schema#label> "has legal object"@en .
+# 
+# https://w3id.org/norma-ontology#hasLegalSource
+<https://w3id.org/norma-ontology#hasLegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasLegalSource> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#isLegalSourceOf> .
+<https://w3id.org/norma-ontology#hasLegalSource> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#hasLegalSource> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#hasLegalSource> <http://www.w3.org/2000/01/rdf-schema#comment> "Links normative content to the legal source (work-level resource) from which it is extracted."@en .
+<https://w3id.org/norma-ontology#hasLegalSource> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasLegalSource> <http://www.w3.org/2000/01/rdf-schema#label> "has legal source"@en .
+# 
+# https://w3id.org/norma-ontology#hasNormStatus
+<https://w3id.org/norma-ontology#hasNormStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasNormStatus> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#isNormStatusOf> .
+<https://w3id.org/norma-ontology#hasNormStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#hasNormStatus> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#hasNormStatus> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormStatus> .
+<https://w3id.org/norma-ontology#hasNormStatus> <http://www.w3.org/2000/01/rdf-schema#comment> "Associates a normative content item with exactly one lifecycle status."@en .
+<https://w3id.org/norma-ontology#hasNormStatus> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasNormStatus> <http://www.w3.org/2000/01/rdf-schema#label> "has norm status"@en .
+# 
+# https://w3id.org/norma-ontology#hasOutcome
+<https://w3id.org/norma-ontology#hasOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasOutcome> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent> .
+<https://w3id.org/norma-ontology#hasOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#hasOutcome> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#TriggerEvent> .
+<https://w3id.org/norma-ontology#hasOutcome> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#ConditionOutcome> .
+<https://w3id.org/norma-ontology#hasOutcome> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a trigger event to the condition outcome that characterises it, for example the true branch, false branch, or another controlled outcome. Declared functional because each trigger event has exactly one outcome."@en .
+<https://w3id.org/norma-ontology#hasOutcome> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasOutcome> <http://www.w3.org/2000/01/rdf-schema#label> "has outcome"@en .
+# 
+# https://w3id.org/norma-ontology#hasReviewStatus
+<https://w3id.org/norma-ontology#hasReviewStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasReviewStatus> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#isReviewStatusOf> .
+<https://w3id.org/norma-ontology#hasReviewStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#hasReviewStatus> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#hasReviewStatus> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#ReviewStatus> .
+<https://w3id.org/norma-ontology#hasReviewStatus> <http://www.w3.org/2000/01/rdf-schema#comment> "Associates a normative content item with one review status."@en .
+<https://w3id.org/norma-ontology#hasReviewStatus> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasReviewStatus> <http://www.w3.org/2000/01/rdf-schema#label> "has review status"@en .
+# 
+# https://w3id.org/norma-ontology#hasSourceExpression
+<https://w3id.org/norma-ontology#hasSourceExpression> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasSourceExpression> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://data.europa.eu/eli/ontology#is_realized_by> .
+<https://w3id.org/norma-ontology#hasSourceExpression> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#isSourceExpressionOf> .
+<https://w3id.org/norma-ontology#hasSourceExpression> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#hasSourceExpression> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalSourceExpression> .
+<https://w3id.org/norma-ontology#hasSourceExpression> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a LegalSource (ELI work-level) to a specific LegalSourceExpression (language, version, consolidation). Subproperty of `eli:is_realized_by` to preserve ELI semantics."@en .
+<https://w3id.org/norma-ontology#hasSourceExpression> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasSourceExpression> <http://www.w3.org/2000/01/rdf-schema#label> "has source expression"@en .
+# 
+# https://w3id.org/norma-ontology#hasTrigger
+<https://w3id.org/norma-ontology#hasTrigger> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#hasTrigger> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#isTriggerOfCondition> .
+<https://w3id.org/norma-ontology#hasTrigger> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalCondition> .
+<https://w3id.org/norma-ontology#hasTrigger> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#TriggerEvent> .
+<https://w3id.org/norma-ontology#hasTrigger> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a legal condition to one of its trigger events. A condition may have several trigger events, for example one trigger event for the true branch and one trigger event for the false branch."@en .
+<https://w3id.org/norma-ontology#hasTrigger> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#hasTrigger> <http://www.w3.org/2000/01/rdf-schema#label> "has trigger"@en .
+# 
+# https://w3id.org/norma-ontology#isActivatedByTriggerEvent
+<https://w3id.org/norma-ontology#isActivatedByTriggerEvent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isActivatedByTriggerEvent> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#activatesNorm> .
+<https://w3id.org/norma-ontology#isActivatedByTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#isActivatedByTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#TriggerEvent> .
+<https://w3id.org/norma-ontology#isActivatedByTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#comment> "Links normative content to a trigger event that activates it."@en .
+<https://w3id.org/norma-ontology#isActivatedByTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isActivatedByTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#label> "is activated by trigger event"@en .
+# 
+# https://w3id.org/norma-ontology#isAnnotatorOf
+<https://w3id.org/norma-ontology#isAnnotatorOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isAnnotatorOf> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#wasAttributedToAnnotator> .
+<https://w3id.org/norma-ontology#isAnnotatorOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#AnnotatorAgent> .
+<https://w3id.org/norma-ontology#isAnnotatorOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#isAnnotatorOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links an annotator agent to normative content attributed to that annotator."@en .
+<https://w3id.org/norma-ontology#isAnnotatorOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isAnnotatorOf> <http://www.w3.org/2000/01/rdf-schema#label> "is annotator of"@en .
+# 
+# https://w3id.org/norma-ontology#isBindingForceOf
+<https://w3id.org/norma-ontology#isBindingForceOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isBindingForceOf> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#hasBindingForce> .
+<https://w3id.org/norma-ontology#isBindingForceOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#BindingForce> .
+<https://w3id.org/norma-ontology#isBindingForceOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#isBindingForceOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a binding-force value to regulative norms classified with that value."@en .
+<https://w3id.org/norma-ontology#isBindingForceOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isBindingForceOf> <http://www.w3.org/2000/01/rdf-schema#label> "is binding force of"@en .
+# 
+# https://w3id.org/norma-ontology#isComplianceCriticalityOf
+<https://w3id.org/norma-ontology#isComplianceCriticalityOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isComplianceCriticalityOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#ComplianceCriticality> .
+<https://w3id.org/norma-ontology#isComplianceCriticalityOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#isComplianceCriticalityOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a compliance-criticality value to regulative norms classified with that value."@en .
+<https://w3id.org/norma-ontology#isComplianceCriticalityOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isComplianceCriticalityOf> <http://www.w3.org/2000/01/rdf-schema#label> "is compliance criticality of"@en .
+# 
+# https://w3id.org/norma-ontology#isExtractionMethodOf
+<https://w3id.org/norma-ontology#isExtractionMethodOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isExtractionMethodOf> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#hasExtractionMethod> .
+<https://w3id.org/norma-ontology#isExtractionMethodOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#ExtractionMethod> .
+<https://w3id.org/norma-ontology#isExtractionMethodOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#isExtractionMethodOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links an extraction method to normative content produced using that method."@en .
+<https://w3id.org/norma-ontology#isExtractionMethodOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isExtractionMethodOf> <http://www.w3.org/2000/01/rdf-schema#label> "is extraction method of"@en .
+# 
+# https://w3id.org/norma-ontology#isLegalActionOf
+<https://w3id.org/norma-ontology#isLegalActionOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isLegalActionOf> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#hasLegalAction> .
+<https://w3id.org/norma-ontology#isLegalActionOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalAction> .
+<https://w3id.org/norma-ontology#isLegalActionOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#isLegalActionOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a legal action to the regulative norm that regulates it."@en .
+<https://w3id.org/norma-ontology#isLegalActionOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isLegalActionOf> <http://www.w3.org/2000/01/rdf-schema#label> "is legal action of"@en .
+# 
+# https://w3id.org/norma-ontology#isLegalAgentOf
+<https://w3id.org/norma-ontology#isLegalAgentOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isLegalAgentOf> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#hasLegalAgent> .
+<https://w3id.org/norma-ontology#isLegalAgentOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalAgent> .
+<https://w3id.org/norma-ontology#isLegalAgentOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#isLegalAgentOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a legal agent to the regulative norm for which it is the norm-bearing subject."@en .
+<https://w3id.org/norma-ontology#isLegalAgentOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isLegalAgentOf> <http://www.w3.org/2000/01/rdf-schema#label> "is legal agent of"@en .
+# 
+# https://w3id.org/norma-ontology#isLegalObjectOf
+<https://w3id.org/norma-ontology#isLegalObjectOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isLegalObjectOf> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#hasLegalObject> .
+<https://w3id.org/norma-ontology#isLegalObjectOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalObject> .
+<https://w3id.org/norma-ontology#isLegalObjectOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#isLegalObjectOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a legal object to the regulative norm in which it is regulated."@en .
+<https://w3id.org/norma-ontology#isLegalObjectOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isLegalObjectOf> <http://www.w3.org/2000/01/rdf-schema#label> "is legal object of"@en .
+# 
+# https://w3id.org/norma-ontology#isLegalSourceOf
+<https://w3id.org/norma-ontology#isLegalSourceOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isLegalSourceOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#isLegalSourceOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#isLegalSourceOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a legal source to normative content extracted or derived from it."@en .
+<https://w3id.org/norma-ontology#isLegalSourceOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isLegalSourceOf> <http://www.w3.org/2000/01/rdf-schema#label> "is legal source of"@en .
+# 
+# https://w3id.org/norma-ontology#isNormStatusOf
+<https://w3id.org/norma-ontology#isNormStatusOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isNormStatusOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormStatus> .
+<https://w3id.org/norma-ontology#isNormStatusOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#isNormStatusOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a norm-status value to normative content carrying that lifecycle status."@en .
+<https://w3id.org/norma-ontology#isNormStatusOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isNormStatusOf> <http://www.w3.org/2000/01/rdf-schema#label> "is norm status of"@en .
+# 
+# https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent
+<https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#ConditionOutcome> .
+<https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#TriggerEvent> .
+<https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a condition outcome to trigger events characterised by that outcome."@en .
+<https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent> <http://www.w3.org/2000/01/rdf-schema#label> "is outcome of trigger event"@en .
+# 
+# https://w3id.org/norma-ontology#isReviewStatusOf
+<https://w3id.org/norma-ontology#isReviewStatusOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isReviewStatusOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#ReviewStatus> .
+<https://w3id.org/norma-ontology#isReviewStatusOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#isReviewStatusOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a review-status value to normative content carrying that status."@en .
+<https://w3id.org/norma-ontology#isReviewStatusOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isReviewStatusOf> <http://www.w3.org/2000/01/rdf-schema#label> "is review status of"@en .
+# 
+# https://w3id.org/norma-ontology#isSourceExpressionOf
+<https://w3id.org/norma-ontology#isSourceExpressionOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isSourceExpressionOf> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSourceExpression> .
+<https://w3id.org/norma-ontology#isSourceExpressionOf> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#isSourceExpressionOf> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a legal source expression to the legal source it realizes or expresses."@en .
+<https://w3id.org/norma-ontology#isSourceExpressionOf> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isSourceExpressionOf> <http://www.w3.org/2000/01/rdf-schema#label> "is source expression of"@en .
+# 
+# https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent
+<https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#wasDerivedFromSource> .
+<https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a legal source to normative content derived from it."@en .
+<https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent> <http://www.w3.org/2000/01/rdf-schema#label> "is source for derived normative content"@en .
+# 
+# https://w3id.org/norma-ontology#isTriggerOfCondition
+<https://w3id.org/norma-ontology#isTriggerOfCondition> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isTriggerOfCondition> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#TriggerEvent> .
+<https://w3id.org/norma-ontology#isTriggerOfCondition> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalCondition> .
+<https://w3id.org/norma-ontology#isTriggerOfCondition> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a trigger event back to the legal condition whose branch or outcome it represents."@en .
+<https://w3id.org/norma-ontology#isTriggerOfCondition> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isTriggerOfCondition> <http://www.w3.org/2000/01/rdf-schema#label> "is trigger of condition"@en .
+# 
+# https://w3id.org/norma-ontology#isTriggeredByCondition
+<https://w3id.org/norma-ontology#isTriggeredByCondition> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#isTriggeredByCondition> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#isTriggeredByCondition> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalCondition> .
+<https://w3id.org/norma-ontology#isTriggeredByCondition> <http://www.w3.org/2000/01/rdf-schema#comment> "Links normative content to the legal condition that triggers it."@en .
+<https://w3id.org/norma-ontology#isTriggeredByCondition> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#isTriggeredByCondition> <http://www.w3.org/2000/01/rdf-schema#label> "is triggered by condition"@en .
+# 
+# https://w3id.org/norma-ontology#relatesTo
+<https://w3id.org/norma-ontology#relatesTo> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#relatesTo> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#SymmetricProperty> .
+<https://w3id.org/norma-ontology#relatesTo> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#relatesTo> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#relatesTo> <http://www.w3.org/2000/01/rdf-schema#comment> "Generic symmetric association between two normative content items (e.g. cross-references, thematic links). Prefer more specific properties when available."@en .
+<https://w3id.org/norma-ontology#relatesTo> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#relatesTo> <http://www.w3.org/2000/01/rdf-schema#label> "relates to"@en .
+# 
+# https://w3id.org/norma-ontology#supersededBy
+<https://w3id.org/norma-ontology#supersededBy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#supersededBy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#supersededBy> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#supersededBy> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#supersededBy> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a superseded normative content item to the single item that replaces it. Pairs with the `norma:Superseded` NormStatus value. (Note: declared FunctionalProperty; relax this if your domain allows a norm to be split across multiple successors.)"@en .
+<https://w3id.org/norma-ontology#supersededBy> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#supersededBy> <http://www.w3.org/2000/01/rdf-schema#label> "superseded by"@en .
+# 
+# https://w3id.org/norma-ontology#supersedes
+<https://w3id.org/norma-ontology#supersedes> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#supersedes> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#supersededBy> .
+<https://w3id.org/norma-ontology#supersedes> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#supersedes> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#supersedes> <http://www.w3.org/2000/01/rdf-schema#comment> "Links normative content to an earlier normative content item that it replaces."@en .
+<https://w3id.org/norma-ontology#supersedes> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#supersedes> <http://www.w3.org/2000/01/rdf-schema#label> "supersedes"@en .
+# 
+# https://w3id.org/norma-ontology#triggersNorm
+<https://w3id.org/norma-ontology#triggersNorm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#triggersNorm> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#isTriggeredByCondition> .
+<https://w3id.org/norma-ontology#triggersNorm> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalCondition> .
+<https://w3id.org/norma-ontology#triggersNorm> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#triggersNorm> <http://www.w3.org/2002/07/owl#propertyChainAxiom> _:genid5 .
+_:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid4 .
+_:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#activatesNorm> .
+_:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#hasTrigger> .
+_:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+<https://w3id.org/norma-ontology#triggersNorm> <http://www.w3.org/2000/01/rdf-schema#comment> "Shortcut: links a legal condition to a normative content item whenever the condition has a trigger event that activates that norm. Implemented as the OWL 2 property chain hasTrigger ∘ activatesNorm. The outcome branch is not recoverable from this shortcut alone; clients that need the true, false, or other branch outcome must traverse the reified TriggerEvent node."@en .
+<https://w3id.org/norma-ontology#triggersNorm> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#triggersNorm> <http://www.w3.org/2000/01/rdf-schema#label> "triggers norm"@en .
+# 
+# https://w3id.org/norma-ontology#usedLegalSource
+<https://w3id.org/norma-ontology#usedLegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#usedLegalSource> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/ns/prov#used> .
+<https://w3id.org/norma-ontology#usedLegalSource> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#wasUsedByAnnotationActivity> .
+<https://w3id.org/norma-ontology#usedLegalSource> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#AnnotationActivity> .
+<https://w3id.org/norma-ontology#usedLegalSource> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#usedLegalSource> <http://www.w3.org/2000/01/rdf-schema#comment> "Links an annotation activity to the legal source it used as input."@en .
+<https://w3id.org/norma-ontology#usedLegalSource> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#usedLegalSource> <http://www.w3.org/2000/01/rdf-schema#label> "used legal source"@en .
+# 
+# https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity
+<https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#AnnotatorAgent> .
+<https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#AnnotationActivity> .
+<https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity> <http://www.w3.org/2000/01/rdf-schema#comment> "Links an annotator agent to an annotation activity with which the agent was associated."@en .
+<https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity> <http://www.w3.org/2000/01/rdf-schema#label> "was annotator associated with activity"@en .
+# 
+# https://w3id.org/norma-ontology#wasAssociatedWithAnnotator
+<https://w3id.org/norma-ontology#wasAssociatedWithAnnotator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#wasAssociatedWithAnnotator> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/ns/prov#wasAssociatedWith> .
+<https://w3id.org/norma-ontology#wasAssociatedWithAnnotator> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity> .
+<https://w3id.org/norma-ontology#wasAssociatedWithAnnotator> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#AnnotationActivity> .
+<https://w3id.org/norma-ontology#wasAssociatedWithAnnotator> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#AnnotatorAgent> .
+<https://w3id.org/norma-ontology#wasAssociatedWithAnnotator> <http://www.w3.org/2000/01/rdf-schema#comment> "Links an annotation activity to the annotator agent that performed it."@en .
+<https://w3id.org/norma-ontology#wasAssociatedWithAnnotator> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#wasAssociatedWithAnnotator> <http://www.w3.org/2000/01/rdf-schema#label> "was associated with annotator"@en .
+# 
+# https://w3id.org/norma-ontology#wasAttributedToAnnotator
+<https://w3id.org/norma-ontology#wasAttributedToAnnotator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#wasAttributedToAnnotator> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/ns/prov#wasAttributedTo> .
+<https://w3id.org/norma-ontology#wasAttributedToAnnotator> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#wasAttributedToAnnotator> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#AnnotatorAgent> .
+<https://w3id.org/norma-ontology#wasAttributedToAnnotator> <http://www.w3.org/2000/01/rdf-schema#comment> "Links normative content to the annotator agent responsible for it."@en .
+<https://w3id.org/norma-ontology#wasAttributedToAnnotator> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#wasAttributedToAnnotator> <http://www.w3.org/2000/01/rdf-schema#label> "was attributed to annotator"@en .
+# 
+# https://w3id.org/norma-ontology#wasDerivedFromSource
+<https://w3id.org/norma-ontology#wasDerivedFromSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#wasDerivedFromSource> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/ns/prov#wasDerivedFrom> .
+<https://w3id.org/norma-ontology#wasDerivedFromSource> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#wasDerivedFromSource> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#wasDerivedFromSource> <http://www.w3.org/2000/01/rdf-schema#comment> "Links normative content to the legal source from which it was derived (entity-to-entity derivation shortcut)."@en .
+<https://w3id.org/norma-ontology#wasDerivedFromSource> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#wasDerivedFromSource> <http://www.w3.org/2000/01/rdf-schema#label> "was derived from source"@en .
+# 
+# https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity
+<https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/ns/prov#wasGeneratedBy> .
+<https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#AnnotationActivity> .
+<https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#comment> "Links normative content to the annotation activity that generated it."@en .
+<https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#label> "was generated by annotation activity"@en .
+# 
+# https://w3id.org/norma-ontology#wasUsedByAnnotationActivity
+<https://w3id.org/norma-ontology#wasUsedByAnnotationActivity> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/norma-ontology#wasUsedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#wasUsedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/norma-ontology#AnnotationActivity> .
+<https://w3id.org/norma-ontology#wasUsedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#comment> "Links a legal source to the annotation activity that used it as input."@en .
+<https://w3id.org/norma-ontology#wasUsedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#wasUsedByAnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#label> "was used by annotation activity"@en .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Data properties
+# #
+# #################################################################
+# 
+# 
+# https://w3id.org/norma-ontology#actionText
+<https://w3id.org/norma-ontology#actionText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#actionText> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#actionText> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#actionText> <http://www.w3.org/2000/01/rdf-schema#comment> "Raw textual form of the regulated action as entered in the annotation template."@en .
+<https://w3id.org/norma-ontology#actionText> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#actionText> <http://www.w3.org/2000/01/rdf-schema#label> "action text"@en .
+# 
+# https://w3id.org/norma-ontology#agentText
+<https://w3id.org/norma-ontology#agentText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#agentText> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#agentText> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#agentText> <http://www.w3.org/2000/01/rdf-schema#comment> "Raw textual form of the legal agent as entered in the annotation template."@en .
+<https://w3id.org/norma-ontology#agentText> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#agentText> <http://www.w3.org/2000/01/rdf-schema#label> "agent text"@en .
+# 
+# https://w3id.org/norma-ontology#annotationDate
+<https://w3id.org/norma-ontology#annotationDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#annotationDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#annotationDate> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#AnnotationActivity> .
+<https://w3id.org/norma-ontology#annotationDate> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-ontology#annotationDate> <http://www.w3.org/2000/01/rdf-schema#comment> "Date on which the annotation activity took place. Convenience shortcut; for instant-level precision use `prov:startedAtTime`/`prov:endedAtTime` from PROV-O (both are valid on prov:Activity, unlike prov:generatedAtTime which is defined on prov:Entity)."@en .
+<https://w3id.org/norma-ontology#annotationDate> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#annotationDate> <http://www.w3.org/2000/01/rdf-schema#label> "annotation date"@en .
+# 
+# https://w3id.org/norma-ontology#articleNumber
+<https://w3id.org/norma-ontology#articleNumber> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#articleNumber> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#articleNumber> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#articleNumber> <http://www.w3.org/2000/01/rdf-schema#comment> "Article, section, or equivalent unit number. Not functional: a single LegalSource may cover multiple articles."@en .
+<https://w3id.org/norma-ontology#articleNumber> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#articleNumber> <http://www.w3.org/2000/01/rdf-schema#label> "article number"@en .
+# 
+# https://w3id.org/norma-ontology#conditionStatement
+<https://w3id.org/norma-ontology#conditionStatement> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#conditionStatement> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalCondition> .
+<https://w3id.org/norma-ontology#conditionStatement> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#conditionStatement> <http://www.w3.org/2000/01/rdf-schema#comment> "Plain-language formulation of the legal condition evaluated at a BPMN gateway."@en .
+<https://w3id.org/norma-ontology#conditionStatement> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#conditionStatement> <http://www.w3.org/2000/01/rdf-schema#label> "condition statement"@en .
+# 
+# https://w3id.org/norma-ontology#conditionTrigger
+<https://w3id.org/norma-ontology#conditionTrigger> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#conditionTrigger> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#conditionTrigger> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#conditionTrigger> <http://www.w3.org/2000/01/rdf-schema#comment> "Raw textual description of the condition under which the norm applies."@en .
+<https://w3id.org/norma-ontology#conditionTrigger> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#conditionTrigger> <http://www.w3.org/2000/01/rdf-schema#label> "condition trigger"@en .
+# 
+# https://w3id.org/norma-ontology#confidenceScore
+<https://w3id.org/norma-ontology#confidenceScore> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#confidenceScore> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#confidenceScore> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#AnnotationActivity> .
+<https://w3id.org/norma-ontology#confidenceScore> <http://www.w3.org/2000/01/rdf-schema#range> _:genid6 .
+_:genid6 <http://www.w3.org/2002/07/owl#withRestrictions> _:genid9 .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid7 .
+_:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid8 .
+_:genid8 <http://www.w3.org/2001/XMLSchema#maxInclusive> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+_:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid10 .
+_:genid10 <http://www.w3.org/2001/XMLSchema#minInclusive> "0.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid6 <http://www.w3.org/2002/07/owl#onDatatype> <http://www.w3.org/2001/XMLSchema#decimal> .
+_:genid6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Datatype> .
+<https://w3id.org/norma-ontology#confidenceScore> <http://www.w3.org/2000/01/rdf-schema#comment> "Confidence score the annotation activity assigned to its output, constrained to the closed interval [0,1]. Placed on the activity rather than the annotation entity to attribute uncertainty to the extraction process; downstream consumers traverse `prov:wasGeneratedBy` to reach it."@en .
+<https://w3id.org/norma-ontology#confidenceScore> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#confidenceScore> <http://www.w3.org/2000/01/rdf-schema#label> "confidence score"@en .
+# 
+# https://w3id.org/norma-ontology#deadline
+<https://w3id.org/norma-ontology#deadline> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#deadline> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#deadline> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#deadline> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#deadline> <http://www.w3.org/2000/01/rdf-schema#comment> "Deadline, sunset date, end date, or textual temporal constraint associated with the normative content."@en .
+<https://w3id.org/norma-ontology#deadline> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#deadline> <http://www.w3.org/2000/01/rdf-schema#label> "deadline"@en .
+# 
+# https://w3id.org/norma-ontology#deonticId
+<https://w3id.org/norma-ontology#deonticId> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#deonticId> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#deonticId> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#deonticId> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#deonticId> <http://www.w3.org/2000/01/rdf-schema#comment> "Unique identifier for a norm or constitutive rule within a regulation pack. The NORMA pipeline generates it from the modality prefix and the BPMN element label (e.g. OBL_Mark_AI_generated_content). Uniqueness is a pipeline invariant, not an OWL one; to enforce global uniqueness across graphs, declare InverseFunctionalProperty or add a SHACL uniqueness constraint."@en .
+<https://w3id.org/norma-ontology#deonticId> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#deonticId> <http://www.w3.org/2000/01/rdf-schema#label> "deontic ID"@en .
+# 
+# https://w3id.org/norma-ontology#effectiveDate
+<https://w3id.org/norma-ontology#effectiveDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#effectiveDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#effectiveDate> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#effectiveDate> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-ontology#effectiveDate> <http://www.w3.org/2000/01/rdf-schema#comment> "Date from which the normative content is effective."@en .
+<https://w3id.org/norma-ontology#effectiveDate> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#effectiveDate> <http://www.w3.org/2000/01/rdf-schema#label> "effective date"@en .
+# 
+# https://w3id.org/norma-ontology#exception
+<https://w3id.org/norma-ontology#exception> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#exception> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#exception> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#exception> <http://www.w3.org/2000/01/rdf-schema#comment> "Exception or carve-out under which the norm does not apply."@en .
+<https://w3id.org/norma-ontology#exception> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#exception> <http://www.w3.org/2000/01/rdf-schema#label> "exception"@en .
+# 
+# https://w3id.org/norma-ontology#factStatement
+<https://w3id.org/norma-ontology#factStatement> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#factStatement> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#ConstitutiveRule> .
+<https://w3id.org/norma-ontology#factStatement> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#factStatement> <http://www.w3.org/2000/01/rdf-schema#comment> "Plain-language statement of the constitutive rule."@en .
+<https://w3id.org/norma-ontology#factStatement> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#factStatement> <http://www.w3.org/2000/01/rdf-schema#label> "fact statement"@en .
+# 
+# https://w3id.org/norma-ontology#fromArticle
+<https://w3id.org/norma-ontology#fromArticle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#fromArticle> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#fromArticle> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#fromArticle> <http://www.w3.org/2000/01/rdf-schema#comment> "Denormalised article identifier copied from the linked LegalSource."@en .
+<https://w3id.org/norma-ontology#fromArticle> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#fromArticle> <http://www.w3.org/2000/01/rdf-schema#label> "from article"@en .
+# 
+# https://w3id.org/norma-ontology#fromParagraph
+<https://w3id.org/norma-ontology#fromParagraph> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#fromParagraph> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#fromParagraph> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#fromParagraph> <http://www.w3.org/2000/01/rdf-schema#comment> "Denormalised paragraph identifier copied from the linked LegalSource."@en .
+<https://w3id.org/norma-ontology#fromParagraph> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#fromParagraph> <http://www.w3.org/2000/01/rdf-schema#label> "from paragraph"@en .
+# 
+# https://w3id.org/norma-ontology#fromRegulation
+<https://w3id.org/norma-ontology#fromRegulation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#fromRegulation> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#fromRegulation> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#fromRegulation> <http://www.w3.org/2000/01/rdf-schema#comment> "Denormalised regulation name copied from the linked LegalSource for convenient querying and SWRL rule generation."@en .
+<https://w3id.org/norma-ontology#fromRegulation> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#fromRegulation> <http://www.w3.org/2000/01/rdf-schema#label> "from regulation"@en .
+# 
+# https://w3id.org/norma-ontology#lastReviewDate
+<https://w3id.org/norma-ontology#lastReviewDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#lastReviewDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#lastReviewDate> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#lastReviewDate> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-ontology#lastReviewDate> <http://www.w3.org/2000/01/rdf-schema#comment> "Date of the most recent legal or editorial review of this annotation. A lifecycle property of the norm itself, not of the activity that created it."@en .
+<https://w3id.org/norma-ontology#lastReviewDate> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#lastReviewDate> <http://www.w3.org/2000/01/rdf-schema#label> "last review date"@en .
+# 
+# https://w3id.org/norma-ontology#normStatement
+<https://w3id.org/norma-ontology#normStatement> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#normStatement> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#normStatement> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#normStatement> <http://www.w3.org/2000/01/rdf-schema#comment> "Human-readable restatement of the norm or rule."@en .
+<https://w3id.org/norma-ontology#normStatement> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#normStatement> <http://www.w3.org/2000/01/rdf-schema#label> "norm statement"@en .
+# 
+# https://w3id.org/norma-ontology#objectText
+<https://w3id.org/norma-ontology#objectText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#objectText> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#objectText> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#objectText> <http://www.w3.org/2000/01/rdf-schema#comment> "Raw textual form of the legal object as entered in the annotation template."@en .
+<https://w3id.org/norma-ontology#objectText> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#objectText> <http://www.w3.org/2000/01/rdf-schema#label> "object text"@en .
+# 
+# https://w3id.org/norma-ontology#originalText
+<https://w3id.org/norma-ontology#originalText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#originalText> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#originalText> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#originalText> <http://www.w3.org/2000/01/rdf-schema#comment> "Verbatim legal text from the legal source."@en .
+<https://w3id.org/norma-ontology#originalText> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#originalText> <http://www.w3.org/2000/01/rdf-schema#label> "original text"@en .
+# 
+# https://w3id.org/norma-ontology#paragraphNumber
+<https://w3id.org/norma-ontology#paragraphNumber> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#paragraphNumber> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#paragraphNumber> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#paragraphNumber> <http://www.w3.org/2000/01/rdf-schema#comment> "Paragraph, subsection, or equivalent granular locator. Not functional."@en .
+<https://w3id.org/norma-ontology#paragraphNumber> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#paragraphNumber> <http://www.w3.org/2000/01/rdf-schema#label> "paragraph number"@en .
+# 
+# https://w3id.org/norma-ontology#regulationName
+<https://w3id.org/norma-ontology#regulationName> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#regulationName> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#regulationName> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#regulationName> <http://www.w3.org/2000/01/rdf-schema#comment> "Name of the legal or regulatory source."@en .
+<https://w3id.org/norma-ontology#regulationName> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#regulationName> <http://www.w3.org/2000/01/rdf-schema#label> "regulation name"@en .
+# 
+# https://w3id.org/norma-ontology#regulationURI
+<https://w3id.org/norma-ontology#regulationURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#regulationURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#FunctionalProperty> .
+<https://w3id.org/norma-ontology#regulationURI> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#LegalSource> .
+<https://w3id.org/norma-ontology#regulationURI> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://w3id.org/norma-ontology#regulationURI> <http://www.w3.org/2000/01/rdf-schema#comment> "URI identifying the legal source."@en .
+<https://w3id.org/norma-ontology#regulationURI> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#regulationURI> <http://www.w3.org/2000/01/rdf-schema#label> "regulation URI"@en .
+# 
+# https://w3id.org/norma-ontology#sanction
+<https://w3id.org/norma-ontology#sanction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#sanction> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#sanction> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#string> .
+<https://w3id.org/norma-ontology#sanction> <http://www.w3.org/2000/01/rdf-schema#comment> "Sanction or consequence associated with non-compliance."@en .
+<https://w3id.org/norma-ontology#sanction> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#sanction> <http://www.w3.org/2000/01/rdf-schema#label> "sanction"@en .
+# 
+# https://w3id.org/norma-ontology#sourceURI
+<https://w3id.org/norma-ontology#sourceURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<https://w3id.org/norma-ontology#sourceURI> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#sourceURI> <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://w3id.org/norma-ontology#sourceURI> <http://www.w3.org/2000/01/rdf-schema#comment> "Denormalised URI copied from the linked LegalSource."@en .
+<https://w3id.org/norma-ontology#sourceURI> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#sourceURI> <http://www.w3.org/2000/01/rdf-schema#label> "source URI"@en .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Classes
+# #
+# #################################################################
+# 
+# 
+# https://w3id.org/norma-ontology#AnnotationActivity
+<https://w3id.org/norma-ontology#AnnotationActivity> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#AnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/ns/prov#Activity> .
+<https://w3id.org/norma-ontology#AnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#comment> "A provenance activity that produces a NORMA annotation (i.e. a NormativeContent) from one or more LegalSources."@en .
+<https://w3id.org/norma-ontology#AnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#AnnotationActivity> <http://www.w3.org/2000/01/rdf-schema#label> "Annotation Activity"@en .
+# 
+# https://w3id.org/norma-ontology#AnnotatorAgent
+<https://w3id.org/norma-ontology#AnnotatorAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#AnnotatorAgent> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/ns/prov#Agent> .
+<https://w3id.org/norma-ontology#AnnotatorAgent> <http://www.w3.org/2000/01/rdf-schema#comment> "A provenance agent responsible for creating, reviewing, or attesting to a NORMA annotation. May represent a person (legal expert, analyst), a software system (LLM extractor, rule engine), or an organization. For finer-grained typing use the corresponding PROV-O subclasses (prov:Person, prov:SoftwareAgent, prov:Organization). Integrity constraint (not OWL-enforced): for a given NormativeContent, `prov:wasAttributedTo` and `prov:wasAssociatedWith` (via its generating AnnotationActivity) should resolve to the same agent; validate with SHACL."@en .
+<https://w3id.org/norma-ontology#AnnotatorAgent> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#AnnotatorAgent> <http://www.w3.org/2000/01/rdf-schema#label> "Annotator Agent"@en .
+# 
+# https://w3id.org/norma-ontology#BindingForce
+<https://w3id.org/norma-ontology#BindingForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#BindingForce> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#BindingForce> <http://www.w3.org/2000/01/rdf-schema#comment> "Binding force of a norm."@en .
+<https://w3id.org/norma-ontology#BindingForce> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#BindingForce> <http://www.w3.org/2000/01/rdf-schema#label> "Binding Force"@en .
+# 
+# https://w3id.org/norma-ontology#ComplianceCriticality
+<https://w3id.org/norma-ontology#ComplianceCriticality> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#ComplianceCriticality> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#ComplianceCriticality> <http://www.w3.org/2000/01/rdf-schema#comment> "Criticality level associated with non-compliance with a regulative norm."@en .
+<https://w3id.org/norma-ontology#ComplianceCriticality> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#ComplianceCriticality> <http://www.w3.org/2000/01/rdf-schema#label> "Compliance Criticality"@en .
+# 
+# https://w3id.org/norma-ontology#ConditionOutcome
+<https://w3id.org/norma-ontology#ConditionOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#ConditionOutcome> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#ConditionOutcome> <http://www.w3.org/2000/01/rdf-schema#comment> "A controlled outcome value produced by evaluating a LegalCondition. It is modelled as an extensible SKOS concept class so binary branches, multi-way gateway branches, exception branches, and decision-table outcomes can all be represented consistently."@en .
+<https://w3id.org/norma-ontology#ConditionOutcome> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#ConditionOutcome> <http://www.w3.org/2000/01/rdf-schema#label> "Condition Outcome"@en .
+# 
+# https://w3id.org/norma-ontology#ConstitutiveRule
+<https://w3id.org/norma-ontology#ConstitutiveRule> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#ConstitutiveRule> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#ConstitutiveRule> <http://www.w3.org/2002/07/owl#disjointWith> <https://w3id.org/norma-ontology#RegulativeNorm> .
+<https://w3id.org/norma-ontology#ConstitutiveRule> <http://www.w3.org/2000/01/rdf-schema#comment> "A normative content item that defines, classifies, or constitutes a legal concept, status, or institutional fact."@en .
+<https://w3id.org/norma-ontology#ConstitutiveRule> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#ConstitutiveRule> <http://www.w3.org/2000/01/rdf-schema#label> "Constitutive Rule"@en .
+# 
+# https://w3id.org/norma-ontology#ExtractionMethod
+<https://w3id.org/norma-ontology#ExtractionMethod> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#ExtractionMethod> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#ExtractionMethod> <http://www.w3.org/2000/01/rdf-schema#comment> "Method used to produce the annotation."@en .
+<https://w3id.org/norma-ontology#ExtractionMethod> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#ExtractionMethod> <http://www.w3.org/2000/01/rdf-schema#label> "Extraction Method"@en .
+# 
+# https://w3id.org/norma-ontology#LegalAction
+<https://w3id.org/norma-ontology#LegalAction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#LegalAction> <http://www.w3.org/2000/01/rdf-schema#comment> "A normalized legal action that is prescribed, prohibited, permitted, or recommended by a regulative norm. NORMA pipeline consumers may work with the literal shortcut `norma:actionText` for low-ceremony use and mint LegalAction individuals only when the knowledge graph needs action-level reuse across norms."@en .
+<https://w3id.org/norma-ontology#LegalAction> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#LegalAction> <http://www.w3.org/2000/01/rdf-schema#label> "Legal Action"@en .
+# 
+# https://w3id.org/norma-ontology#LegalAgent
+<https://w3id.org/norma-ontology#LegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#LegalAgent> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://xmlns.com/foaf/0.1/Agent> .
+<https://w3id.org/norma-ontology#LegalAgent> <http://www.w3.org/2000/01/rdf-schema#comment> "An entity that bears the legally relevant role of subject of a regulative norm: the party that is obliged, prohibited, permitted, or recommended to perform a legal action. Instances should be further typed using foaf:Person, foaf:Organization, or foaf:Group to express whether the agent is a natural person, a legal entity (e.g. an AI provider, deployer, or operator), or a collective."@en .
+<https://w3id.org/norma-ontology#LegalAgent> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#LegalAgent> <http://www.w3.org/2000/01/rdf-schema#label> "Legal Agent"@en .
+# 
+# https://w3id.org/norma-ontology#LegalCondition
+<https://w3id.org/norma-ontology#LegalCondition> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#LegalCondition> <http://www.w3.org/2000/01/rdf-schema#comment> "A legally relevant condition, fact pattern, or decision criterion whose evaluated outcome determines whether normative content becomes applicable or is triggered. Branch-specific activation is represented using the n-ary TriggerEvent pattern via norma:hasTrigger."@en .
+<https://w3id.org/norma-ontology#LegalCondition> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#LegalCondition> <http://www.w3.org/2000/01/rdf-schema#label> "Legal Condition"@en .
+# 
+# https://w3id.org/norma-ontology#LegalObject
+<https://w3id.org/norma-ontology#LegalObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#LegalObject> <http://www.w3.org/2000/01/rdf-schema#comment> "The entity, resource, person, document, system, content, or data item toward which the regulated action is directed."@en .
+<https://w3id.org/norma-ontology#LegalObject> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#LegalObject> <http://www.w3.org/2000/01/rdf-schema#label> "Legal Object"@en .
+# 
+# https://w3id.org/norma-ontology#LegalSource
+<https://w3id.org/norma-ontology#LegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#LegalSource> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://data.europa.eu/eli/ontology#LegalResource> .
+<https://w3id.org/norma-ontology#LegalSource> <http://www.w3.org/2000/01/rdf-schema#comment> "A legal resource (in the ELI sense: a work-level identity) from which normative content is extracted, cited, or traced."@en .
+<https://w3id.org/norma-ontology#LegalSource> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#LegalSource> <http://www.w3.org/2000/01/rdf-schema#label> "Legal Source"@en .
+# 
+# https://w3id.org/norma-ontology#LegalSourceExpression
+<https://w3id.org/norma-ontology#LegalSourceExpression> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#LegalSourceExpression> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://data.europa.eu/eli/ontology#LegalExpression> .
+<https://w3id.org/norma-ontology#LegalSourceExpression> <http://www.w3.org/2000/01/rdf-schema#comment> "A concrete legal expression of a LegalSource: a specific language, consolidation, or published version of the underlying legal resource. Follows the ELI work/expression pattern: a LegalSource is realised by one or more LegalSourceExpressions via `norma:hasSourceExpression` (subproperty of `eli:is_realized_by`)."@en .
+<https://w3id.org/norma-ontology#LegalSourceExpression> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#LegalSourceExpression> <http://www.w3.org/2000/01/rdf-schema#label> "Legal Source Expression"@en .
+# 
+# https://w3id.org/norma-ontology#NegativeRecommendation
+<https://w3id.org/norma-ontology#NegativeRecommendation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#NegativeRecommendation> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/norma-ontology#RegulativeNorm> .
+# 
+# https://w3id.org/norma-ontology#NormStatus
+<https://w3id.org/norma-ontology#NormStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#NormStatus> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#NormStatus> <http://www.w3.org/2000/01/rdf-schema#comment> "Lifecycle status of a normative content item."@en .
+<https://w3id.org/norma-ontology#NormStatus> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#NormStatus> <http://www.w3.org/2000/01/rdf-schema#label> "Norm Status"@en .
+# 
+# https://w3id.org/norma-ontology#NormativeContent
+<https://w3id.org/norma-ontology#NormativeContent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#NormativeContent> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/ns/prov#Entity> .
+<https://w3id.org/norma-ontology#NormativeContent> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid11 .
+_:genid11 <http://www.w3.org/2002/07/owl#allValuesFrom> <http://data.europa.eu/eli/ontology#AdministrativeArea> .
+_:genid11 <http://www.w3.org/2002/07/owl#onProperty> <http://data.europa.eu/eli/ontology#jurisdiction> .
+_:genid11 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<https://w3id.org/norma-ontology#NormativeContent> <http://www.w3.org/2000/01/rdf-schema#comment> "An informational entity that expresses machine-readable legal-normative content extracted or formulated from a legal source, either a regulative norm or a constitutive rule. Jurisdiction is represented only with eli:jurisdiction, whose value must be an eli:AdministrativeArea. If no authoritative URI is available yet, use a local provisional resource typed as eli:AdministrativeArea and provide its rdfs:label."@en .
+<https://w3id.org/norma-ontology#NormativeContent> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#NormativeContent> <http://www.w3.org/2000/01/rdf-schema#label> "Normative Content"@en .
+<https://w3id.org/norma-ontology#NormativeContent> <http://www.w3.org/2004/02/skos/core#scopeNote> "Do not attach jurisdiction strings directly to NormativeContent. For extracted labels such as \"Spain\" or \"California\", mint a local jurisdiction resource, type it as eli:AdministrativeArea, attach the extracted text as rdfs:label, and later align or replace it with an authoritative URI when available."@en .
+# 
+# https://w3id.org/norma-ontology#Obligation
+<https://w3id.org/norma-ontology#Obligation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#Obligation> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/norma-ontology#RegulativeNorm> .
+# 
+# https://w3id.org/norma-ontology#Permission
+<https://w3id.org/norma-ontology#Permission> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#Permission> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/norma-ontology#RegulativeNorm> .
+# 
+# https://w3id.org/norma-ontology#Prohibition
+<https://w3id.org/norma-ontology#Prohibition> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#Prohibition> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/norma-ontology#RegulativeNorm> .
+# 
+# https://w3id.org/norma-ontology#Recommendation
+<https://w3id.org/norma-ontology#Recommendation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#Recommendation> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/norma-ontology#RegulativeNorm> .
+# 
+# https://w3id.org/norma-ontology#RegulativeNorm
+<https://w3id.org/norma-ontology#RegulativeNorm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#RegulativeNorm> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/norma-ontology#NormativeContent> .
+<https://w3id.org/norma-ontology#RegulativeNorm> <http://www.w3.org/2000/01/rdf-schema#comment> "A normative content item that regulates conduct by prescribing, prohibiting, permitting, or recommending a legal action."@en .
+<https://w3id.org/norma-ontology#RegulativeNorm> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#RegulativeNorm> <http://www.w3.org/2000/01/rdf-schema#label> "Regulative Norm"@en .
+# 
+# https://w3id.org/norma-ontology#ReviewStatus
+<https://w3id.org/norma-ontology#ReviewStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#ReviewStatus> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#ReviewStatus> <http://www.w3.org/2000/01/rdf-schema#comment> "Legal review status of an annotation."@en .
+<https://w3id.org/norma-ontology#ReviewStatus> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#ReviewStatus> <http://www.w3.org/2000/01/rdf-schema#label> "Review Status"@en .
+# 
+# https://w3id.org/norma-ontology#TriggerEvent
+<https://w3id.org/norma-ontology#TriggerEvent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/norma-ontology#TriggerEvent> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid12 .
+_:genid12 <http://www.w3.org/2002/07/owl#onClass> <https://w3id.org/norma-ontology#NormativeContent> .
+_:genid12 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+_:genid12 <http://www.w3.org/2002/07/owl#onProperty> <https://w3id.org/norma-ontology#activatesNorm> .
+_:genid12 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<https://w3id.org/norma-ontology#TriggerEvent> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid13 .
+_:genid13 <http://www.w3.org/2002/07/owl#onClass> <https://w3id.org/norma-ontology#ConditionOutcome> .
+_:genid13 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+_:genid13 <http://www.w3.org/2002/07/owl#onProperty> <https://w3id.org/norma-ontology#hasOutcome> .
+_:genid13 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+<https://w3id.org/norma-ontology#TriggerEvent> <http://www.w3.org/2000/01/rdf-schema#comment> "Reified instance of the triggering relation between a legal condition, one evaluated condition outcome, and one activated normative content item. Represents true, false, and other branch-specific activations without using separate branch-label datatype properties. Follows Pattern 1 / Use Case 1 of the W3C Working Group Note Defining N-ary Relations on the Semantic Web."@en .
+<https://w3id.org/norma-ontology#TriggerEvent> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#TriggerEvent> <http://www.w3.org/2000/01/rdf-schema#label> "Trigger Event"@en .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Individuals
+# #
+# #################################################################
+# 
+# 
+# https://w3id.org/norma-ontology
+<https://w3id.org/norma-ontology> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology> <http://xmlns.com/foaf/0.1/logo> <https://w3id.org/norma-ontology/assets/logo.png> .
+<https://w3id.org/norma-ontology/assets/logo.png> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+# 
+# https://w3id.org/norma-ontology#Active
+<https://w3id.org/norma-ontology#Active> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Active> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#Active> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#NormStatus> .
+<https://w3id.org/norma-ontology#Active> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Active> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#Active> <http://www.w3.org/2004/02/skos/core#notation> "ACTIVE" .
+<https://w3id.org/norma-ontology#Active> <http://www.w3.org/2000/01/rdf-schema#comment> "Currently in force or active."@en .
+<https://w3id.org/norma-ontology#Active> <http://www.w3.org/2000/01/rdf-schema#label> "Active"@en .
+<https://w3id.org/norma-ontology#Active> <http://www.w3.org/2004/02/skos/core#prefLabel> "Active"@en .
+# 
+# https://w3id.org/norma-ontology#Approved
+<https://w3id.org/norma-ontology#Approved> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Approved> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#Approved> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ReviewStatus> .
+<https://w3id.org/norma-ontology#Approved> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ReviewStatusScheme> .
+<https://w3id.org/norma-ontology#ReviewStatusScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Approved> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ReviewStatusScheme> .
+<https://w3id.org/norma-ontology#Approved> <http://www.w3.org/2004/02/skos/core#notation> "APPROVED" .
+<https://w3id.org/norma-ontology#Approved> <http://www.w3.org/2000/01/rdf-schema#comment> "Review status indicating that the annotation has been validated and accepted."@en .
+<https://w3id.org/norma-ontology#Approved> <http://www.w3.org/2000/01/rdf-schema#label> "Approved"@en .
+<https://w3id.org/norma-ontology#Approved> <http://www.w3.org/2004/02/skos/core#prefLabel> "Approved"@en .
+# 
+# https://w3id.org/norma-ontology#BindingForceScheme
+<https://w3id.org/norma-ontology#BindingForceScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#BindingForceScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#ConceptScheme> .
+<https://w3id.org/norma-ontology#BindingForceScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#Contractual> .
+<https://w3id.org/norma-ontology#BindingForceScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#HardLaw> .
+<https://w3id.org/norma-ontology#BindingForceScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#InternalPolicy> .
+<https://w3id.org/norma-ontology#BindingForceScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#SoftLaw> .
+<https://w3id.org/norma-ontology#BindingForceScheme> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#BindingForceScheme> <http://www.w3.org/2004/02/skos/core#definition> "SKOS concept scheme grouping binding-force values used by NORMA regulative norms."@en .
+<https://w3id.org/norma-ontology#BindingForceScheme> <http://www.w3.org/2004/02/skos/core#prefLabel> "Binding force scheme"@en .
+# 
+# https://w3id.org/norma-ontology#ComplianceCriticalityScheme
+<https://w3id.org/norma-ontology#ComplianceCriticalityScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#ComplianceCriticalityScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#ConceptScheme> .
+<https://w3id.org/norma-ontology#ComplianceCriticalityScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#Critical> .
+<https://w3id.org/norma-ontology#ComplianceCriticalityScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#High> .
+<https://w3id.org/norma-ontology#ComplianceCriticalityScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#Low> .
+<https://w3id.org/norma-ontology#ComplianceCriticalityScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#Medium> .
+<https://w3id.org/norma-ontology#ComplianceCriticalityScheme> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#ComplianceCriticalityScheme> <http://www.w3.org/2004/02/skos/core#definition> "SKOS concept scheme grouping compliance criticality values used by NORMA regulative norms."@en .
+<https://w3id.org/norma-ontology#ComplianceCriticalityScheme> <http://www.w3.org/2004/02/skos/core#prefLabel> "Compliance criticality scheme"@en .
+# 
+# https://w3id.org/norma-ontology#ConditionOutcomeScheme
+<https://w3id.org/norma-ontology#ConditionOutcomeScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#ConditionOutcomeScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#ConceptScheme> .
+<https://w3id.org/norma-ontology#ConditionOutcomeScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#FalseOutcome> .
+<https://w3id.org/norma-ontology#ConditionOutcomeScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#TrueOutcome> .
+<https://w3id.org/norma-ontology#ConditionOutcomeScheme> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#ConditionOutcomeScheme> <http://www.w3.org/2004/02/skos/core#definition> "Extensible SKOS scheme grouping condition outcome values used by NORMA trigger events."@en .
+<https://w3id.org/norma-ontology#ConditionOutcomeScheme> <http://www.w3.org/2004/02/skos/core#prefLabel> "Condition outcome scheme"@en .
+# 
+# https://w3id.org/norma-ontology#Contractual
+<https://w3id.org/norma-ontology#Contractual> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Contractual> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#Contractual> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#BindingForce> .
+<https://w3id.org/norma-ontology#Contractual> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#BindingForceScheme> .
+<https://w3id.org/norma-ontology#Contractual> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#BindingForceScheme> .
+<https://w3id.org/norma-ontology#Contractual> <http://www.w3.org/2004/02/skos/core#notation> "CONTRACTUAL" .
+<https://w3id.org/norma-ontology#Contractual> <http://www.w3.org/2000/01/rdf-schema#comment> "Binding force category for obligations, permissions, or constraints arising from a contract or agreement."@en .
+<https://w3id.org/norma-ontology#Contractual> <http://www.w3.org/2000/01/rdf-schema#label> "Contractual"@en .
+<https://w3id.org/norma-ontology#Contractual> <http://www.w3.org/2004/02/skos/core#prefLabel> "Contractual"@en .
+# 
+# https://w3id.org/norma-ontology#Critical
+<https://w3id.org/norma-ontology#Critical> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Critical> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#Critical> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ComplianceCriticality> .
+<https://w3id.org/norma-ontology#Critical> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ComplianceCriticalityScheme> .
+<https://w3id.org/norma-ontology#Critical> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ComplianceCriticalityScheme> .
+<https://w3id.org/norma-ontology#Critical> <http://www.w3.org/2004/02/skos/core#notation> "CRITICAL" .
+<https://w3id.org/norma-ontology#Critical> <http://www.w3.org/2000/01/rdf-schema#comment> "Compliance criticality level indicating that non-compliance may cause severe legal, financial, operational, or safety consequences."@en .
+<https://w3id.org/norma-ontology#Critical> <http://www.w3.org/2000/01/rdf-schema#label> "Critical"@en .
+<https://w3id.org/norma-ontology#Critical> <http://www.w3.org/2004/02/skos/core#prefLabel> "Critical"@en .
+# 
+# https://w3id.org/norma-ontology#Disputed
+<https://w3id.org/norma-ontology#Disputed> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Disputed> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#Disputed> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#NormStatus> .
+<https://w3id.org/norma-ontology#Disputed> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#Disputed> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#Disputed> <http://www.w3.org/2004/02/skos/core#notation> "DISPUTED" .
+<https://w3id.org/norma-ontology#Disputed> <http://www.w3.org/2000/01/rdf-schema#comment> "Legally or interpretively disputed."@en .
+<https://w3id.org/norma-ontology#Disputed> <http://www.w3.org/2000/01/rdf-schema#label> "Disputed"@en .
+<https://w3id.org/norma-ontology#Disputed> <http://www.w3.org/2004/02/skos/core#prefLabel> "Disputed"@en .
+# 
+# https://w3id.org/norma-ontology#ExtractionMethodScheme
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#ConceptScheme> .
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#LLMExtraction> .
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#ManualAnalyst> .
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#ManualLawyer> .
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#PatternMatching> .
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#RuleBased> .
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/2004/02/skos/core#definition> "SKOS concept scheme grouping annotation extraction method values used by NORMA."@en .
+<https://w3id.org/norma-ontology#ExtractionMethodScheme> <http://www.w3.org/2004/02/skos/core#prefLabel> "Extraction method scheme"@en .
+# 
+# https://w3id.org/norma-ontology#FalseOutcome
+<https://w3id.org/norma-ontology#FalseOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#FalseOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#FalseOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ConditionOutcome> .
+<https://w3id.org/norma-ontology#FalseOutcome> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ConditionOutcomeScheme> .
+<https://w3id.org/norma-ontology#FalseOutcome> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ConditionOutcomeScheme> .
+<https://w3id.org/norma-ontology#FalseOutcome> <http://www.w3.org/2004/02/skos/core#notation> "FALSE" .
+<https://w3id.org/norma-ontology#FalseOutcome> <http://www.w3.org/2000/01/rdf-schema#comment> "Condition outcome indicating that the condition does not hold, corresponding to a false or no branch."@en .
+<https://w3id.org/norma-ontology#FalseOutcome> <http://www.w3.org/2000/01/rdf-schema#label> "False Outcome"@en .
+<https://w3id.org/norma-ontology#FalseOutcome> <http://www.w3.org/2004/02/skos/core#prefLabel> "False outcome"@en .
+# 
+# https://w3id.org/norma-ontology#HardLaw
+<https://w3id.org/norma-ontology#HardLaw> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#HardLaw> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#HardLaw> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#BindingForce> .
+<https://w3id.org/norma-ontology#HardLaw> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#BindingForceScheme> .
+<https://w3id.org/norma-ontology#HardLaw> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#BindingForceScheme> .
+<https://w3id.org/norma-ontology#HardLaw> <http://www.w3.org/2004/02/skos/core#notation> "HARD_LAW" .
+<https://w3id.org/norma-ontology#HardLaw> <http://www.w3.org/2000/01/rdf-schema#comment> "Binding force category for legally binding instruments such as statutes, regulations, or enforceable legal acts."@en .
+<https://w3id.org/norma-ontology#HardLaw> <http://www.w3.org/2000/01/rdf-schema#label> "Hard Law"@en .
+<https://w3id.org/norma-ontology#HardLaw> <http://www.w3.org/2004/02/skos/core#prefLabel> "Hard Law"@en .
+# 
+# https://w3id.org/norma-ontology#High
+<https://w3id.org/norma-ontology#High> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#High> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#High> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ComplianceCriticality> .
+<https://w3id.org/norma-ontology#High> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ComplianceCriticalityScheme> .
+<https://w3id.org/norma-ontology#High> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ComplianceCriticalityScheme> .
+<https://w3id.org/norma-ontology#High> <http://www.w3.org/2004/02/skos/core#notation> "HIGH" .
+<https://w3id.org/norma-ontology#High> <http://www.w3.org/2000/01/rdf-schema#comment> "Compliance criticality level indicating a high level of legal, operational, or business risk in case of non-compliance."@en .
+<https://w3id.org/norma-ontology#High> <http://www.w3.org/2000/01/rdf-schema#label> "High"@en .
+<https://w3id.org/norma-ontology#High> <http://www.w3.org/2004/02/skos/core#prefLabel> "High"@en .
+# 
+# https://w3id.org/norma-ontology#InternalPolicy
+<https://w3id.org/norma-ontology#InternalPolicy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#InternalPolicy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#InternalPolicy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#BindingForce> .
+<https://w3id.org/norma-ontology#InternalPolicy> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#BindingForceScheme> .
+<https://w3id.org/norma-ontology#InternalPolicy> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#BindingForceScheme> .
+<https://w3id.org/norma-ontology#InternalPolicy> <http://www.w3.org/2004/02/skos/core#notation> "INTERNAL_POLICY" .
+<https://w3id.org/norma-ontology#InternalPolicy> <http://www.w3.org/2000/01/rdf-schema#comment> "Binding force category for internal organizational policies, procedures, or governance rules."@en .
+<https://w3id.org/norma-ontology#InternalPolicy> <http://www.w3.org/2000/01/rdf-schema#label> "Internal Policy"@en .
+<https://w3id.org/norma-ontology#InternalPolicy> <http://www.w3.org/2004/02/skos/core#prefLabel> "Internal Policy"@en .
+# 
+# https://w3id.org/norma-ontology#LLMExtraction
+<https://w3id.org/norma-ontology#LLMExtraction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#LLMExtraction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#LLMExtraction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ExtractionMethod> .
+<https://w3id.org/norma-ontology#LLMExtraction> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#LLMExtraction> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#LLMExtraction> <http://www.w3.org/2004/02/skos/core#notation> "LLM_EXTRACTION" .
+<https://w3id.org/norma-ontology#LLMExtraction> <http://www.w3.org/2000/01/rdf-schema#comment> "Extraction method indicating that the annotation was produced using a large language model."@en .
+<https://w3id.org/norma-ontology#LLMExtraction> <http://www.w3.org/2000/01/rdf-schema#label> "LLM extraction"@en .
+<https://w3id.org/norma-ontology#LLMExtraction> <http://www.w3.org/2004/02/skos/core#prefLabel> "LLM extraction"@en .
+# 
+# https://w3id.org/norma-ontology#Low
+<https://w3id.org/norma-ontology#Low> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Low> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#Low> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ComplianceCriticality> .
+<https://w3id.org/norma-ontology#Low> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ComplianceCriticalityScheme> .
+<https://w3id.org/norma-ontology#Low> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ComplianceCriticalityScheme> .
+<https://w3id.org/norma-ontology#Low> <http://www.w3.org/2004/02/skos/core#notation> "LOW" .
+<https://w3id.org/norma-ontology#Low> <http://www.w3.org/2000/01/rdf-schema#comment> "Compliance criticality level indicating limited compliance risk or impact."@en .
+<https://w3id.org/norma-ontology#Low> <http://www.w3.org/2000/01/rdf-schema#label> "Low"@en .
+<https://w3id.org/norma-ontology#Low> <http://www.w3.org/2004/02/skos/core#prefLabel> "Low"@en .
+# 
+# https://w3id.org/norma-ontology#ManualAnalyst
+<https://w3id.org/norma-ontology#ManualAnalyst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#ManualAnalyst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#ManualAnalyst> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ExtractionMethod> .
+<https://w3id.org/norma-ontology#ManualAnalyst> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#ManualAnalyst> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#ManualAnalyst> <http://www.w3.org/2004/02/skos/core#notation> "MANUAL_ANALYST" .
+<https://w3id.org/norma-ontology#ManualAnalyst> <http://www.w3.org/2000/01/rdf-schema#comment> "Extraction method indicating that the annotation was created manually by a non-lawyer analyst."@en .
+<https://w3id.org/norma-ontology#ManualAnalyst> <http://www.w3.org/2000/01/rdf-schema#label> "Manual annotation (analyst)"@en .
+<https://w3id.org/norma-ontology#ManualAnalyst> <http://www.w3.org/2004/02/skos/core#prefLabel> "Manual annotation (analyst)"@en .
+# 
+# https://w3id.org/norma-ontology#ManualLawyer
+<https://w3id.org/norma-ontology#ManualLawyer> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#ManualLawyer> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#ManualLawyer> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ExtractionMethod> .
+<https://w3id.org/norma-ontology#ManualLawyer> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#ManualLawyer> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#ManualLawyer> <http://www.w3.org/2004/02/skos/core#notation> "MANUAL_LAWYER" .
+<https://w3id.org/norma-ontology#ManualLawyer> <http://www.w3.org/2000/01/rdf-schema#comment> "Extraction method indicating that the annotation was created manually by a legal expert."@en .
+<https://w3id.org/norma-ontology#ManualLawyer> <http://www.w3.org/2000/01/rdf-schema#label> "Manual annotation (lawyer)"@en .
+<https://w3id.org/norma-ontology#ManualLawyer> <http://www.w3.org/2004/02/skos/core#prefLabel> "Manual annotation (lawyer)"@en .
+# 
+# https://w3id.org/norma-ontology#Medium
+<https://w3id.org/norma-ontology#Medium> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Medium> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#Medium> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ComplianceCriticality> .
+<https://w3id.org/norma-ontology#Medium> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ComplianceCriticalityScheme> .
+<https://w3id.org/norma-ontology#Medium> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ComplianceCriticalityScheme> .
+<https://w3id.org/norma-ontology#Medium> <http://www.w3.org/2004/02/skos/core#notation> "MEDIUM" .
+<https://w3id.org/norma-ontology#Medium> <http://www.w3.org/2000/01/rdf-schema#comment> "Compliance criticality level indicating moderate compliance risk or impact."@en .
+<https://w3id.org/norma-ontology#Medium> <http://www.w3.org/2000/01/rdf-schema#label> "Medium"@en .
+<https://w3id.org/norma-ontology#Medium> <http://www.w3.org/2004/02/skos/core#prefLabel> "Medium"@en .
+# 
+# https://w3id.org/norma-ontology#NegativeRecommendation
+<https://w3id.org/norma-ontology#NegativeRecommendation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#NegativeRecommendation> <http://www.w3.org/2004/02/skos/core#notation> "REC_NOT" .
+# 
+# https://w3id.org/norma-ontology#NormStatusScheme
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#ConceptScheme> .
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#Active> .
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#Disputed> .
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#NotYetInForce> .
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#Superseded> .
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#UnderReview> .
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/2004/02/skos/core#definition> "SKOS concept scheme grouping lifecycle status values used by NORMA normative content."@en .
+<https://w3id.org/norma-ontology#NormStatusScheme> <http://www.w3.org/2004/02/skos/core#prefLabel> "Norm status scheme"@en .
+# 
+# https://w3id.org/norma-ontology#NotReviewed
+<https://w3id.org/norma-ontology#NotReviewed> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#NotReviewed> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#NotReviewed> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ReviewStatus> .
+<https://w3id.org/norma-ontology#NotReviewed> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ReviewStatusScheme> .
+<https://w3id.org/norma-ontology#NotReviewed> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ReviewStatusScheme> .
+<https://w3id.org/norma-ontology#NotReviewed> <http://www.w3.org/2004/02/skos/core#notation> "NOT_REVIEWED" .
+<https://w3id.org/norma-ontology#NotReviewed> <http://www.w3.org/2000/01/rdf-schema#comment> "Review status indicating that the normative content has not yet been reviewed."@en .
+<https://w3id.org/norma-ontology#NotReviewed> <http://www.w3.org/2000/01/rdf-schema#label> "Not Reviewed"@en .
+<https://w3id.org/norma-ontology#NotReviewed> <http://www.w3.org/2004/02/skos/core#prefLabel> "Not Reviewed"@en .
+# 
+# https://w3id.org/norma-ontology#NotYetInForce
+<https://w3id.org/norma-ontology#NotYetInForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#NotYetInForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#NotYetInForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#NormStatus> .
+<https://w3id.org/norma-ontology#NotYetInForce> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#NotYetInForce> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#NotYetInForce> <http://www.w3.org/2004/02/skos/core#notation> "NOT_YET_IN_FORCE" .
+<https://w3id.org/norma-ontology#NotYetInForce> <http://www.w3.org/2000/01/rdf-schema#comment> "Published or known but not yet effective."@en .
+<https://w3id.org/norma-ontology#NotYetInForce> <http://www.w3.org/2000/01/rdf-schema#label> "Not Yet In Force"@en .
+<https://w3id.org/norma-ontology#NotYetInForce> <http://www.w3.org/2004/02/skos/core#prefLabel> "Not Yet In Force"@en .
+# 
+# https://w3id.org/norma-ontology#Obligation
+<https://w3id.org/norma-ontology#Obligation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Obligation> <http://www.w3.org/2004/02/skos/core#notation> "OBL" .
+# 
+# https://w3id.org/norma-ontology#PatternMatching
+<https://w3id.org/norma-ontology#PatternMatching> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#PatternMatching> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#PatternMatching> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ExtractionMethod> .
+<https://w3id.org/norma-ontology#PatternMatching> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#PatternMatching> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#PatternMatching> <http://www.w3.org/2004/02/skos/core#notation> "PATTERN_MATCHING" .
+<https://w3id.org/norma-ontology#PatternMatching> <http://www.w3.org/2000/01/rdf-schema#comment> "Extraction method indicating that annotation content was produced by matching textual or structural patterns."@en .
+<https://w3id.org/norma-ontology#PatternMatching> <http://www.w3.org/2000/01/rdf-schema#label> "Pattern matching"@en .
+<https://w3id.org/norma-ontology#PatternMatching> <http://www.w3.org/2004/02/skos/core#prefLabel> "Pattern matching"@en .
+# 
+# https://w3id.org/norma-ontology#PendingReview
+<https://w3id.org/norma-ontology#PendingReview> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#PendingReview> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#PendingReview> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ReviewStatus> .
+<https://w3id.org/norma-ontology#PendingReview> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ReviewStatusScheme> .
+<https://w3id.org/norma-ontology#PendingReview> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ReviewStatusScheme> .
+<https://w3id.org/norma-ontology#PendingReview> <http://www.w3.org/2004/02/skos/core#notation> "PENDING_REVIEW" .
+<https://w3id.org/norma-ontology#PendingReview> <http://www.w3.org/2000/01/rdf-schema#comment> "Review status indicating that the annotation is waiting for review."@en .
+<https://w3id.org/norma-ontology#PendingReview> <http://www.w3.org/2000/01/rdf-schema#label> "Pending Review"@en .
+<https://w3id.org/norma-ontology#PendingReview> <http://www.w3.org/2004/02/skos/core#prefLabel> "Pending Review"@en .
+# 
+# https://w3id.org/norma-ontology#Permission
+<https://w3id.org/norma-ontology#Permission> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Permission> <http://www.w3.org/2004/02/skos/core#notation> "PER" .
+# 
+# https://w3id.org/norma-ontology#Prohibition
+<https://w3id.org/norma-ontology#Prohibition> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Prohibition> <http://www.w3.org/2004/02/skos/core#notation> "PRH" .
+# 
+# https://w3id.org/norma-ontology#Recommendation
+<https://w3id.org/norma-ontology#Recommendation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Recommendation> <http://www.w3.org/2004/02/skos/core#notation> "REC" .
+# 
+# https://w3id.org/norma-ontology#ReviewStatusScheme
+<https://w3id.org/norma-ontology#ReviewStatusScheme> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#ConceptScheme> .
+<https://w3id.org/norma-ontology#ReviewStatusScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#Approved> .
+<https://w3id.org/norma-ontology#ReviewStatusScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#NotReviewed> .
+<https://w3id.org/norma-ontology#ReviewStatusScheme> <http://www.w3.org/2004/02/skos/core#hasTopConcept> <https://w3id.org/norma-ontology#PendingReview> .
+<https://w3id.org/norma-ontology#ReviewStatusScheme> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#ReviewStatusScheme> <http://www.w3.org/2004/02/skos/core#definition> "SKOS concept scheme grouping review status values used by NORMA annotations."@en .
+<https://w3id.org/norma-ontology#ReviewStatusScheme> <http://www.w3.org/2004/02/skos/core#prefLabel> "Review status scheme"@en .
+# 
+# https://w3id.org/norma-ontology#RuleBased
+<https://w3id.org/norma-ontology#RuleBased> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#RuleBased> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#RuleBased> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ExtractionMethod> .
+<https://w3id.org/norma-ontology#RuleBased> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#RuleBased> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ExtractionMethodScheme> .
+<https://w3id.org/norma-ontology#RuleBased> <http://www.w3.org/2004/02/skos/core#notation> "RULE_BASED" .
+<https://w3id.org/norma-ontology#RuleBased> <http://www.w3.org/2000/01/rdf-schema#comment> "Extraction method indicating that the annotation was produced by deterministic rules."@en .
+<https://w3id.org/norma-ontology#RuleBased> <http://www.w3.org/2000/01/rdf-schema#label> "Rule-based extraction"@en .
+<https://w3id.org/norma-ontology#RuleBased> <http://www.w3.org/2004/02/skos/core#prefLabel> "Rule-based extraction"@en .
+# 
+# https://w3id.org/norma-ontology#SoftLaw
+<https://w3id.org/norma-ontology#SoftLaw> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#SoftLaw> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#SoftLaw> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#BindingForce> .
+<https://w3id.org/norma-ontology#SoftLaw> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#BindingForceScheme> .
+<https://w3id.org/norma-ontology#SoftLaw> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#BindingForceScheme> .
+<https://w3id.org/norma-ontology#SoftLaw> <http://www.w3.org/2004/02/skos/core#notation> "SOFT_LAW" .
+<https://w3id.org/norma-ontology#SoftLaw> <http://www.w3.org/2000/01/rdf-schema#comment> "Binding force category for non-binding guidance, recommendations, codes of conduct, or policy instruments."@en .
+<https://w3id.org/norma-ontology#SoftLaw> <http://www.w3.org/2000/01/rdf-schema#label> "Soft Law"@en .
+<https://w3id.org/norma-ontology#SoftLaw> <http://www.w3.org/2004/02/skos/core#prefLabel> "Soft Law"@en .
+# 
+# https://w3id.org/norma-ontology#Superseded
+<https://w3id.org/norma-ontology#Superseded> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#Superseded> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#Superseded> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#NormStatus> .
+<https://w3id.org/norma-ontology#Superseded> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#Superseded> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#Superseded> <http://www.w3.org/2004/02/skos/core#notation> "SUPERSEDED" .
+<https://w3id.org/norma-ontology#Superseded> <http://www.w3.org/2000/01/rdf-schema#comment> "Replaced by another norm."@en .
+<https://w3id.org/norma-ontology#Superseded> <http://www.w3.org/2000/01/rdf-schema#label> "Superseded"@en .
+<https://w3id.org/norma-ontology#Superseded> <http://www.w3.org/2004/02/skos/core#prefLabel> "Superseded"@en .
+# 
+# https://w3id.org/norma-ontology#TrueOutcome
+<https://w3id.org/norma-ontology#TrueOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#TrueOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#TrueOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#ConditionOutcome> .
+<https://w3id.org/norma-ontology#TrueOutcome> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#ConditionOutcomeScheme> .
+<https://w3id.org/norma-ontology#TrueOutcome> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#ConditionOutcomeScheme> .
+<https://w3id.org/norma-ontology#TrueOutcome> <http://www.w3.org/2004/02/skos/core#notation> "TRUE" .
+<https://w3id.org/norma-ontology#TrueOutcome> <http://www.w3.org/2000/01/rdf-schema#comment> "Condition outcome indicating that the condition holds, corresponding to a true or yes branch."@en .
+<https://w3id.org/norma-ontology#TrueOutcome> <http://www.w3.org/2000/01/rdf-schema#label> "True Outcome"@en .
+<https://w3id.org/norma-ontology#TrueOutcome> <http://www.w3.org/2004/02/skos/core#prefLabel> "True outcome"@en .
+# 
+# https://w3id.org/norma-ontology#UnderReview
+<https://w3id.org/norma-ontology#UnderReview> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-ontology#UnderReview> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://w3id.org/norma-ontology#UnderReview> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#NormStatus> .
+<https://w3id.org/norma-ontology#UnderReview> <http://www.w3.org/2004/02/skos/core#inScheme> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#UnderReview> <http://www.w3.org/2004/02/skos/core#topConceptOf> <https://w3id.org/norma-ontology#NormStatusScheme> .
+<https://w3id.org/norma-ontology#UnderReview> <http://www.w3.org/2004/02/skos/core#notation> "UNDER_REVIEW" .
+<https://w3id.org/norma-ontology#UnderReview> <http://www.w3.org/2000/01/rdf-schema#comment> "Under legal, editorial, or analytical review."@en .
+<https://w3id.org/norma-ontology#UnderReview> <http://www.w3.org/2000/01/rdf-schema#label> "Under Review"@en .
+<https://w3id.org/norma-ontology#UnderReview> <http://www.w3.org/2004/02/skos/core#prefLabel> "Under Review"@en .
+# 
+# https://w3id.org/norma-ontology/assets/logo.png
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Annotations
+# #
+# #################################################################
+# 
+# 
+<https://w3id.org/norma-ontology#NegativeRecommendation> <http://www.w3.org/2000/01/rdf-schema#comment> "A regulative norm stating that a legal action is discouraged."@en .
+<https://w3id.org/norma-ontology#NegativeRecommendation> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#NegativeRecommendation> <http://www.w3.org/2000/01/rdf-schema#label> "Negative Recommendation"@en .
+# 
+<https://w3id.org/norma-ontology#Obligation> <http://www.w3.org/2000/01/rdf-schema#comment> "A regulative norm stating that a legal action is required."@en .
+<https://w3id.org/norma-ontology#Obligation> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#Obligation> <http://www.w3.org/2000/01/rdf-schema#label> "Obligation"@en .
+# 
+<https://w3id.org/norma-ontology#Permission> <http://www.w3.org/2000/01/rdf-schema#comment> "A regulative norm stating that a legal action is allowed."@en .
+<https://w3id.org/norma-ontology#Permission> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#Permission> <http://www.w3.org/2000/01/rdf-schema#label> "Permission"@en .
+# 
+<https://w3id.org/norma-ontology#Prohibition> <http://www.w3.org/2000/01/rdf-schema#comment> "A regulative norm stating that a legal action is forbidden."@en .
+<https://w3id.org/norma-ontology#Prohibition> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#Prohibition> <http://www.w3.org/2000/01/rdf-schema#label> "Prohibition"@en .
+# 
+<https://w3id.org/norma-ontology#Recommendation> <http://www.w3.org/2000/01/rdf-schema#comment> "A regulative norm stating that a legal action is recommended."@en .
+<https://w3id.org/norma-ontology#Recommendation> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-ontology#Recommendation> <http://www.w3.org/2000/01/rdf-schema#label> "Recommendation"@en .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    General axioms
+# #
+# #################################################################
+# 
+# 
+_:genid14 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AllDisjointClasses> .
+_:genid14 <http://www.w3.org/2002/07/owl#members> _:genid20 .
+_:genid20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid19 .
+_:genid19 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid18 .
+_:genid18 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid17 .
+_:genid17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid16 .
+_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid15 .
+_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#NormativeContent> .
+_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#LegalSource> .
+_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#LegalObject> .
+_:genid17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid18 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#LegalCondition> .
+_:genid18 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid19 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#LegalAgent> .
+_:genid19 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#LegalAction> .
+_:genid20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+# 
+_:genid21 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AllDisjointClasses> .
+_:genid21 <http://www.w3.org/2002/07/owl#members> _:genid26 .
+_:genid26 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid25 .
+_:genid25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid24 .
+_:genid24 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid23 .
+_:genid23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid22 .
+_:genid22 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid22 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#Recommendation> .
+_:genid22 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#Prohibition> .
+_:genid23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid24 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#Permission> .
+_:genid24 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#Obligation> .
+_:genid25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+_:genid26 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <https://w3id.org/norma-ontology#NegativeRecommendation> .
+_:genid26 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#List> .
+# 
+# Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/
