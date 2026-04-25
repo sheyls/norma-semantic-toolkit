@@ -1,0 +1,488 @@
+{
+  "@context" : {
+    "LegalSource" : {
+      "@id" : "https://w3id.org/norma-ontology#LegalSource"
+    },
+    "ComplianceCriticality" : {
+      "@id" : "https://w3id.org/norma-ontology#ComplianceCriticality"
+    },
+    "relatesTo" : {
+      "@id" : "https://w3id.org/norma-ontology#relatesTo",
+      "@type" : "@id"
+    },
+    "scopeNote" : {
+      "@id" : "http://www.w3.org/2004/02/skos/core#scopeNote"
+    },
+    "ConstitutiveRule" : {
+      "@id" : "https://w3id.org/norma-ontology#ConstitutiveRule"
+    },
+    "wasGeneratedBy" : {
+      "@id" : "http://www.w3.org/ns/prov#wasGeneratedBy",
+      "@type" : "@id"
+    },
+    "versionInfo" : {
+      "@id" : "http://www.w3.org/2002/07/owl#versionInfo"
+    },
+    "created" : {
+      "@id" : "http://purl.org/dc/terms/created"
+    },
+    "isSourceExpressionOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isSourceExpressionOf",
+      "@type" : "@id"
+    },
+    "LegalCondition" : {
+      "@id" : "https://w3id.org/norma-ontology#LegalCondition"
+    },
+    "Recommendation" : {
+      "@id" : "https://w3id.org/norma-ontology#Recommendation"
+    },
+    "license" : {
+      "@id" : "http://purl.org/dc/terms/license"
+    },
+    "deadline" : {
+      "@id" : "https://w3id.org/norma-ontology#deadline",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "RegulativeNorm" : {
+      "@id" : "https://w3id.org/norma-ontology#RegulativeNorm"
+    },
+    "NormStatus" : {
+      "@id" : "https://w3id.org/norma-ontology#NormStatus"
+    },
+    "bibliographicCitation" : {
+      "@id" : "http://purl.org/dc/terms/bibliographicCitation"
+    },
+    "Organization" : {
+      "@id" : "http://xmlns.com/foaf/0.1/Organization"
+    },
+    "normStatement" : {
+      "@id" : "https://w3id.org/norma-ontology#normStatement",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "issued" : {
+      "@id" : "http://purl.org/dc/terms/issued"
+    },
+    "is_realized_by" : {
+      "@id" : "http://data.europa.eu/eli/ontology#is_realized_by",
+      "@type" : "@id"
+    },
+    "Permission" : {
+      "@id" : "https://w3id.org/norma-ontology#Permission"
+    },
+    "objectText" : {
+      "@id" : "https://w3id.org/norma-ontology#objectText",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "hasLegalObject" : {
+      "@id" : "https://w3id.org/norma-ontology#hasLegalObject",
+      "@type" : "@id"
+    },
+    "paragraphNumber" : {
+      "@id" : "https://w3id.org/norma-ontology#paragraphNumber",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "Obligation" : {
+      "@id" : "https://w3id.org/norma-ontology#Obligation"
+    },
+    "BindingForce" : {
+      "@id" : "https://w3id.org/norma-ontology#BindingForce"
+    },
+    "wasAttributedTo" : {
+      "@id" : "http://www.w3.org/ns/prov#wasAttributedTo",
+      "@type" : "@id"
+    },
+    "isOutcomeOfTriggerEvent" : {
+      "@id" : "https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent",
+      "@type" : "@id"
+    },
+    "wasGeneratedByAnnotationActivity" : {
+      "@id" : "https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity",
+      "@type" : "@id"
+    },
+    "supersededBy" : {
+      "@id" : "https://w3id.org/norma-ontology#supersededBy",
+      "@type" : "@id"
+    },
+    "actionText" : {
+      "@id" : "https://w3id.org/norma-ontology#actionText",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "label" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#label"
+    },
+    "Prohibition" : {
+      "@id" : "https://w3id.org/norma-ontology#Prohibition"
+    },
+    "sanction" : {
+      "@id" : "https://w3id.org/norma-ontology#sanction",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "doi" : {
+      "@id" : "http://purl.org/ontology/bibo/doi"
+    },
+    "regulationName" : {
+      "@id" : "https://w3id.org/norma-ontology#regulationName",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "effectiveDate" : {
+      "@id" : "https://w3id.org/norma-ontology#effectiveDate",
+      "@type" : "http://www.w3.org/2001/XMLSchema#date"
+    },
+    "Concept" : {
+      "@id" : "http://www.w3.org/2004/02/skos/core#Concept"
+    },
+    "hasSourceExpression" : {
+      "@id" : "https://w3id.org/norma-ontology#hasSourceExpression",
+      "@type" : "@id"
+    },
+    "isTriggerOfCondition" : {
+      "@id" : "https://w3id.org/norma-ontology#isTriggerOfCondition",
+      "@type" : "@id"
+    },
+    "hasExtractionMethod" : {
+      "@id" : "https://w3id.org/norma-ontology#hasExtractionMethod",
+      "@type" : "@id"
+    },
+    "LegalResource" : {
+      "@id" : "http://data.europa.eu/eli/ontology#LegalResource"
+    },
+    "exception" : {
+      "@id" : "https://w3id.org/norma-ontology#exception",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "isTriggeredByCondition" : {
+      "@id" : "https://w3id.org/norma-ontology#isTriggeredByCondition",
+      "@type" : "@id"
+    },
+    "Activity" : {
+      "@id" : "http://www.w3.org/ns/prov#Activity"
+    },
+    "used" : {
+      "@id" : "http://www.w3.org/ns/prov#used",
+      "@type" : "@id"
+    },
+    "NormativeContent" : {
+      "@id" : "https://w3id.org/norma-ontology#NormativeContent"
+    },
+    "fromArticle" : {
+      "@id" : "https://w3id.org/norma-ontology#fromArticle",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "Person" : {
+      "@id" : "http://xmlns.com/foaf/0.1/Person"
+    },
+    "hasLegalSource" : {
+      "@id" : "https://w3id.org/norma-ontology#hasLegalSource",
+      "@type" : "@id"
+    },
+    "hasTrigger" : {
+      "@id" : "https://w3id.org/norma-ontology#hasTrigger",
+      "@type" : "@id"
+    },
+    "notation" : {
+      "@id" : "http://www.w3.org/2004/02/skos/core#notation"
+    },
+    "confidenceScore" : {
+      "@id" : "https://w3id.org/norma-ontology#confidenceScore"
+    },
+    "isBindingForceOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isBindingForceOf",
+      "@type" : "@id"
+    },
+    "triggersNorm" : {
+      "@id" : "https://w3id.org/norma-ontology#triggersNorm",
+      "@type" : "@id"
+    },
+    "LegalObject" : {
+      "@id" : "https://w3id.org/norma-ontology#LegalObject"
+    },
+    "Agent" : {
+      "@id" : "http://xmlns.com/foaf/0.1/Agent"
+    },
+    "wasUsedByAnnotationActivity" : {
+      "@id" : "https://w3id.org/norma-ontology#wasUsedByAnnotationActivity",
+      "@type" : "@id"
+    },
+    "LegalSourceExpression" : {
+      "@id" : "https://w3id.org/norma-ontology#LegalSourceExpression"
+    },
+    "creator" : {
+      "@id" : "http://purl.org/dc/terms/creator"
+    },
+    "isComplianceCriticalityOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isComplianceCriticalityOf",
+      "@type" : "@id"
+    },
+    "name" : {
+      "@id" : "http://xmlns.com/foaf/0.1/name"
+    },
+    "isLegalActionOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isLegalActionOf",
+      "@type" : "@id"
+    },
+    "ExtractionMethod" : {
+      "@id" : "https://w3id.org/norma-ontology#ExtractionMethod"
+    },
+    "LegalAgent" : {
+      "@id" : "https://w3id.org/norma-ontology#LegalAgent"
+    },
+    "hasBindingForce" : {
+      "@id" : "https://w3id.org/norma-ontology#hasBindingForce",
+      "@type" : "@id"
+    },
+    "conditionStatement" : {
+      "@id" : "https://w3id.org/norma-ontology#conditionStatement",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "fromParagraph" : {
+      "@id" : "https://w3id.org/norma-ontology#fromParagraph",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "isSourceForDerivedNormativeContent" : {
+      "@id" : "https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent",
+      "@type" : "@id"
+    },
+    "value" : {
+      "@id" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+      "@type" : "@id"
+    },
+    "wasDerivedFrom" : {
+      "@id" : "http://www.w3.org/ns/prov#wasDerivedFrom",
+      "@type" : "@id"
+    },
+    "hasOutcome" : {
+      "@id" : "https://w3id.org/norma-ontology#hasOutcome",
+      "@type" : "@id"
+    },
+    "factStatement" : {
+      "@id" : "https://w3id.org/norma-ontology#factStatement",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "conditionTrigger" : {
+      "@id" : "https://w3id.org/norma-ontology#conditionTrigger",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "sourceURI" : {
+      "@id" : "https://w3id.org/norma-ontology#sourceURI",
+      "@type" : "http://www.w3.org/2001/XMLSchema#anyURI"
+    },
+    "hasLegalAction" : {
+      "@id" : "https://w3id.org/norma-ontology#hasLegalAction",
+      "@type" : "@id"
+    },
+    "NegativeRecommendation" : {
+      "@id" : "https://w3id.org/norma-ontology#NegativeRecommendation"
+    },
+    "ConditionOutcome" : {
+      "@id" : "https://w3id.org/norma-ontology#ConditionOutcome"
+    },
+    "status" : {
+      "@id" : "http://purl.org/ontology/bibo/status"
+    },
+    "hasComplianceCriticality" : {
+      "@id" : "https://w3id.org/norma-ontology#hasComplianceCriticality",
+      "@type" : "@id"
+    },
+    "wasAttributedToAnnotator" : {
+      "@id" : "https://w3id.org/norma-ontology#wasAttributedToAnnotator",
+      "@type" : "@id"
+    },
+    "isAnnotatorOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isAnnotatorOf",
+      "@type" : "@id"
+    },
+    "supersedes" : {
+      "@id" : "https://w3id.org/norma-ontology#supersedes",
+      "@type" : "@id"
+    },
+    "preferredNamespacePrefix" : {
+      "@id" : "http://purl.org/vocab/vann/preferredNamespacePrefix"
+    },
+    "articleNumber" : {
+      "@id" : "https://w3id.org/norma-ontology#articleNumber",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "isDefinedBy" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+    },
+    "agentText" : {
+      "@id" : "https://w3id.org/norma-ontology#agentText",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "hasNormStatus" : {
+      "@id" : "https://w3id.org/norma-ontology#hasNormStatus",
+      "@type" : "@id"
+    },
+    "definition" : {
+      "@id" : "http://www.w3.org/2004/02/skos/core#definition"
+    },
+    "deonticId" : {
+      "@id" : "https://w3id.org/norma-ontology#deonticId",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "activatesNorm" : {
+      "@id" : "https://w3id.org/norma-ontology#activatesNorm",
+      "@type" : "@id"
+    },
+    "jurisdiction" : {
+      "@id" : "http://data.europa.eu/eli/ontology#jurisdiction",
+      "@type" : "@id"
+    },
+    "ConceptScheme" : {
+      "@id" : "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+    },
+    "title" : {
+      "@id" : "http://purl.org/dc/terms/title"
+    },
+    "wasAssociatedWith" : {
+      "@id" : "http://www.w3.org/ns/prov#wasAssociatedWith",
+      "@type" : "@id"
+    },
+    "annotationDate" : {
+      "@id" : "https://w3id.org/norma-ontology#annotationDate",
+      "@type" : "http://www.w3.org/2001/XMLSchema#date"
+    },
+    "source" : {
+      "@id" : "http://purl.org/dc/terms/source"
+    },
+    "wasAssociatedWithAnnotator" : {
+      "@id" : "https://w3id.org/norma-ontology#wasAssociatedWithAnnotator",
+      "@type" : "@id"
+    },
+    "publisher" : {
+      "@id" : "http://purl.org/dc/terms/publisher"
+    },
+    "AnnotatorAgent" : {
+      "@id" : "https://w3id.org/norma-ontology#AnnotatorAgent"
+    },
+    "ReviewStatus" : {
+      "@id" : "https://w3id.org/norma-ontology#ReviewStatus"
+    },
+    "isReviewStatusOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isReviewStatusOf",
+      "@type" : "@id"
+    },
+    "hasReviewStatus" : {
+      "@id" : "https://w3id.org/norma-ontology#hasReviewStatus",
+      "@type" : "@id"
+    },
+    "modified" : {
+      "@id" : "http://purl.org/dc/terms/modified"
+    },
+    "isActivatedByTriggerEvent" : {
+      "@id" : "https://w3id.org/norma-ontology#isActivatedByTriggerEvent",
+      "@type" : "@id"
+    },
+    "topConceptOf" : {
+      "@id" : "http://www.w3.org/2004/02/skos/core#topConceptOf"
+    },
+    "logo" : {
+      "@id" : "http://xmlns.com/foaf/0.1/logo",
+      "@type" : "@id"
+    },
+    "seeAlso" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+    },
+    "TriggerEvent" : {
+      "@id" : "https://w3id.org/norma-ontology#TriggerEvent"
+    },
+    "Entity" : {
+      "@id" : "http://www.w3.org/ns/prov#Entity"
+    },
+    "hasLegalAgent" : {
+      "@id" : "https://w3id.org/norma-ontology#hasLegalAgent",
+      "@type" : "@id"
+    },
+    "originalText" : {
+      "@id" : "https://w3id.org/norma-ontology#originalText",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "isNormStatusOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isNormStatusOf",
+      "@type" : "@id"
+    },
+    "generatedNormativeContent" : {
+      "@id" : "https://w3id.org/norma-ontology#generatedNormativeContent",
+      "@type" : "@id"
+    },
+    "fromRegulation" : {
+      "@id" : "https://w3id.org/norma-ontology#fromRegulation",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    },
+    "comment" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#comment"
+    },
+    "language" : {
+      "@id" : "http://purl.org/dc/terms/language"
+    },
+    "isExtractionMethodOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isExtractionMethodOf",
+      "@type" : "@id"
+    },
+    "contributor" : {
+      "@id" : "http://purl.org/dc/terms/contributor"
+    },
+    "usedLegalSource" : {
+      "@id" : "https://w3id.org/norma-ontology#usedLegalSource",
+      "@type" : "@id"
+    },
+    "isLegalAgentOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isLegalAgentOf",
+      "@type" : "@id"
+    },
+    "lastReviewDate" : {
+      "@id" : "https://w3id.org/norma-ontology#lastReviewDate",
+      "@type" : "http://www.w3.org/2001/XMLSchema#date"
+    },
+    "wasAnnotatorAssociatedWithActivity" : {
+      "@id" : "https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity",
+      "@type" : "@id"
+    },
+    "alternative" : {
+      "@id" : "http://purl.org/dc/terms/alternative"
+    },
+    "LegalAction" : {
+      "@id" : "https://w3id.org/norma-ontology#LegalAction"
+    },
+    "isLegalSourceOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isLegalSourceOf",
+      "@type" : "@id"
+    },
+    "AdministrativeArea" : {
+      "@id" : "http://data.europa.eu/eli/ontology#AdministrativeArea"
+    },
+    "isLegalObjectOf" : {
+      "@id" : "https://w3id.org/norma-ontology#isLegalObjectOf",
+      "@type" : "@id"
+    },
+    "AnnotationActivity" : {
+      "@id" : "https://w3id.org/norma-ontology#AnnotationActivity"
+    },
+    "hasTopConcept" : {
+      "@id" : "http://www.w3.org/2004/02/skos/core#hasTopConcept"
+    },
+    "prefLabel" : {
+      "@id" : "http://www.w3.org/2004/02/skos/core#prefLabel"
+    },
+    "inScheme" : {
+      "@id" : "http://www.w3.org/2004/02/skos/core#inScheme"
+    },
+    "description" : {
+      "@id" : "http://purl.org/dc/terms/description"
+    },
+    "LegalExpression" : {
+      "@id" : "http://data.europa.eu/eli/ontology#LegalExpression"
+    },
+    "preferredNamespaceUri" : {
+      "@id" : "http://purl.org/vocab/vann/preferredNamespaceUri"
+    },
+    "regulationURI" : {
+      "@id" : "https://w3id.org/norma-ontology#regulationURI",
+      "@type" : "http://www.w3.org/2001/XMLSchema#anyURI"
+    },
+    "wasDerivedFromSource" : {
+      "@id" : "https://w3id.org/norma-ontology#wasDerivedFromSource",
+      "@type" : "@id"
+    }
+  }
+}
