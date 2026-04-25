@@ -141,6 +141,7 @@ def rule_ir_to_swrl_xml(
     abox_iri: str,
     tbox_ns: str = DEFAULT_TBOX_NS,
     export_actions: bool = False,
+    head_class_atoms_only: bool = True,
 ) -> str:
     if not ir.conditions:
         raise ValueError(
@@ -206,35 +207,36 @@ def rule_ir_to_swrl_xml(
             _swrl_class_atom(class_iri=class_iri, subject_iri=subj_iri)
         )
 
-    for rel in ir.relations:
-        _validate_head_predicate(rel.predicate, "RelationAtom")
+    if not head_class_atoms_only:
+        for rel in ir.relations:
+            _validate_head_predicate(rel.predicate, "RelationAtom")
 
-        pred_iri = _resolve_ref(rel.predicate, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-        subj_iri = _resolve_ref(rel.subject, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-        obj_iri = _resolve_ref(rel.object, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
+            pred_iri = _resolve_ref(rel.predicate, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
+            subj_iri = _resolve_ref(rel.subject, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
+            obj_iri = _resolve_ref(rel.object, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
 
-        head_atoms.append(
-            _swrl_object_atom(
-                predicate_iri=pred_iri,
-                subject_iri=subj_iri,
-                object_iri=obj_iri,
+            head_atoms.append(
+                _swrl_object_atom(
+                    predicate_iri=pred_iri,
+                    subject_iri=subj_iri,
+                    object_iri=obj_iri,
+                )
             )
-        )
 
-    for dat in ir.data_atoms:
-        _validate_head_predicate(dat.predicate, "DataAtom")
+        for dat in ir.data_atoms:
+            _validate_head_predicate(dat.predicate, "DataAtom")
 
-        pred_iri = _resolve_ref(dat.predicate, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-        subj_iri = _resolve_ref(dat.subject, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
+            pred_iri = _resolve_ref(dat.predicate, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
+            subj_iri = _resolve_ref(dat.subject, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
 
-        head_atoms.append(
-            _swrl_data_atom(
-                predicate_iri=pred_iri,
-                subject_iri=subj_iri,
-                value=str(dat.value),
-                datatype=dat.datatype,
+            head_atoms.append(
+                _swrl_data_atom(
+                    predicate_iri=pred_iri,
+                    subject_iri=subj_iri,
+                    value=str(dat.value),
+                    datatype=dat.datatype,
+                )
             )
-        )
 
     body_list = _atom_list_xml(body_atoms, indent=6)
     head_list = _atom_list_xml(head_atoms, indent=6)
@@ -272,6 +274,7 @@ def export_rules_to_owl(
     tbox_ns: str = DEFAULT_TBOX_NS,
     imports_iri: str | None = None,
     export_actions: bool = False,
+    head_class_atoms_only: bool = True,
 ) -> None:
     # Unconditional norms (no gateway conditions) are fully declared in the ABox
     # and do not need a SWRL rule.  Skip them so the export never crashes on
@@ -301,6 +304,7 @@ def export_rules_to_owl(
             abox_iri=abox_iri,
             tbox_ns=tbox_ns,
             export_actions=export_actions,
+            head_class_atoms_only=head_class_atoms_only,
         )
         for r in rules
     )

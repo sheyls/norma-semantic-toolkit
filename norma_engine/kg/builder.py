@@ -21,6 +21,7 @@ import argparse
 import json
 import re
 import sys
+from datetime import date as _date
 from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
@@ -36,6 +37,10 @@ NS = {
 
 NORMA_IRI = "https://w3id.org/norma-ontology#"
 NORMA_ONT = "https://w3id.org/norma-ontology"
+
+# Default annotator emitted when no annotator is supplied in the BPMN.
+_DEFAULT_ANNOTATOR_LOCAL = "NORMAAnnotator"
+_DEFAULT_ANNOTATOR_LABEL = "NORMA Legal Expert"
 
 # ── Controlled-vocabulary mappings (template dropdown → OWL individual IRI) ───
 
@@ -338,6 +343,7 @@ def to_turtle(
         "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .",
         "@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .",
         "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .",
+        "@prefix eli:   <http://data.europa.eu/eli/ontology#> .",
         "",
         f"<{base_iri}>",
         "    a owl:Ontology ;",
@@ -346,12 +352,13 @@ def to_turtle(
     ]
 
     # ── Collect unique canonical individuals ──────────────────────────────────
-    agents:      dict[str, str] = {}
-    actions:     dict[str, str] = {}
-    objects:     dict[str, str] = {}
-    annotators:  dict[str, str] = {}
-    regulations: dict[str, str] = {}
-    conditions:  dict[tuple[str, str, str, str, str], str] = {}
+    agents:        dict[str, str] = {}
+    actions:       dict[str, str] = {}
+    objects:       dict[str, str] = {}
+    annotators:    dict[str, str] = {}
+    regulations:   dict[str, str] = {}
+    jurisdictions: dict[str, str] = {}
+    conditions:    dict[tuple[str, str, str, str, str], str] = {}
     norm_locals: dict[str, str] = {}
     condition_predicates: dict[str, str] = {}
 
@@ -362,16 +369,20 @@ def to_turtle(
             ob  = r.get("object", "")
             reg = r.get("regulation", "")
             ann = r.get("annotator", "")
-            if ag  and ag  not in agents:      agents[ag]      = f"Agent_{slug(ag)}"
-            if act and act not in actions:     actions[act]     = f"Action_{slug(act)}"
-            if ob  and ob  not in objects:     objects[ob]     = f"Object_{slug(ob)}"
-            if ann and ann not in annotators:  annotators[ann]  = f"Annotator_{slug(ann)}"
-            if reg and reg not in regulations: regulations[reg] = f"Regulation_{slug(reg)}"
+            jur = r.get("jurisdiction", "")
+            if ag  and ag  not in agents:           agents[ag]           = f"Agent_{slug(ag)}"
+            if act and act not in actions:          actions[act]          = f"Action_{slug(act)}"
+            if ob  and ob  not in objects:          objects[ob]           = f"Object_{slug(ob)}"
+            if ann and ann not in annotators:       annotators[ann]       = f"Annotator_{slug(ann)}"
+            if reg and reg not in regulations:      regulations[reg]      = f"Regulation_{slug(reg)}"
+            if jur and jur not in jurisdictions:    jurisdictions[jur]    = f"Jurisdiction_{slug(jur)}"
         elif r["element_type"] == "exclusiveGateway":
             reg = r.get("regulation", "")
             ann = r.get("annotator", "")
-            if ann and ann not in annotators: annotators[ann] = f"Annotator_{slug(ann)}"
-            if reg and reg not in regulations: regulations[reg] = f"Regulation_{slug(reg)}"
+            jur = r.get("jurisdiction", "")
+            if ann and ann not in annotators:       annotators[ann]       = f"Annotator_{slug(ann)}"
+            if reg and reg not in regulations:      regulations[reg]      = f"Regulation_{slug(reg)}"
+            if jur and jur not in jurisdictions:    jurisdictions[jur]    = f"Jurisdiction_{slug(jur)}"
             key = (
                 r.get("condition_statement", r["bpmn_name"]),
                 r.get("true_branch", ""),
@@ -403,7 +414,7 @@ def to_turtle(
         local = conditions.get(key, f"Condition_{slug(r['bpmn_id'])}")
         condition_predicates[to_symbol(cond or r["bpmn_name"])] = local
 
-    triggered_norms: dict[str, set[str]] = {}
+    triggered_norms: dict[str, set[tuple[bool, str]]] = {}
     for rule in rules_ir or []:
         rule_norm_ids: set[str] = set()
 
@@ -439,8 +450,11 @@ def to_turtle(
             condition_local = condition_predicates.get(predicate_name)
             if not condition_local:
                 continue
+            outcome = getattr(cond, "value", True)
             triggered_norms.setdefault(condition_local, set()).update(
-                norm_locals[norm_id] for norm_id in rule_norm_ids if norm_id in norm_locals
+                (outcome, norm_locals[norm_id])
+                for norm_id in rule_norm_ids
+                if norm_id in norm_locals
             )
 
     # ── Agents ────────────────────────────────────────────────────────────────
@@ -516,16 +530,33 @@ def to_turtle(
             _close(T)
             lines += T + [""]
 
-    # ── Annotator Agents ───────────────────────────────────────────────────────
-    if annotators:
-        lines.append("# ── Annotator Agents ─────────────────────────────────────────────")
-        for label, local in annotators.items():
+    # ── Jurisdictions ─────────────────────────────────────────────────────────
+    if jurisdictions:
+        lines.append("# ── Jurisdictions ────────────────────────────────────────────────")
+        for label, local in jurisdictions.items():
             lines += [
                 f":{local}",
-                "    a owl:NamedIndividual, norma:AnnotatorAgent ;",
+                "    a owl:NamedIndividual, eli:AdministrativeArea ;",
                 f'    rdfs:label "{esc(label)}"@en .',
                 "",
             ]
+
+    # ── Annotator Agents ───────────────────────────────────────────────────────
+    lines.append("# ── Annotator Agents ─────────────────────────────────────────────")
+    # Always emit the default NORMA system annotator.
+    lines += [
+        f":{_DEFAULT_ANNOTATOR_LOCAL}",
+        "    a owl:NamedIndividual, norma:AnnotatorAgent ;",
+        f'    rdfs:label "{_DEFAULT_ANNOTATOR_LABEL}"@en .',
+        "",
+    ]
+    for label, local in annotators.items():
+        lines += [
+            f":{local}",
+            "    a owl:NamedIndividual, norma:AnnotatorAgent ;",
+            f'    rdfs:label "{esc(label)}"@en .',
+            "",
+        ]
 
     # ── Norms (tasks) ─────────────────────────────────────────────────────────
     lines.append("# ── Norms ────────────────────────────────────────────────────────────")
@@ -556,7 +587,6 @@ def to_turtle(
         _dp(T, "objectText",        r.get("object", ""))
         _dp(T, "factStatement",    r.get("fact_statement", ""))
         _dp(T, "conditionTrigger", r.get("trigger_condition", ""))
-        _dp(T, "jurisdiction",     r.get("jurisdiction", ""))
         _dp(T, "exception",        r.get("exception", ""))
         _dp(T, "sanction",         r.get("sanction", ""))
         _dp(T, "fromRegulation",   r.get("regulation", ""))
@@ -586,6 +616,9 @@ def to_turtle(
         act = r.get("action", "")
         ob  = r.get("object", "")
         reg = r.get("regulation", "")
+        jur = r.get("jurisdiction", "")
+        if jur and jur in jurisdictions:
+            T.append(f"    eli:jurisdiction :{jurisdictions[jur]} ;")
         if ag  and ag  in agents:      T.append(f"    norma:hasLegalAgent  :{agents[ag]} ;")
         if act and act in actions:     T.append(f"    norma:hasLegalAction :{actions[act]} ;")
         if ob  and ob  in objects:     T.append(f"    norma:hasLegalObject :{objects[ob]} ;")
@@ -595,8 +628,9 @@ def to_turtle(
         annotator = r.get("annotator", "")
         if annotator and annotator in annotators:
             T.append(f"    norma:wasAttributedToAnnotator :{annotators[annotator]} ;")
-        if annotator or r.get("annotation_date") or r.get("confidence"):
-            T.append(f"    norma:wasGeneratedByAnnotationActivity :AnnotationActivity_{local} ;")
+        else:
+            T.append(f"    norma:wasAttributedToAnnotator :{_DEFAULT_ANNOTATOR_LOCAL} ;")
+        T.append(f"    norma:wasGeneratedByAnnotationActivity :AnnotationActivity_{local} ;")
 
         _close(T)
         lines += T + [""]
@@ -621,6 +655,12 @@ def to_turtle(
             continue
         emitted_conditions.add(local)
 
+        te_pairs = sorted(triggered_norms.get(local, set()))
+        te_locals = [
+            f"TriggerEvent_{local}_{'True' if out else 'False'}_{norm_local}"
+            for out, norm_local in te_pairs
+        ]
+
         T = [
             f":{local}",
             "    a owl:NamedIndividual, norma:LegalCondition ;",
@@ -628,65 +668,53 @@ def to_turtle(
             f"    norma:conditionStatement {lit(cond)} ;",
         ]
 
-        if r.get("true_branch"):
-            T.append(f"    norma:trueBranchLabel  {lit(r['true_branch'])} ;")
-        if r.get("false_branch"):
-            T.append(f"    norma:falseBranchLabel {lit(r['false_branch'])} ;")
-        _op(T, "hasNormStatus",       NORM_STATUS, r, "norm_status")
-        _op(T, "hasExtractionMethod", EXTRACTION,  r, "extraction_method")
-        _op(T, "hasReviewStatus",     REVIEW,      r, "review_status")
-
-        reg = r.get("regulation", "")
-        if reg and reg in regulations:
-            T.append(f"    norma:hasLegalSource :{regulations[reg]} ;")
-            T.append(f"    norma:wasDerivedFromSource :{regulations[reg]} ;")
-        annotator = r.get("annotator", "")
-        if annotator and annotator in annotators:
-            T.append(f"    norma:wasAttributedToAnnotator :{annotators[annotator]} ;")
-        if annotator or r.get("annotation_date") or r.get("confidence"):
-            T.append(f"    norma:wasGeneratedByAnnotationActivity :AnnotationActivity_{local} ;")
-        for norm_local in sorted(triggered_norms.get(local, set())):
-            T.append(f"    norma:triggersNorm :{norm_local} ;")
+        for te_local in te_locals:
+            T.append(f"    norma:hasTrigger :{te_local} ;")
 
         _close(T)
         lines += T + [""]
 
+        for (out, norm_local), te_local in zip(te_pairs, te_locals):
+            outcome_iri = "norma:TrueOutcome" if out else "norma:FalseOutcome"
+            lines += [
+                f":{te_local}",
+                "    a owl:NamedIndividual, norma:TriggerEvent ;",
+                f"    norma:hasOutcome {outcome_iri} ;",
+                f"    norma:activatesNorm :{norm_local} .",
+                "",
+            ]
+
     # ── Annotation Activities ──────────────────────────────────────────────────
+    today_iso = _date.today().isoformat()
     lines.append("# ── Annotation Activities ─────────────────────────────────────────")
+    emitted_activities: set[str] = set()
     for r in records:
-        if r["element_type"] == "task":
-            entity_local = slug(r.get("deontic_id") or r["bpmn_id"]) or slug(r["bpmn_id"])
-            activity_subject = r.get("deontic_id") or r["bpmn_name"] or r["bpmn_id"]
-        elif r["element_type"] == "exclusiveGateway":
-            cond = r.get("condition_statement", r["bpmn_name"])
-            key = (
-                cond,
-                r.get("true_branch", ""),
-                r.get("false_branch", ""),
-                r.get("regulation", ""),
-                r.get("article", ""),
-            )
-            entity_local = conditions.get(key, f"Condition_{slug(r['bpmn_id'])}")
-            activity_subject = cond or r["bpmn_name"] or r["bpmn_id"]
-        else:
+        if r["element_type"] != "task":
             continue
-
-        if not (r.get("annotator") or r.get("annotation_date") or r.get("confidence")):
-            continue
-
+        entity_local = slug(r.get("deontic_id") or r["bpmn_id"]) or slug(r["bpmn_id"])
+        activity_subject = r.get("deontic_id") or r["bpmn_name"] or r["bpmn_id"]
         activity_local = f"AnnotationActivity_{entity_local}"
+        if activity_local in emitted_activities:
+            continue
+        emitted_activities.add(activity_local)
+
+        ann_date = r.get("annotation_date") or today_iso
+        confidence = r.get("confidence", "")
+        annotator = r.get("annotator", "")
+        annotator_local = annotators.get(annotator) if annotator else None
+
         T = [
             f":{activity_local}",
             "    a owl:NamedIndividual, norma:AnnotationActivity ;",
             f'    rdfs:label "Annotation activity for {esc(activity_subject)}"@en ;',
+            f"    norma:annotationDate {_date_or_string_literal(ann_date)} ;",
         ]
-        if r.get("annotation_date"):
-            T.append(f"    norma:annotationDate {_date_or_string_literal(r['annotation_date'])} ;")
-        if r.get("confidence"):
-            T.append(f"    norma:confidenceScore {lit(r['confidence'], 'xsd:decimal')} ;")
-        annotator = r.get("annotator", "")
-        if annotator and annotator in annotators:
-            T.append(f"    norma:wasAssociatedWithAnnotator :{annotators[annotator]} ;")
+        if confidence:
+            T.append(f"    norma:confidenceScore {lit(confidence, 'xsd:decimal')} ;")
+        if annotator_local:
+            T.append(f"    norma:wasAssociatedWithAnnotator :{annotator_local} ;")
+        else:
+            T.append(f"    norma:wasAssociatedWithAnnotator :{_DEFAULT_ANNOTATOR_LOCAL} ;")
         reg = r.get("regulation", "")
         if reg and reg in regulations:
             T.append(f"    norma:usedLegalSource :{regulations[reg]} ;")

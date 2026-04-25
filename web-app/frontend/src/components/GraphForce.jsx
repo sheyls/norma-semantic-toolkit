@@ -15,8 +15,8 @@ const NODE_COLORS = {
   LegalCondition: "#b45309",
   LegalSource: "#6c5b7b",
   LegalSourceExpression: "#8d7ea3",
-  AnnotationActivity: "#0f766e",
-  AnnotatorAgent: "#374151",
+  AnnotationActivity: "#5b4f72",
+  AnnotatorAgent: "#5b4f72",
   BindingForce: "#0d3b66",
   ComplianceCriticality: "#a63a50",
   NormStatus: "#5c6b73",
@@ -145,14 +145,6 @@ function nodeDetailRows(node) {
     rows.push({ label: "Trigger condition", value: node.trigger_condition });
   }
 
-  if (node.true_branch || node.false_branch) {
-    rows.push({
-      label: "Gateway branches",
-      value: [node.true_branch && `True: ${node.true_branch}`, node.false_branch && `False: ${node.false_branch}`]
-        .filter(Boolean)
-        .join(" · "),
-    });
-  }
 
   if (node.source) {
     rows.push({ label: "Linked source", value: node.source, tone: "code" });

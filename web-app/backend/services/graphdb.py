@@ -136,7 +136,7 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT DISTINCT ?node ?type ?label ?regulation ?article ?paragraph ?source
                 ?deonticId ?normStatement ?conditionStatement ?trigger
-                ?agentText ?actionText ?objectText ?trueBranch ?falseBranch
+                ?agentText ?actionText ?objectText
                 ?annotationDate ?confidenceScore
 WHERE {
   ?node rdf:type ?type .
@@ -144,7 +144,8 @@ WHERE {
   FILTER(STRSTARTS(STR(?type), "https://w3id.org/norma-ontology#"))
   FILTER(
     STR(?type) != "https://w3id.org/norma-ontology#NormativeContent" &&
-    STR(?type) != "https://w3id.org/norma-ontology#RegulativeNorm"
+    STR(?type) != "https://w3id.org/norma-ontology#RegulativeNorm" &&
+    STR(?type) != "https://w3id.org/norma-ontology#TriggerEvent"
   )
   OPTIONAL { ?node rdfs:label ?label . }
   OPTIONAL { ?node norma:fromRegulation ?regulation . }
@@ -158,38 +159,50 @@ WHERE {
   OPTIONAL { ?node norma:agentText ?agentText . }
   OPTIONAL { ?node norma:actionText ?actionText . }
   OPTIONAL { ?node norma:objectText ?objectText . }
-  OPTIONAL { ?node norma:trueBranchLabel ?trueBranch . }
-  OPTIONAL { ?node norma:falseBranchLabel ?falseBranch . }
   OPTIONAL { ?node norma:annotationDate ?annotationDate . }
   OPTIONAL { ?node norma:confidenceScore ?confidenceScore . }
 }
 ORDER BY ?type ?node
 """
 
+    # TriggerEvent is a reification node — collapse the n-ary chain into a
+    # direct LegalCondition → Norm edge labelled with the branch outcome.
     edge_query = """
 PREFIX norma: <https://w3id.org/norma-ontology#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT DISTINCT ?source ?predicate ?target ?predicateLabel
+SELECT DISTINCT ?source ?target ?label
 WHERE {
-  VALUES ?predicate {
-    norma:hasLegalAgent norma:hasLegalAction norma:hasLegalObject
-    norma:hasLegalSource norma:hasSourceExpression norma:triggersNorm
-    norma:hasBindingForce norma:hasComplianceCriticality norma:hasNormStatus
-    norma:hasExtractionMethod norma:hasReviewStatus
-    norma:wasGeneratedByAnnotationActivity norma:wasAttributedToAnnotator
-    norma:wasAssociatedWithAnnotator norma:usedLegalSource
-    norma:wasDerivedFromSource norma:relatesTo norma:supersededBy
+  {
+    VALUES ?predicate {
+      norma:hasLegalAgent norma:hasLegalAction norma:hasLegalObject
+      norma:hasLegalSource norma:hasSourceExpression
+      norma:wasGeneratedByAnnotationActivity norma:wasAttributedToAnnotator
+      norma:wasAssociatedWithAnnotator norma:usedLegalSource
+      norma:wasDerivedFromSource norma:relatesTo norma:supersededBy
+    }
+    ?source ?predicate ?target .
+    FILTER(isIRI(?source) && isIRI(?target))
+    FILTER(STRSTARTS(STR(?source), "https://w3id.org/norma-abox/"))
+    FILTER(STRSTARTS(STR(?target), "https://w3id.org/norma-abox/"))
+    OPTIONAL { ?predicate rdfs:label ?predicateLabel . }
+    BIND(COALESCE(?predicateLabel, REPLACE(STR(?predicate), "^.+[#/]", "")) AS ?label)
   }
-  ?source ?predicate ?target .
-  FILTER(isIRI(?source) && isIRI(?target))
-  FILTER(
-    STRSTARTS(STR(?source), "https://w3id.org/norma-abox/") &&
-    STRSTARTS(STR(?target), "https://w3id.org/norma-abox/")
-  )
-  OPTIONAL { ?predicate rdfs:label ?predicateLabel . }
+  UNION
+  {
+    ?source norma:hasTrigger ?te .
+    ?te norma:activatesNorm ?target .
+    ?te norma:hasOutcome ?outcome .
+    FILTER(STRSTARTS(STR(?source), "https://w3id.org/norma-abox/"))
+    FILTER(STRSTARTS(STR(?target), "https://w3id.org/norma-abox/"))
+    BIND(
+      IF(STR(?outcome) = "https://w3id.org/norma-ontology#TrueOutcome",
+         "when true", "when false")
+      AS ?label
+    )
+  }
 }
-ORDER BY ?predicate ?source ?target
+ORDER BY ?label ?source ?target
 """
 
     nodes: dict[str, dict[str, Any]] = {}
@@ -216,8 +229,6 @@ ORDER BY ?predicate ?source ?target
         agent_text = binding_value(row, "agentText")
         action_text = binding_value(row, "actionText")
         object_text = binding_value(row, "objectText")
-        true_branch = binding_value(row, "trueBranch")
-        false_branch = binding_value(row, "falseBranch")
         annotation_date = binding_value(row, "annotationDate")
         confidence = binding_value(row, "confidenceScore")
         existing = nodes.get(node_id)
@@ -237,8 +248,6 @@ ORDER BY ?predicate ?source ?target
                 "agent": agent_text,
                 "action": action_text,
                 "object": object_text,
-                "true_branch": true_branch,
-                "false_branch": false_branch,
                 "annotation_date": annotation_date,
                 "confidence": confidence,
             }
@@ -267,10 +276,6 @@ ORDER BY ?predicate ?source ?target
                 existing["action"] = action_text
             if object_text and not existing.get("object"):
                 existing["object"] = object_text
-            if true_branch and not existing.get("true_branch"):
-                existing["true_branch"] = true_branch
-            if false_branch and not existing.get("false_branch"):
-                existing["false_branch"] = false_branch
             if annotation_date and not existing.get("annotation_date"):
                 existing["annotation_date"] = annotation_date
             if confidence and not existing.get("confidence"):
@@ -280,10 +285,9 @@ ORDER BY ?predicate ?source ?target
     for row in edge_results:
         source_uri = binding_value(row, "source")
         target_uri = binding_value(row, "target")
-        predicate_uri = binding_value(row, "predicate")
-        if not source_uri or not target_uri or not predicate_uri:
+        label = binding_value(row, "label") or ""
+        if not source_uri or not target_uri:
             continue
-        label = binding_value(row, "predicateLabel") or local_name(predicate_uri)
         if source_uri not in nodes or target_uri not in nodes:
             continue
         key = (source_uri, target_uri, label)

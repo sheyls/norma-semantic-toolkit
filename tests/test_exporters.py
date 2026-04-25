@@ -68,19 +68,21 @@ class TestSWRLExporter:
         assert f'rdf:about="{RULES_IRI}"' in content
 
     def test_tbox_properties_in_head(self, sample_bpmn_xml):
+        # SWRL head is compact: only ClassAtoms (deontic type assertions).
+        # RelationAtoms and DataAtoms are omitted — they are declared in the ABox
+        # which the SWRL file imports, so asserting them in the rule head is redundant.
         content = _export(sample_bpmn_xml)
-        assert f"{TBOX_NS}hasLegalAgent" in content
-        assert f"{TBOX_NS}hasLegalObject" in content
-        assert f"{TBOX_NS}hasNormStatus" in content
-        assert f"{TBOX_NS}hasExtractionMethod" in content
-        assert f"{TBOX_NS}hasReviewStatus" in content
-        assert f"{TBOX_NS}hasLegalSource" in content
+        assert f"{TBOX_NS}Obligation" in content
+        assert f"{TBOX_NS}Recommendation" in content
+        assert f"{TBOX_NS}hasLegalAgent" not in content
+        assert f"{TBOX_NS}hasLegalSource" not in content
 
     def test_abox_individuals_in_head(self, sample_bpmn_xml):
+        # Compact head: norm individuals appear as ClassAtom subjects; agent individuals do not.
         content = _export(sample_bpmn_xml)
-        assert f"{ABOX_IRI}#OBL_1"          in content
-        assert f"{ABOX_IRI}#REC_1"          in content
-        assert f"{ABOX_IRI}#Agent_AI_owner" in content
+        assert f"{ABOX_IRI}#OBL_1" in content
+        assert f"{ABOX_IRI}#REC_1" in content
+        assert f"{ABOX_IRI}#Agent_AI_owner" not in content
 
     def test_body_uses_boolean_condition(self, sample_bpmn_xml):
         content = _export(sample_bpmn_xml)
@@ -94,20 +96,23 @@ class TestSWRLExporter:
         assert f"{RULES_IRI}#var_x" in content
 
     def test_binding_force_tbox_individual_in_head(self, sample_bpmn_xml):
+        # Compact head omits RelationAtoms — binding-force individuals stay in the ABox only.
         content = _export(sample_bpmn_xml)
-        assert f"{TBOX_NS}HardLaw" in content
-        assert f"{TBOX_NS}SoftLaw" in content
+        assert f"{TBOX_NS}HardLaw" not in content
+        assert f"{TBOX_NS}SoftLaw" not in content
 
     def test_deontic_id_data_atom_in_head(self, sample_bpmn_xml):
+        # Compact head omits DataAtoms — deonticId literals stay in the ABox only.
         content = _export(sample_bpmn_xml)
-        assert f"{TBOX_NS}deonticId" in content
-        assert ">OBL_1<" in content
-        assert ">REC_1<" in content
+        assert f"{TBOX_NS}deonticId" not in content
+        assert ">OBL_1<" not in content
+        assert ">REC_1<" not in content
 
     def test_semantic_template_data_is_exported(self, sample_bpmn_xml):
+        # Compact head omits DataAtoms and RelationAtoms — annotation metadata stays in the ABox only.
         content = _export(sample_bpmn_xml)
-        assert f"{TBOX_NS}fromRegulation" in content
-        assert f"{TBOX_NS}fromArticle" in content
-        assert f"{TBOX_NS}annotationDate" in content
-        assert f"{TBOX_NS}confidenceScore" in content
-        assert f"{TBOX_NS}wasGeneratedByAnnotationActivity" in content
+        assert f"{TBOX_NS}fromRegulation" not in content
+        assert f"{TBOX_NS}fromArticle" not in content
+        assert f"{TBOX_NS}annotationDate" not in content
+        assert f"{TBOX_NS}confidenceScore" not in content
+        assert f"{TBOX_NS}wasGeneratedByAnnotationActivity" not in content

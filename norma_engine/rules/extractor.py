@@ -415,7 +415,6 @@ def _action_from_deontic_props(
     _add_string_data_atom(data, "normStatement", norm_ref, norm_statement)
     _add_string_data_atom(data, "factStatement", norm_ref, fact_statement)
     _add_string_data_atom(data, "conditionTrigger", norm_ref, trigger_condition)
-    _add_string_data_atom(data, "jurisdiction", norm_ref, jurisdiction)
     _add_string_data_atom(data, "exception", norm_ref, exception)
     _add_string_data_atom(data, "sanction", norm_ref, sanction)
     _add_dateish_data_atom(data, "effectiveDate", norm_ref, effective_date)
@@ -459,12 +458,6 @@ def _action_from_deontic_props(
     class_atoms_list: List[ClassAtom] = [
         ClassAtom(class_ref=tbox(norm_class), subject=norm_ref),
     ]
-    if annotator_ref is not None:
-        class_atoms_list.append(ClassAtom(class_ref=tbox("AnnotatorAgent"), subject=annotator_ref))
-    if activity_ref is not None:
-        class_atoms_list.append(ClassAtom(class_ref=tbox("AnnotationActivity"), subject=activity_ref))
-    if source_ref is not None:
-        class_atoms_list.append(ClassAtom(class_ref=tbox("LegalSource"), subject=source_ref))
 
     return action_summary, tuple(relations), tuple(data), tuple(class_atoms_list)
 

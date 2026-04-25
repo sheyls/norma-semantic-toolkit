@@ -39,16 +39,20 @@ ORDER BY ?agent""",
     {
         "id": "conditions",
         "label": "Gateway conditions",
-        "description": "All legal conditions and their branch labels.",
+        "description": "Legal conditions with each trigger event, its outcome, and the norm it activates.",
         "query": """PREFIX norma: <https://w3id.org/norma-ontology#>
+PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?cond ?statement ?yes ?no
+SELECT ?cond ?statement ?outcome ?norm ?normLabel
 WHERE {
   ?cond a norma:LegalCondition ;
         norma:conditionStatement ?statement ;
-        norma:trueBranchLabel ?yes ;
-        norma:falseBranchLabel ?no .
-}""",
+        norma:hasTrigger ?te .
+  ?te norma:hasOutcome ?outcome ;
+      norma:activatesNorm ?norm .
+  OPTIONAL { ?norm rdfs:label ?normLabel . }
+}
+ORDER BY ?cond ?outcome""",
     },
     {
         "id": "hard-law",
