@@ -142,8 +142,8 @@ norma-semantic-toolkit/
 
 ## The NORMA Ontology (TBox)
 
-**IRI:** `https://w3id.org/norma-ontology`  
-**Version IRI:** `https://w3id.org/norma-ontology/1.0`  
+**IRI:** `https://w3id.org/def/norma-o`  
+**Version IRI:** `https://w3id.org/def/norma-o/1.0`  
 **Serialisations:** Turtle and RDF/XML (both provided)  
 **License:** CC BY 4.0  
 **DOI:** 10.5281/zenodo.19765302
@@ -263,7 +263,7 @@ The `norma_engine` package implements a four-stage pipeline:
 - Creates `AnnotationActivity` individuals linked to each norm, stamping `norma:annotationDate` (from the annotation metadata or the generation date) and `norma:wasAssociatedWithAnnotator` (from the annotator field or the default `NORMAAnnotator` individual).
 - Mints provisional `eli:AdministrativeArea` individuals for jurisdiction strings, ready for later alignment to authoritative URIs.
 
-The resulting ABox imports the TBox (`owl:imports <https://w3id.org/norma-ontology>`) and is self-contained.
+The resulting ABox imports the TBox (`owl:imports <https://w3id.org/def/norma-o>`) and is self-contained.
 
 ### Stage 4 — SWRL Rule Extraction
 

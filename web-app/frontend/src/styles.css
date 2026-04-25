@@ -1039,18 +1039,19 @@ h1 {
 }
 
 .button--hero-secondary {
-  background: var(--paper);
-  color: var(--ink-2);
-  border-color: var(--line);
-  box-shadow: var(--shadow);
+  background: #14316e;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
-.button--hero-secondary span { color: var(--brand); }
+.button--hero-secondary span { color: rgba(147, 197, 253, 0.82); }
 
 .button--hero-secondary:hover {
   transform: translateY(-1px);
-  border-color: var(--brand-light);
-  box-shadow: var(--shadow-md);
+  background: #10295c;
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.2);
 }
 
 .pill {
@@ -3318,6 +3319,21 @@ h1 { color: var(--ink-2); }
   background: var(--paper);
   border-color: var(--line);
   border-radius: var(--r-md);
+}
+
+.ontology-panel__meta-item--doc {
+  background: linear-gradient(180deg, #17324a, #10222f);
+  border-color: rgba(16, 34, 47, 0.96);
+  box-shadow: 0 18px 34px rgba(16, 34, 47, 0.18);
+}
+
+.ontology-panel__meta-item--doc span,
+.ontology-panel__meta-item--doc strong {
+  color: #f4fbfd;
+}
+
+.ontology-panel__meta-item--doc:hover {
+  background: linear-gradient(180deg, #102a40, #0b1d2b);
 }
 
 /* ── Sidebar chip ── */

@@ -16,8 +16,8 @@ import io
 
 
 BASE_IRI = "https://w3id.org/norma-abox/test"
-NORMA_IRI = "https://w3id.org/norma-ontology#"
-NORMA_ONT = "https://w3id.org/norma-ontology"
+NORMA_IRI = "https://w3id.org/def/norma-o#"
+NORMA_ONT = "https://w3id.org/def/norma-o"
 
 
 def _records(sample_bpmn_xml):
@@ -214,4 +214,4 @@ class TestToTurtle:
         assert normalized[1]["deontic_id"] == "OBL_First"
 
         ttl = to_turtle(normalized, "test_source", BASE_IRI)
-        assert ttl.count("a owl:NamedIndividual, <https://w3id.org/norma-ontology#Obligation>") == 1
+        assert ttl.count("a owl:NamedIndividual, <https://w3id.org/def/norma-o#Obligation>") == 1

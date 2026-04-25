@@ -18,7 +18,7 @@ from norma_engine.exporters.swrl import export_rules_to_owl
 
 RULES_IRI = "http://test.org/norma/rules"
 ABOX_IRI  = "http://test.org/norma"
-TBOX_NS   = "https://w3id.org/norma-ontology#"
+TBOX_NS   = "https://w3id.org/def/norma-o#"
 
 
 def _rules(sample_bpmn_xml):

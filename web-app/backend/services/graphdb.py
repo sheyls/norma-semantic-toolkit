@@ -62,7 +62,7 @@ def binding_value(row: Any, key: str) -> Optional[str]:
 
 def _node_payload_from_store(store: Any, node_uri: str) -> Optional[dict[str, Any]]:
     metadata_query = f"""
-PREFIX norma: <https://w3id.org/norma-ontology#>
+PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
@@ -74,9 +74,9 @@ WHERE {{
   BIND(<{node_uri}> AS ?node)
   ?node rdf:type ?type .
   FILTER(
-    STRSTARTS(STR(?type), "https://w3id.org/norma-ontology#") &&
-    STR(?type) != "https://w3id.org/norma-ontology#NormativeContent" &&
-    STR(?type) != "https://w3id.org/norma-ontology#RegulativeNorm"
+    STRSTARTS(STR(?type), "https://w3id.org/def/norma-o#") &&
+    STR(?type) != "https://w3id.org/def/norma-o#NormativeContent" &&
+    STR(?type) != "https://w3id.org/def/norma-o#RegulativeNorm"
   )
   OPTIONAL {{ ?node rdfs:label ?label . }}
   OPTIONAL {{ ?node norma:fromRegulation ?regulation . }}
@@ -130,7 +130,7 @@ def semantic_graph_data(store: Any, pack: Optional[dict[str, Any]] = None) -> di
         raise HTTPException(503, "Semantic graph store unavailable")
 
     node_query = """
-PREFIX norma: <https://w3id.org/norma-ontology#>
+PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
@@ -141,11 +141,11 @@ SELECT DISTINCT ?node ?type ?label ?regulation ?article ?paragraph ?source
 WHERE {
   ?node rdf:type ?type .
   FILTER(STRSTARTS(STR(?node), "https://w3id.org/norma-abox/"))
-  FILTER(STRSTARTS(STR(?type), "https://w3id.org/norma-ontology#"))
+  FILTER(STRSTARTS(STR(?type), "https://w3id.org/def/norma-o#"))
   FILTER(
-    STR(?type) != "https://w3id.org/norma-ontology#NormativeContent" &&
-    STR(?type) != "https://w3id.org/norma-ontology#RegulativeNorm" &&
-    STR(?type) != "https://w3id.org/norma-ontology#TriggerEvent"
+    STR(?type) != "https://w3id.org/def/norma-o#NormativeContent" &&
+    STR(?type) != "https://w3id.org/def/norma-o#RegulativeNorm" &&
+    STR(?type) != "https://w3id.org/def/norma-o#TriggerEvent"
   )
   OPTIONAL { ?node rdfs:label ?label . }
   OPTIONAL { ?node norma:fromRegulation ?regulation . }
@@ -168,7 +168,7 @@ ORDER BY ?type ?node
     # TriggerEvent is a reification node — collapse the n-ary chain into a
     # direct LegalCondition → Norm edge labelled with the branch outcome.
     edge_query = """
-PREFIX norma: <https://w3id.org/norma-ontology#>
+PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT DISTINCT ?source ?target ?label
@@ -196,7 +196,7 @@ WHERE {
     FILTER(STRSTARTS(STR(?source), "https://w3id.org/norma-abox/"))
     FILTER(STRSTARTS(STR(?target), "https://w3id.org/norma-abox/"))
     BIND(
-      IF(STR(?outcome) = "https://w3id.org/norma-ontology#TrueOutcome",
+      IF(STR(?outcome) = "https://w3id.org/def/norma-o#TrueOutcome",
          "when true", "when false")
       AS ?label
     )

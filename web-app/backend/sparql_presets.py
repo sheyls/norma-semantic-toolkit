@@ -3,7 +3,7 @@ SPARQL_PRESETS = [
         "id": "all-norms",
         "label": "All norms",
         "description": "Every norm with binding force, risk level, and article reference.",
-        "query": """PREFIX norma: <https://w3id.org/norma-ontology#>
+        "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?norm ?label ?type ?bindingForce ?riskLevel ?article
@@ -24,7 +24,7 @@ ORDER BY ?norm""",
         "id": "agents",
         "label": "Agents per norm",
         "description": "Which agents are bound by each norm.",
-        "query": """PREFIX norma: <https://w3id.org/norma-ontology#>
+        "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?agent ?agentLabel ?norm ?normLabel ?bindingForce
@@ -40,7 +40,7 @@ ORDER BY ?agent""",
         "id": "conditions",
         "label": "Gateway conditions",
         "description": "Legal conditions with each trigger event, its outcome, and the norm it activates.",
-        "query": """PREFIX norma: <https://w3id.org/norma-ontology#>
+        "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?cond ?statement ?outcome ?norm ?normLabel
@@ -58,7 +58,7 @@ ORDER BY ?cond ?outcome""",
         "id": "hard-law",
         "label": "Hard-law obligations",
         "description": "Obligations classified as hard law.",
-        "query": """PREFIX norma: <https://w3id.org/norma-ontology#>
+        "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?norm ?label ?regulation ?article ?paragraph
@@ -76,7 +76,7 @@ ORDER BY ?regulation ?article""",
         "id": "critical-risks",
         "label": "Critical-risk norms",
         "description": "Norms marked as critical or high risk.",
-        "query": """PREFIX norma: <https://w3id.org/norma-ontology#>
+        "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?norm ?label ?type ?riskLevel ?regulation ?article
@@ -98,7 +98,7 @@ ORDER BY ?riskLevel ?norm""",
         "id": "prohibitions",
         "label": "Prohibitions",
         "description": "All Prohibition norms with action, object, and risk level.",
-        "query": """PREFIX norma: <https://w3id.org/norma-ontology#>
+        "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?norm ?label ?agent ?action ?object ?riskLevel
@@ -116,7 +116,7 @@ ORDER BY ?norm""",
         "id": "by-regulation",
         "label": "Norms by regulation",
         "description": "All norms grouped by the regulation they derive from.",
-        "query": """PREFIX norma: <https://w3id.org/norma-ontology#>
+        "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?regulation ?norm ?type ?article
@@ -135,7 +135,7 @@ ORDER BY ?regulation ?article""",
         "id": "count-by-type",
         "label": "Count by type",
         "description": "Summary count of each deontic modality.",
-        "query": """PREFIX norma: <https://w3id.org/norma-ontology#>
+        "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 
 SELECT ?type (COUNT(?norm) AS ?count)
 WHERE {
