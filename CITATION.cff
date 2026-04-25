@@ -7,5 +7,5 @@ authors:
   - family-names: "Leyva-Sánchez"
     given-names: "Sheyla"
 license: "CC-BY-4.0"
-url: "https://w3id.org/norma-ontology"
+url: "https://w3id.org/def/norma-o"
 abstract: "NORMA transforms BPMN processes annotated with legal norms into ontology aligned knowledge graph artifacts, SWRL rules, SPARQL queryable data, and web based semantic exploration views."

@@ -8,7 +8,7 @@ from norma_engine.rules.ir import RuleIR, Ref, ClassAtom
 RDF_NIL = "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
 XSD_BOOL = "http://www.w3.org/2001/XMLSchema#boolean"
 
-DEFAULT_TBOX_NS = "https://w3id.org/norma-ontology#"
+DEFAULT_TBOX_NS = "https://w3id.org/def/norma-o#"
 
 
 def _indent(s: str, n: int) -> str:

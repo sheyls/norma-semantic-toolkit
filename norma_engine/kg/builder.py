@@ -35,8 +35,8 @@ NS = {
     "zeebe": "http://camunda.org/schema/zeebe/1.0",
 }
 
-NORMA_IRI = "https://w3id.org/norma-ontology#"
-NORMA_ONT = "https://w3id.org/norma-ontology"
+NORMA_IRI = "https://w3id.org/def/norma-o#"
+NORMA_ONT = "https://w3id.org/def/norma-o"
 
 # Default annotator emitted when no annotator is supplied in the BPMN.
 _DEFAULT_ANNOTATOR_LOCAL = "NORMAAnnotator"

@@ -73,7 +73,7 @@ except Exception as e:
     _RULES_AVAILABLE = False
     print(f"[!] rule extraction imports failed: {type(e).__name__}: {e}")
 
-NORMA_ONT = "https://w3id.org/norma-ontology"
+NORMA_ONT = "https://w3id.org/def/norma-o"
 ABOX_BASE  = "https://w3id.org/norma-abox"
 
 

@@ -58,7 +58,7 @@ const REFERENCE_LINKS = [
   { label: "Semantic toolkit repository", href: "https://github.com/sheyls/norma-semantic-toolkit" },
   { label: "NORMA ontology repository", href: "https://github.com/norma-project/norma-ontology" },
   { label: "CC BY 4.0 licence", href: "https://creativecommons.org/licenses/by/4.0/" },
-  { label: "Ontology IRI (w3id)", href: "https://w3id.org/norma-ontology" },
+  { label: "Ontology IRI (w3id)", href: "https://w3id.org/def/norma-o" },
 ];
 
 export default function Home() {
@@ -86,7 +86,7 @@ export default function Home() {
                 <strong>Open toolkit →</strong>
               </Link>
               <a
-                href="https://github.com/norma-project/norma-ontology"
+                href="https://w3id.org/def/norma-o"
                 className="button button--hero-secondary"
                 target="_blank"
                 rel="noreferrer"

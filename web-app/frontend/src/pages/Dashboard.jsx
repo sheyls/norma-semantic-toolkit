@@ -40,7 +40,7 @@ const ONTOLOGY_ITEMS = [
   "BindingForce and ComplianceCriticality for legal classification",
 ];
 
-const ONTOLOGY_DOCS_URL = "https://w3id.org/norma-ontology/documentation";
+const ONTOLOGY_DOCS_URL = "https://w3id.org/def/norma-o";
 
 const EXTERNAL_ONTOLOGIES = [
   {
@@ -155,7 +155,7 @@ const NORM_SECTIONS = [
 ];
 
 const ONTOLOGY_PREFIXES = [
-  ["https://w3id.org/norma-ontology#", "norma:"],
+  ["https://w3id.org/def/norma-o#", "norma:"],
   ["https://w3id.org/norma-abox/", "abox:"],
   ["http://www.w3.org/2001/XMLSchema#", "xsd:"],
   ["http://www.w3.org/2000/01/rdf-schema#", "rdfs:"],
