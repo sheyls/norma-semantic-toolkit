@@ -148,7 +148,7 @@ norma-semantic-toolkit/
 **License:** CC BY 4.0  
 **DOI:** 10.5281/zenodo.19765302
 
-<img width="2364" height="1345" alt="Norma Drawio" src="https://github.com/user-attachments/assets/89ffbe45-6eb5-4ad6-91d3-dc83b186cc96" />
+<img width="2364" height="1345" alt="norma-o" src="https://github.com/user-attachments/assets/b2f435d9-f111-4527-beb2-9e52cf6292a9" />
 
 ### Statistics
 
