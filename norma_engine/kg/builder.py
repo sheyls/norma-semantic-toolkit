@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
 
-from norma_engine.utils import to_symbol
+from norma_engine.utils import to_symbol, slug
 
 # ── Namespace map ──────────────────────────────────────────────────────────────
 
@@ -110,10 +110,6 @@ except ImportError:
 # =============================================================================
 # String helpers
 # =============================================================================
-
-def slug(text: str) -> str:
-    """Convert an arbitrary label to a valid IRI local name."""
-    return re.sub(r"_+", "_", re.sub(r"[^A-Za-z0-9_]", "_", text.strip())).strip("_")
 
 
 def auto_deontic_id(dtype: str, bpmn_name: str, bpmn_id: str) -> str:
@@ -679,8 +675,7 @@ def to_turtle(
             lines += [
                 f":{te_local}",
                 "    a owl:NamedIndividual, norma:TriggerEvent ;",
-                f"    norma:hasOutcome {outcome_iri} ;",
-                f"    norma:activatesNorm :{norm_local} .",
+                f"    norma:hasOutcome {outcome_iri} .",
                 "",
             ]
 

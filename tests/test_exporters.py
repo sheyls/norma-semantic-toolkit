@@ -68,18 +68,23 @@ class TestSWRLExporter:
         assert f'rdf:about="{RULES_IRI}"' in content
 
     def test_tbox_properties_in_head(self, sample_bpmn_xml):
-        # SWRL head is compact: only ClassAtoms (deontic type assertions).
-        # RelationAtoms and DataAtoms are omitted — they are declared in the ABox
-        # which the SWRL file imports, so asserting them in the rule head is redundant.
+        # SWRL head uses norma:activatesNorm(TriggerEvent, Norm) — the activation link
+        # is derived conditionally by SWRL, keeping it non-redundant with the ABox
+        # (which declares TriggerEvent shells without activatesNorm).
+        # Deontic type IRIs (Obligation, Recommendation) are in the ABox static typing only.
         content = _export(sample_bpmn_xml)
-        assert f"{TBOX_NS}Obligation" in content
-        assert f"{TBOX_NS}Recommendation" in content
+        assert f"{TBOX_NS}activatesNorm" in content
+        assert "swrl:IndividualPropertyAtom" in content
+        assert f"{TBOX_NS}Obligation" not in content
+        assert f"{TBOX_NS}Recommendation" not in content
         assert f"{TBOX_NS}hasLegalAgent" not in content
         assert f"{TBOX_NS}hasLegalSource" not in content
 
     def test_abox_individuals_in_head(self, sample_bpmn_xml):
-        # Compact head: norm individuals appear as ClassAtom subjects; agent individuals do not.
+        # Head: TriggerEvent individuals (te_ref) and norm individuals (norm_ref) appear.
+        # Agent individuals do not appear in the SWRL head.
         content = _export(sample_bpmn_xml)
+        assert "TriggerEvent_" in content
         assert f"{ABOX_IRI}#OBL_1" in content
         assert f"{ABOX_IRI}#REC_1" in content
         assert f"{ABOX_IRI}#Agent_AI_owner" not in content
