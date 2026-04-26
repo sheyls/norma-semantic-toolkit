@@ -22,7 +22,7 @@
         <owl:imports rdf:resource="http://www.w3.org/ns/prov-o"/>
         <owl:imports rdf:resource="http://xmlns.com/foaf/0.1/"/>
         <terms:alternative xml:lang="en">NORMA Ontology</terms:alternative>
-        <terms:bibliographicCitation xml:lang="en">Leyva-Sánchez, S. et al. (2026). NORMA: Normative Ontology for Regulatory Machine-readable Annotations (Version 1.0) [Ontology]. https://w3id.org/norma-ontology/1.0</terms:bibliographicCitation>
+        <terms:bibliographicCitation xml:lang="en">Leyva-Sánchez, S. et al. (2026). NORMA-O: The NORMA Ontology for Legal Norm Annotations (Version 1.0) [Ontology]. https://w3id.org/norma-ontology/1.0</terms:bibliographicCitation>
         <terms:contributor rdf:nodeID="genid1"/>
         <terms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-15</terms:created>
         <terms:creator rdf:nodeID="genid2"/>
@@ -33,7 +33,7 @@
         <terms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-25</terms:modified>
         <terms:publisher rdf:nodeID="genid3"/>
         <terms:source rdf:resource="https://github.com/norma-project/norma-ontology"/>
-        <terms:title xml:lang="en">NORMA: Normative Ontology for Regulatory Machine-readable Annotations</terms:title>
+        <terms:title xml:lang="en">NORMA-O: The NORMA Ontology for Legal Norm Annotations</terms:title>
         <bibo:doi>10.5281/zenodo.19765302</bibo:doi>
         <bibo:status xml:lang="en">Published</bibo:status>
         <vann:preferredNamespacePrefix>norma</vann:preferredNamespacePrefix>

@@ -20,33 +20,33 @@
 <https://w3id.org/def/norma-o> a owl:Ontology ;
     rdfs:label "NORMA ontology"@en ;
     dcterms:alternative "NORMA Ontology"@en ;
-    dcterms:bibliographicCitation "Leyva-Sánchez, S. et al. (2026). NORMA: Normative Ontology for Regulatory Machine-readable Annotations (Version 1.0) [Ontology]. https://w3id.org/def/norma-o/1.0"@en ;
+    dcterms:bibliographicCitation "Leyva-Sánchez, S. et al. (2026). NORMA-O: The NORMA Ontology for Legal Norm Annotations (Version 1.0) [Ontology]. https://w3id.org/def/norma-o/1.0"@en ;
     dcterms:contributor [ a foaf:Person ;
             foaf:name "NORMA project contributors" ] ;
     dcterms:created "2026-04-15"^^xsd:date ;
     dcterms:creator [ a foaf:Person ;
             foaf:name "Sheyla Leyva-Sánchez" ] ;
-    dcterms:description "Ontology for representing machine-readable legal norm annotations derived from BPMN workflow models in the NORMA pipeline. The ontology models regulative norms (obligations, prohibitions, permissions, and recommendations) and constitutive rules expressing legal responsibilities, along with legal conditions, legal sources, legal agents, legal objects, provenance metadata and lifecycle status. It aligns with PROV-O (provenance), ELI (legal resources), and FOAF (agents and project metadata). Legal conditions are connected to normative content via a W3C n-ary relation pattern (TriggerEvent) that associates each condition outcome with the specific normative content it activates."@en ;
+    dcterms:description "The NORMA ontology is a formal semantic model for representing machine-readable legal norm annotations as reusable knowledge graph resources. It distinguishes between regulative norms and constitutive rules; represents legal conditions, their evaluated outcomes, and branch-sensitive activation through a TriggerEvent n-ary relation pattern; and captures the legal agents, actions, objects, sources, provenance metadata, lifecycle status, review status, extraction method, and controlled classification values needed for traceable and interoperable publication. The ontology aligns with PROV-O for provenance, ELI for legal resource modelling, FOAF for agent-oriented metadata, and SKOS for controlled vocabularies."@en ;
     dcterms:issued "2026-04-17"^^xsd:date ;
     dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
-    dcterms:modified "2026-04-25"^^xsd:date ;
+    dcterms:modified "2026-04-26"^^xsd:date ;
     dcterms:publisher [ a foaf:Organization ;
             foaf:name "NORMA project" ] ;
     dcterms:source <https://github.com/norma-project/norma-ontology> ;
-    dcterms:title "NORMA: Normative Ontology for Regulatory Machine-readable Annotations"@en ;
+    dcterms:title "NORMA-O: The NORMA Ontology for Legal Norm Annotations"@en ;
     bibo:doi "10.5281/zenodo.19765302" ;
     bibo:status "Published"@en ;
     vann:preferredNamespacePrefix "norma" ;
     vann:preferredNamespaceUri "https://w3id.org/def/norma-o#" ;
-    rdfs:comment "Publication-quality ontology aligned to the NORMA annotation model and BPMN legal compliance workflow."@en ;
+    rdfs:comment "Formal ontology for representing machine-readable legal norm annotations, their legal context, conditional applicability, provenance, source traceability, lifecycle status, and controlled classification values in the NORMA toolkit."@en ;
     rdfs:seeAlso <https://www.w3.org/TR/swbp-n-aryRelations/> ;
     owl:imports <http://data.europa.eu/eli/ontology>,
         <http://www.w3.org/ns/prov-o>,
         foaf: ;
     owl:versionIRI <https://w3id.org/def/norma-o/1.0> ;
     owl:versionInfo "1.0" ;
-    foaf:logo <https://w3id.org/def/norma-o/assets/logo.png> .
+    foaf:logo <https://w3id.org/def/norma-o/assets/norma-o.png> .
 
 
 # =============================================================================

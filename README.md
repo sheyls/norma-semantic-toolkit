@@ -1,14 +1,21 @@
-# NORMA — Normative Ontology for Regulatory Machine-readable Annotations
+# NORMA Semantic Toolkit
 
-**NORMA** is an open semantic resource for the formal representation and computational processing of legal norms extracted from regulatory documents. It combines an OWL 2 DL ontology, a structured annotation methodology based on BPMN, an automated knowledge-graph construction pipeline, and a SWRL rule generation engine. The result is a self-consistent, queryable, and reasoner-ready knowledge graph that faithfully instantiates the ontology from annotated process models.
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.19765302-blue)](https://doi.org/10.5281/zenodo.19765302)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
+[![Tests](https://img.shields.io/badge/Tests-64%20passing-brightgreen)](#testing)
+[![OWL 2 DL](https://img.shields.io/badge/Ontology-OWL%202%20DL-orange)](https://www.w3.org/TR/owl2-overview/)
+[![Ontology Docs](https://img.shields.io/badge/Docs-NORMA--O%20Ontology-navy)](https://w3id.org/def/norma-o)
 
-> Sheyla Leyva-Sánchez · NORMA Resources · CC BY 4.0 · DOI [10.5281/zenodo.19765302](https://doi.org/10.5281/zenodo.19765302)
+**NORMA** is an open semantic resource for the formal representation and computational processing of legal norms extracted from regulatory documents. It combines an OWL 2 DL ontology, a structured annotation methodology based on BPMN, an automated knowledge-graph construction pipeline, and a SWRL rule generation engine. The result is a self-consistent, queryable, and reasoner ready knowledge graph that faithfully instantiates the ontology from annotated process models.
+
+> Sheyla Leyva-Sánchez · Ontology Engineering Group, Universidad Politécnica de Madrid · CC BY 4.0 · DOI [10.5281/zenodo.19765302](https://doi.org/10.5281/zenodo.19765302)
 
 ---
 
 ## Table of Contents
 
-- [NORMA — Normative Ontology for Regulatory Machine-readable Annotations](#norma--normative-ontology-for-regulatory-machine-readable-annotations)
+- [NORMA Semantic Toolkit](#norma-semantic-toolkit)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
   - [Motivations and Design Goals](#motivations-and-design-goals)
@@ -92,7 +99,7 @@ The design of NORMA is guided by four principles:
 ```
 norma-semantic-toolkit/
 │
-├── ontology/
+├── norma-ontology/
 │   ├── norma-ontology-v1.ttl        # OWL 2 DL ontology (Turtle)
 │   └── norma-ontology-v1.rdf        # OWL 2 DL ontology (RDF/XML)
 │
@@ -144,11 +151,12 @@ norma-semantic-toolkit/
 
 **IRI:** `https://w3id.org/def/norma-o`  
 **Version IRI:** `https://w3id.org/def/norma-o/1.0`  
+**Documentation:** [https://w3id.org/def/norma-o](https://w3id.org/def/norma-o)  
 **Serialisations:** Turtle and RDF/XML (both provided)  
 **License:** CC BY 4.0  
 **DOI:** 10.5281/zenodo.19765302
 
-<img width="2364" height="1345" alt="norma-o" src="https://github.com/user-attachments/assets/b2f435d9-f111-4527-beb2-9e52cf6292a9" />
+![NORMA-O ontology diagram](norma-ontology/norma-o.png)
 
 ### Statistics
 
@@ -479,10 +487,10 @@ pytest
 If you use NORMA in your research, please cite:
 
 ```bibtex
-@misc{leyvaSanchez2025norma,
-  title        = {{NORMA}: Normative Ontology for Regulatory Machine-readable Annotations},
+@misc{leyvaSanchez2026norma,
+  title        = {{NORMA-O}: The {NORMA} Ontology for Legal Norm Annotations},
   author       = {Leyva-S{\'a}nchez, Sheyla},
-  year         = {2025},
+  year         = {2026},
   doi          = {10.5281/zenodo.19765302},
   url          = {https://doi.org/10.5281/zenodo.19765302},
   note         = {OWL 2 ontology, annotation pipeline, and SWRL rule generator for legal norm formalisation. CC BY 4.0.}

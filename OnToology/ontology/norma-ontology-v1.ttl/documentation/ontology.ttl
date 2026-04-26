@@ -12,7 +12,7 @@
                                                <http://www.w3.org/ns/prov-o> ,
                                                <http://xmlns.com/foaf/0.1/> ;
                                    <http://purl.org/dc/terms/alternative> "NORMA Ontology"@en ;
-                                   <http://purl.org/dc/terms/bibliographicCitation> "Leyva-Sánchez, S. et al. (2026). NORMA: Normative Ontology for Regulatory Machine-readable Annotations (Version 1.0) [Ontology]. https://w3id.org/norma-ontology/1.0"@en ;
+                                   <http://purl.org/dc/terms/bibliographicCitation> "Leyva-Sánchez, S. et al. (2026). NORMA-O: The NORMA Ontology for Legal Norm Annotations (Version 1.0) [Ontology]. https://w3id.org/norma-ontology/1.0"@en ;
                                    <http://purl.org/dc/terms/contributor> _:genid1 ;
                                    <http://purl.org/dc/terms/created> "2026-04-15"^^xsd:date ;
                                    <http://purl.org/dc/terms/creator> _:genid2 ;
@@ -23,7 +23,7 @@
                                    <http://purl.org/dc/terms/modified> "2026-04-25"^^xsd:date ;
                                    <http://purl.org/dc/terms/publisher> _:genid3 ;
                                    <http://purl.org/dc/terms/source> <https://github.com/norma-project/norma-ontology> ;
-                                   <http://purl.org/dc/terms/title> "NORMA: Normative Ontology for Regulatory Machine-readable Annotations"@en ;
+                                   <http://purl.org/dc/terms/title> "NORMA-O: The NORMA Ontology for Legal Norm Annotations"@en ;
                                    <http://purl.org/ontology/bibo/doi> "10.5281/zenodo.19765302" ;
                                    <http://purl.org/ontology/bibo/status> "Published"@en ;
                                    <http://purl.org/vocab/vann/preferredNamespacePrefix> "norma" ;

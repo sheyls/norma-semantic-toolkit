@@ -103,10 +103,45 @@ dt {
 
 .imageblock {
 	text-align: center;
+	margin: 24px 0;
 }
 
 .imageblock img {
 	border:1px solid gray;
+}
+
+.ontology-diagram {
+	margin: 28px 0 10px 0;
+	text-align: center;
+}
+
+.ontology-diagram img {
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	display: block;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+
+.ontology-diagram figcaption {
+	margin-top: 8px;
+	font-size: 90%;
+	color: #555;
+	font-style: italic;
+}
+
+.concept-group {
+	background-color: #F4FFFF;
+	border-left: 4px solid navy;
+	padding: 10px 14px;
+	margin: 14px 0;
+}
+
+.concept-group h4 {
+	margin: 0 0 6px 0;
+	color: navy;
+	font-size: 100%;
 }
 
 .endnote {

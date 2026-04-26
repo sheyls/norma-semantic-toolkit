@@ -1,3 +1,165 @@
 <h2 id="desc" class="list">NORMA ontology: Description <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
 
-<span class="markdown">Publication-quality ontology aligned to the NORMA annotation model and BPMN legal compliance workflow.</span>
+<span class="markdown">The NORMA ontology is a domain ontology for representing machine-readable legal norm annotations as structured semantic resources. It is intended to support the semantic representation, publication, and reuse of annotations derived from regulatory sources, while preserving traceability to legal texts and accountability for the annotation process.
+
+### Scope
+
+The ontology models normative content and the legal context needed to interpret it. Its scope includes:
+
+- regulative norms, such as obligations, prohibitions, permissions, recommendations, and negative recommendations;
+- constitutive rules that define statuses, classifications, or institutional facts;
+- legal conditions and their outcomes;
+- the triggering relation between condition outcomes and applicable normative content;
+- legal agents, legal actions, legal objects, and legal sources;
+- provenance, extraction method, review status, lifecycle status, and source traceability.
+
+### Design objectives
+
+The ontology has been designed to satisfy a set of practical and conceptual objectives that are common in professional ontology engineering for legal and regulatory domains:
+
+- distinguish clearly between prescriptive content and definitional content;
+- support traceability from each annotation back to the legal source from which it was produced;
+- preserve information about who created an annotation, how it was produced, and with what confidence or review state;
+- make conditional applicability explicit enough to support querying, validation, and downstream reasoning;
+- reuse established standards where possible rather than introducing isolated project-specific patterns.
+
+### Conceptual organization
+
+The conceptual centre of the ontology is `norma:NormativeContent`. This class represents the machine-readable legal content that is extracted, formulated, or curated from legal sources. Two principal subclasses structure this content:
+
+- `norma:RegulativeNorm`, for normative statements governing conduct;
+- `norma:ConstitutiveRule`, for statements that define or qualify legal or institutional situations.
+
+Regulative norms may be further specialized as obligations, prohibitions, permissions, recommendations, or negative recommendations. They can be linked to a legal agent, a legal action, a legal object, a binding-force classification, and a compliance-criticality level. Constitutive rules are modelled separately so that definitional and classificatory legal content is not conflated with prescriptive content.
+
+### Modelling conditional applicability
+
+One of the distinguishing features of the ontology is the treatment of legal conditions. Rather than representing conditionality as an informal text fragment alone, the ontology provides:
+
+- `norma:LegalCondition`, to represent the relevant condition or criterion;
+- `norma:ConditionOutcome`, to represent the evaluated branch or outcome;
+- `norma:TriggerEvent`, to reify the relation between one condition outcome and one activated item of normative content.
+
+This design follows an n-ary relation pattern and makes branch-sensitive activation explicit. It is particularly useful in annotation settings where a legal condition may activate different norms depending on whether the evaluated outcome is true, false, or otherwise classified.
+
+### Modelling conventions
+
+Several modelling conventions are important for interpreting NORMA correctly.
+
+- Literal shortcut properties such as `norma:agentText`, `norma:actionText`, `norma:objectText`, and `norma:conditionTrigger` are convenience properties intended for low-ceremony annotation and pipeline interoperability. They do not replace the more explicit object-level modelling with `norma:LegalAgent`, `norma:LegalAction`, `norma:LegalObject`, and `norma:LegalCondition`; rather, they coexist with it.
+- Controlled-value classes such as `norma:BindingForce`, `norma:ComplianceCriticality`, `norma:NormStatus`, `norma:ReviewStatus`, `norma:ExtractionMethod`, and `norma:ConditionOutcome` are represented as extensible SKOS concept classes with named individuals. This makes classification values stable, queryable, and extensible without changing the core conceptual model.
+- Some properties are intentionally functional because the ontology assumes exactly one value per annotated artifact for a given managerial dimension. Examples include `norma:hasNormStatus`, `norma:hasReviewStatus`, and `norma:hasExtractionMethod`. These choices communicate expected data quality and simplify downstream usage, while still allowing future relaxation if domain requirements evolve.
+- Conditional activation is represented in two layers: the explicit n-ary pattern through `norma:TriggerEvent`, and the shortcut binary relation `norma:triggersNorm`, which is derived through a property chain. Systems that need only the existence of a triggering relation may use the shortcut, while systems that need branch-sensitive semantics should traverse the full trigger-event structure.
+
+### Provenance and legal traceability
+
+NORMA also models the provenance of annotations. `norma:AnnotationActivity` represents the activity that generated an annotation, `norma:AnnotatorAgent` identifies the responsible agent, and object properties derived from PROV-O make attribution and source usage explicit. `norma:LegalSource` and `norma:LegalSourceExpression`, aligned with ELI, support work-level and expression-level references to legal materials. This allows consumers of the ontology to trace a normative statement back to the legal source from which it was derived.
+
+### Controlled vocabularies and lifecycle information
+
+Several dimensions of annotation management are represented through controlled vocabularies, including:
+
+- `norma:BindingForce`;
+- `norma:ComplianceCriticality`;
+- `norma:ExtractionMethod`;
+- `norma:NormStatus`;
+- `norma:ReviewStatus`;
+- `norma:ConditionOutcome`.
+
+These categories support consistent classification and querying across regulatory knowledge graphs and annotation workflows.
+
+### Illustrative examples
+
+The following simplified examples illustrate the intended use of the ontology.
+
+#### Example 1: representing a regulative norm
+
+```turtle
+@prefix norma: <https://w3id.org/def/norma-o#> .
+@prefix ex: <https://example.org/norma/> .
+
+ex:obl_mark_content
+    a norma:Obligation ;
+    norma:deonticId "OBL_Mark_AI_generated_content" ;
+    norma:normStatement "Providers must mark AI-generated content." ;
+    norma:agentText "Provider" ;
+    norma:actionText "mark AI-generated content" ;
+    norma:objectText "AI-generated content" .
+```
+
+This example shows a regulative norm represented as an obligation with a human-readable statement and literal shortcuts for the annotated agent, action, and object.
+
+#### Example 2: representing a constitutive rule
+
+```turtle
+@prefix norma: <https://w3id.org/def/norma-o#> .
+@prefix ex: <https://example.org/norma/> .
+
+ex:cr_high_risk_system
+    a norma:ConstitutiveRule ;
+    norma:deonticId "CR_High_Risk_AI_System" ;
+    norma:factStatement "An AI system used for biometric identification in critical infrastructure is classified as high-risk." ;
+    norma:normStatement "Certain biometric-identification systems are legally classified as high-risk AI systems." .
+```
+
+This example illustrates the modelling of classificatory legal content. The statement is not a prescription directed at an agent, but a constitutive determination that establishes a legal status or category.
+
+#### Example 3: representing conditional activation
+
+```turtle
+@prefix norma: <https://w3id.org/def/norma-o#> .
+@prefix ex: <https://example.org/norma/> .
+
+ex:condition_disclosure_required
+    a norma:LegalCondition ;
+    norma:conditionStatement "The content is capable of misleading recipients as to whether it was generated by AI." ;
+    norma:hasTrigger ex:trigger_true .
+
+ex:trigger_true
+    a norma:TriggerEvent ;
+    norma:hasOutcome norma:TrueOutcome ;
+    norma:activatesNorm ex:obl_mark_content .
+```
+
+Here the ontology does not merely record that a condition exists; it explicitly records which evaluated outcome activates which norm.
+
+#### Example 4: representing provenance and source traceability
+
+```turtle
+@prefix norma: <https://w3id.org/def/norma-o#> .
+@prefix ex: <https://example.org/norma/> .
+
+ex:activity_001
+    a norma:AnnotationActivity ;
+    norma:generatedNormativeContent ex:obl_mark_content ;
+    norma:usedLegalSource ex:source_ai_act ;
+    norma:confidenceScore 0.93 .
+
+ex:source_ai_act
+    a norma:LegalSource ;
+    norma:regulationName "EU AI Act" ;
+    norma:articleNumber "50" .
+```
+
+This example shows how an annotation can be linked to the activity that produced it and to the source material on which it is based.
+
+#### Example 5: representing status and review metadata
+
+```turtle
+@prefix norma: <https://w3id.org/def/norma-o#> .
+@prefix ex: <https://example.org/norma/> .
+
+ex:obl_mark_content
+    norma:hasNormStatus norma:Active ;
+    norma:hasReviewStatus norma:Approved ;
+    norma:hasExtractionMethod norma:ManualLawyer ;
+    norma:lastReviewDate "2026-04-20"^^<http://www.w3.org/2001/XMLSchema#date> .
+```
+
+This example illustrates how NORMA supports governance-oriented metadata that is often essential in professional annotation workflows, including status, review, and production method.
+
+### Intended use
+
+The ontology is designed for semantic annotation, publication, validation, querying, and reuse. It is suitable for use in knowledge graph generation pipelines, ontology-driven documentation, provenance-aware annotation environments, and downstream reasoning or compliance-support scenarios. In particular, it is appropriate wherever an organisation needs a model that connects legal meaning, traceable source references, conditional applicability, and annotation provenance within a single coherent specification.
+
+The examples above are illustrative rather than normative, but they reflect the modelling patterns the ontology is intended to support in practice. Implementations are free to extend the model with domain-specific subclasses, additional controlled vocabularies, or validation constraints, provided that such extensions preserve the core conceptual commitments of the ontology and its interoperability with reused vocabularies.</span>

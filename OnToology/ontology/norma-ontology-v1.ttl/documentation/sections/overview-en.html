@@ -1,444 +1,534 @@
 <h2 id="overv" class="list">NORMA ontology: Overview <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
 <span class="markdown">
-This ontology has the following classes and properties.</span>
+The NORMA ontology is organized around four complementary concerns: (1) normative content and its deontic classification; (2) legal context — the conditions, agents, actions, objects, and sources that give norms their meaning; (3) annotation provenance and lifecycle governance; and (4) controlled concept schemes for classifying key annotation dimensions. The diagram below provides a bird's-eye view of the principal classes and their relationships.
+</span>
+
+<figure class="ontology-diagram">
+  <img src="../../../../norma-ontology/norma-o.png"
+       alt="NORMA ontology diagram — principal classes and their relationships" />
+  <figcaption>
+    <strong>Figure 1.</strong> Principal classes and relationships of the NORMA ontology.
+    Boxes denote classes; labelled arrows denote object properties.
+    Dashed borders indicate controlled-vocabulary (SKOS concept) classes.
+  </figcaption>
+</figure>
+
+<h3 id="overv-groups" class="list">Conceptual groups</h3>
+
+<div class="concept-group">
+  <h4>Normative content</h4>
+  <p>
+    <code>norma:NormativeContent</code> is the central class. It is specialized into
+    <code>norma:RegulativeNorm</code> — prescriptive statements governing conduct — and
+    <code>norma:ConstitutiveRule</code> — definitional statements that establish legal statuses
+    or categories. Regulative norms are further specialized as
+    <code>norma:Obligation</code>, <code>norma:Prohibition</code>,
+    <code>norma:Permission</code>, <code>norma:Recommendation</code>, and
+    <code>norma:NegativeRecommendation</code>.
+  </p>
+</div>
+
+<div class="concept-group">
+  <h4>Legal context</h4>
+  <p>
+    Each normative content item may be associated with the legal elements that give it
+    meaning: a <code>norma:LegalAgent</code> (the party bearing an obligation or right),
+    a <code>norma:LegalAction</code> (the required, permitted, or prohibited act),
+    a <code>norma:LegalObject</code> (the thing the action concerns), and a
+    <code>norma:LegalSource</code> or <code>norma:LegalSourceExpression</code>
+    (the legal instrument from which the norm derives, aligned with ELI).
+    Literal shortcut properties (<code>norma:agentText</code>,
+    <code>norma:actionText</code>, <code>norma:objectText</code>) support
+    low-overhead annotation pipelines without sacrificing the richer object-level model.
+  </p>
+</div>
+
+<div class="concept-group">
+  <h4>Conditional activation — the TriggerEvent pattern</h4>
+  <p>
+    Legal norms commonly apply only when certain conditions hold.
+    NORMA makes conditional applicability explicit through a reified n-ary pattern:
+    a <code>norma:LegalCondition</code> links to one or more
+    <code>norma:TriggerEvent</code> instances, each pairing a specific
+    <code>norma:ConditionOutcome</code> (true, false, or other) with the
+    <code>norma:NormativeContent</code> that is activated by that outcome.
+    The shortcut property <code>norma:triggersNorm</code>, derived via a property chain,
+    supports systems that need only the existence of a triggering relation.
+  </p>
+</div>
+
+<div class="concept-group">
+  <h4>Provenance and annotation governance</h4>
+  <p>
+    <code>norma:AnnotationActivity</code> (aligned with <code>prov:Activity</code>)
+    records the annotation act that produced a normative content item.
+    <code>norma:AnnotatorAgent</code> (aligned with <code>prov:Agent</code>)
+    identifies the responsible party. Data properties such as
+    <code>norma:confidenceScore</code>, <code>norma:annotationDate</code>,
+    and <code>norma:lastReviewDate</code> support accountability and auditability.
+  </p>
+</div>
+
+<div class="concept-group">
+  <h4>Controlled vocabularies</h4>
+  <p>
+    Six SKOS-based concept classes provide stable, queryable classification values:
+    <code>norma:BindingForce</code> (hard law, soft law, contractual, internal policy),
+    <code>norma:ComplianceCriticality</code> (critical, high, medium, low),
+    <code>norma:ExtractionMethod</code> (manual by lawyer or analyst, LLM extraction,
+    pattern matching, rule-based extraction),
+    <code>norma:NormStatus</code> (active, not yet in force, superseded),
+    <code>norma:ReviewStatus</code> (not reviewed, pending review, under review,
+    approved, disputed), and
+    <code>norma:ConditionOutcome</code> (true outcome, false outcome).
+    Each class has a corresponding SKOS concept scheme named individual
+    (e.g., <code>norma:BindingForceScheme</code>).
+  </p>
+</div>
+
+<h3 id="overv-terms" class="list">Full term index</h3>
+<span class="markdown">
+The following tables list all ontology terms. In the detailed cross-reference, the abbreviations `c`, `op`, `dp`, and `ni` denote class, object property, data property, and named individual respectively.
+</span>
+
 <h4>Classes</h4>
 <ul xmlns:widoco="https://w3id.org/widoco/vocab#"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     class="hlist">
    <li>
       <a href="#AnnotationActivity"
-         title="https://w3id.org/norma-ontology#AnnotationActivity">Annotation Activity</a>
+         title="https://w3id.org/def/norma-o#AnnotationActivity">Annotation Activity</a>
    </li>
    <li>
-      <a href="#AnnotatorAgent" title="https://w3id.org/norma-ontology#AnnotatorAgent">Annotator Agent</a>
+      <a href="#AnnotatorAgent" title="https://w3id.org/def/norma-o#AnnotatorAgent">Annotator Agent</a>
    </li>
    <li>
-      <a href="#BindingForce" title="https://w3id.org/norma-ontology#BindingForce">Binding Force</a>
+      <a href="#BindingForce" title="https://w3id.org/def/norma-o#BindingForce">Binding Force</a>
    </li>
    <li>
       <a href="#ComplianceCriticality"
-         title="https://w3id.org/norma-ontology#ComplianceCriticality">Compliance Criticality</a>
+         title="https://w3id.org/def/norma-o#ComplianceCriticality">Compliance Criticality</a>
    </li>
    <li>
       <a href="#ConditionOutcome"
-         title="https://w3id.org/norma-ontology#ConditionOutcome">Condition Outcome</a>
+         title="https://w3id.org/def/norma-o#ConditionOutcome">Condition Outcome</a>
    </li>
    <li>
       <a href="#ConstitutiveRule"
-         title="https://w3id.org/norma-ontology#ConstitutiveRule">Constitutive Rule</a>
+         title="https://w3id.org/def/norma-o#ConstitutiveRule">Constitutive Rule</a>
    </li>
    <li>
       <a href="#ExtractionMethod"
-         title="https://w3id.org/norma-ontology#ExtractionMethod">Extraction Method</a>
+         title="https://w3id.org/def/norma-o#ExtractionMethod">Extraction Method</a>
    </li>
    <li>
-      <a href="#LegalAction" title="https://w3id.org/norma-ontology#LegalAction">Legal Action</a>
+      <a href="#LegalAction" title="https://w3id.org/def/norma-o#LegalAction">Legal Action</a>
    </li>
    <li>
-      <a href="#LegalAgent" title="https://w3id.org/norma-ontology#LegalAgent">Legal Agent</a>
+      <a href="#LegalAgent" title="https://w3id.org/def/norma-o#LegalAgent">Legal Agent</a>
    </li>
    <li>
-      <a href="#LegalCondition" title="https://w3id.org/norma-ontology#LegalCondition">Legal Condition</a>
+      <a href="#LegalCondition" title="https://w3id.org/def/norma-o#LegalCondition">Legal Condition</a>
    </li>
    <li>
-      <a href="#LegalObject" title="https://w3id.org/norma-ontology#LegalObject">Legal Object</a>
+      <a href="#LegalObject" title="https://w3id.org/def/norma-o#LegalObject">Legal Object</a>
    </li>
    <li>
-      <a href="#LegalSource" title="https://w3id.org/norma-ontology#LegalSource">Legal Source</a>
+      <a href="#LegalSource" title="https://w3id.org/def/norma-o#LegalSource">Legal Source</a>
    </li>
    <li>
       <a href="#LegalSourceExpression"
-         title="https://w3id.org/norma-ontology#LegalSourceExpression">Legal Source Expression</a>
+         title="https://w3id.org/def/norma-o#LegalSourceExpression">Legal Source Expression</a>
    </li>
    <li>
       <a href="#NegativeRecommendation"
-         title="https://w3id.org/norma-ontology#NegativeRecommendation">
+         title="https://w3id.org/def/norma-o#NegativeRecommendation">
          <span>Negative Recommendation</span>
       </a>
    </li>
    <li>
-      <a href="#NormStatus" title="https://w3id.org/norma-ontology#NormStatus">Norm Status</a>
+      <a href="#NormStatus" title="https://w3id.org/def/norma-o#NormStatus">Norm Status</a>
    </li>
    <li>
       <a href="#NormativeContent"
-         title="https://w3id.org/norma-ontology#NormativeContent">Normative Content</a>
+         title="https://w3id.org/def/norma-o#NormativeContent">Normative Content</a>
    </li>
    <li>
-      <a href="#Obligation" title="https://w3id.org/norma-ontology#Obligation">
+      <a href="#Obligation" title="https://w3id.org/def/norma-o#Obligation">
          <span>Obligation</span>
       </a>
    </li>
    <li>
-      <a href="#Permission" title="https://w3id.org/norma-ontology#Permission">
+      <a href="#Permission" title="https://w3id.org/def/norma-o#Permission">
          <span>Permission</span>
       </a>
    </li>
    <li>
-      <a href="#Prohibition" title="https://w3id.org/norma-ontology#Prohibition">
+      <a href="#Prohibition" title="https://w3id.org/def/norma-o#Prohibition">
          <span>Prohibition</span>
       </a>
    </li>
    <li>
-      <a href="#Recommendation" title="https://w3id.org/norma-ontology#Recommendation">
+      <a href="#Recommendation" title="https://w3id.org/def/norma-o#Recommendation">
          <span>Recommendation</span>
       </a>
    </li>
    <li>
-      <a href="#RegulativeNorm" title="https://w3id.org/norma-ontology#RegulativeNorm">Regulative Norm</a>
+      <a href="#RegulativeNorm" title="https://w3id.org/def/norma-o#RegulativeNorm">Regulative Norm</a>
    </li>
    <li>
-      <a href="#ReviewStatus" title="https://w3id.org/norma-ontology#ReviewStatus">Review Status</a>
+      <a href="#ReviewStatus" title="https://w3id.org/def/norma-o#ReviewStatus">Review Status</a>
    </li>
    <li>
-      <a href="#TriggerEvent" title="https://w3id.org/norma-ontology#TriggerEvent">Trigger Event</a>
+      <a href="#TriggerEvent" title="https://w3id.org/def/norma-o#TriggerEvent">Trigger Event</a>
    </li>
 </ul><h4>Object Properties</h4><ul xmlns:widoco="https://w3id.org/widoco/vocab#"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     class="hlist">
    <li>
-      <a href="#activatesNorm" title="https://w3id.org/norma-ontology#activatesNorm">activates norm</a>
+      <a href="#activatesNorm" title="https://w3id.org/def/norma-o#activatesNorm">activates norm</a>
    </li>
    <li>
       <a href="#generatedNormativeContent"
-         title="https://w3id.org/norma-ontology#generatedNormativeContent">generated normative content</a>
+         title="https://w3id.org/def/norma-o#generatedNormativeContent">generated normative content</a>
    </li>
    <li>
-      <a href="#hasBindingForce" title="https://w3id.org/norma-ontology#hasBindingForce">has binding force</a>
+      <a href="#hasBindingForce" title="https://w3id.org/def/norma-o#hasBindingForce">has binding force</a>
    </li>
    <li>
       <a href="#hasComplianceCriticality"
-         title="https://w3id.org/norma-ontology#hasComplianceCriticality">has compliance criticality</a>
+         title="https://w3id.org/def/norma-o#hasComplianceCriticality">has compliance criticality</a>
    </li>
    <li>
       <a href="#hasExtractionMethod"
-         title="https://w3id.org/norma-ontology#hasExtractionMethod">has extraction method</a>
+         title="https://w3id.org/def/norma-o#hasExtractionMethod">has extraction method</a>
    </li>
    <li>
-      <a href="#hasLegalAction" title="https://w3id.org/norma-ontology#hasLegalAction">has legal action</a>
+      <a href="#hasLegalAction" title="https://w3id.org/def/norma-o#hasLegalAction">has legal action</a>
    </li>
    <li>
-      <a href="#hasLegalAgent" title="https://w3id.org/norma-ontology#hasLegalAgent">has legal agent</a>
+      <a href="#hasLegalAgent" title="https://w3id.org/def/norma-o#hasLegalAgent">has legal agent</a>
    </li>
    <li>
-      <a href="#hasLegalObject" title="https://w3id.org/norma-ontology#hasLegalObject">has legal object</a>
+      <a href="#hasLegalObject" title="https://w3id.org/def/norma-o#hasLegalObject">has legal object</a>
    </li>
    <li>
-      <a href="#hasLegalSource" title="https://w3id.org/norma-ontology#hasLegalSource">has legal source</a>
+      <a href="#hasLegalSource" title="https://w3id.org/def/norma-o#hasLegalSource">has legal source</a>
    </li>
    <li>
-      <a href="#hasNormStatus" title="https://w3id.org/norma-ontology#hasNormStatus">has norm status</a>
+      <a href="#hasNormStatus" title="https://w3id.org/def/norma-o#hasNormStatus">has norm status</a>
    </li>
    <li>
-      <a href="#hasOutcome" title="https://w3id.org/norma-ontology#hasOutcome">has outcome</a>
+      <a href="#hasOutcome" title="https://w3id.org/def/norma-o#hasOutcome">has outcome</a>
    </li>
    <li>
-      <a href="#hasReviewStatus" title="https://w3id.org/norma-ontology#hasReviewStatus">has review status</a>
+      <a href="#hasReviewStatus" title="https://w3id.org/def/norma-o#hasReviewStatus">has review status</a>
    </li>
    <li>
       <a href="#hasSourceExpression"
-         title="https://w3id.org/norma-ontology#hasSourceExpression">has source expression</a>
+         title="https://w3id.org/def/norma-o#hasSourceExpression">has source expression</a>
    </li>
    <li>
-      <a href="#hasTrigger" title="https://w3id.org/norma-ontology#hasTrigger">has trigger</a>
+      <a href="#hasTrigger" title="https://w3id.org/def/norma-o#hasTrigger">has trigger</a>
    </li>
    <li>
       <a href="#isActivatedByTriggerEvent"
-         title="https://w3id.org/norma-ontology#isActivatedByTriggerEvent">is activated by trigger event</a>
+         title="https://w3id.org/def/norma-o#isActivatedByTriggerEvent">is activated by trigger event</a>
    </li>
    <li>
-      <a href="#isAnnotatorOf" title="https://w3id.org/norma-ontology#isAnnotatorOf">is annotator of</a>
+      <a href="#isAnnotatorOf" title="https://w3id.org/def/norma-o#isAnnotatorOf">is annotator of</a>
    </li>
    <li>
-      <a href="#isBindingForceOf" title="https://w3id.org/norma-ontology#isBindingForceOf">is binding force of</a>
+      <a href="#isBindingForceOf" title="https://w3id.org/def/norma-o#isBindingForceOf">is binding force of</a>
    </li>
    <li>
       <a href="#isComplianceCriticalityOf"
-         title="https://w3id.org/norma-ontology#isComplianceCriticalityOf">is compliance criticality of</a>
+         title="https://w3id.org/def/norma-o#isComplianceCriticalityOf">is compliance criticality of</a>
    </li>
    <li>
       <a href="#isExtractionMethodOf"
-         title="https://w3id.org/norma-ontology#isExtractionMethodOf">is extraction method of</a>
+         title="https://w3id.org/def/norma-o#isExtractionMethodOf">is extraction method of</a>
    </li>
    <li>
-      <a href="#isLegalActionOf" title="https://w3id.org/norma-ontology#isLegalActionOf">is legal action of</a>
+      <a href="#isLegalActionOf" title="https://w3id.org/def/norma-o#isLegalActionOf">is legal action of</a>
    </li>
    <li>
-      <a href="#isLegalAgentOf" title="https://w3id.org/norma-ontology#isLegalAgentOf">is legal agent of</a>
+      <a href="#isLegalAgentOf" title="https://w3id.org/def/norma-o#isLegalAgentOf">is legal agent of</a>
    </li>
    <li>
-      <a href="#isLegalObjectOf" title="https://w3id.org/norma-ontology#isLegalObjectOf">is legal object of</a>
+      <a href="#isLegalObjectOf" title="https://w3id.org/def/norma-o#isLegalObjectOf">is legal object of</a>
    </li>
    <li>
-      <a href="#isLegalSourceOf" title="https://w3id.org/norma-ontology#isLegalSourceOf">is legal source of</a>
+      <a href="#isLegalSourceOf" title="https://w3id.org/def/norma-o#isLegalSourceOf">is legal source of</a>
    </li>
    <li>
-      <a href="#isNormStatusOf" title="https://w3id.org/norma-ontology#isNormStatusOf">is norm status of</a>
+      <a href="#isNormStatusOf" title="https://w3id.org/def/norma-o#isNormStatusOf">is norm status of</a>
    </li>
    <li>
       <a href="#isOutcomeOfTriggerEvent"
-         title="https://w3id.org/norma-ontology#isOutcomeOfTriggerEvent">is outcome of trigger event</a>
+         title="https://w3id.org/def/norma-o#isOutcomeOfTriggerEvent">is outcome of trigger event</a>
    </li>
    <li>
-      <a href="#isReviewStatusOf" title="https://w3id.org/norma-ontology#isReviewStatusOf">is review status of</a>
+      <a href="#isReviewStatusOf" title="https://w3id.org/def/norma-o#isReviewStatusOf">is review status of</a>
    </li>
    <li>
       <a href="#isSourceExpressionOf"
-         title="https://w3id.org/norma-ontology#isSourceExpressionOf">is source expression of</a>
+         title="https://w3id.org/def/norma-o#isSourceExpressionOf">is source expression of</a>
    </li>
    <li>
       <a href="#isSourceForDerivedNormativeContent"
-         title="https://w3id.org/norma-ontology#isSourceForDerivedNormativeContent">is source for derived normative content</a>
+         title="https://w3id.org/def/norma-o#isSourceForDerivedNormativeContent">is source for derived normative content</a>
    </li>
    <li>
       <a href="#isTriggerOfCondition"
-         title="https://w3id.org/norma-ontology#isTriggerOfCondition">is trigger of condition</a>
+         title="https://w3id.org/def/norma-o#isTriggerOfCondition">is trigger of condition</a>
    </li>
    <li>
       <a href="#isTriggeredByCondition"
-         title="https://w3id.org/norma-ontology#isTriggeredByCondition">is triggered by condition</a>
+         title="https://w3id.org/def/norma-o#isTriggeredByCondition">is triggered by condition</a>
    </li>
    <li>
-      <a href="#relatesTo" title="https://w3id.org/norma-ontology#relatesTo">relates to</a>
+      <a href="#relatesTo" title="https://w3id.org/def/norma-o#relatesTo">relates to</a>
    </li>
    <li>
-      <a href="#supersededBy" title="https://w3id.org/norma-ontology#supersededBy">superseded by</a>
+      <a href="#supersededBy" title="https://w3id.org/def/norma-o#supersededBy">superseded by</a>
    </li>
    <li>
-      <a href="#supersedes" title="https://w3id.org/norma-ontology#supersedes">supersedes</a>
+      <a href="#supersedes" title="https://w3id.org/def/norma-o#supersedes">supersedes</a>
    </li>
    <li>
-      <a href="#triggersNorm" title="https://w3id.org/norma-ontology#triggersNorm">triggers norm</a>
+      <a href="#triggersNorm" title="https://w3id.org/def/norma-o#triggersNorm">triggers norm</a>
    </li>
    <li>
-      <a href="#usedLegalSource" title="https://w3id.org/norma-ontology#usedLegalSource">used legal source</a>
+      <a href="#usedLegalSource" title="https://w3id.org/def/norma-o#usedLegalSource">used legal source</a>
    </li>
    <li>
       <a href="#wasAnnotatorAssociatedWithActivity"
-         title="https://w3id.org/norma-ontology#wasAnnotatorAssociatedWithActivity">was annotator associated with activity</a>
+         title="https://w3id.org/def/norma-o#wasAnnotatorAssociatedWithActivity">was annotator associated with activity</a>
    </li>
    <li>
       <a href="#wasAssociatedWithAnnotator"
-         title="https://w3id.org/norma-ontology#wasAssociatedWithAnnotator">was associated with annotator</a>
+         title="https://w3id.org/def/norma-o#wasAssociatedWithAnnotator">was associated with annotator</a>
    </li>
    <li>
       <a href="#wasAttributedToAnnotator"
-         title="https://w3id.org/norma-ontology#wasAttributedToAnnotator">was attributed to annotator</a>
+         title="https://w3id.org/def/norma-o#wasAttributedToAnnotator">was attributed to annotator</a>
    </li>
    <li>
       <a href="#wasDerivedFromSource"
-         title="https://w3id.org/norma-ontology#wasDerivedFromSource">was derived from source</a>
+         title="https://w3id.org/def/norma-o#wasDerivedFromSource">was derived from source</a>
    </li>
    <li>
       <a href="#wasGeneratedByAnnotationActivity"
-         title="https://w3id.org/norma-ontology#wasGeneratedByAnnotationActivity">was generated by annotation activity</a>
+         title="https://w3id.org/def/norma-o#wasGeneratedByAnnotationActivity">was generated by annotation activity</a>
    </li>
    <li>
       <a href="#wasUsedByAnnotationActivity"
-         title="https://w3id.org/norma-ontology#wasUsedByAnnotationActivity">was used by annotation activity</a>
+         title="https://w3id.org/def/norma-o#wasUsedByAnnotationActivity">was used by annotation activity</a>
    </li>
 </ul><h4>Data Properties</h4><ul xmlns:widoco="https://w3id.org/widoco/vocab#"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     class="hlist">
    <li>
-      <a href="#actionText" title="https://w3id.org/norma-ontology#actionText">action text</a>
+      <a href="#actionText" title="https://w3id.org/def/norma-o#actionText">action text</a>
    </li>
    <li>
-      <a href="#agentText" title="https://w3id.org/norma-ontology#agentText">agent text</a>
+      <a href="#agentText" title="https://w3id.org/def/norma-o#agentText">agent text</a>
    </li>
    <li>
-      <a href="#annotationDate" title="https://w3id.org/norma-ontology#annotationDate">annotation date</a>
+      <a href="#annotationDate" title="https://w3id.org/def/norma-o#annotationDate">annotation date</a>
    </li>
    <li>
-      <a href="#articleNumber" title="https://w3id.org/norma-ontology#articleNumber">article number</a>
+      <a href="#articleNumber" title="https://w3id.org/def/norma-o#articleNumber">article number</a>
    </li>
    <li>
       <a href="#conditionStatement"
-         title="https://w3id.org/norma-ontology#conditionStatement">condition statement</a>
+         title="https://w3id.org/def/norma-o#conditionStatement">condition statement</a>
    </li>
    <li>
       <a href="#conditionTrigger"
-         title="https://w3id.org/norma-ontology#conditionTrigger">condition trigger</a>
+         title="https://w3id.org/def/norma-o#conditionTrigger">condition trigger</a>
    </li>
    <li>
-      <a href="#confidenceScore" title="https://w3id.org/norma-ontology#confidenceScore">confidence score</a>
+      <a href="#confidenceScore" title="https://w3id.org/def/norma-o#confidenceScore">confidence score</a>
    </li>
    <li>
-      <a href="#deadline" title="https://w3id.org/norma-ontology#deadline">deadline</a>
+      <a href="#deadline" title="https://w3id.org/def/norma-o#deadline">deadline</a>
    </li>
    <li>
-      <a href="#deonticId" title="https://w3id.org/norma-ontology#deonticId">deontic ID</a>
+      <a href="#deonticId" title="https://w3id.org/def/norma-o#deonticId">deontic ID</a>
    </li>
    <li>
-      <a href="#effectiveDate" title="https://w3id.org/norma-ontology#effectiveDate">effective date</a>
+      <a href="#effectiveDate" title="https://w3id.org/def/norma-o#effectiveDate">effective date</a>
    </li>
    <li>
-      <a href="#exception" title="https://w3id.org/norma-ontology#exception">exception</a>
+      <a href="#exception" title="https://w3id.org/def/norma-o#exception">exception</a>
    </li>
    <li>
-      <a href="#factStatement" title="https://w3id.org/norma-ontology#factStatement">fact statement</a>
+      <a href="#factStatement" title="https://w3id.org/def/norma-o#factStatement">fact statement</a>
    </li>
    <li>
-      <a href="#fromArticle" title="https://w3id.org/norma-ontology#fromArticle">from article</a>
+      <a href="#fromArticle" title="https://w3id.org/def/norma-o#fromArticle">from article</a>
    </li>
    <li>
-      <a href="#fromParagraph" title="https://w3id.org/norma-ontology#fromParagraph">from paragraph</a>
+      <a href="#fromParagraph" title="https://w3id.org/def/norma-o#fromParagraph">from paragraph</a>
    </li>
    <li>
-      <a href="#fromRegulation" title="https://w3id.org/norma-ontology#fromRegulation">from regulation</a>
+      <a href="#fromRegulation" title="https://w3id.org/def/norma-o#fromRegulation">from regulation</a>
    </li>
    <li>
-      <a href="#lastReviewDate" title="https://w3id.org/norma-ontology#lastReviewDate">last review date</a>
+      <a href="#lastReviewDate" title="https://w3id.org/def/norma-o#lastReviewDate">last review date</a>
    </li>
    <li>
-      <a href="#normStatement" title="https://w3id.org/norma-ontology#normStatement">norm statement</a>
+      <a href="#normStatement" title="https://w3id.org/def/norma-o#normStatement">norm statement</a>
    </li>
    <li>
-      <a href="#objectText" title="https://w3id.org/norma-ontology#objectText">object text</a>
+      <a href="#objectText" title="https://w3id.org/def/norma-o#objectText">object text</a>
    </li>
    <li>
-      <a href="#originalText" title="https://w3id.org/norma-ontology#originalText">original text</a>
+      <a href="#originalText" title="https://w3id.org/def/norma-o#originalText">original text</a>
    </li>
    <li>
-      <a href="#paragraphNumber" title="https://w3id.org/norma-ontology#paragraphNumber">paragraph number</a>
+      <a href="#paragraphNumber" title="https://w3id.org/def/norma-o#paragraphNumber">paragraph number</a>
    </li>
    <li>
-      <a href="#regulationName" title="https://w3id.org/norma-ontology#regulationName">regulation name</a>
+      <a href="#regulationName" title="https://w3id.org/def/norma-o#regulationName">regulation name</a>
    </li>
    <li>
-      <a href="#regulationURI" title="https://w3id.org/norma-ontology#regulationURI">regulation URI</a>
+      <a href="#regulationURI" title="https://w3id.org/def/norma-o#regulationURI">regulation URI</a>
    </li>
    <li>
-      <a href="#sanction" title="https://w3id.org/norma-ontology#sanction">sanction</a>
+      <a href="#sanction" title="https://w3id.org/def/norma-o#sanction">sanction</a>
    </li>
    <li>
-      <a href="#sourceURI" title="https://w3id.org/norma-ontology#sourceURI">source URI</a>
+      <a href="#sourceURI" title="https://w3id.org/def/norma-o#sourceURI">source URI</a>
    </li>
 </ul><h4>Named Individuals</h4><ul xmlns:widoco="https://w3id.org/widoco/vocab#"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     class="hlist">
    <li>
-      <a href="#Active" title="https://w3id.org/norma-ontology#Active">Active</a>
+      <a href="#Active" title="https://w3id.org/def/norma-o#Active">Active</a>
    </li>
    <li>
-      <a href="#Approved" title="https://w3id.org/norma-ontology#Approved">Approved</a>
+      <a href="#Approved" title="https://w3id.org/def/norma-o#Approved">Approved</a>
    </li>
    <li>
       <a href="#BindingForceScheme"
-         title="https://w3id.org/norma-ontology#BindingForceScheme">Binding force scheme</a>
+         title="https://w3id.org/def/norma-o#BindingForceScheme">Binding force scheme</a>
    </li>
    <li>
       <a href="#ComplianceCriticalityScheme"
-         title="https://w3id.org/norma-ontology#ComplianceCriticalityScheme">Compliance criticality scheme</a>
+         title="https://w3id.org/def/norma-o#ComplianceCriticalityScheme">Compliance criticality scheme</a>
    </li>
    <li>
       <a href="#ConditionOutcomeScheme"
-         title="https://w3id.org/norma-ontology#ConditionOutcomeScheme">Condition outcome scheme</a>
+         title="https://w3id.org/def/norma-o#ConditionOutcomeScheme">Condition outcome scheme</a>
    </li>
    <li>
-      <a href="#Contractual" title="https://w3id.org/norma-ontology#Contractual">Contractual</a>
+      <a href="#Contractual" title="https://w3id.org/def/norma-o#Contractual">Contractual</a>
    </li>
    <li>
-      <a href="#Critical" title="https://w3id.org/norma-ontology#Critical">Critical</a>
+      <a href="#Critical" title="https://w3id.org/def/norma-o#Critical">Critical</a>
    </li>
    <li>
-      <a href="#Disputed" title="https://w3id.org/norma-ontology#Disputed">Disputed</a>
+      <a href="#Disputed" title="https://w3id.org/def/norma-o#Disputed">Disputed</a>
    </li>
    <li>
       <a href="#ExtractionMethodScheme"
-         title="https://w3id.org/norma-ontology#ExtractionMethodScheme">Extraction method scheme</a>
+         title="https://w3id.org/def/norma-o#ExtractionMethodScheme">Extraction method scheme</a>
    </li>
    <li>
-      <a href="#FalseOutcome" title="https://w3id.org/norma-ontology#FalseOutcome">False Outcome</a>
+      <a href="#FalseOutcome" title="https://w3id.org/def/norma-o#FalseOutcome">False Outcome</a>
    </li>
    <li>
-      <a href="#HardLaw" title="https://w3id.org/norma-ontology#HardLaw">Hard Law</a>
+      <a href="#HardLaw" title="https://w3id.org/def/norma-o#HardLaw">Hard Law</a>
    </li>
    <li>
-      <a href="#High" title="https://w3id.org/norma-ontology#High">High</a>
+      <a href="#High" title="https://w3id.org/def/norma-o#High">High</a>
    </li>
    <li>
-      <a href="#InternalPolicy" title="https://w3id.org/norma-ontology#InternalPolicy">Internal Policy</a>
+      <a href="#InternalPolicy" title="https://w3id.org/def/norma-o#InternalPolicy">Internal Policy</a>
    </li>
    <li>
-      <a href="#LLMExtraction" title="https://w3id.org/norma-ontology#LLMExtraction">LLM extraction</a>
+      <a href="#LLMExtraction" title="https://w3id.org/def/norma-o#LLMExtraction">LLM extraction</a>
    </li>
    <li>
-      <a href="#Low" title="https://w3id.org/norma-ontology#Low">Low</a>
+      <a href="#Low" title="https://w3id.org/def/norma-o#Low">Low</a>
    </li>
    <li>
-      <a href="#ManualAnalyst" title="https://w3id.org/norma-ontology#ManualAnalyst">Manual annotation (analyst)</a>
+      <a href="#ManualAnalyst" title="https://w3id.org/def/norma-o#ManualAnalyst">Manual annotation (analyst)</a>
    </li>
    <li>
-      <a href="#ManualLawyer" title="https://w3id.org/norma-ontology#ManualLawyer">Manual annotation (lawyer)</a>
+      <a href="#ManualLawyer" title="https://w3id.org/def/norma-o#ManualLawyer">Manual annotation (lawyer)</a>
    </li>
    <li>
-      <a href="#Medium" title="https://w3id.org/norma-ontology#Medium">Medium</a>
+      <a href="#Medium" title="https://w3id.org/def/norma-o#Medium">Medium</a>
    </li>
    <li>
       <a href="#NegativeRecommendation"
-         title="https://w3id.org/norma-ontology#NegativeRecommendation">
+         title="https://w3id.org/def/norma-o#NegativeRecommendation">
          <span>Negative Recommendation</span>
       </a>
    </li>
    <li>
       <a href="#NormStatusScheme"
-         title="https://w3id.org/norma-ontology#NormStatusScheme">Norm status scheme</a>
+         title="https://w3id.org/def/norma-o#NormStatusScheme">Norm status scheme</a>
    </li>
    <li>
-      <a href="#https://w3id.org/norma-ontology" title="https://w3id.org/norma-ontology">
+      <a href="#https://w3id.org/def/norma-o" title="https://w3id.org/def/norma-o">
          <span>NORMA ontology</span>
       </a>
    </li>
    <li>
-      <a href="#NotReviewed" title="https://w3id.org/norma-ontology#NotReviewed">Not Reviewed</a>
+      <a href="#NotReviewed" title="https://w3id.org/def/norma-o#NotReviewed">Not Reviewed</a>
    </li>
    <li>
-      <a href="#NotYetInForce" title="https://w3id.org/norma-ontology#NotYetInForce">Not Yet In Force</a>
+      <a href="#NotYetInForce" title="https://w3id.org/def/norma-o#NotYetInForce">Not Yet In Force</a>
    </li>
    <li>
-      <a href="#Obligation" title="https://w3id.org/norma-ontology#Obligation">
+      <a href="#Obligation" title="https://w3id.org/def/norma-o#Obligation">
          <span>Obligation</span>
       </a>
    </li>
    <li>
-      <a href="#PatternMatching" title="https://w3id.org/norma-ontology#PatternMatching">Pattern matching</a>
+      <a href="#PatternMatching" title="https://w3id.org/def/norma-o#PatternMatching">Pattern matching</a>
    </li>
    <li>
-      <a href="#PendingReview" title="https://w3id.org/norma-ontology#PendingReview">Pending Review</a>
+      <a href="#PendingReview" title="https://w3id.org/def/norma-o#PendingReview">Pending Review</a>
    </li>
    <li>
-      <a href="#Permission" title="https://w3id.org/norma-ontology#Permission">
+      <a href="#Permission" title="https://w3id.org/def/norma-o#Permission">
          <span>Permission</span>
       </a>
    </li>
    <li>
-      <a href="#Prohibition" title="https://w3id.org/norma-ontology#Prohibition">
+      <a href="#Prohibition" title="https://w3id.org/def/norma-o#Prohibition">
          <span>Prohibition</span>
       </a>
    </li>
    <li>
-      <a href="#Recommendation" title="https://w3id.org/norma-ontology#Recommendation">
+      <a href="#Recommendation" title="https://w3id.org/def/norma-o#Recommendation">
          <span>Recommendation</span>
       </a>
    </li>
    <li>
       <a href="#ReviewStatusScheme"
-         title="https://w3id.org/norma-ontology#ReviewStatusScheme">Review status scheme</a>
+         title="https://w3id.org/def/norma-o#ReviewStatusScheme">Review status scheme</a>
    </li>
    <li>
-      <a href="#RuleBased" title="https://w3id.org/norma-ontology#RuleBased">Rule-based extraction</a>
+      <a href="#RuleBased" title="https://w3id.org/def/norma-o#RuleBased">Rule-based extraction</a>
    </li>
    <li>
-      <a href="#SoftLaw" title="https://w3id.org/norma-ontology#SoftLaw">Soft Law</a>
+      <a href="#SoftLaw" title="https://w3id.org/def/norma-o#SoftLaw">Soft Law</a>
    </li>
    <li>
-      <a href="#Superseded" title="https://w3id.org/norma-ontology#Superseded">Superseded</a>
+      <a href="#Superseded" title="https://w3id.org/def/norma-o#Superseded">Superseded</a>
    </li>
    <li>
-      <a href="#TrueOutcome" title="https://w3id.org/norma-ontology#TrueOutcome">True Outcome</a>
+      <a href="#TrueOutcome" title="https://w3id.org/def/norma-o#TrueOutcome">True Outcome</a>
    </li>
    <li>
-      <a href="#UnderReview" title="https://w3id.org/norma-ontology#UnderReview">Under Review</a>
+      <a href="#UnderReview" title="https://w3id.org/def/norma-o#UnderReview">Under Review</a>
    </li>
 </ul><h4> Rules </h4><ul xmlns:widoco="https://w3id.org/widoco/vocab#"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
