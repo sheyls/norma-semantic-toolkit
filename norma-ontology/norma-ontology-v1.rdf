@@ -41,7 +41,7 @@
     <dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-17</dcterms:issued>
     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-26</dcterms:modified>
     <dcterms:language rdf:resource="http://id.loc.gov/vocabulary/iso639-1/en"/>
-    <dcterms:license rdf:resource="https://creativecommons.org/licenses/by/4.0/"/>
+    <dcterms:license rdf:resource="https://creativecommons.org/licenses/by-nc/4.0/"/>
     <dcterms:source rdf:resource="https://github.com/sheyls/norma-semantic-toolkit"/>
     <dcterms:bibliographicCitation xml:lang="en">Leyva-Sánchez, S. et al. (2026). NORMA-O: The NORMA Ontology for Legal Norm Annotations (Version 1.0) [Ontology]. https://w3id.org/def/norma-o/1.0</dcterms:bibliographicCitation>
     <bibo:doi>10.5281/zenodo.19765302</bibo:doi>

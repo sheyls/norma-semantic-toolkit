@@ -1,11 +1,44 @@
 cff-version: 1.2.0
-message: "If you use NORMA in academic work, please cite this software artifact and the accompanying paper."
-title: "NORMA..."
+message: "If you use the NORMA Semantic Toolkit in your research, please cite the toolkit. If you use the NORMA-O ontology specifically, also cite it using the DOI below."
+type: software
+title: "NORMA Semantic Toolkit"
 version: "1.0.0"
 date-released: "2026-04-23"
 authors:
   - family-names: "Leyva-Sánchez"
     given-names: "Sheyla"
-license: "CC-BY-4.0"
+    affiliation: "Ontology Engineering Group, Universidad Politécnica de Madrid"
+license: "CC-BY-NC-4.0"
+repository-code: "https://github.com/sheyls/norma-semantic-toolkit"
 url: "https://w3id.org/def/norma-o"
-abstract: "NORMA transforms BPMN processes annotated with legal norms into ontology aligned knowledge graph artifacts, SWRL rules, SPARQL queryable data, and web based semantic exploration views."
+abstract: "NORMA is an open semantic toolkit for the formal representation and computational processing of legal norms. It combines an OWL 2 DL ontology (NORMA-O), a structured BPMN-based annotation methodology, an automated knowledge graph construction pipeline, and a SWRL rule generation engine. The result is a queryable, reasoner-ready knowledge graph suitable for semantic publication, compliance support, and legal knowledge engineering."
+keywords:
+  - legal ontology
+  - legal knowledge engineering
+  - regulatory compliance
+  - knowledge graph
+  - OWL 2 DL
+  - SWRL
+  - BPMN
+  - semantic web
+  - norm annotation
+  - ELI
+  - PROV-O
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.19765302"
+    description: "NORMA-O ontology (Zenodo)"
+  - type: url
+    value: "https://zenodo.org/communities/norma"
+    description: "NORMA Zenodo community (all resources)"
+references:
+  - type: data
+    title: "NORMA-O: The NORMA Ontology for Legal Norm Annotations"
+    version: "1.0.0"
+    authors:
+      - family-names: "Leyva-Sánchez"
+        given-names: "Sheyla"
+        affiliation: "Ontology Engineering Group, Universidad Politécnica de Madrid"
+    doi: "10.5281/zenodo.19765302"
+    url: "https://doi.org/10.5281/zenodo.19765302"
+    license: "CC-BY-NC-4.0"

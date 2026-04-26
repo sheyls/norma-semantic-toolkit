@@ -29,7 +29,7 @@
     dcterms:description "The NORMA ontology is a formal semantic model for representing machine-readable legal norm annotations as reusable knowledge graph resources. It distinguishes between regulative norms and constitutive rules; represents legal conditions, their evaluated outcomes, and branch-sensitive activation through a TriggerEvent n-ary relation pattern; and captures the legal agents, actions, objects, sources, provenance metadata, lifecycle status, review status, extraction method, and controlled classification values needed for traceable and interoperable publication. The ontology aligns with PROV-O for provenance, ELI for legal resource modelling, FOAF for agent-oriented metadata, and SKOS for controlled vocabularies."@en ;
     dcterms:issued "2026-04-17"^^xsd:date ;
     dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
-    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:license <https://creativecommons.org/licenses/by-nc/4.0/> ;
     dcterms:modified "2026-04-26"^^xsd:date ;
     dcterms:publisher [ a foaf:Organization ;
             foaf:name "NORMA project" ] ;
