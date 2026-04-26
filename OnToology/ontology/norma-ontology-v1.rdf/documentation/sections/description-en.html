@@ -64,93 +64,126 @@
 
 <h3 id="desc-examples" class="list">Illustrative examples</h3>
 
-<p>The following simplified examples illustrate the intended use of the ontology.</p>
+<p>The following simplified examples illustrate how the TBox can be instantiated in a self-contained ABox. They use an illustrative example namespace rather than reusing a project-specific repository ABox.</p>
 
 <div class="description">
-<p><strong>Example 1: representing a regulative norm — EU AI Act, Article 4(2)</strong></p>
+<p><strong>Example 1: representing a regulative norm — EU AI Act biometric high-risk obligations</strong></p>
 <pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
-@prefix :      &lt;https://w3id.org/norma-abox/eu-ai-act#&gt; .
+@prefix ex:    &lt;https://example.org/norma/&gt; .
+@prefix rdfs:  &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix xsd:   &lt;http://www.w3.org/2001/XMLSchema#&gt; .
 
-:OBL_1
+ex:OBL_Respect_high_risk_obligations
     a norma:Obligation ;
-    rdfs:label "Marking obligation"@en ;
-    norma:deonticId "OBL_1" ;
-    norma:actionText "Marking obligation" ;
-    norma:fromRegulation "EU AI Act" ;
-    norma:fromArticle "4" ;
-    norma:fromParagraph "2" ;
-    norma:hasBindingForce    norma:HardLaw ;
-    norma:hasNormStatus      norma:Active ;
+    rdfs:label "Respect high-risk obligations"@en ;
+    norma:deonticId "OBL_Respect_high_risk_obligations"^^xsd:string ;
+    norma:actionText "comply"^^xsd:string ;
+    norma:agentText "AI provider"^^xsd:string ;
+    norma:objectText "AI system"^^xsd:string ;
+    norma:fromRegulation "EU AI Act"^^xsd:string ;
+    norma:fromArticle "8 to 22"^^xsd:string ;
+    norma:hasBindingForce norma:HardLaw ;
+    norma:hasNormStatus norma:Active ;
     norma:hasComplianceCriticality norma:High ;
     norma:hasExtractionMethod norma:ManualLawyer ;
-    norma:hasReviewStatus    norma:PendingReview ;
-    norma:hasLegalAgent      :Agent_AI_owner ;
-    norma:hasLegalObject     :Object_generate_content ;
-    norma:hasLegalSource     :Regulation_EU_AI_Act ;
-    norma:annotationDate     "2026-02-13"^^xsd:date ;
-    norma:confidenceScore    1.0 .</code></pre>
-<p>This is a real obligation from the EU AI Act knowledge graph included in this repository. It is classified as hard law, active, high criticality, and was manually annotated by a legal expert. The agent bearing the obligation is the AI owner; the object is the act of generating content. All controlled-vocabulary values (<code>norma:HardLaw</code>, <code>norma:Active</code>, etc.) are named individuals declared in the TBox.</p>
+    norma:hasReviewStatus norma:PendingReview ;
+    norma:hasLegalAgent ex:Agent_AI_provider ;
+    norma:hasLegalAction ex:Action_comply ;
+    norma:hasLegalObject ex:Object_AI_system ;
+    norma:hasLegalSource ex:Regulation_EU_AI_Act ;
+    norma:wasDerivedFromSource ex:Regulation_EU_AI_Act ;
+    norma:wasAttributedToAnnotator ex:NORMAAnnotator ;
+    norma:wasGeneratedByAnnotationActivity
+        ex:AnnotationActivity_OBL_Respect_high_risk_obligations .</code></pre>
+<p>This example instantiates the ontology with a biometric high-risk obligation under the EU AI Act. It shows the norm itself as normative content, while provenance details such as annotation date and confidence are attached to the linked <code>norma:AnnotationActivity</code>, not to the norm directly. Controlled values such as <code>norma:HardLaw</code>, <code>norma:Active</code>, and <code>norma:PendingReview</code> are named individuals declared in the TBox.</p>
 </div>
 
 <div class="description">
 <p><strong>Example 2: representing a constitutive rule</strong></p>
 <pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
-@prefix ex: &lt;https://example.org/norma/&gt; .
+@prefix ex:    &lt;https://example.org/norma/&gt; .
+@prefix rdfs:  &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix xsd:   &lt;http://www.w3.org/2001/XMLSchema#&gt; .
 
-ex:cr_high_risk_system
+ex:CR_Biometric_system_is_high_risk
     a norma:ConstitutiveRule ;
-    norma:deonticId "CR_High_Risk_AI_System" ;
-    norma:factStatement "An AI system used for biometric identification in critical infrastructure is classified as high-risk." ;
-    norma:normStatement "Certain biometric-identification systems are legally classified as high-risk AI systems." .</code></pre>
-<p>Classificatory legal content: not a prescription directed at an agent, but a constitutive determination that establishes a legal status or category.</p>
+    rdfs:label "Biometric system classified as high-risk"@en ;
+    norma:deonticId "CR_Biometric_system_is_high_risk"^^xsd:string ;
+    norma:factStatement
+        "An AI system used for biometric purposes is classified as a high-risk AI system."^^xsd:string ;
+    norma:normStatement
+        "Biometric use can place an AI system in the high-risk category under the EU AI Act."^^xsd:string ;
+    norma:fromRegulation "EU AI Act"^^xsd:string ;
+    norma:hasLegalSource ex:Regulation_EU_AI_Act ;
+    norma:wasDerivedFromSource ex:Regulation_EU_AI_Act .</code></pre>
+<p>This is classificatory legal content rather than a prescription directed at an agent. The example stays on the same topic as Example 1, but models the legal classification itself instead of an obligation imposed on the provider.</p>
 </div>
 
 <div class="description">
 <p><strong>Example 3: representing conditional activation</strong></p>
 <pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
-@prefix ex: &lt;https://example.org/norma/&gt; .
+@prefix ex:    &lt;https://example.org/norma/&gt; .
+@prefix rdfs:  &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix xsd:   &lt;http://www.w3.org/2001/XMLSchema#&gt; .
 
-ex:condition_disclosure_required
+ex:Condition_Is_the_AI_system_used_for_biometric_purposes
     a norma:LegalCondition ;
-    norma:conditionStatement "The content is capable of misleading recipients as to whether it was generated by AI." ;
-    norma:hasTrigger ex:trigger_true .
+    rdfs:label "Is the AI system used for biometric purposes?"@en ;
+    norma:conditionStatement
+        "Is the AI system used for biometric purposes?"^^xsd:string ;
+    norma:hasTrigger
+        ex:TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_Respect_high_risk_obligations ;
+    norma:hasTrigger
+        ex:TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_ADD_testing_obligations .
 
-ex:trigger_true
+ex:TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_Respect_high_risk_obligations
     a norma:TriggerEvent ;
     norma:hasOutcome norma:TrueOutcome ;
-    norma:activatesNorm ex:obl_mark_content .</code></pre>
-<p>The ontology does not merely record that a condition exists; it explicitly records which evaluated outcome activates which norm.</p>
+    norma:activatesNorm ex:OBL_Respect_high_risk_obligations .
+
+ex:TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_ADD_testing_obligations
+    a norma:TriggerEvent ;
+    norma:hasOutcome norma:TrueOutcome ;
+    norma:activatesNorm ex:OBL_ADD_testing_obligations .</code></pre>
+<p>The ontology records not only the condition, but also the exact branch outcome and the normative content activated by that branch. In this case, the same true outcome activates two obligations in the biometric high-risk workflow.</p>
 </div>
 
 <div class="description">
 <p><strong>Example 4: representing provenance and source traceability</strong></p>
 <pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
-@prefix ex: &lt;https://example.org/norma/&gt; .
+@prefix ex:    &lt;https://example.org/norma/&gt; .
+@prefix rdfs:  &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix xsd:   &lt;http://www.w3.org/2001/XMLSchema#&gt; .
 
-ex:activity_001
+ex:AnnotationActivity_OBL_Respect_high_risk_obligations
     a norma:AnnotationActivity ;
-    norma:generatedNormativeContent ex:obl_mark_content ;
-    norma:usedLegalSource ex:source_ai_act ;
-    norma:confidenceScore 0.93 .
+    rdfs:label "Annotation activity for OBL_Respect_high_risk_obligations"@en ;
+    norma:generatedNormativeContent ex:OBL_Respect_high_risk_obligations ;
+    norma:usedLegalSource ex:Regulation_EU_AI_Act ;
+    norma:wasAssociatedWithAnnotator ex:NORMAAnnotator ;
+    norma:annotationDate "2026-04-26"^^xsd:date ;
+    norma:confidenceScore "1.0"^^xsd:decimal .
 
-ex:source_ai_act
+ex:Regulation_EU_AI_Act
     a norma:LegalSource ;
-    norma:regulationName "EU AI Act" ;
-    norma:articleNumber "50" .</code></pre>
-<p>An annotation linked to the activity that produced it and to the source material on which it is based.</p>
+    norma:regulationName "EU AI Act"^^xsd:string ;
+    norma:articleNumber "8 to 22"^^xsd:string ;
+    norma:articleNumber "60 and 61"^^xsd:string .</code></pre>
+<p>This example shows the provenance pattern explicitly: the annotation activity generated the norm, used a legal source as input, and records both the annotator and the confidence attached to the extraction process.</p>
 </div>
 
 <div class="description">
 <p><strong>Example 5: representing status and review metadata</strong></p>
 <pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
-@prefix ex: &lt;https://example.org/norma/&gt; .
+@prefix ex:    &lt;https://example.org/norma/&gt; .
+@prefix xsd:   &lt;http://www.w3.org/2001/XMLSchema#&gt; .
 
-ex:obl_mark_content
+ex:OBL_ADD_testing_obligations
     norma:hasNormStatus norma:Active ;
     norma:hasReviewStatus norma:Approved ;
     norma:hasExtractionMethod norma:ManualLawyer ;
-    norma:lastReviewDate "2026-04-20"^^&lt;http://www.w3.org/2001/XMLSchema#date&gt; .</code></pre>
-<p>Governance-oriented metadata essential in professional annotation workflows: status, review state, and production method.</p>
+    norma:lastReviewDate "2026-04-26"^^xsd:date .</code></pre>
+<p>These are governance-oriented properties of the normative content itself. Unlike <code>norma:annotationDate</code> and <code>norma:confidenceScore</code>, which belong on the annotation activity, <code>norma:lastReviewDate</code> is a lifecycle property of the norm.</p>
 </div>
 
 <h3 id="desc-use" class="list">Intended use</h3>
