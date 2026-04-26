@@ -32,7 +32,7 @@
         <terms:license rdf:resource="https://creativecommons.org/licenses/by/4.0/"/>
         <terms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-25</terms:modified>
         <terms:publisher rdf:nodeID="genid3"/>
-        <terms:source rdf:resource="https://github.com/norma-project/norma-ontology"/>
+        <terms:source rdf:resource="https://github.com/sheyls/norma-semantic-toolkit"/>
         <terms:title xml:lang="en">NORMA-O: The NORMA Ontology for Legal Norm Annotations</terms:title>
         <bibo:doi>10.5281/zenodo.19765302</bibo:doi>
         <bibo:status xml:lang="en">Published</bibo:status>

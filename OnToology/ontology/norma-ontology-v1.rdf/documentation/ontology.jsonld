@@ -192,7 +192,7 @@
     "@id" : "_:genid3"
   } ],
   "http://purl.org/dc/terms/source" : [ {
-    "@id" : "https://github.com/norma-project/norma-ontology"
+    "@id" : "https://github.com/sheyls/norma-semantic-toolkit"
   } ],
   "http://purl.org/dc/terms/title" : [ {
     "@language" : "en",

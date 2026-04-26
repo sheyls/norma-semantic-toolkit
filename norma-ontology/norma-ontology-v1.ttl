@@ -33,7 +33,7 @@
     dcterms:modified "2026-04-26"^^xsd:date ;
     dcterms:publisher [ a foaf:Organization ;
             foaf:name "NORMA project" ] ;
-    dcterms:source <https://github.com/norma-project/norma-ontology> ;
+    dcterms:source <https://github.com/sheyls/norma-semantic-toolkit> ;
     dcterms:title "NORMA-O: The NORMA Ontology for Legal Norm Annotations"@en ;
     bibo:doi "10.5281/zenodo.19765302" ;
     bibo:status "Published"@en ;

@@ -20,7 +20,7 @@ _:genid2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foa
 <https://w3id.org/norma-ontology> <http://purl.org/dc/terms/publisher> _:genid3 .
 _:genid3 <http://xmlns.com/foaf/0.1/name> "NORMA project" .
 _:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Organization> .
-<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/source> <https://github.com/norma-project/norma-ontology> .
+<https://w3id.org/norma-ontology> <http://purl.org/dc/terms/source> <https://github.com/sheyls/norma-semantic-toolkit> .
 <https://w3id.org/norma-ontology> <http://purl.org/dc/terms/title> "NORMA-O: The NORMA Ontology for Legal Norm Annotations"@en .
 <https://w3id.org/norma-ontology> <http://purl.org/ontology/bibo/doi> "10.5281/zenodo.19765302" .
 <https://w3id.org/norma-ontology> <http://purl.org/ontology/bibo/status> "Published"@en .

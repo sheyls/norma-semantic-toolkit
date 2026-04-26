@@ -56,7 +56,7 @@ const STACK = [
 
 const REFERENCE_LINKS = [
   { label: "Semantic toolkit repository", href: "https://github.com/sheyls/norma-semantic-toolkit" },
-  { label: "NORMA ontology repository", href: "https://github.com/norma-project/norma-ontology" },
+  { label: "NORMA ontology repository", href: "https://github.com/sheyls/norma-semantic-toolkit" },
   { label: "CC BY 4.0 licence", href: "https://creativecommons.org/licenses/by/4.0/" },
   { label: "Ontology IRI (w3id)", href: "https://w3id.org/def/norma-o" },
 ];
