@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import Iterable, List, Set, Tuple
 from xml.sax.saxutils import escape
 
-from norma_engine.rules.ir import RuleIR, Ref, ClassAtom
+from norma_engine.rules.ir import RuleIR, Ref, TriggerAtom
+from norma_engine.exporters.common import resolve_ref as _resolve_ref, xsd_iri as _xsd_iri
 
 RDF_NIL = "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
 XSD_BOOL = "http://www.w3.org/2001/XMLSchema#boolean"
@@ -14,42 +15,6 @@ DEFAULT_TBOX_NS = "https://w3id.org/def/norma-o#"
 def _indent(s: str, n: int) -> str:
     pad = " " * n
     return "\n".join(pad + line if line.strip() else line for line in s.splitlines())
-
-
-def _rules_var_iri(rules_iri: str, name: str) -> str:
-    return f"{rules_iri}#var_{name}"
-
-
-def _rules_res_iri(rules_iri: str, name: str) -> str:
-    return f"{rules_iri}#{name}"
-
-
-def _abox_res_iri(abox_iri: str, name: str) -> str:
-    return f"{abox_iri}#{name}"
-
-
-def _tbox_res_iri(tbox_ns: str, name: str) -> str:
-    return f"{tbox_ns}{name}"
-
-
-def _resolve_ref(ref: Ref, *, rules_iri: str, abox_iri: str, tbox_ns: str) -> str:
-    if ref.kind == "var":
-        return _rules_var_iri(rules_iri, ref.name)
-    if ref.kind == "rules":
-        return _rules_res_iri(rules_iri, ref.name)
-    if ref.kind == "abox":
-        return _abox_res_iri(abox_iri, ref.name)
-    if ref.kind == "tbox":
-        return _tbox_res_iri(tbox_ns, ref.name)
-    raise ValueError(f"Unsupported Ref.kind: {ref.kind}")
-
-
-def _xsd_iri(datatype: str) -> str:
-    if datatype.startswith(("http://", "https://")):
-        return datatype
-    if datatype.startswith("xsd:"):
-        return f"http://www.w3.org/2001/XMLSchema#{datatype.replace('xsd:', '')}"
-    return f"http://www.w3.org/2001/XMLSchema#{datatype}"
 
 
 def _swrl_bool_atom(*, predicate_iri: str, arg1_iri: str, value: bool) -> str:
@@ -140,8 +105,6 @@ def rule_ir_to_swrl_xml(
     rules_iri: str,
     abox_iri: str,
     tbox_ns: str = DEFAULT_TBOX_NS,
-    export_actions: bool = False,
-    head_class_atoms_only: bool = True,
 ) -> str:
     if not ir.conditions:
         raise ValueError(
@@ -149,94 +112,42 @@ def rule_ir_to_swrl_xml(
             "Unconditional norms are fully declared in the ABox and do not need a SWRL rule. "
             "Call export_rules_to_owl() which filters these out automatically."
         )
+    if not ir.trigger_atoms:
+        raise ValueError(
+            f"Rule {ir.rid} has no trigger atoms — the gateway branch leads to no applicable norms. "
+            "Call export_rules_to_owl() which filters these out automatically."
+        )
 
     body_atoms: List[str] = []
-
     for c in ir.conditions:
         _validate_condition_ref(c.predicate, "predicate")
         _validate_condition_ref(c.subject, "subject")
-
         pred_iri = _resolve_ref(c.predicate, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
         subj_iri = _resolve_ref(c.subject, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-
         body_atoms.append(
-            _swrl_bool_atom(
-                predicate_iri=pred_iri,
-                arg1_iri=subj_iri,
-                value=c.value,
-            )
+            _swrl_bool_atom(predicate_iri=pred_iri, arg1_iri=subj_iri, value=c.value)
         )
 
     head_atoms: List[str] = []
 
-    if export_actions:
-        for a in ir.actions:
-            _validate_action_subject(a.subject)
-
-            if a.predicate is None:
-                raise ValueError(
-                    f"Action in rule {ir.rid} has no predicate. "
-                    "Either set Action.predicate=Ref('tbox', ...) or disable export_actions."
-                )
-
-            _validate_head_predicate(a.predicate, "Action")
-
-            pred_iri = _resolve_ref(a.predicate, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-            subj_iri = _resolve_ref(a.subject, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-
-            head_atoms.append(
-                _swrl_data_atom(
-                    predicate_iri=pred_iri,
-                    subject_iri=subj_iri,
-                    value=a.name,
-                    datatype=a.datatype,
-                )
-            )
-
-    # ClassAtoms first — assert rdf:type of the norm individual
-    for ca in ir.class_atoms:
-        if ca.class_ref.kind != "tbox":
-            raise ValueError(f"ClassAtom class_ref must be Ref(kind='tbox', ...), got {ca.class_ref}")
-        if ca.subject.kind not in {"abox", "var"}:
-            raise ValueError(f"ClassAtom subject must be Ref(kind='abox'|'var', ...), got {ca.subject}")
-
-        class_iri = _resolve_ref(ca.class_ref, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-        subj_iri  = _resolve_ref(ca.subject,   rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-
+    # Head: norma:activatesNorm(TriggerEvent, Norm) — conditionally derived by SWRL,
+    # keeping the head non-redundant with the ABox (which declares TriggerEvent shells
+    # with hasOutcome but without activatesNorm).
+    activates_norm_iri = f"{tbox_ns}activatesNorm"
+    for ta in ir.trigger_atoms:
+        if ta.te_ref.kind != "abox":
+            raise ValueError(f"TriggerAtom te_ref must be Ref(kind='abox', ...), got {ta.te_ref}")
+        if ta.norm_ref.kind != "abox":
+            raise ValueError(f"TriggerAtom norm_ref must be Ref(kind='abox', ...), got {ta.norm_ref}")
+        te_iri   = _resolve_ref(ta.te_ref,   rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
+        norm_iri = _resolve_ref(ta.norm_ref, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
         head_atoms.append(
-            _swrl_class_atom(class_iri=class_iri, subject_iri=subj_iri)
+            _swrl_object_atom(
+                predicate_iri=activates_norm_iri,
+                subject_iri=te_iri,
+                object_iri=norm_iri,
+            )
         )
-
-    if not head_class_atoms_only:
-        for rel in ir.relations:
-            _validate_head_predicate(rel.predicate, "RelationAtom")
-
-            pred_iri = _resolve_ref(rel.predicate, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-            subj_iri = _resolve_ref(rel.subject, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-            obj_iri = _resolve_ref(rel.object, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-
-            head_atoms.append(
-                _swrl_object_atom(
-                    predicate_iri=pred_iri,
-                    subject_iri=subj_iri,
-                    object_iri=obj_iri,
-                )
-            )
-
-        for dat in ir.data_atoms:
-            _validate_head_predicate(dat.predicate, "DataAtom")
-
-            pred_iri = _resolve_ref(dat.predicate, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-            subj_iri = _resolve_ref(dat.subject, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
-
-            head_atoms.append(
-                _swrl_data_atom(
-                    predicate_iri=pred_iri,
-                    subject_iri=subj_iri,
-                    value=str(dat.value),
-                    datatype=dat.datatype,
-                )
-            )
 
     body_list = _atom_list_xml(body_atoms, indent=6)
     head_list = _atom_list_xml(head_atoms, indent=6)
@@ -273,39 +184,33 @@ def export_rules_to_owl(
     abox_iri: str = "https://w3id.org/norma-abox/eu-ai-act",
     tbox_ns: str = DEFAULT_TBOX_NS,
     imports_iri: str | None = None,
-    export_actions: bool = False,
-    head_class_atoms_only: bool = True,
 ) -> None:
-    # Unconditional norms (no gateway conditions) are fully declared in the ABox
-    # and do not need a SWRL rule.  Skip them so the export never crashes on
-    # linear BPMN paths that have no exclusive gateways.
-    conditional_rules = [r for r in rules if r.conditions]
-    skipped = len(rules) - len(conditional_rules)
+    # Unconditional rules (no gateway conditions) are fully declared in the ABox.
+    # Rules with no trigger_atoms correspond to gateway branches that lead to no
+    # applicable norms — both are vacuous as SWRL rules and are skipped.
+    exportable = [r for r in rules if r.conditions and r.trigger_atoms]
+    skipped = len(rules) - len(exportable)
     if skipped:
-        print(f"[norma] SWRL export: skipped {skipped} unconditional rule(s) — already in ABox.")
-    rules = conditional_rules
+        print(
+            f"[norma] SWRL export: skipped {skipped} rule(s) "
+            "(unconditional or leading to no applicable norms — already in ABox)."
+        )
+    rules = exportable
 
     vars_, body_data_preds = _collect_vars_and_predicates(rules)
 
     data_props_xml = "\n".join(
-        f'  <owl:DatatypeProperty rdf:about="{escape(_rules_res_iri(rules_iri, p))}"/>'
+        f'  <owl:DatatypeProperty rdf:about="{escape(f"{rules_iri}#{p}")}"/>'
         for p in sorted(body_data_preds)
     )
 
     vars_xml = "\n".join(
-        f'  <swrl:Variable rdf:about="{escape(_rules_var_iri(rules_iri, v))}"/>'
+        f'  <swrl:Variable rdf:about="{escape(f"{rules_iri}#var_{v}")}"/>'
         for v in sorted(vars_)
     )
 
     rules_xml = "\n\n".join(
-        rule_ir_to_swrl_xml(
-            r,
-            rules_iri=rules_iri,
-            abox_iri=abox_iri,
-            tbox_ns=tbox_ns,
-            export_actions=export_actions,
-            head_class_atoms_only=head_class_atoms_only,
-        )
+        rule_ir_to_swrl_xml(r, rules_iri=rules_iri, abox_iri=abox_iri, tbox_ns=tbox_ns)
         for r in rules
     )
 

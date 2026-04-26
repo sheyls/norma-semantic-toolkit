@@ -139,14 +139,16 @@ def build_kg(
     normalize_labels: bool = True,
     override_file: str | None = None,
     threshold:     float = 0.82,
-) -> list[dict] | None:
+) -> tuple[list[dict] | None, list]:
     """
-    Step 1+2: Parse BPMNs → normalize → generate ABox Turtle.
-    Returns the normalized records (for further processing).
+    Step 1–3: Parse BPMNs → normalize → extract rules → generate ABox Turtle.
+    Returns (normalized_records, rules_ir).  Rules are extracted here so the
+    ABox can include TriggerEvent shells (hasTrigger + hasOutcome) without
+    activatesNorm, which is conditionally derived by the SWRL rules.
     """
     if not _KG_AVAILABLE:
         print("[!] kg_builder not available — skipping KG build.")
-        return None
+        return None, []
 
     print(f"\n── KG Build: {pack_name} ──────────────────────────────────────────")
     print(f"   BPMN source: {bpmn_dir}")
@@ -172,25 +174,38 @@ def build_kg(
     json_path.write_text(json.dumps(records, indent=2, ensure_ascii=False))
     print(f"[✓] JSON:  {json_path}")
 
-    # Step 4: Write ABox Turtle
+    # Step 4: Extract rules now so ABox TriggerEvent shells can reference them.
+    all_rules: list = []
+    if _RULES_AVAILABLE:
+        for bpmn_file in sorted(bpmn_dir.glob("*.bpmn")):
+            xml = bpmn_file.read_text(encoding="utf-8")
+            nodes, edges, _, gw_index, task_props = parse_bpmn_to_reduced_graph(xml)
+            task_props = _apply_normalized_labels_to_task_props(task_props, records)
+            _, rules_ir, _ = enumerate_paths_and_build_ir(
+                nodes=nodes, edges=edges,
+                gateway_outgoing_index=gw_index, task_props=task_props,
+            )
+            all_rules.extend(rules_ir)
+
+    # Step 5: Write ABox Turtle — pass rules_ir so TriggerEvent shells are generated.
     abox_iri  = _abox_iri(pack_name)
-    turtle    = to_turtle(records, str(bpmn_dir), abox_iri)
+    turtle    = to_turtle(records, str(bpmn_dir), abox_iri, rules_ir=all_rules)
     ttl_path  = out_dir / f"{pack_name}.abox.ttl"
     ttl_path.write_text(turtle, encoding="utf-8")
     print(f"[✓] ABox:  {ttl_path}")
 
-    return records
+    return records, all_rules
 
 
 def build_rules(
     bpmn_dir: Path,
     out_dir: Path,
     pack_name: str,
+    prebuilt_rules: list | None = None,
     normalized_records: list[dict] | None = None,
 ) -> None:
     """
-    Step 3: Run DFS rule extraction on every BPMN file in bpmn_dir and write:
-      - <pack_name>.swrl.owl      (SWRL/OWL, imports the ABox)
+    Step 4: Write the SWRL/OWL file from pre-extracted rules (or re-extract if needed).
     """
     if not _RULES_AVAILABLE:
         print("[!] norma.rules not available — skipping rule extraction.")
@@ -198,38 +213,35 @@ def build_rules(
 
     print(f"\n── Rule Extraction: {pack_name} ──────────────────────────────────────")
 
-    all_rules:       list = []
-    all_superiority: list = []
-
-    for bpmn_file in sorted(bpmn_dir.glob("*.bpmn")):
-        xml = bpmn_file.read_text(encoding="utf-8")
-        nodes, edges, _, gw_index, task_props = parse_bpmn_to_reduced_graph(xml)
-        task_props = _apply_normalized_labels_to_task_props(task_props, normalized_records)
-
-        _, rules_ir, superiority = enumerate_paths_and_build_ir(
-            nodes=nodes,
-            edges=edges,
-            gateway_outgoing_index=gw_index,
-            task_props=task_props,
-        )
-        all_rules.extend(rules_ir)
-        all_superiority.extend(superiority)
-        print(f"   {bpmn_file.name}: {len(rules_ir)} rule(s)")
+    if prebuilt_rules is not None:
+        all_rules = prebuilt_rules
+        print(f"   (using pre-extracted rules — {len(all_rules)} total)")
+    else:
+        all_rules = []
+        for bpmn_file in sorted(bpmn_dir.glob("*.bpmn")):
+            xml = bpmn_file.read_text(encoding="utf-8")
+            nodes, edges, _, gw_index, task_props = parse_bpmn_to_reduced_graph(xml)
+            task_props = _apply_normalized_labels_to_task_props(task_props, normalized_records)
+            _, rules_ir, _ = enumerate_paths_and_build_ir(
+                nodes=nodes, edges=edges,
+                gateway_outgoing_index=gw_index, task_props=task_props,
+            )
+            all_rules.extend(rules_ir)
+            print(f"   {bpmn_file.name}: {len(rules_ir)} rule(s)")
 
     if not all_rules:
         print("[!] No rules extracted — check that BPMN tasks carry deontic annotations.")
         return
 
-    # SWRL — ontology IRI is <abox_iri>/rules; imports the ABox so it gets TBox too
     abox_iri  = _abox_iri(pack_name)
     swrl_iri  = f"{abox_iri}/rules"
     swrl_path = out_dir / f"{pack_name}.swrl.owl"
     export_rules_to_owl(
-    all_rules,
-    out_file=str(swrl_path),
-    rules_iri=swrl_iri,
-    abox_iri=abox_iri,
-    imports_iri=abox_iri,
+        all_rules,
+        out_file=str(swrl_path),
+        rules_iri=swrl_iri,
+        abox_iri=abox_iri,
+        imports_iri=abox_iri,
     )
     print(f"[✓] SWRL:        {swrl_path}")
 
@@ -273,9 +285,11 @@ def build_organization(
         out_dir.mkdir(exist_ok=True)
         bpmn_dir, _ = _resolve_pack(internal_dir)
         if (bpmn_dir).glob("*.bpmn"):
-            build_kg(bpmn_dir, out_dir, f"{org_dir.name}_internal",
-                     normalize_labels=normalize_labels,
-                     override_file=override_file)
+            records, prebuilt = build_kg(bpmn_dir, out_dir, f"{org_dir.name}_internal",
+                                         normalize_labels=normalize_labels,
+                                         override_file=override_file)
+            build_rules(bpmn_dir, out_dir, f"{org_dir.name}_internal",
+                        prebuilt_rules=prebuilt, normalized_records=records)
 
 
 # =============================================================================
@@ -355,14 +369,14 @@ def main():
 
     # Full build
     print(f"\n╔══ NORMA Build: {pack_name} {'═' * max(0, 50 - len(pack_name))}╗")
-    records = build_kg(
+    records, prebuilt_rules = build_kg(
         bpmn_dir, out_dir, pack_name,
         normalize_labels=normalize_labels,
         override_file=args.override,
         threshold=args.threshold,
     )
 
-    build_rules(bpmn_dir, out_dir, pack_name, normalized_records=records)
+    build_rules(bpmn_dir, out_dir, pack_name, prebuilt_rules=prebuilt_rules, normalized_records=records)
 
     print(f"\n╚══ Done: {pack_name} {'═' * max(0, 53 - len(pack_name))}╝\n")
 

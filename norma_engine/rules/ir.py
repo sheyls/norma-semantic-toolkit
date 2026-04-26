@@ -21,9 +21,10 @@ class Condition:
     Example:
       rules:Generation_of_synthetic_content(?x, true)
     """
-    predicate: Ref   # must usually be Ref("rules", ...)
-    subject: Ref     # must usually be Ref("var", ...)
+    predicate: Ref        # must usually be Ref("rules", ...)
+    subject: Ref          # must usually be Ref("var", ...)
     value: bool
+    condition_local: str = ""  # ABox LegalCondition local name (slug-based), e.g. "Condition_IsHighRisk"
 
 
 @dataclass(frozen=True)
@@ -53,6 +54,22 @@ class ClassAtom:
     """
     class_ref: Ref   # must be Ref("tbox", ...)
     subject: Ref     # must be Ref("abox", ...) or Ref("var", ...)
+
+
+@dataclass(frozen=True)
+class TriggerAtom:
+    """
+    SWRL head activation atom.
+
+    Asserts norma:activatesNorm(triggerEvent, norm) so that a SWRL reasoner
+    derives the activation link conditionally, keeping it non-redundant with
+    the structural ABox (which declares TriggerEvent shells without activatesNorm).
+
+    Example:
+      norma:activatesNorm(:TriggerEvent_Condition_IsHighRisk_True_OBL_1, :OBL_1)
+    """
+    te_ref: Ref    # Ref("abox", "TriggerEvent_{condition_local}_{True|False}_{norm_local}")
+    norm_ref: Ref  # Ref("abox", norm_local)
 
 
 @dataclass(frozen=True)
@@ -89,5 +106,6 @@ class RuleIR:
     actions: Tuple[Action, ...] = ()
     relations: Tuple[RelationAtom, ...] = ()
     data_atoms: Tuple[DataAtom, ...] = ()
-    class_atoms: Tuple[ClassAtom, ...] = ()  # norm rdf:type assertions for SWRL head
-    source: str = ""                          # source BPMN filename
+    class_atoms: Tuple[ClassAtom, ...] = ()    # rdf:type assertions — used by SHACL exporter
+    trigger_atoms: Tuple[TriggerAtom, ...] = ()  # norma:activatesNorm assertions — used by SWRL exporter
+    source: str = ""                             # source BPMN filename

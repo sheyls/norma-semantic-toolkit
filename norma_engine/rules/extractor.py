@@ -12,10 +12,11 @@ from norma_engine.rules.ir import (
     Condition,
     Action,
     ClassAtom,
+    TriggerAtom,
     RelationAtom,
     DataAtom,
 )
-from norma_engine.utils import to_symbol
+from norma_engine.utils import to_symbol, slug
 
 
 TaskProps = Dict[str, Dict[str, str]]  # task_id -> {prop_name: prop_value}
@@ -528,26 +529,30 @@ def build_rule_ir_from_path(
             value = _condition_truth_value(e, e.src, gw_props, gateway_outgoing_index)
 
             if gw_props.get("gw_conditionStatement"):
-                statement  = to_symbol(gw_props["gw_conditionStatement"])
+                cond_text  = gw_props["gw_conditionStatement"]
+                statement  = to_symbol(cond_text)
+                cond_local = f"Condition_{slug(cond_text)}"
                 if value is not None:
                     conds.append(
                         Condition(
                             predicate=rules(statement),
                             subject=v("x"),
                             value=value,
+                            condition_local=cond_local,
                         )
                     )
 
             elif value is not None:
-                # Use the full gateway name via to_symbol for consistent predicate naming
-                # (same as the gw_conditionStatement path above, avoids duplicate nodes)
-                gw_name   = nodes[e.src].name or ""
-                statement = to_symbol(gw_name) if gw_name else "unnamed"
+                gw_name    = nodes[e.src].name or ""
+                cond_text  = gw_name or e.src
+                statement  = to_symbol(gw_name) if gw_name else "unnamed"
+                cond_local = f"Condition_{slug(cond_text)}"
                 conds.append(
                     Condition(
                         predicate=rules(statement),
                         subject=v("x"),
                         value=value,
+                        condition_local=cond_local,
                     )
                 )
 
@@ -627,6 +632,24 @@ def build_rule_ir_from_path(
             seen_ca.add(key)
             out_ca.append(ca)
 
+    # TriggerAtoms: SWRL head uses norma:activatesNorm(TriggerEvent, norm).
+    # The last condition in the conjunction is the decisive gateway; its TriggerEvent
+    # is the one whose activatesNorm link is conditionally derived by SWRL.
+    out_ta: List[TriggerAtom] = []
+    last_cond = out_c[-1] if out_c else None
+    if last_cond and last_cond.condition_local:
+        outcome_label = "True" if last_cond.value else "False"
+        seen_ta: set = set()
+        for ca in out_ca:
+            norm_local = slug(ca.subject.name)
+            te_local = f"TriggerEvent_{last_cond.condition_local}_{outcome_label}_{norm_local}"
+            if te_local not in seen_ta:
+                seen_ta.add(te_local)
+                out_ta.append(TriggerAtom(
+                    te_ref=Ref("abox", te_local),
+                    norm_ref=ca.subject,
+                ))
+
     return RuleIR(
         rid=rid,
         conditions=tuple(out_c),
@@ -634,6 +657,7 @@ def build_rule_ir_from_path(
         relations=tuple(out_r),
         data_atoms=tuple(out_d),
         class_atoms=tuple(out_ca),
+        trigger_atoms=tuple(out_ta),
     )
 
 
