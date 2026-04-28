@@ -209,9 +209,10 @@ Each enumerated dimension is modelled as a SKOS scheme with declared `owl:NamedI
 |---|---|
 | **ELI** (European Legislation Identifier) | `LegalSource ⊑ eli:LegalResource`; `eli:jurisdiction` with `eli:AdministrativeArea` for jurisdiction |
 | **PROV-O** | `AnnotationActivity ⊑ prov:Activity`; `NormativeContent ⊑ prov:Entity`; `AnnotatorAgent ⊑ prov:Agent` |
-| **FOAF** | `LegalAgent ⊑ foaf:Agent`; subclasses align with `foaf:Person`, `foaf:Organization` |
+| **FOAF** | Imported for agent-level interoperability; `foaf:Person`, `foaf:Organization`, `foaf:Group` available for instance-level typing of `LegalAgent` individuals (not asserted at the TBox level) |
 | **SKOS** | All controlled vocabularies use SKOS `ConceptScheme` / `Concept` structure |
 | **BIBO** | `bibo:doi`, `bibo:status` for ontology-level bibliographic metadata |
+| **LKIF-Core** | Informative alignments via `skos:closeMatch`: `RegulativeNorm` ↔ `lkif:Norm`; `Obligation`, `Prohibition`, `Permission` ↔ LKIF deontic counterparts; `LegalAgent` ↔ `lkif-la:Legal_Person`; `LegalAction` ↔ `lkif-la:Legal_Action`; `SoftLaw` ↔ `lkif:Soft_Law`; `rdfs:seeAlso` for `ConstitutiveRule`, `LegalSource` |
 
 ---
 
@@ -384,7 +385,8 @@ The ABox is a valid OWL 2 DL ontology that can be loaded directly into Protégé
 | **BPMN 2.0** | Annotation surface; processed via standard XML parsing |
 | **ELI** | Legal source typing and jurisdiction; aligns with European linked-data legal infrastructure |
 | **PROV-O** | Annotation provenance; sub-properties of `prov:wasGeneratedBy`, `prov:wasAssociatedWith`, `prov:wasAttributedTo` |
-| **FOAF** | Agent classification; `LegalAgent ⊑ foaf:Agent` |
+| **FOAF** | Agent-level interoperability; imported at TBox level; `foaf:Person`, `foaf:Organization`, `foaf:Group` available for instance-level typing |
+| **LKIF-Core** | Informative cross-vocabulary alignment via `skos:closeMatch` and `rdfs:seeAlso`; no formal import |
 | **SKOS** | Extensible controlled vocabularies; each dimension is an open `ConceptScheme` |
 | **Camunda 8 / Zeebe** | Annotation tooling; element template distributable via Camunda marketplace |
 
