@@ -4,12 +4,15 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix eli: <http://data.europa.eu/eli/ontology#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix lkif: <http://www.estrellaproject.org/lkif-core/norm.owl#> .
+@prefix lkif-la: <http://www.estrellaproject.org/lkif-core/legal-action.owl#> .
 @prefix norma: <https://w3id.org/def/norma-o#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix schema: <https://schema.org/> .
 @prefix vann: <http://purl.org/vocab/vann/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
@@ -21,16 +24,24 @@
     rdfs:label "NORMA ontology"@en ;
     dcterms:alternative "NORMA Ontology"@en ;
     dcterms:bibliographicCitation "Leyva-Sánchez, S. et al. (2026). NORMA-O: The NORMA Ontology for Legal Norm Annotations (Version 1.0) [Ontology]. https://w3id.org/def/norma-o/1.0"@en ;
-    dcterms:contributor [ a foaf:Person ;
-            foaf:name "NORMA project contributors" ] ;
-    dcterms:created "2026-04-15"^^xsd:date ;
-    dcterms:creator [ a foaf:Person ;
-            foaf:name "Sheyla Leyva-Sánchez" ] ;
-    dcterms:description "The NORMA ontology is a formal semantic model for representing machine-readable legal norm annotations as reusable knowledge graph resources. It distinguishes between regulative norms and constitutive rules; represents legal conditions, their evaluated outcomes, and branch-sensitive activation through a TriggerEvent n-ary relation pattern; and captures the legal agents, actions, objects, sources, provenance metadata, lifecycle status, review status, extraction method, and controlled classification values needed for traceable and interoperable publication. The ontology aligns with PROV-O for provenance, ELI for legal resource modelling, FOAF for agent-oriented metadata, and SKOS for controlled vocabularies."@en ;
+    dcterms:contributor [
+        a foaf:Person ;
+        foaf:name "María Poveda-Villalón"
+    ] ;
+
+    dcterms:contributor [
+        a foaf:Person ;
+        foaf:name "Víctor Rodríguez-Doncel"
+    ] ;
+        dcterms:creator [
+        a foaf:Person ;
+        foaf:name "Sheyla Leyva-Sánchez"
+    ] ;
+    dcterms:description "The NORMA ontology is a formal semantic model for representing machine-readable legal norm annotations as reusable knowledge graph resources. It distinguishes between regulative norms and constitutive rules; represents legal conditions, their evaluated outcomes, and branch-sensitive activation through a TriggerEvent n-ary relation pattern; and captures the legal agents, actions, objects, sources, provenance metadata, lifecycle status, review status, extraction method, and controlled classification values needed for traceable and interoperable publication. The ontology aligns with PROV-O for provenance, ELI for legal resource modelling, FOAF for agent-oriented metadata, and SKOS for controlled vocabularies, and provides informative alignments with LKIF-Core via SKOS mapping properties."@en ;
     dcterms:issued "2026-04-17"^^xsd:date ;
     dcterms:language <http://id.loc.gov/vocabulary/iso639-1/en> ;
     dcterms:license <https://creativecommons.org/licenses/by-nc/4.0/> ;
-    dcterms:modified "2026-04-26"^^xsd:date ;
+    dcterms:modified "2026-04-28"^^xsd:date ;
     dcterms:publisher [ a foaf:Organization ;
             foaf:name "NORMA project" ] ;
     dcterms:source <https://github.com/sheyls/norma-semantic-toolkit> ;
@@ -40,13 +51,15 @@
     vann:preferredNamespacePrefix "norma" ;
     vann:preferredNamespaceUri "https://w3id.org/def/norma-o#" ;
     rdfs:comment "Formal ontology for representing machine-readable legal norm annotations, their legal context, conditional applicability, provenance, source traceability, lifecycle status, and controlled classification values in the NORMA toolkit."@en ;
-    rdfs:seeAlso <https://www.w3.org/TR/swbp-n-aryRelations/> ;
+    rdfs:seeAlso <http://www.estrellaproject.org/lkif-core/norm.owl>,
+        <https://www.w3.org/TR/swbp-n-aryRelations/> ;
     owl:imports <http://data.europa.eu/eli/ontology>,
         <http://www.w3.org/ns/prov-o>,
         foaf: ;
     owl:versionIRI <https://w3id.org/def/norma-o/1.0> ;
     owl:versionInfo "1.0" ;
-    foaf:logo <https://w3id.org/def/norma-o/assets/norma-o.png> .
+    foaf:logo <https://w3id.org/def/norma-o/assets/norma-o.png> ;
+    schema:includedInDataCatalog <https://zenodo.org/communities/norma> .
 
 
 # =============================================================================
@@ -68,34 +81,41 @@ norma:RegulativeNorm a owl:Class ;
     rdfs:comment "A normative content item that regulates conduct by prescribing, prohibiting, permitting, or recommending a legal action."@en ;
     rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
     rdfs:subClassOf norma:NormativeContent ;
-    owl:disjointWith norma:ConstitutiveRule .
+    owl:disjointWith norma:ConstitutiveRule ;
+    skos:closeMatch lkif:Norm ;
+    skos:scopeNote "Conceptually close to lkif:Norm in LKIF-Core. SKOS closeMatch is used rather than rdfs:subClassOf because lkif:Norm is equivalentClass to a restriction on lkif:qualifies (a property NORMA does not use) and because LKIF axiomatises the deontic operators as interdefinable (lkif:Obligation owl:equivalentClass lkif:Prohibition), which would conflict with NORMA's pairwise disjointness of regulative subclasses if formal subsumption were asserted."@en .
 
 norma:ConstitutiveRule a owl:Class ;
     rdfs:label "Constitutive Rule"@en ;
     rdfs:comment "A normative content item that defines, classifies, or constitutes a legal concept, status, or institutional fact."@en ;
     rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
-    rdfs:subClassOf norma:NormativeContent .
+    rdfs:seeAlso <http://www.estrellaproject.org/lkif-core/lkif-top.owl#counts_as> ;
+    rdfs:subClassOf norma:NormativeContent ;
+    skos:scopeNote "LKIF-Core does not reify constitutive rules as a class; it expresses constitutive force through the lkif:counts_as property on Subjective_Entity (Searle-style institutional facts). The reference is informative only — no formal alignment is asserted because a class cannot be subsumed by a property."@en .
 
 norma:Obligation a owl:Class ;
     rdfs:label "Obligation"@en ;
     rdfs:comment "A regulative norm stating that a legal action is required."@en ;
     rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
     rdfs:subClassOf norma:RegulativeNorm ;
-    skos:notation "OBL" .
+    skos:notation "OBL" ;
+    skos:closeMatch lkif:Obligation .
 
 norma:Prohibition a owl:Class ;
     rdfs:label "Prohibition"@en ;
     rdfs:comment "A regulative norm stating that a legal action is forbidden."@en ;
     rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
     rdfs:subClassOf norma:RegulativeNorm ;
-    skos:notation "PRH" .
+    skos:notation "PRH" ;
+    skos:closeMatch lkif:Prohibition .
 
 norma:Permission a owl:Class ;
     rdfs:label "Permission"@en ;
     rdfs:comment "A regulative norm stating that a legal action is allowed."@en ;
     rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
     rdfs:subClassOf norma:RegulativeNorm ;
-    skos:notation "PER" .
+    skos:notation "PER" ;
+    skos:closeMatch lkif:Permission .
 
 norma:Recommendation a owl:Class ;
     rdfs:label "Recommendation"@en ;
@@ -132,7 +152,8 @@ norma:TriggerEvent a owl:Class ;
 norma:LegalAction a owl:Class ;
     rdfs:label "Legal Action"@en ;
     rdfs:comment "A normalized legal action that is prescribed, prohibited, permitted, or recommended by a regulative norm. NORMA pipeline consumers may work with the literal shortcut `norma:actionText` for low-ceremony use and mint LegalAction individuals only when the knowledge graph needs action-level reuse across norms."@en ;
-    rdfs:isDefinedBy <https://w3id.org/def/norma-o> .
+    rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
+    skos:closeMatch lkif-la:Legal_Action .
 
 norma:LegalObject a owl:Class ;
     rdfs:label "Legal Object"@en ;
@@ -141,9 +162,10 @@ norma:LegalObject a owl:Class ;
 
 norma:LegalAgent a owl:Class ;
     rdfs:label "Legal Agent"@en ;
-    rdfs:comment "An entity that bears the legally relevant role of subject of a regulative norm: the party that is obliged, prohibited, permitted, or recommended to perform a legal action. Instances should be further typed using foaf:Person, foaf:Organization, or foaf:Group to express whether the agent is a natural person, a legal entity (e.g. an AI provider, deployer, or operator), or a collective."@en ;
+    rdfs:comment "An entity that bears the legally relevant role of subject of a regulative norm: the party that is obliged, prohibited, permitted, or recommended to perform a legal action."@en ;
     rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
-    rdfs:subClassOf foaf:Agent .
+    skos:closeMatch lkif-la:Legal_Person ;
+    skos:scopeNote "Conceptually close to lkif-la:Legal_Person (Natural_Person, Private_Legal_Person, Public_Body). skos:closeMatch is used rather than rdfs:subClassOf because lkif-la:Legal_Person also covers Legislative_Body — entities that utter norms rather than bear them — which falls outside NORMA's LegalAgent role, and because lkif-core/legal-action.owl is not imported. foaf:Agent is intentionally not asserted as a TBox parent because it is broader than legal personhood (it includes software agents and other non-legal entities); FOAF classes remain available for instance-level annotation."@en .
 
 norma:AnnotatorAgent a owl:Class ;
     rdfs:label "Annotator Agent"@en ;
@@ -155,7 +177,9 @@ norma:LegalSource a owl:Class ;
     rdfs:label "Legal Source"@en ;
     rdfs:comment "A legal resource (in the ELI sense: a work-level identity) from which normative content is extracted, cited, or traced."@en ;
     rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
-    rdfs:subClassOf eli:LegalResource .
+    rdfs:seeAlso lkif:Legal_Document ;
+    rdfs:subClassOf eli:LegalResource ;
+    skos:scopeNote "Conceptually related to lkif:Legal_Document. NORMA aligns formally to eli:LegalResource (the maintained W3C-adjacent legal-resource standard) rather than to lkif:Legal_Document, because lkif:Legal_Document is itself an expression:Medium subclass with restrictions on bears/utterer that are incompatible with NORMA's source-as-reference pattern. The LKIF reference is informative only."@en .
 
 norma:LegalSourceExpression a owl:Class ;
     rdfs:label "Legal Source Expression"@en ;
@@ -856,6 +880,7 @@ norma:SoftLaw a owl:NamedIndividual,
         norma:BindingForce ;
     rdfs:label "Soft Law"@en ;
     rdfs:comment "Binding force category for non-binding guidance, recommendations, codes of conduct, or policy instruments."@en ;
+    skos:closeMatch lkif:Soft_Law ;
     skos:inScheme norma:BindingForceScheme ;
     skos:notation "SOFT_LAW" ;
     skos:prefLabel "Soft Law"@en ;
