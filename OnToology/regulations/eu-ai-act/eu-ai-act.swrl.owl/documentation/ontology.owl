@@ -26,31 +26,31 @@
     
 
 
-    <!-- https://w3id.org/norma-ontology#actsOn -->
+    <!-- https://w3id.org/norma-o#actsOn -->
 
 
-    <owl:ObjectProperty rdf:about="https://w3id.org/norma-ontology#actsOn"/>
+    <owl:ObjectProperty rdf:about="https://w3id.org/norma-o#actsOn"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasBindingForce -->
+    <!-- https://w3id.org/norma-o#hasBindingForce -->
 
 
-    <owl:ObjectProperty rdf:about="https://w3id.org/norma-ontology#hasBindingForce"/>
+    <owl:ObjectProperty rdf:about="https://w3id.org/norma-o#hasBindingForce"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasRiskLevel -->
+    <!-- https://w3id.org/norma-o#hasRiskLevel -->
 
 
-    <owl:ObjectProperty rdf:about="https://w3id.org/norma-ontology#hasRiskLevel"/>
+    <owl:ObjectProperty rdf:about="https://w3id.org/norma-o#hasRiskLevel"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#performsAction -->
+    <!-- https://w3id.org/norma-o#performsAction -->
 
 
-    <owl:ObjectProperty rdf:about="https://w3id.org/norma-ontology#performsAction"/>
+    <owl:ObjectProperty rdf:about="https://w3id.org/norma-o#performsAction"/>
     
 
 
@@ -73,38 +73,38 @@
     
 
 
-    <!-- https://w3id.org/norma-ontology#deonticId -->
+    <!-- https://w3id.org/norma-o#deonticId -->
 
 
-    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-ontology#deonticId"/>
+    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-o#deonticId"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#fromArticle -->
+    <!-- https://w3id.org/norma-o#fromArticle -->
 
 
-    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-ontology#fromArticle"/>
+    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-o#fromArticle"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#fromParagraph -->
+    <!-- https://w3id.org/norma-o#fromParagraph -->
 
 
-    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-ontology#fromParagraph"/>
+    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-o#fromParagraph"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#fromRegulation -->
+    <!-- https://w3id.org/norma-o#fromRegulation -->
 
 
-    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-ontology#fromRegulation"/>
+    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-o#fromRegulation"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#sourceURI -->
+    <!-- https://w3id.org/norma-o#sourceURI -->
 
 
-    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-ontology#sourceURI"/>
+    <owl:DatatypeProperty rdf:about="https://w3id.org/norma-o#sourceURI"/>
     
 
 
@@ -148,31 +148,31 @@
     
 
 
-    <!-- https://w3id.org/norma-ontology#HardLaw -->
+    <!-- https://w3id.org/norma-o#HardLaw -->
 
 
-    <owl:NamedIndividual rdf:about="https://w3id.org/norma-ontology#HardLaw"/>
+    <owl:NamedIndividual rdf:about="https://w3id.org/norma-o#HardLaw"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#HighRisk -->
+    <!-- https://w3id.org/norma-o#HighRisk -->
 
 
-    <owl:NamedIndividual rdf:about="https://w3id.org/norma-ontology#HighRisk"/>
+    <owl:NamedIndividual rdf:about="https://w3id.org/norma-o#HighRisk"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#LowRisk -->
+    <!-- https://w3id.org/norma-o#LowRisk -->
 
 
-    <owl:NamedIndividual rdf:about="https://w3id.org/norma-ontology#LowRisk"/>
+    <owl:NamedIndividual rdf:about="https://w3id.org/norma-o#LowRisk"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#SoftLaw -->
+    <!-- https://w3id.org/norma-o#SoftLaw -->
 
 
-    <owl:NamedIndividual rdf:about="https://w3id.org/norma-ontology#SoftLaw"/>
+    <owl:NamedIndividual rdf:about="https://w3id.org/norma-o#SoftLaw"/>
     
 
 
@@ -210,7 +210,7 @@
                 <rdf:first>
                     <rdf:Description>
                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#performsAction"/>
+                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#performsAction"/>
                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner"/>
                         <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_1"/>
                     </rdf:Description>
@@ -221,7 +221,7 @@
                         <rdf:first>
                             <rdf:Description>
                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#actsOn"/>
+                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#actsOn"/>
                                 <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_1"/>
                                 <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Object_generate_content"/>
                             </rdf:Description>
@@ -232,9 +232,9 @@
                                 <rdf:first>
                                     <rdf:Description>
                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#hasBindingForce"/>
+                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#hasBindingForce"/>
                                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_1"/>
-                                        <swrl:argument2 rdf:resource="https://w3id.org/norma-ontology#SoftLaw"/>
+                                        <swrl:argument2 rdf:resource="https://w3id.org/norma-o#SoftLaw"/>
                                     </rdf:Description>
                                 </rdf:first>
                                 <rdf:rest>
@@ -243,9 +243,9 @@
                                         <rdf:first>
                                             <rdf:Description>
                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#hasRiskLevel"/>
+                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#hasRiskLevel"/>
                                                 <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_1"/>
-                                                <swrl:argument2 rdf:resource="https://w3id.org/norma-ontology#LowRisk"/>
+                                                <swrl:argument2 rdf:resource="https://w3id.org/norma-o#LowRisk"/>
                                             </rdf:Description>
                                         </rdf:first>
                                         <rdf:rest>
@@ -254,7 +254,7 @@
                                                 <rdf:first>
                                                     <rdf:Description>
                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#deonticId"/>
+                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#deonticId"/>
                                                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_1"/>
                                                         <swrl:argument2>REC_1</swrl:argument2>
                                                     </rdf:Description>
@@ -265,7 +265,7 @@
                                                         <rdf:first>
                                                             <rdf:Description>
                                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#fromRegulation"/>
+                                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#fromRegulation"/>
                                                                 <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_1"/>
                                                                 <swrl:argument2>EU AI Act</swrl:argument2>
                                                             </rdf:Description>
@@ -276,7 +276,7 @@
                                                                 <rdf:first>
                                                                     <rdf:Description>
                                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#fromArticle"/>
+                                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#fromArticle"/>
                                                                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_1"/>
                                                                         <swrl:argument2>5</swrl:argument2>
                                                                     </rdf:Description>
@@ -287,7 +287,7 @@
                                                                         <rdf:first>
                                                                             <rdf:Description>
                                                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#fromParagraph"/>
+                                                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#fromParagraph"/>
                                                                                 <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_1"/>
                                                                                 <swrl:argument2>2</swrl:argument2>
                                                                             </rdf:Description>
@@ -298,7 +298,7 @@
                                                                                 <rdf:first>
                                                                                     <rdf:Description>
                                                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#sourceURI"/>
+                                                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#sourceURI"/>
                                                                                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_1"/>
                                                                                         <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">hhtps://...</swrl:argument2>
                                                                                     </rdf:Description>
@@ -345,7 +345,7 @@
                 <rdf:first>
                     <rdf:Description>
                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#performsAction"/>
+                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#performsAction"/>
                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner"/>
                         <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_1"/>
                     </rdf:Description>
@@ -356,7 +356,7 @@
                         <rdf:first>
                             <rdf:Description>
                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#actsOn"/>
+                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#actsOn"/>
                                 <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_1"/>
                                 <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Object_generate_content"/>
                             </rdf:Description>
@@ -367,9 +367,9 @@
                                 <rdf:first>
                                     <rdf:Description>
                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#hasBindingForce"/>
+                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#hasBindingForce"/>
                                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_1"/>
-                                        <swrl:argument2 rdf:resource="https://w3id.org/norma-ontology#HardLaw"/>
+                                        <swrl:argument2 rdf:resource="https://w3id.org/norma-o#HardLaw"/>
                                     </rdf:Description>
                                 </rdf:first>
                                 <rdf:rest>
@@ -378,9 +378,9 @@
                                         <rdf:first>
                                             <rdf:Description>
                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#hasRiskLevel"/>
+                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#hasRiskLevel"/>
                                                 <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_1"/>
-                                                <swrl:argument2 rdf:resource="https://w3id.org/norma-ontology#HighRisk"/>
+                                                <swrl:argument2 rdf:resource="https://w3id.org/norma-o#HighRisk"/>
                                             </rdf:Description>
                                         </rdf:first>
                                         <rdf:rest>
@@ -389,7 +389,7 @@
                                                 <rdf:first>
                                                     <rdf:Description>
                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#deonticId"/>
+                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#deonticId"/>
                                                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_1"/>
                                                         <swrl:argument2>OBL_1</swrl:argument2>
                                                     </rdf:Description>
@@ -400,7 +400,7 @@
                                                         <rdf:first>
                                                             <rdf:Description>
                                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#fromRegulation"/>
+                                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#fromRegulation"/>
                                                                 <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_1"/>
                                                                 <swrl:argument2>EU AI Act</swrl:argument2>
                                                             </rdf:Description>
@@ -411,7 +411,7 @@
                                                                 <rdf:first>
                                                                     <rdf:Description>
                                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#fromArticle"/>
+                                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#fromArticle"/>
                                                                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_1"/>
                                                                         <swrl:argument2>4</swrl:argument2>
                                                                     </rdf:Description>
@@ -422,7 +422,7 @@
                                                                         <rdf:first>
                                                                             <rdf:Description>
                                                                                 <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#fromParagraph"/>
+                                                                                <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#fromParagraph"/>
                                                                                 <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_1"/>
                                                                                 <swrl:argument2>2</swrl:argument2>
                                                                             </rdf:Description>
@@ -433,7 +433,7 @@
                                                                                 <rdf:first>
                                                                                     <rdf:Description>
                                                                                         <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom"/>
-                                                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-ontology#sourceURI"/>
+                                                                                        <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-o#sourceURI"/>
                                                                                         <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_1"/>
                                                                                         <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">hhtps://</swrl:argument2>
                                                                                     </rdf:Description>

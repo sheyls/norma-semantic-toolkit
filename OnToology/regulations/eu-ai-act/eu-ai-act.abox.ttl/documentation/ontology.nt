@@ -1,5 +1,5 @@
 <https://w3id.org/norma-abox/eu-ai-act> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Ontology> .
-<https://w3id.org/norma-abox/eu-ai-act> <http://www.w3.org/2002/07/owl#imports> <https://w3id.org/norma-ontology> .
+<https://w3id.org/norma-abox/eu-ai-act> <http://www.w3.org/2002/07/owl#imports> <https://w3id.org/norma-o> .
 # 
 # 
 # #################################################################
@@ -9,80 +9,80 @@
 # #################################################################
 # 
 # 
-# https://w3id.org/norma-ontology#actionText
-<https://w3id.org/norma-ontology#actionText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#actionText
+<https://w3id.org/norma-o#actionText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#annotationDate
-<https://w3id.org/norma-ontology#annotationDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#annotationDate
+<https://w3id.org/norma-o#annotationDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#annotator
-<https://w3id.org/norma-ontology#annotator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#annotator
+<https://w3id.org/norma-o#annotator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#articleNumber
-<https://w3id.org/norma-ontology#articleNumber> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#articleNumber
+<https://w3id.org/norma-o#articleNumber> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#conditionStatement
-<https://w3id.org/norma-ontology#conditionStatement> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#conditionStatement
+<https://w3id.org/norma-o#conditionStatement> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#confidenceScore
-<https://w3id.org/norma-ontology#confidenceScore> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#confidenceScore
+<https://w3id.org/norma-o#confidenceScore> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#deonticId
-<https://w3id.org/norma-ontology#deonticId> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#deonticId
+<https://w3id.org/norma-o#deonticId> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#falseBranchLabel
-<https://w3id.org/norma-ontology#falseBranchLabel> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#falseBranchLabel
+<https://w3id.org/norma-o#falseBranchLabel> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#fromArticle
-<https://w3id.org/norma-ontology#fromArticle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#fromArticle
+<https://w3id.org/norma-o#fromArticle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#fromParagraph
-<https://w3id.org/norma-ontology#fromParagraph> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#fromParagraph
+<https://w3id.org/norma-o#fromParagraph> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#fromRegulation
-<https://w3id.org/norma-ontology#fromRegulation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#fromRegulation
+<https://w3id.org/norma-o#fromRegulation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#hasBindingForce
-<https://w3id.org/norma-ontology#hasBindingForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#hasBindingForce
+<https://w3id.org/norma-o#hasBindingForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#hasComplianceCriticality
-<https://w3id.org/norma-ontology#hasComplianceCriticality> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#hasComplianceCriticality
+<https://w3id.org/norma-o#hasComplianceCriticality> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#hasExtractionMethod
-<https://w3id.org/norma-ontology#hasExtractionMethod> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#hasExtractionMethod
+<https://w3id.org/norma-o#hasExtractionMethod> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#hasLegalAgent
-<https://w3id.org/norma-ontology#hasLegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#hasLegalAgent
+<https://w3id.org/norma-o#hasLegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#hasLegalSource
-<https://w3id.org/norma-ontology#hasLegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#hasLegalSource
+<https://w3id.org/norma-o#hasLegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#hasNormStatus
-<https://w3id.org/norma-ontology#hasNormStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#hasNormStatus
+<https://w3id.org/norma-o#hasNormStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#hasObject
-<https://w3id.org/norma-ontology#hasObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#hasObject
+<https://w3id.org/norma-o#hasObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#hasReviewStatus
-<https://w3id.org/norma-ontology#hasReviewStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#hasReviewStatus
+<https://w3id.org/norma-o#hasReviewStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#originalText
-<https://w3id.org/norma-ontology#originalText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#originalText
+<https://w3id.org/norma-o#originalText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#paragraphNumber
-<https://w3id.org/norma-ontology#paragraphNumber> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#paragraphNumber
+<https://w3id.org/norma-o#paragraphNumber> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#regulationName
-<https://w3id.org/norma-ontology#regulationName> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#regulationName
+<https://w3id.org/norma-o#regulationName> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#regulationURI
-<https://w3id.org/norma-ontology#regulationURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#regulationURI
+<https://w3id.org/norma-o#regulationURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#sourceURI
-<https://w3id.org/norma-ontology#sourceURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#sourceURI
+<https://w3id.org/norma-o#sourceURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-ontology#trueBranchLabel
-<https://w3id.org/norma-ontology#trueBranchLabel> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/norma-o#trueBranchLabel
+<https://w3id.org/norma-o#trueBranchLabel> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
 # 
 # 
@@ -105,23 +105,23 @@
 # #################################################################
 # 
 # 
-# https://w3id.org/norma-ontology#LegalAgent
-<https://w3id.org/norma-ontology#LegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/norma-o#LegalAgent
+<https://w3id.org/norma-o#LegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-ontology#LegalCondition
-<https://w3id.org/norma-ontology#LegalCondition> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/norma-o#LegalCondition
+<https://w3id.org/norma-o#LegalCondition> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-ontology#LegalObject
-<https://w3id.org/norma-ontology#LegalObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/norma-o#LegalObject
+<https://w3id.org/norma-o#LegalObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-ontology#LegalSource
-<https://w3id.org/norma-ontology#LegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/norma-o#LegalSource
+<https://w3id.org/norma-o#LegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-ontology#Obligation
-<https://w3id.org/norma-ontology#Obligation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/norma-o#Obligation
+<https://w3id.org/norma-o#Obligation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-ontology#Recommendation
-<https://w3id.org/norma-ontology#Recommendation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/norma-o#Recommendation
+<https://w3id.org/norma-o#Recommendation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
 # 
 # 
@@ -134,80 +134,80 @@
 # 
 # https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner
 <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#LegalAgent> .
+<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#LegalAgent> .
 <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> <http://www.w3.org/2000/01/rdf-schema#label> "AI owner"@en .
 # 
 # https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0
 <https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#LegalCondition> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#LegalCondition> .
 <https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <http://www.w3.org/2000/01/rdf-schema#label> "Generation of syntetic content?"@en .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-ontology#conditionStatement> "Generation of syntetic content?" .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-ontology#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-ontology#falseBranchLabel> "No" .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-ontology#hasExtractionMethod> <https://w3id.org/norma-ontology#ManualLawyer> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-ontology#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-ontology#hasNormStatus> <https://w3id.org/norma-ontology#Active> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-ontology#hasReviewStatus> <https://w3id.org/norma-ontology#PendingReview> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-ontology#trueBranchLabel> "Yes" .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#conditionStatement> "Generation of syntetic content?" .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#falseBranchLabel> "No" .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#hasExtractionMethod> <https://w3id.org/norma-o#ManualLawyer> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#hasNormStatus> <https://w3id.org/norma-o#Active> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#hasReviewStatus> <https://w3id.org/norma-o#PendingReview> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#trueBranchLabel> "Yes" .
 # 
 # https://w3id.org/norma-abox/eu-ai-act#OBL_1
 <https://w3id.org/norma-abox/eu-ai-act#OBL_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#Obligation> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#Obligation> .
 <https://w3id.org/norma-abox/eu-ai-act#OBL_1> <http://www.w3.org/2000/01/rdf-schema#label> "Marking obligation"@en .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#actionText> "Marking obligation" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#annotationDate> "2026-02-13"^^<http://www.w3.org/2001/XMLSchema#date> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#annotator> "Juana" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#deonticId> "OBL_1" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#fromArticle> "4" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#fromParagraph> "2" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#fromRegulation> "EU AI Act" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#hasBindingForce> <https://w3id.org/norma-ontology#HardLaw> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#hasComplianceCriticality> <https://w3id.org/norma-ontology#High> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#hasExtractionMethod> <https://w3id.org/norma-ontology#ManualLawyer> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#hasLegalAgent> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#hasNormStatus> <https://w3id.org/norma-ontology#Active> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#hasObject> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#hasReviewStatus> <https://w3id.org/norma-ontology#PendingReview> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-ontology#sourceURI> "hhtps://"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#actionText> "Marking obligation" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#annotationDate> "2026-02-13"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#annotator> "Juana" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#deonticId> "OBL_1" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#fromArticle> "4" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#fromParagraph> "2" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#fromRegulation> "EU AI Act" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasBindingForce> <https://w3id.org/norma-o#HardLaw> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasComplianceCriticality> <https://w3id.org/norma-o#High> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasExtractionMethod> <https://w3id.org/norma-o#ManualLawyer> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasLegalAgent> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasNormStatus> <https://w3id.org/norma-o#Active> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasObject> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasReviewStatus> <https://w3id.org/norma-o#PendingReview> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#sourceURI> "hhtps://"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
 # 
 # https://w3id.org/norma-abox/eu-ai-act#Object_generate_content
 <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#LegalObject> .
+<https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#LegalObject> .
 <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> <http://www.w3.org/2000/01/rdf-schema#label> "generate content"@en .
 # 
 # https://w3id.org/norma-abox/eu-ai-act#REC_1
 <https://w3id.org/norma-abox/eu-ai-act#REC_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#Recommendation> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#Recommendation> .
 <https://w3id.org/norma-abox/eu-ai-act#REC_1> <http://www.w3.org/2000/01/rdf-schema#label> "Volutary codes\nof conduct"@en .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#actionText> "Adopt volutary codes of conduct" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#annotationDate> "2026-02-13"^^<http://www.w3.org/2001/XMLSchema#date> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#annotator> "Juana" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#deonticId> "REC_1" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#fromArticle> "5" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#fromParagraph> "2" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#fromRegulation> "EU AI Act" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#hasBindingForce> <https://w3id.org/norma-ontology#SoftLaw> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#hasComplianceCriticality> <https://w3id.org/norma-ontology#Low> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#hasExtractionMethod> <https://w3id.org/norma-ontology#ManualLawyer> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#hasLegalAgent> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#hasNormStatus> <https://w3id.org/norma-ontology#Active> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#hasObject> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#hasReviewStatus> <https://w3id.org/norma-ontology#PendingReview> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-ontology#sourceURI> "hhtps://..."^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#actionText> "Adopt volutary codes of conduct" .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#annotationDate> "2026-02-13"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#annotator> "Juana" .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#deonticId> "REC_1" .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#fromArticle> "5" .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#fromParagraph> "2" .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#fromRegulation> "EU AI Act" .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasBindingForce> <https://w3id.org/norma-o#SoftLaw> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasComplianceCriticality> <https://w3id.org/norma-o#Low> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasExtractionMethod> <https://w3id.org/norma-o#ManualLawyer> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasLegalAgent> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasNormStatus> <https://w3id.org/norma-o#Active> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasObject> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasReviewStatus> <https://w3id.org/norma-o#PendingReview> .
+<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#sourceURI> "hhtps://..."^^<http://www.w3.org/2001/XMLSchema#anyURI> .
 # 
 # https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act
 <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-ontology#LegalSource> .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-ontology#articleNumber> "4" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-ontology#articleNumber> "5" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-ontology#originalText> "BLABLABLA" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-ontology#originalText> "BLABLABLAadhjadjajf" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-ontology#paragraphNumber> "2" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-ontology#regulationName> "EU AI Act" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-ontology#regulationURI> "hhtps://"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#LegalSource> .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#articleNumber> "4" .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#articleNumber> "5" .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#originalText> "BLABLABLA" .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#originalText> "BLABLABLAadhjadjajf" .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#paragraphNumber> "2" .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#regulationName> "EU AI Act" .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#regulationURI> "hhtps://"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
 # 
 # Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/
