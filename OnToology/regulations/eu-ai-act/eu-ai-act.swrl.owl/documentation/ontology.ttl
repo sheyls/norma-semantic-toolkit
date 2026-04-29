@@ -13,84 +13,44 @@
 #    Object Properties
 #################################################################
 
-###  https://w3id.org/norma-o#actsOn
-<https://w3id.org/norma-o#actsOn> rdf:type owl:ObjectProperty .
-
-
-###  https://w3id.org/norma-o#hasBindingForce
-<https://w3id.org/norma-o#hasBindingForce> rdf:type owl:ObjectProperty .
-
-
-###  https://w3id.org/norma-o#hasRiskLevel
-<https://w3id.org/norma-o#hasRiskLevel> rdf:type owl:ObjectProperty .
-
-
-###  https://w3id.org/norma-o#performsAction
-<https://w3id.org/norma-o#performsAction> rdf:type owl:ObjectProperty .
+###  https://w3id.org/def/norma-o#activatesNorm
+<https://w3id.org/def/norma-o#activatesNorm> rdf:type owl:ObjectProperty .
 
 
 #################################################################
 #    Data properties
 #################################################################
 
-###  https://w3id.org/norma-abox/eu-ai-act/rules#Generation_of_syntetic_content
-:Generation_of_syntetic_content rdf:type owl:DatatypeProperty .
+###  https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_tested_in_reallife_before_entering_into_the_market
+:Is_the_AI_system_tested_in_reallife_before_entering_into_the_market rdf:type owl:DatatypeProperty .
 
 
-###  https://w3id.org/norma-o#deonticId
-<https://w3id.org/norma-o#deonticId> rdf:type owl:DatatypeProperty .
-
-
-###  https://w3id.org/norma-o#fromArticle
-<https://w3id.org/norma-o#fromArticle> rdf:type owl:DatatypeProperty .
-
-
-###  https://w3id.org/norma-o#fromParagraph
-<https://w3id.org/norma-o#fromParagraph> rdf:type owl:DatatypeProperty .
-
-
-###  https://w3id.org/norma-o#fromRegulation
-<https://w3id.org/norma-o#fromRegulation> rdf:type owl:DatatypeProperty .
-
-
-###  https://w3id.org/norma-o#sourceURI
-<https://w3id.org/norma-o#sourceURI> rdf:type owl:DatatypeProperty .
+###  https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_used_for_biometric_purposes
+:Is_the_AI_system_used_for_biometric_purposes rdf:type owl:DatatypeProperty .
 
 
 #################################################################
 #    Individuals
 #################################################################
 
-###  https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner
-<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> rdf:type owl:NamedIndividual .
+###  https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> rdf:type owl:NamedIndividual .
 
 
-###  https://w3id.org/norma-abox/eu-ai-act#OBL_1
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> rdf:type owl:NamedIndividual .
+###  https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> rdf:type owl:NamedIndividual .
 
 
-###  https://w3id.org/norma-abox/eu-ai-act#Object_generate_content
-<https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> rdf:type owl:NamedIndividual .
+###  https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations> rdf:type owl:NamedIndividual .
 
 
-###  https://w3id.org/norma-abox/eu-ai-act#REC_1
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> rdf:type owl:NamedIndividual .
+###  https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations> rdf:type owl:NamedIndividual .
 
 
-###  https://w3id.org/norma-o#HardLaw
-<https://w3id.org/norma-o#HardLaw> rdf:type owl:NamedIndividual .
-
-
-###  https://w3id.org/norma-o#HighRisk
-<https://w3id.org/norma-o#HighRisk> rdf:type owl:NamedIndividual .
-
-
-###  https://w3id.org/norma-o#LowRisk
-<https://w3id.org/norma-o#LowRisk> rdf:type owl:NamedIndividual .
-
-
-###  https://w3id.org/norma-o#SoftLaw
-<https://w3id.org/norma-o#SoftLaw> rdf:type owl:NamedIndividual .
+###  https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations> rdf:type owl:NamedIndividual .
 
 
 #################################################################
@@ -102,149 +62,58 @@
 [ rdf:type <http://www.w3.org/2003/11/swrl#Imp> ;
    <http://www.w3.org/2003/11/swrl#body> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
                                            rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                       <http://www.w3.org/2003/11/swrl#propertyPredicate> :Generation_of_syntetic_content ;
+                                                       <http://www.w3.org/2003/11/swrl#propertyPredicate> :Is_the_AI_system_used_for_biometric_purposes ;
                                                        <http://www.w3.org/2003/11/swrl#argument1> :var_x ;
-                                                       <http://www.w3.org/2003/11/swrl#argument2> "false"^^xsd:boolean
+                                                       <http://www.w3.org/2003/11/swrl#argument2> "true"^^xsd:boolean
                                                      ] ;
-                                           rdf:rest rdf:nil
+                                           rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                      rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
+                                                                  <http://www.w3.org/2003/11/swrl#propertyPredicate> :Is_the_AI_system_tested_in_reallife_before_entering_into_the_market ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument1> :var_x ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument2> "false"^^xsd:boolean
+                                                                ] ;
+                                                      rdf:rest rdf:nil
+                                                    ]
                                          ] ;
    <http://www.w3.org/2003/11/swrl#head> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
                                            rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
-                                                       <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#performsAction> ;
-                                                       <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> ;
-                                                       <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#REC_1>
+                                                       <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/def/norma-o#activatesNorm> ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations> ;
+                                                       <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations>
                                                      ] ;
-                                           rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                      rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
-                                                                  <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#actsOn> ;
-                                                                  <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> ;
-                                                                  <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content>
-                                                                ] ;
-                                                      rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                 rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
-                                                                             <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#hasBindingForce> ;
-                                                                             <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> ;
-                                                                             <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-o#SoftLaw>
-                                                                           ] ;
-                                                                 rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                            rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
-                                                                                        <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#hasRiskLevel> ;
-                                                                                        <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> ;
-                                                                                        <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-o#LowRisk>
-                                                                                      ] ;
-                                                                            rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                       rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                   <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#deonticId> ;
-                                                                                                   <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> ;
-                                                                                                   <http://www.w3.org/2003/11/swrl#argument2> "REC_1"
-                                                                                                 ] ;
-                                                                                       rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                                  rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                              <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromRegulation> ;
-                                                                                                              <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> ;
-                                                                                                              <http://www.w3.org/2003/11/swrl#argument2> "EU AI Act"
-                                                                                                            ] ;
-                                                                                                  rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                                             rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                                         <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromArticle> ;
-                                                                                                                         <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> ;
-                                                                                                                         <http://www.w3.org/2003/11/swrl#argument2> "5"
-                                                                                                                       ] ;
-                                                                                                             rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                                                        rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                                                    <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromParagraph> ;
-                                                                                                                                    <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> ;
-                                                                                                                                    <http://www.w3.org/2003/11/swrl#argument2> "2"
-                                                                                                                                  ] ;
-                                                                                                                        rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                                                                   rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                                                               <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#sourceURI> ;
-                                                                                                                                               <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> ;
-                                                                                                                                               <http://www.w3.org/2003/11/swrl#argument2> "hhtps://..."^^xsd:anyURI
-                                                                                                                                             ] ;
-                                                                                                                                   rdf:rest rdf:nil
-                                                                                                                                 ]
-                                                                                                                      ]
-                                                                                                           ]
-                                                                                                ]
-                                                                                     ]
-                                                                          ]
-                                                               ]
-                                                    ]
+                                           rdf:rest rdf:nil
                                          ]
  ] .
 
 [ rdf:type <http://www.w3.org/2003/11/swrl#Imp> ;
    <http://www.w3.org/2003/11/swrl#body> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
                                            rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                       <http://www.w3.org/2003/11/swrl#propertyPredicate> :Generation_of_syntetic_content ;
+                                                       <http://www.w3.org/2003/11/swrl#propertyPredicate> :Is_the_AI_system_used_for_biometric_purposes ;
                                                        <http://www.w3.org/2003/11/swrl#argument1> :var_x ;
                                                        <http://www.w3.org/2003/11/swrl#argument2> "true"^^xsd:boolean
                                                      ] ;
-                                           rdf:rest rdf:nil
+                                           rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
+                                                      rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
+                                                                  <http://www.w3.org/2003/11/swrl#propertyPredicate> :Is_the_AI_system_tested_in_reallife_before_entering_into_the_market ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument1> :var_x ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument2> "true"^^xsd:boolean
+                                                                ] ;
+                                                      rdf:rest rdf:nil
+                                                    ]
                                          ] ;
    <http://www.w3.org/2003/11/swrl#head> [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
                                            rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
-                                                       <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#performsAction> ;
-                                                       <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> ;
-                                                       <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#OBL_1>
+                                                       <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/def/norma-o#activatesNorm> ;
+                                                       <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations> ;
+                                                       <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations>
                                                      ] ;
                                            rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
                                                       rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
-                                                                  <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#actsOn> ;
-                                                                  <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> ;
-                                                                  <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content>
+                                                                  <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/def/norma-o#activatesNorm> ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations> ;
+                                                                  <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations>
                                                                 ] ;
-                                                      rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                 rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
-                                                                             <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#hasBindingForce> ;
-                                                                             <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> ;
-                                                                             <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-o#HardLaw>
-                                                                           ] ;
-                                                                 rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                            rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> ;
-                                                                                        <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#hasRiskLevel> ;
-                                                                                        <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> ;
-                                                                                        <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-o#HighRisk>
-                                                                                      ] ;
-                                                                            rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                       rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                   <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#deonticId> ;
-                                                                                                   <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> ;
-                                                                                                   <http://www.w3.org/2003/11/swrl#argument2> "OBL_1"
-                                                                                                 ] ;
-                                                                                       rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                                  rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                              <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromRegulation> ;
-                                                                                                              <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> ;
-                                                                                                              <http://www.w3.org/2003/11/swrl#argument2> "EU AI Act"
-                                                                                                            ] ;
-                                                                                                  rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                                             rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                                         <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromArticle> ;
-                                                                                                                         <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> ;
-                                                                                                                         <http://www.w3.org/2003/11/swrl#argument2> "4"
-                                                                                                                       ] ;
-                                                                                                             rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                                                        rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                                                    <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromParagraph> ;
-                                                                                                                                    <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> ;
-                                                                                                                                    <http://www.w3.org/2003/11/swrl#argument2> "2"
-                                                                                                                                  ] ;
-                                                                                                                        rdf:rest [ rdf:type <http://www.w3.org/2003/11/swrl#AtomList> ;
-                                                                                                                                   rdf:first [ rdf:type <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> ;
-                                                                                                                                               <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#sourceURI> ;
-                                                                                                                                               <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> ;
-                                                                                                                                               <http://www.w3.org/2003/11/swrl#argument2> "hhtps://"^^xsd:anyURI
-                                                                                                                                             ] ;
-                                                                                                                                   rdf:rest rdf:nil
-                                                                                                                                 ]
-                                                                                                                      ]
-                                                                                                           ]
-                                                                                                ]
-                                                                                     ]
-                                                                          ]
-                                                               ]
+                                                      rdf:rest rdf:nil
                                                     ]
                                          ]
  ] .

@@ -1,0 +1,115 @@
+{
+  "@context" : {
+    "LegalSource" : {
+      "@id" : "https://w3id.org/def/norma-o#LegalSource"
+    },
+    "LegalCondition" : {
+      "@id" : "https://w3id.org/def/norma-o#LegalCondition"
+    },
+    "objectText" : {
+      "@id" : "https://w3id.org/def/norma-o#objectText"
+    },
+    "hasLegalObject" : {
+      "@id" : "https://w3id.org/def/norma-o#hasLegalObject"
+    },
+    "Obligation" : {
+      "@id" : "https://w3id.org/def/norma-o#Obligation"
+    },
+    "wasGeneratedByAnnotationActivity" : {
+      "@id" : "https://w3id.org/def/norma-o#wasGeneratedByAnnotationActivity"
+    },
+    "actionText" : {
+      "@id" : "https://w3id.org/def/norma-o#actionText"
+    },
+    "label" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#label"
+    },
+    "regulationName" : {
+      "@id" : "https://w3id.org/def/norma-o#regulationName"
+    },
+    "hasExtractionMethod" : {
+      "@id" : "https://w3id.org/def/norma-o#hasExtractionMethod"
+    },
+    "fromArticle" : {
+      "@id" : "https://w3id.org/def/norma-o#fromArticle"
+    },
+    "hasLegalSource" : {
+      "@id" : "https://w3id.org/def/norma-o#hasLegalSource"
+    },
+    "hasTrigger" : {
+      "@id" : "https://w3id.org/def/norma-o#hasTrigger"
+    },
+    "confidenceScore" : {
+      "@id" : "https://w3id.org/def/norma-o#confidenceScore"
+    },
+    "LegalObject" : {
+      "@id" : "https://w3id.org/def/norma-o#LegalObject"
+    },
+    "LegalAgent" : {
+      "@id" : "https://w3id.org/def/norma-o#LegalAgent"
+    },
+    "hasBindingForce" : {
+      "@id" : "https://w3id.org/def/norma-o#hasBindingForce"
+    },
+    "conditionStatement" : {
+      "@id" : "https://w3id.org/def/norma-o#conditionStatement"
+    },
+    "hasOutcome" : {
+      "@id" : "https://w3id.org/def/norma-o#hasOutcome"
+    },
+    "hasLegalAction" : {
+      "@id" : "https://w3id.org/def/norma-o#hasLegalAction"
+    },
+    "hasComplianceCriticality" : {
+      "@id" : "https://w3id.org/def/norma-o#hasComplianceCriticality"
+    },
+    "wasAttributedToAnnotator" : {
+      "@id" : "https://w3id.org/def/norma-o#wasAttributedToAnnotator"
+    },
+    "articleNumber" : {
+      "@id" : "https://w3id.org/def/norma-o#articleNumber"
+    },
+    "agentText" : {
+      "@id" : "https://w3id.org/def/norma-o#agentText"
+    },
+    "hasNormStatus" : {
+      "@id" : "https://w3id.org/def/norma-o#hasNormStatus"
+    },
+    "deonticId" : {
+      "@id" : "https://w3id.org/def/norma-o#deonticId"
+    },
+    "annotationDate" : {
+      "@id" : "https://w3id.org/def/norma-o#annotationDate"
+    },
+    "wasAssociatedWithAnnotator" : {
+      "@id" : "https://w3id.org/def/norma-o#wasAssociatedWithAnnotator"
+    },
+    "AnnotatorAgent" : {
+      "@id" : "https://w3id.org/def/norma-o#AnnotatorAgent"
+    },
+    "hasReviewStatus" : {
+      "@id" : "https://w3id.org/def/norma-o#hasReviewStatus"
+    },
+    "TriggerEvent" : {
+      "@id" : "https://w3id.org/def/norma-o#TriggerEvent"
+    },
+    "hasLegalAgent" : {
+      "@id" : "https://w3id.org/def/norma-o#hasLegalAgent"
+    },
+    "fromRegulation" : {
+      "@id" : "https://w3id.org/def/norma-o#fromRegulation"
+    },
+    "usedLegalSource" : {
+      "@id" : "https://w3id.org/def/norma-o#usedLegalSource"
+    },
+    "LegalAction" : {
+      "@id" : "https://w3id.org/def/norma-o#LegalAction"
+    },
+    "AnnotationActivity" : {
+      "@id" : "https://w3id.org/def/norma-o#AnnotationActivity"
+    },
+    "wasDerivedFromSource" : {
+      "@id" : "https://w3id.org/def/norma-o#wasDerivedFromSource"
+    }
+  }
+}

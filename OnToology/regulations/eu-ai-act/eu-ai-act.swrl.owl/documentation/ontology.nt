@@ -9,17 +9,8 @@
 # #################################################################
 # 
 # 
-# https://w3id.org/norma-o#actsOn
-<https://w3id.org/norma-o#actsOn> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
-# 
-# https://w3id.org/norma-o#hasBindingForce
-<https://w3id.org/norma-o#hasBindingForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
-# 
-# https://w3id.org/norma-o#hasRiskLevel
-<https://w3id.org/norma-o#hasRiskLevel> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
-# 
-# https://w3id.org/norma-o#performsAction
-<https://w3id.org/norma-o#performsAction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+# https://w3id.org/def/norma-o#activatesNorm
+<https://w3id.org/def/norma-o#activatesNorm> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
 # 
 # 
 # 
@@ -30,23 +21,11 @@
 # #################################################################
 # 
 # 
-# https://w3id.org/norma-abox/eu-ai-act/rules#Generation_of_syntetic_content
-<https://w3id.org/norma-abox/eu-ai-act/rules#Generation_of_syntetic_content> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+# https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_tested_in_reallife_before_entering_into_the_market
+<https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_tested_in_reallife_before_entering_into_the_market> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
 # 
-# https://w3id.org/norma-o#deonticId
-<https://w3id.org/norma-o#deonticId> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
-# 
-# https://w3id.org/norma-o#fromArticle
-<https://w3id.org/norma-o#fromArticle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
-# 
-# https://w3id.org/norma-o#fromParagraph
-<https://w3id.org/norma-o#fromParagraph> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
-# 
-# https://w3id.org/norma-o#fromRegulation
-<https://w3id.org/norma-o#fromRegulation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
-# 
-# https://w3id.org/norma-o#sourceURI
-<https://w3id.org/norma-o#sourceURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+# https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_used_for_biometric_purposes
+<https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_used_for_biometric_purposes> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
 # 
 # 
 # 
@@ -57,29 +36,20 @@
 # #################################################################
 # 
 # 
-# https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner
-<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+# https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
 # 
-# https://w3id.org/norma-abox/eu-ai-act#OBL_1
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+# https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
 # 
-# https://w3id.org/norma-abox/eu-ai-act#Object_generate_content
-<https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+# https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
 # 
-# https://w3id.org/norma-abox/eu-ai-act#REC_1
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+# https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
 # 
-# https://w3id.org/norma-o#HardLaw
-<https://w3id.org/norma-o#HardLaw> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-# 
-# https://w3id.org/norma-o#HighRisk
-<https://w3id.org/norma-o#HighRisk> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-# 
-# https://w3id.org/norma-o#LowRisk
-<https://w3id.org/norma-o#LowRisk> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-# 
-# https://w3id.org/norma-o#SoftLaw
-<https://w3id.org/norma-o#SoftLaw> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+# https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
 # 
 # 
 # 
@@ -92,149 +62,58 @@
 # 
 <https://w3id.org/norma-abox/eu-ai-act/rules#var_x> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#Variable> .
 _:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#Imp> .
-_:genid1 <http://www.w3.org/2003/11/swrl#body> _:genid2 .
+_:genid1 <http://www.w3.org/2003/11/swrl#body> _:genid4 .
+_:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid2 .
 _:genid2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
 _:genid2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid3 .
 _:genid3 <http://www.w3.org/2003/11/swrl#argument2> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
 _:genid3 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act/rules#var_x> .
-_:genid3 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-abox/eu-ai-act/rules#Generation_of_syntetic_content> .
+_:genid3 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_tested_in_reallife_before_entering_into_the_market> .
 _:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
 _:genid2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid1 <http://www.w3.org/2003/11/swrl#head> _:genid20 .
-_:genid20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid18 .
-_:genid18 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid16 .
-_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid14 .
-_:genid14 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid12 .
-_:genid12 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid10 .
-_:genid10 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid8 .
-_:genid8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid6 .
-_:genid6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid4 .
-_:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
 _:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid5 .
-_:genid5 <http://www.w3.org/2003/11/swrl#argument2> "hhtps://..."^^<http://www.w3.org/2001/XMLSchema#anyURI> .
-_:genid5 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> .
-_:genid5 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#sourceURI> .
+_:genid5 <http://www.w3.org/2003/11/swrl#argument2> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+_:genid5 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act/rules#var_x> .
+_:genid5 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_used_for_biometric_purposes> .
 _:genid5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
 _:genid4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
+_:genid1 <http://www.w3.org/2003/11/swrl#head> _:genid6 .
+_:genid6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
 _:genid6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid7 .
-_:genid7 <http://www.w3.org/2003/11/swrl#argument2> "2" .
-_:genid7 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> .
-_:genid7 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromParagraph> .
-_:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
+_:genid7 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> .
+_:genid7 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations> .
+_:genid7 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/def/norma-o#activatesNorm> .
+_:genid7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
 _:genid6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid9 .
-_:genid9 <http://www.w3.org/2003/11/swrl#argument2> "5" .
-_:genid9 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> .
-_:genid9 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromArticle> .
-_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
-_:genid8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid10 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid11 .
-_:genid11 <http://www.w3.org/2003/11/swrl#argument2> "EU AI Act" .
-_:genid11 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> .
-_:genid11 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromRegulation> .
-_:genid11 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
-_:genid10 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid12 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid13 .
-_:genid13 <http://www.w3.org/2003/11/swrl#argument2> "REC_1" .
-_:genid13 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> .
-_:genid13 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#deonticId> .
-_:genid13 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
-_:genid12 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid14 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid15 .
-_:genid15 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-o#LowRisk> .
-_:genid15 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> .
-_:genid15 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#hasRiskLevel> .
-_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
-_:genid14 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid17 .
-_:genid17 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-o#SoftLaw> .
-_:genid17 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> .
-_:genid17 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#hasBindingForce> .
-_:genid17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
-_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid18 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid19 .
-_:genid19 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> .
-_:genid19 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#REC_1> .
-_:genid19 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#actsOn> .
-_:genid19 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
-_:genid18 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid21 .
-_:genid21 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#REC_1> .
-_:genid21 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> .
-_:genid21 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#performsAction> .
-_:genid21 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
-_:genid20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid22 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#Imp> .
-_:genid22 <http://www.w3.org/2003/11/swrl#body> _:genid23 .
-_:genid23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
-_:genid23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid24 .
-_:genid24 <http://www.w3.org/2003/11/swrl#argument2> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-_:genid24 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act/rules#var_x> .
-_:genid24 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-abox/eu-ai-act/rules#Generation_of_syntetic_content> .
-_:genid24 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
-_:genid23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid22 <http://www.w3.org/2003/11/swrl#head> _:genid41 .
-_:genid41 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid39 .
-_:genid39 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid37 .
-_:genid37 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid35 .
-_:genid35 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid33 .
-_:genid33 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid31 .
-_:genid31 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid29 .
-_:genid29 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid27 .
-_:genid27 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid25 .
-_:genid25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
-_:genid25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid26 .
-_:genid26 <http://www.w3.org/2003/11/swrl#argument2> "hhtps://"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
-_:genid26 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> .
-_:genid26 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#sourceURI> .
-_:genid26 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
-_:genid25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid27 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid28 .
-_:genid28 <http://www.w3.org/2003/11/swrl#argument2> "2" .
-_:genid28 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> .
-_:genid28 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromParagraph> .
-_:genid28 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
-_:genid27 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid29 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid30 .
-_:genid30 <http://www.w3.org/2003/11/swrl#argument2> "4" .
-_:genid30 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> .
-_:genid30 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromArticle> .
-_:genid30 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
-_:genid29 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid31 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid32 .
-_:genid32 <http://www.w3.org/2003/11/swrl#argument2> "EU AI Act" .
-_:genid32 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> .
-_:genid32 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#fromRegulation> .
-_:genid32 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
-_:genid31 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid33 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid34 .
-_:genid34 <http://www.w3.org/2003/11/swrl#argument2> "OBL_1" .
-_:genid34 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> .
-_:genid34 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#deonticId> .
-_:genid34 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
-_:genid33 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid35 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid36 .
-_:genid36 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-o#HighRisk> .
-_:genid36 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> .
-_:genid36 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#hasRiskLevel> .
-_:genid36 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
-_:genid35 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid37 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid38 .
-_:genid38 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-o#HardLaw> .
-_:genid38 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> .
-_:genid38 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#hasBindingForce> .
-_:genid38 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
-_:genid37 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid39 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid40 .
-_:genid40 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> .
-_:genid40 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> .
-_:genid40 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#actsOn> .
-_:genid40 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
-_:genid39 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
-_:genid41 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid42 .
-_:genid42 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#OBL_1> .
-_:genid42 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> .
-_:genid42 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-o#performsAction> .
-_:genid42 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
-_:genid41 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
+_:genid8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#Imp> .
+_:genid8 <http://www.w3.org/2003/11/swrl#body> _:genid11 .
+_:genid11 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid9 .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid10 .
+_:genid10 <http://www.w3.org/2003/11/swrl#argument2> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+_:genid10 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act/rules#var_x> .
+_:genid10 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_tested_in_reallife_before_entering_into_the_market> .
+_:genid10 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
+_:genid9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
+_:genid11 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid12 .
+_:genid12 <http://www.w3.org/2003/11/swrl#argument2> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+_:genid12 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act/rules#var_x> .
+_:genid12 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_used_for_biometric_purposes> .
+_:genid12 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#DatavaluedPropertyAtom> .
+_:genid11 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
+_:genid8 <http://www.w3.org/2003/11/swrl#head> _:genid15 .
+_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:genid13 .
+_:genid13 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+_:genid13 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid14 .
+_:genid14 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> .
+_:genid14 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations> .
+_:genid14 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/def/norma-o#activatesNorm> .
+_:genid14 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
+_:genid13 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
+_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:genid16 .
+_:genid16 <http://www.w3.org/2003/11/swrl#argument2> <https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> .
+_:genid16 <http://www.w3.org/2003/11/swrl#argument1> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations> .
+_:genid16 <http://www.w3.org/2003/11/swrl#propertyPredicate> <https://w3id.org/def/norma-o#activatesNorm> .
+_:genid16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom> .
+_:genid15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2003/11/swrl#AtomList> .
 # Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/
