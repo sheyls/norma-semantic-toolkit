@@ -1,5 +1,5 @@
 <https://w3id.org/norma-abox/eu-ai-act> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Ontology> .
-<https://w3id.org/norma-abox/eu-ai-act> <http://www.w3.org/2002/07/owl#imports> <https://w3id.org/norma-o> .
+<https://w3id.org/norma-abox/eu-ai-act> <http://www.w3.org/2002/07/owl#imports> <https://w3id.org/def/norma-o> .
 # 
 # 
 # #################################################################
@@ -9,92 +9,86 @@
 # #################################################################
 # 
 # 
-# https://w3id.org/norma-o#actionText
-<https://w3id.org/norma-o#actionText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#actionText
+<https://w3id.org/def/norma-o#actionText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#annotationDate
-<https://w3id.org/norma-o#annotationDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#agentText
+<https://w3id.org/def/norma-o#agentText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#annotator
-<https://w3id.org/norma-o#annotator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#annotationDate
+<https://w3id.org/def/norma-o#annotationDate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#articleNumber
-<https://w3id.org/norma-o#articleNumber> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#articleNumber
+<https://w3id.org/def/norma-o#articleNumber> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#conditionStatement
-<https://w3id.org/norma-o#conditionStatement> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#conditionStatement
+<https://w3id.org/def/norma-o#conditionStatement> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#confidenceScore
-<https://w3id.org/norma-o#confidenceScore> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#confidenceScore
+<https://w3id.org/def/norma-o#confidenceScore> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#deonticId
-<https://w3id.org/norma-o#deonticId> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#deonticId
+<https://w3id.org/def/norma-o#deonticId> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#falseBranchLabel
-<https://w3id.org/norma-o#falseBranchLabel> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#fromArticle
+<https://w3id.org/def/norma-o#fromArticle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#fromArticle
-<https://w3id.org/norma-o#fromArticle> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#fromRegulation
+<https://w3id.org/def/norma-o#fromRegulation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#fromParagraph
-<https://w3id.org/norma-o#fromParagraph> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasBindingForce
+<https://w3id.org/def/norma-o#hasBindingForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#fromRegulation
-<https://w3id.org/norma-o#fromRegulation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasComplianceCriticality
+<https://w3id.org/def/norma-o#hasComplianceCriticality> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#hasBindingForce
-<https://w3id.org/norma-o#hasBindingForce> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasExtractionMethod
+<https://w3id.org/def/norma-o#hasExtractionMethod> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#hasComplianceCriticality
-<https://w3id.org/norma-o#hasComplianceCriticality> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasLegalAction
+<https://w3id.org/def/norma-o#hasLegalAction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#hasExtractionMethod
-<https://w3id.org/norma-o#hasExtractionMethod> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasLegalAgent
+<https://w3id.org/def/norma-o#hasLegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#hasLegalAgent
-<https://w3id.org/norma-o#hasLegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasLegalObject
+<https://w3id.org/def/norma-o#hasLegalObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#hasLegalSource
-<https://w3id.org/norma-o#hasLegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasLegalSource
+<https://w3id.org/def/norma-o#hasLegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#hasNormStatus
-<https://w3id.org/norma-o#hasNormStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasNormStatus
+<https://w3id.org/def/norma-o#hasNormStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#hasObject
-<https://w3id.org/norma-o#hasObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasOutcome
+<https://w3id.org/def/norma-o#hasOutcome> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#hasReviewStatus
-<https://w3id.org/norma-o#hasReviewStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasReviewStatus
+<https://w3id.org/def/norma-o#hasReviewStatus> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#originalText
-<https://w3id.org/norma-o#originalText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#hasTrigger
+<https://w3id.org/def/norma-o#hasTrigger> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#paragraphNumber
-<https://w3id.org/norma-o#paragraphNumber> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#objectText
+<https://w3id.org/def/norma-o#objectText> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#regulationName
-<https://w3id.org/norma-o#regulationName> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#regulationName
+<https://w3id.org/def/norma-o#regulationName> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#regulationURI
-<https://w3id.org/norma-o#regulationURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#usedLegalSource
+<https://w3id.org/def/norma-o#usedLegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#sourceURI
-<https://w3id.org/norma-o#sourceURI> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#wasAssociatedWithAnnotator
+<https://w3id.org/def/norma-o#wasAssociatedWithAnnotator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# https://w3id.org/norma-o#trueBranchLabel
-<https://w3id.org/norma-o#trueBranchLabel> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# https://w3id.org/def/norma-o#wasAttributedToAnnotator
+<https://w3id.org/def/norma-o#wasAttributedToAnnotator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
+# https://w3id.org/def/norma-o#wasDerivedFromSource
+<https://w3id.org/def/norma-o#wasDerivedFromSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
-# 
-# #################################################################
-# #
-# #    Datatypes
-# #
-# #################################################################
-# 
-# 
-# http://www.w3.org/2001/XMLSchema#date
-<http://www.w3.org/2001/XMLSchema#date> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Datatype> .
+# https://w3id.org/def/norma-o#wasGeneratedByAnnotationActivity
+<https://w3id.org/def/norma-o#wasGeneratedByAnnotationActivity> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
 # 
 # 
 # 
@@ -105,23 +99,32 @@
 # #################################################################
 # 
 # 
-# https://w3id.org/norma-o#LegalAgent
-<https://w3id.org/norma-o#LegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/def/norma-o#AnnotationActivity
+<https://w3id.org/def/norma-o#AnnotationActivity> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-o#LegalCondition
-<https://w3id.org/norma-o#LegalCondition> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/def/norma-o#AnnotatorAgent
+<https://w3id.org/def/norma-o#AnnotatorAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-o#LegalObject
-<https://w3id.org/norma-o#LegalObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/def/norma-o#LegalAction
+<https://w3id.org/def/norma-o#LegalAction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-o#LegalSource
-<https://w3id.org/norma-o#LegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/def/norma-o#LegalAgent
+<https://w3id.org/def/norma-o#LegalAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-o#Obligation
-<https://w3id.org/norma-o#Obligation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/def/norma-o#LegalCondition
+<https://w3id.org/def/norma-o#LegalCondition> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
-# https://w3id.org/norma-o#Recommendation
-<https://w3id.org/norma-o#Recommendation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# https://w3id.org/def/norma-o#LegalObject
+<https://w3id.org/def/norma-o#LegalObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# 
+# https://w3id.org/def/norma-o#LegalSource
+<https://w3id.org/def/norma-o#LegalSource> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# 
+# https://w3id.org/def/norma-o#Obligation
+<https://w3id.org/def/norma-o#Obligation> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# 
+# https://w3id.org/def/norma-o#TriggerEvent
+<https://w3id.org/def/norma-o#TriggerEvent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
 # 
 # 
 # 
@@ -132,82 +135,137 @@
 # #################################################################
 # 
 # 
-# https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner
-<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#LegalAgent> .
-<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> <http://www.w3.org/2000/01/rdf-schema#label> "AI owner"@en .
+# https://w3id.org/norma-abox/eu-ai-act#Action_comply
+<https://w3id.org/norma-abox/eu-ai-act#Action_comply> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#Action_comply> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#LegalAction> .
+<https://w3id.org/norma-abox/eu-ai-act#Action_comply> <http://www.w3.org/2000/01/rdf-schema#label> "comply"@en .
 # 
-# https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#LegalCondition> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <http://www.w3.org/2000/01/rdf-schema#label> "Generation of syntetic content?"@en .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#conditionStatement> "Generation of syntetic content?" .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#falseBranchLabel> "No" .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#hasExtractionMethod> <https://w3id.org/norma-o#ManualLawyer> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#hasNormStatus> <https://w3id.org/norma-o#Active> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#hasReviewStatus> <https://w3id.org/norma-o#PendingReview> .
-<https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0> <https://w3id.org/norma-o#trueBranchLabel> "Yes" .
+# https://w3id.org/norma-abox/eu-ai-act#Agent_AI_provider
+<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_provider> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_provider> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#LegalAgent> .
+<https://w3id.org/norma-abox/eu-ai-act#Agent_AI_provider> <http://www.w3.org/2000/01/rdf-schema#label> "AI provider"@en .
 # 
-# https://w3id.org/norma-abox/eu-ai-act#OBL_1
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#Obligation> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <http://www.w3.org/2000/01/rdf-schema#label> "Marking obligation"@en .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#actionText> "Marking obligation" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#annotationDate> "2026-02-13"^^<http://www.w3.org/2001/XMLSchema#date> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#annotator> "Juana" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#deonticId> "OBL_1" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#fromArticle> "4" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#fromParagraph> "2" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#fromRegulation> "EU AI Act" .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasBindingForce> <https://w3id.org/norma-o#HardLaw> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasComplianceCriticality> <https://w3id.org/norma-o#High> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasExtractionMethod> <https://w3id.org/norma-o#ManualLawyer> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasLegalAgent> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasNormStatus> <https://w3id.org/norma-o#Active> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasObject> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#hasReviewStatus> <https://w3id.org/norma-o#PendingReview> .
-<https://w3id.org/norma-abox/eu-ai-act#OBL_1> <https://w3id.org/norma-o#sourceURI> "hhtps://"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+# https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_ADD_testing_obligations
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#AnnotationActivity> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_ADD_testing_obligations> <http://www.w3.org/2000/01/rdf-schema#label> "Annotation activity for OBL_ADD_testing_obligations"@en .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#annotationDate> "2026-04-26"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#usedLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#wasAssociatedWithAnnotator> <https://w3id.org/norma-abox/eu-ai-act#NORMAAnnotator> .
 # 
-# https://w3id.org/norma-abox/eu-ai-act#Object_generate_content
-<https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#LegalObject> .
-<https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> <http://www.w3.org/2000/01/rdf-schema#label> "generate content"@en .
+# https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#AnnotationActivity> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_Respect_high_risk_obligations> <http://www.w3.org/2000/01/rdf-schema#label> "Annotation activity for OBL_Respect_high_risk_obligations"@en .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#annotationDate> "2026-04-26"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#usedLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
+<https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#wasAssociatedWithAnnotator> <https://w3id.org/norma-abox/eu-ai-act#NORMAAnnotator> .
 # 
-# https://w3id.org/norma-abox/eu-ai-act#REC_1
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#Recommendation> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <http://www.w3.org/2000/01/rdf-schema#label> "Volutary codes\nof conduct"@en .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#actionText> "Adopt volutary codes of conduct" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#annotationDate> "2026-02-13"^^<http://www.w3.org/2001/XMLSchema#date> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#annotator> "Juana" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#confidenceScore> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#deonticId> "REC_1" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#fromArticle> "5" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#fromParagraph> "2" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#fromRegulation> "EU AI Act" .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasBindingForce> <https://w3id.org/norma-o#SoftLaw> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasComplianceCriticality> <https://w3id.org/norma-o#Low> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasExtractionMethod> <https://w3id.org/norma-o#ManualLawyer> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasLegalAgent> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasNormStatus> <https://w3id.org/norma-o#Active> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasObject> <https://w3id.org/norma-abox/eu-ai-act#Object_generate_content> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#hasReviewStatus> <https://w3id.org/norma-o#PendingReview> .
-<https://w3id.org/norma-abox/eu-ai-act#REC_1> <https://w3id.org/norma-o#sourceURI> "hhtps://..."^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+# https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#LegalCondition> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market> <http://www.w3.org/2000/01/rdf-schema#label> "Is the AI system tested in real-life before entering into the market?"@en .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market> <https://w3id.org/def/norma-o#conditionStatement> "Is the AI system tested in real-life before entering into the market?" .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market> <https://w3id.org/def/norma-o#hasTrigger> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market> <https://w3id.org/def/norma-o#hasTrigger> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market> <https://w3id.org/def/norma-o#hasTrigger> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations> .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_used_for_biometric_purposes
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_used_for_biometric_purposes> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_used_for_biometric_purposes> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#LegalCondition> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_used_for_biometric_purposes> <http://www.w3.org/2000/01/rdf-schema#label> "Is the AI system used for biometric purposes?"@en .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_used_for_biometric_purposes> <https://w3id.org/def/norma-o#conditionStatement> "Is the AI system used for biometric purposes?" .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_used_for_biometric_purposes> <https://w3id.org/def/norma-o#hasTrigger> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_ADD_testing_obligations> .
+<https://w3id.org/norma-abox/eu-ai-act#Condition_Is_the_AI_system_used_for_biometric_purposes> <https://w3id.org/def/norma-o#hasTrigger> <https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_Respect_high_risk_obligations> .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#NORMAAnnotator
+<https://w3id.org/norma-abox/eu-ai-act#NORMAAnnotator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#NORMAAnnotator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#AnnotatorAgent> .
+<https://w3id.org/norma-abox/eu-ai-act#NORMAAnnotator> <http://www.w3.org/2000/01/rdf-schema#label> "NORMA Legal Expert"@en .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#Obligation> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <http://www.w3.org/2000/01/rdf-schema#label> "ADD testing obligations"@en .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#actionText> "comply" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#agentText> "AI provider" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#deonticId> "OBL_ADD_testing_obligations" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#fromArticle> "60 and 61" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#fromRegulation> "EU AI Act" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasBindingForce> <https://w3id.org/def/norma-o#HardLaw> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasComplianceCriticality> <https://w3id.org/def/norma-o#High> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasExtractionMethod> <https://w3id.org/def/norma-o#ManualLawyer> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasLegalAction> <https://w3id.org/norma-abox/eu-ai-act#Action_comply> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasLegalAgent> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_provider> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasLegalObject> <https://w3id.org/norma-abox/eu-ai-act#Object_AI_system> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasNormStatus> <https://w3id.org/def/norma-o#Active> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasReviewStatus> <https://w3id.org/def/norma-o#PendingReview> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#objectText> "AI system" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#wasAttributedToAnnotator> <https://w3id.org/norma-abox/eu-ai-act#NORMAAnnotator> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#wasDerivedFromSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#wasGeneratedByAnnotationActivity> <https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_ADD_testing_obligations> .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#Obligation> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <http://www.w3.org/2000/01/rdf-schema#label> "Respect high-risk obligations"@en .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#actionText> "comply" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#agentText> "AI provider" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#deonticId> "OBL_Respect_high_risk_obligations" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#fromArticle> "8 to 22" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#fromRegulation> "EU AI Act" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasBindingForce> <https://w3id.org/def/norma-o#HardLaw> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasComplianceCriticality> <https://w3id.org/def/norma-o#High> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasExtractionMethod> <https://w3id.org/def/norma-o#ManualLawyer> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasLegalAction> <https://w3id.org/norma-abox/eu-ai-act#Action_comply> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasLegalAgent> <https://w3id.org/norma-abox/eu-ai-act#Agent_AI_provider> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasLegalObject> <https://w3id.org/norma-abox/eu-ai-act#Object_AI_system> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasLegalSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasNormStatus> <https://w3id.org/def/norma-o#Active> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasReviewStatus> <https://w3id.org/def/norma-o#PendingReview> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#objectText> "AI system" .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#wasAttributedToAnnotator> <https://w3id.org/norma-abox/eu-ai-act#NORMAAnnotator> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#wasDerivedFromSource> <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> .
+<https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#wasGeneratedByAnnotationActivity> <https://w3id.org/norma-abox/eu-ai-act#AnnotationActivity_OBL_Respect_high_risk_obligations> .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#Object_AI_system
+<https://w3id.org/norma-abox/eu-ai-act#Object_AI_system> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#Object_AI_system> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#LegalObject> .
+<https://w3id.org/norma-abox/eu-ai-act#Object_AI_system> <http://www.w3.org/2000/01/rdf-schema#label> "AI system"@en .
 # 
 # https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act
 <https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/norma-o#LegalSource> .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#articleNumber> "4" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#articleNumber> "5" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#originalText> "BLABLABLA" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#originalText> "BLABLABLAadhjadjajf" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#paragraphNumber> "2" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#regulationName> "EU AI Act" .
-<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/norma-o#regulationURI> "hhtps://"^^<http://www.w3.org/2001/XMLSchema#anyURI> .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#LegalSource> .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/def/norma-o#articleNumber> "60 and 61" .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/def/norma-o#articleNumber> "8 to 22" .
+<https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act> <https://w3id.org/def/norma-o#regulationName> "EU AI Act" .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#TriggerEvent> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_False_OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasOutcome> <https://w3id.org/def/norma-o#FalseOutcome> .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#TriggerEvent> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasOutcome> <https://w3id.org/def/norma-o#TrueOutcome> .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#TriggerEvent> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_tested_in_real_life_before_entering_into_the_market_True_OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasOutcome> <https://w3id.org/def/norma-o#TrueOutcome> .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_ADD_testing_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_ADD_testing_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#TriggerEvent> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_ADD_testing_obligations> <https://w3id.org/def/norma-o#hasOutcome> <https://w3id.org/def/norma-o#TrueOutcome> .
+# 
+# https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_Respect_high_risk_obligations
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#NamedIndividual> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_Respect_high_risk_obligations> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://w3id.org/def/norma-o#TriggerEvent> .
+<https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_the_AI_system_used_for_biometric_purposes_True_OBL_Respect_high_risk_obligations> <https://w3id.org/def/norma-o#hasOutcome> <https://w3id.org/def/norma-o#TrueOutcome> .
 # 
 # Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/
