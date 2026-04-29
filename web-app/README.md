@@ -32,7 +32,7 @@ In the monorepo, the default behavior already resolves:
 
 - `norma_engine/` from the repository root
 - `regulations/` from the repository root
-- `ontology/norma-ontology-v1.ttl` from the repository root
+- `ontology/norma-o-v1.ttl` from the repository root
 - `camunda-template/camunda8-compliance-template.json` from the repository root
 
 You only need environment variables if you intentionally move those locations.
@@ -42,7 +42,7 @@ Example override setup:
 ```env
 NORMA_CORE_ROOT=/absolute/path/to/core-repo
 NORMA_REGULATIONS_DIR=/absolute/path/to/core-repo/regulations
-NORMA_ONTOLOGY_PATH=/absolute/path/to/core-repo/ontology/norma-ontology-v1.ttl
+NORMA_ONTOLOGY_PATH=/absolute/path/to/core-repo/ontology/norma-o-v1.ttl
 NORMA_CAMUNDA_TEMPLATE_PATH=/absolute/path/to/core-repo/camunda-template/camunda8-compliance-template.json
 NORMA_DATA_DIR=./backend/data
 VITE_PROXY_TARGET=http://localhost:8000

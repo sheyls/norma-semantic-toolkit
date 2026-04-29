@@ -22,7 +22,7 @@
   - [Overview](#overview)
   - [Motivations and Design Goals](#motivations-and-design-goals)
   - [Repository Structure](#repository-structure)
-  - [The NORMA Ontology (TBox)](#the-norma-ontology-tbox)
+  - [The NORMA Ontology (TBox)](#the-norma-o-tbox)
     - [Statistics](#statistics)
     - [Class Hierarchy](#class-hierarchy)
     - [Controlled Vocabularies (SKOS ConceptSchemes)](#controlled-vocabularies-skos-conceptschemes)
@@ -62,7 +62,7 @@ Regulatory compliance requires understanding which legal obligations, prohibitio
 
 NORMA addresses this by providing:
 
-1. **An OWL 2 DL ontology** (`norma-ontology-v1`) that formally defines the vocabulary of legal norms, their structural components, provenance metadata, and condition-triggering mechanisms.
+1. **An OWL 2 DL ontology** (`norma-o-v1`) that formally defines the vocabulary of legal norms, their structural components, provenance metadata, and condition-triggering mechanisms.
 2. **A Camunda 8 element template** that enables legal experts to annotate BPMN process diagrams with structured normative metadata directly inside a standard process modelling tool.
 3. **An automated construction pipeline** (`norma_engine`) that transforms annotated BPMN files into a validated OWL ABox, resolving entity references and enforcing ontological constraints.
 4. **A SWRL rule generator** that derives condition-aware inference rules from the gateway logic embedded in the BPMN, enabling norm determination under a reasoner.
@@ -102,9 +102,9 @@ The design of NORMA is guided by four principles:
 ```
 norma-semantic-toolkit/
 │
-├── norma-ontology/
-│   ├── norma-ontology-v1.ttl        # OWL 2 DL ontology (Turtle)
-│   └── norma-ontology-v1.rdf        # OWL 2 DL ontology (RDF/XML)
+├── norma-o/
+│   ├── norma-o-v1.ttl        # OWL 2 DL ontology (Turtle)
+│   └── norma-o-v1.rdf        # OWL 2 DL ontology (RDF/XML)
 │
 ├── camunda-template/
 │   └── camunda8-compliance-template.json   # Camunda 8 element template
@@ -159,7 +159,7 @@ norma-semantic-toolkit/
 **License:** CC BY-NC 4.0  
 **DOI:** 10.5281/zenodo.19765302
 
-![NORMA-O ontology diagram](norma-ontology/norma-o.png)
+![NORMA-O ontology diagram](norma-o/norma-o.png)
 
 ### Statistics
 

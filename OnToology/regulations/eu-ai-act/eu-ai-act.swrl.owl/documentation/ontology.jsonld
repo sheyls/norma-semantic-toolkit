@@ -37,7 +37,7 @@
     "@value" : "EU AI Act"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#fromRegulation"
+    "@id" : "https://w3id.org/norma-o#fromRegulation"
   } ]
 }, {
   "@id" : "_:genid13",
@@ -49,7 +49,7 @@
     "@value" : "REC_1"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#deonticId"
+    "@id" : "https://w3id.org/norma-o#deonticId"
   } ]
 }, {
   "@id" : "_:genid15",
@@ -58,10 +58,10 @@
     "@id" : "https://w3id.org/norma-abox/eu-ai-act#REC_1"
   } ],
   "http://www.w3.org/2003/11/swrl#argument2" : [ {
-    "@id" : "https://w3id.org/norma-ontology#LowRisk"
+    "@id" : "https://w3id.org/norma-o#LowRisk"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#hasRiskLevel"
+    "@id" : "https://w3id.org/norma-o#hasRiskLevel"
   } ]
 }, {
   "@id" : "_:genid17",
@@ -70,10 +70,10 @@
     "@id" : "https://w3id.org/norma-abox/eu-ai-act#REC_1"
   } ],
   "http://www.w3.org/2003/11/swrl#argument2" : [ {
-    "@id" : "https://w3id.org/norma-ontology#SoftLaw"
+    "@id" : "https://w3id.org/norma-o#SoftLaw"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#hasBindingForce"
+    "@id" : "https://w3id.org/norma-o#hasBindingForce"
   } ]
 }, {
   "@id" : "_:genid19",
@@ -85,7 +85,7 @@
     "@id" : "https://w3id.org/norma-abox/eu-ai-act#Object_generate_content"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#actsOn"
+    "@id" : "https://w3id.org/norma-o#actsOn"
   } ]
 }, {
   "@id" : "_:genid21",
@@ -97,7 +97,7 @@
     "@id" : "https://w3id.org/norma-abox/eu-ai-act#REC_1"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#performsAction"
+    "@id" : "https://w3id.org/norma-o#performsAction"
   } ]
 }, {
   "@id" : "_:genid22",
@@ -152,7 +152,7 @@
     "@value" : "hhtps://"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#sourceURI"
+    "@id" : "https://w3id.org/norma-o#sourceURI"
   } ]
 }, {
   "@id" : "_:genid28",
@@ -164,7 +164,7 @@
     "@value" : "2"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#fromParagraph"
+    "@id" : "https://w3id.org/norma-o#fromParagraph"
   } ]
 }, {
   "@id" : "_:genid3",
@@ -189,7 +189,7 @@
     "@value" : "4"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#fromArticle"
+    "@id" : "https://w3id.org/norma-o#fromArticle"
   } ]
 }, {
   "@id" : "_:genid32",
@@ -201,7 +201,7 @@
     "@value" : "EU AI Act"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#fromRegulation"
+    "@id" : "https://w3id.org/norma-o#fromRegulation"
   } ]
 }, {
   "@id" : "_:genid34",
@@ -213,7 +213,7 @@
     "@value" : "OBL_1"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#deonticId"
+    "@id" : "https://w3id.org/norma-o#deonticId"
   } ]
 }, {
   "@id" : "_:genid36",
@@ -222,10 +222,10 @@
     "@id" : "https://w3id.org/norma-abox/eu-ai-act#OBL_1"
   } ],
   "http://www.w3.org/2003/11/swrl#argument2" : [ {
-    "@id" : "https://w3id.org/norma-ontology#HighRisk"
+    "@id" : "https://w3id.org/norma-o#HighRisk"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#hasRiskLevel"
+    "@id" : "https://w3id.org/norma-o#hasRiskLevel"
   } ]
 }, {
   "@id" : "_:genid38",
@@ -234,10 +234,10 @@
     "@id" : "https://w3id.org/norma-abox/eu-ai-act#OBL_1"
   } ],
   "http://www.w3.org/2003/11/swrl#argument2" : [ {
-    "@id" : "https://w3id.org/norma-ontology#HardLaw"
+    "@id" : "https://w3id.org/norma-o#HardLaw"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#hasBindingForce"
+    "@id" : "https://w3id.org/norma-o#hasBindingForce"
   } ]
 }, {
   "@id" : "_:genid40",
@@ -249,7 +249,7 @@
     "@id" : "https://w3id.org/norma-abox/eu-ai-act#Object_generate_content"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#actsOn"
+    "@id" : "https://w3id.org/norma-o#actsOn"
   } ]
 }, {
   "@id" : "_:genid42",
@@ -261,7 +261,7 @@
     "@id" : "https://w3id.org/norma-abox/eu-ai-act#OBL_1"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#performsAction"
+    "@id" : "https://w3id.org/norma-o#performsAction"
   } ]
 }, {
   "@id" : "_:genid5",
@@ -274,7 +274,7 @@
     "@value" : "hhtps://..."
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#sourceURI"
+    "@id" : "https://w3id.org/norma-o#sourceURI"
   } ]
 }, {
   "@id" : "_:genid7",
@@ -286,7 +286,7 @@
     "@value" : "2"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#fromParagraph"
+    "@id" : "https://w3id.org/norma-o#fromParagraph"
   } ]
 }, {
   "@id" : "_:genid9",
@@ -298,7 +298,7 @@
     "@value" : "5"
   } ],
   "http://www.w3.org/2003/11/swrl#propertyPredicate" : [ {
-    "@id" : "https://w3id.org/norma-ontology#fromArticle"
+    "@id" : "https://w3id.org/norma-o#fromArticle"
   } ]
 }, {
   "@id" : "https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner",
@@ -325,42 +325,42 @@
   "@id" : "https://w3id.org/norma-abox/eu-ai-act/rules#var_x",
   "@type" : [ "http://www.w3.org/2003/11/swrl#Variable" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#HardLaw",
+  "@id" : "https://w3id.org/norma-o#HardLaw",
   "@type" : [ "http://www.w3.org/2002/07/owl#NamedIndividual" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#HighRisk",
+  "@id" : "https://w3id.org/norma-o#HighRisk",
   "@type" : [ "http://www.w3.org/2002/07/owl#NamedIndividual" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#LowRisk",
+  "@id" : "https://w3id.org/norma-o#LowRisk",
   "@type" : [ "http://www.w3.org/2002/07/owl#NamedIndividual" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#SoftLaw",
+  "@id" : "https://w3id.org/norma-o#SoftLaw",
   "@type" : [ "http://www.w3.org/2002/07/owl#NamedIndividual" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#actsOn",
+  "@id" : "https://w3id.org/norma-o#actsOn",
   "@type" : [ "http://www.w3.org/2002/07/owl#ObjectProperty" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#deonticId",
+  "@id" : "https://w3id.org/norma-o#deonticId",
   "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#fromArticle",
+  "@id" : "https://w3id.org/norma-o#fromArticle",
   "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#fromParagraph",
+  "@id" : "https://w3id.org/norma-o#fromParagraph",
   "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#fromRegulation",
+  "@id" : "https://w3id.org/norma-o#fromRegulation",
   "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#hasBindingForce",
+  "@id" : "https://w3id.org/norma-o#hasBindingForce",
   "@type" : [ "http://www.w3.org/2002/07/owl#ObjectProperty" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#hasRiskLevel",
+  "@id" : "https://w3id.org/norma-o#hasRiskLevel",
   "@type" : [ "http://www.w3.org/2002/07/owl#ObjectProperty" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#performsAction",
+  "@id" : "https://w3id.org/norma-o#performsAction",
   "@type" : [ "http://www.w3.org/2002/07/owl#ObjectProperty" ]
 }, {
-  "@id" : "https://w3id.org/norma-ontology#sourceURI",
+  "@id" : "https://w3id.org/norma-o#sourceURI",
   "@type" : [ "http://www.w3.org/2002/07/owl#DatatypeProperty" ]
 } ]

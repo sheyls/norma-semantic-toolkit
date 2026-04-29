@@ -6,9 +6,9 @@
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:norma-ontology="https://w3id.org/norma-ontology#">
+     xmlns:norma-o="https://w3id.org/norma-o#">
     <owl:Ontology rdf:about="https://w3id.org/norma-abox/eu-ai-act">
-        <owl:imports rdf:resource="https://w3id.org/norma-ontology"/>
+        <owl:imports rdf:resource="https://w3id.org/norma-o"/>
     </owl:Ontology>
     
 
@@ -25,178 +25,178 @@
     
 
 
-    <!-- https://w3id.org/norma-ontology#actionText -->
+    <!-- https://w3id.org/norma-o#actionText -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#actionText"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#actionText"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#annotationDate -->
+    <!-- https://w3id.org/norma-o#annotationDate -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#annotationDate"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#annotationDate"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#annotator -->
+    <!-- https://w3id.org/norma-o#annotator -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#annotator"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#annotator"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#articleNumber -->
+    <!-- https://w3id.org/norma-o#articleNumber -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#articleNumber"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#articleNumber"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#conditionStatement -->
+    <!-- https://w3id.org/norma-o#conditionStatement -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#conditionStatement"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#conditionStatement"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#confidenceScore -->
+    <!-- https://w3id.org/norma-o#confidenceScore -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#confidenceScore"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#confidenceScore"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#deonticId -->
+    <!-- https://w3id.org/norma-o#deonticId -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#deonticId"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#deonticId"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#falseBranchLabel -->
+    <!-- https://w3id.org/norma-o#falseBranchLabel -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#falseBranchLabel"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#falseBranchLabel"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#fromArticle -->
+    <!-- https://w3id.org/norma-o#fromArticle -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#fromArticle"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#fromArticle"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#fromParagraph -->
+    <!-- https://w3id.org/norma-o#fromParagraph -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#fromParagraph"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#fromParagraph"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#fromRegulation -->
+    <!-- https://w3id.org/norma-o#fromRegulation -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#fromRegulation"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#fromRegulation"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasBindingForce -->
+    <!-- https://w3id.org/norma-o#hasBindingForce -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#hasBindingForce"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#hasBindingForce"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasComplianceCriticality -->
+    <!-- https://w3id.org/norma-o#hasComplianceCriticality -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#hasComplianceCriticality"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#hasComplianceCriticality"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasExtractionMethod -->
+    <!-- https://w3id.org/norma-o#hasExtractionMethod -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#hasExtractionMethod"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#hasExtractionMethod"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasLegalAgent -->
+    <!-- https://w3id.org/norma-o#hasLegalAgent -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#hasLegalAgent"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#hasLegalAgent"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasLegalSource -->
+    <!-- https://w3id.org/norma-o#hasLegalSource -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#hasLegalSource"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#hasLegalSource"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasNormStatus -->
+    <!-- https://w3id.org/norma-o#hasNormStatus -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#hasNormStatus"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#hasNormStatus"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasObject -->
+    <!-- https://w3id.org/norma-o#hasObject -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#hasObject"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#hasObject"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#hasReviewStatus -->
+    <!-- https://w3id.org/norma-o#hasReviewStatus -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#hasReviewStatus"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#hasReviewStatus"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#originalText -->
+    <!-- https://w3id.org/norma-o#originalText -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#originalText"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#originalText"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#paragraphNumber -->
+    <!-- https://w3id.org/norma-o#paragraphNumber -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#paragraphNumber"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#paragraphNumber"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#regulationName -->
+    <!-- https://w3id.org/norma-o#regulationName -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#regulationName"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#regulationName"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#regulationURI -->
+    <!-- https://w3id.org/norma-o#regulationURI -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#regulationURI"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#regulationURI"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#sourceURI -->
+    <!-- https://w3id.org/norma-o#sourceURI -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#sourceURI"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#sourceURI"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#trueBranchLabel -->
+    <!-- https://w3id.org/norma-o#trueBranchLabel -->
 
 
-    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-ontology#trueBranchLabel"/>
+    <owl:AnnotationProperty rdf:about="https://w3id.org/norma-o#trueBranchLabel"/>
     
 
 
@@ -231,45 +231,45 @@
     
 
 
-    <!-- https://w3id.org/norma-ontology#LegalAgent -->
+    <!-- https://w3id.org/norma-o#LegalAgent -->
 
 
-    <owl:Class rdf:about="https://w3id.org/norma-ontology#LegalAgent"/>
+    <owl:Class rdf:about="https://w3id.org/norma-o#LegalAgent"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#LegalCondition -->
+    <!-- https://w3id.org/norma-o#LegalCondition -->
 
 
-    <owl:Class rdf:about="https://w3id.org/norma-ontology#LegalCondition"/>
+    <owl:Class rdf:about="https://w3id.org/norma-o#LegalCondition"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#LegalObject -->
+    <!-- https://w3id.org/norma-o#LegalObject -->
 
 
-    <owl:Class rdf:about="https://w3id.org/norma-ontology#LegalObject"/>
+    <owl:Class rdf:about="https://w3id.org/norma-o#LegalObject"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#LegalSource -->
+    <!-- https://w3id.org/norma-o#LegalSource -->
 
 
-    <owl:Class rdf:about="https://w3id.org/norma-ontology#LegalSource"/>
+    <owl:Class rdf:about="https://w3id.org/norma-o#LegalSource"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#Obligation -->
+    <!-- https://w3id.org/norma-o#Obligation -->
 
 
-    <owl:Class rdf:about="https://w3id.org/norma-ontology#Obligation"/>
+    <owl:Class rdf:about="https://w3id.org/norma-o#Obligation"/>
     
 
 
-    <!-- https://w3id.org/norma-ontology#Recommendation -->
+    <!-- https://w3id.org/norma-o#Recommendation -->
 
 
-    <owl:Class rdf:about="https://w3id.org/norma-ontology#Recommendation"/>
+    <owl:Class rdf:about="https://w3id.org/norma-o#Recommendation"/>
     
 
 
@@ -289,7 +289,7 @@
 
 
     <owl:NamedIndividual rdf:about="https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner">
-        <rdf:type rdf:resource="https://w3id.org/norma-ontology#LegalAgent"/>
+        <rdf:type rdf:resource="https://w3id.org/norma-o#LegalAgent"/>
         <rdfs:label xml:lang="en">AI owner</rdfs:label>
     </owl:NamedIndividual>
     
@@ -299,16 +299,16 @@
 
 
     <owl:NamedIndividual rdf:about="https://w3id.org/norma-abox/eu-ai-act#Condition_Gateway_00rfxw0">
-        <rdf:type rdf:resource="https://w3id.org/norma-ontology#LegalCondition"/>
+        <rdf:type rdf:resource="https://w3id.org/norma-o#LegalCondition"/>
         <rdfs:label xml:lang="en">Generation of syntetic content?</rdfs:label>
-        <norma-ontology:conditionStatement>Generation of syntetic content?</norma-ontology:conditionStatement>
-        <norma-ontology:confidenceScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.0</norma-ontology:confidenceScore>
-        <norma-ontology:falseBranchLabel>No</norma-ontology:falseBranchLabel>
-        <norma-ontology:hasExtractionMethod rdf:resource="https://w3id.org/norma-ontology#ManualLawyer"/>
-        <norma-ontology:hasLegalSource rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act"/>
-        <norma-ontology:hasNormStatus rdf:resource="https://w3id.org/norma-ontology#Active"/>
-        <norma-ontology:hasReviewStatus rdf:resource="https://w3id.org/norma-ontology#PendingReview"/>
-        <norma-ontology:trueBranchLabel>Yes</norma-ontology:trueBranchLabel>
+        <norma-o:conditionStatement>Generation of syntetic content?</norma-o:conditionStatement>
+        <norma-o:confidenceScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.0</norma-o:confidenceScore>
+        <norma-o:falseBranchLabel>No</norma-o:falseBranchLabel>
+        <norma-o:hasExtractionMethod rdf:resource="https://w3id.org/norma-o#ManualLawyer"/>
+        <norma-o:hasLegalSource rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act"/>
+        <norma-o:hasNormStatus rdf:resource="https://w3id.org/norma-o#Active"/>
+        <norma-o:hasReviewStatus rdf:resource="https://w3id.org/norma-o#PendingReview"/>
+        <norma-o:trueBranchLabel>Yes</norma-o:trueBranchLabel>
     </owl:NamedIndividual>
     
 
@@ -317,25 +317,25 @@
 
 
     <owl:NamedIndividual rdf:about="https://w3id.org/norma-abox/eu-ai-act#OBL_1">
-        <rdf:type rdf:resource="https://w3id.org/norma-ontology#Obligation"/>
+        <rdf:type rdf:resource="https://w3id.org/norma-o#Obligation"/>
         <rdfs:label xml:lang="en">Marking obligation</rdfs:label>
-        <norma-ontology:actionText>Marking obligation</norma-ontology:actionText>
-        <norma-ontology:annotationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-02-13</norma-ontology:annotationDate>
-        <norma-ontology:annotator>Juana</norma-ontology:annotator>
-        <norma-ontology:confidenceScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.0</norma-ontology:confidenceScore>
-        <norma-ontology:deonticId>OBL_1</norma-ontology:deonticId>
-        <norma-ontology:fromArticle>4</norma-ontology:fromArticle>
-        <norma-ontology:fromParagraph>2</norma-ontology:fromParagraph>
-        <norma-ontology:fromRegulation>EU AI Act</norma-ontology:fromRegulation>
-        <norma-ontology:hasBindingForce rdf:resource="https://w3id.org/norma-ontology#HardLaw"/>
-        <norma-ontology:hasComplianceCriticality rdf:resource="https://w3id.org/norma-ontology#High"/>
-        <norma-ontology:hasExtractionMethod rdf:resource="https://w3id.org/norma-ontology#ManualLawyer"/>
-        <norma-ontology:hasLegalAgent rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner"/>
-        <norma-ontology:hasLegalSource rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act"/>
-        <norma-ontology:hasNormStatus rdf:resource="https://w3id.org/norma-ontology#Active"/>
-        <norma-ontology:hasObject rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Object_generate_content"/>
-        <norma-ontology:hasReviewStatus rdf:resource="https://w3id.org/norma-ontology#PendingReview"/>
-        <norma-ontology:sourceURI rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">hhtps://</norma-ontology:sourceURI>
+        <norma-o:actionText>Marking obligation</norma-o:actionText>
+        <norma-o:annotationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-02-13</norma-o:annotationDate>
+        <norma-o:annotator>Juana</norma-o:annotator>
+        <norma-o:confidenceScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.0</norma-o:confidenceScore>
+        <norma-o:deonticId>OBL_1</norma-o:deonticId>
+        <norma-o:fromArticle>4</norma-o:fromArticle>
+        <norma-o:fromParagraph>2</norma-o:fromParagraph>
+        <norma-o:fromRegulation>EU AI Act</norma-o:fromRegulation>
+        <norma-o:hasBindingForce rdf:resource="https://w3id.org/norma-o#HardLaw"/>
+        <norma-o:hasComplianceCriticality rdf:resource="https://w3id.org/norma-o#High"/>
+        <norma-o:hasExtractionMethod rdf:resource="https://w3id.org/norma-o#ManualLawyer"/>
+        <norma-o:hasLegalAgent rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner"/>
+        <norma-o:hasLegalSource rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act"/>
+        <norma-o:hasNormStatus rdf:resource="https://w3id.org/norma-o#Active"/>
+        <norma-o:hasObject rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Object_generate_content"/>
+        <norma-o:hasReviewStatus rdf:resource="https://w3id.org/norma-o#PendingReview"/>
+        <norma-o:sourceURI rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">hhtps://</norma-o:sourceURI>
     </owl:NamedIndividual>
     
 
@@ -344,7 +344,7 @@
 
 
     <owl:NamedIndividual rdf:about="https://w3id.org/norma-abox/eu-ai-act#Object_generate_content">
-        <rdf:type rdf:resource="https://w3id.org/norma-ontology#LegalObject"/>
+        <rdf:type rdf:resource="https://w3id.org/norma-o#LegalObject"/>
         <rdfs:label xml:lang="en">generate content</rdfs:label>
     </owl:NamedIndividual>
     
@@ -354,26 +354,26 @@
 
 
     <owl:NamedIndividual rdf:about="https://w3id.org/norma-abox/eu-ai-act#REC_1">
-        <rdf:type rdf:resource="https://w3id.org/norma-ontology#Recommendation"/>
+        <rdf:type rdf:resource="https://w3id.org/norma-o#Recommendation"/>
         <rdfs:label xml:lang="en">Volutary codes
 of conduct</rdfs:label>
-        <norma-ontology:actionText>Adopt volutary codes of conduct</norma-ontology:actionText>
-        <norma-ontology:annotationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-02-13</norma-ontology:annotationDate>
-        <norma-ontology:annotator>Juana</norma-ontology:annotator>
-        <norma-ontology:confidenceScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.0</norma-ontology:confidenceScore>
-        <norma-ontology:deonticId>REC_1</norma-ontology:deonticId>
-        <norma-ontology:fromArticle>5</norma-ontology:fromArticle>
-        <norma-ontology:fromParagraph>2</norma-ontology:fromParagraph>
-        <norma-ontology:fromRegulation>EU AI Act</norma-ontology:fromRegulation>
-        <norma-ontology:hasBindingForce rdf:resource="https://w3id.org/norma-ontology#SoftLaw"/>
-        <norma-ontology:hasComplianceCriticality rdf:resource="https://w3id.org/norma-ontology#Low"/>
-        <norma-ontology:hasExtractionMethod rdf:resource="https://w3id.org/norma-ontology#ManualLawyer"/>
-        <norma-ontology:hasLegalAgent rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner"/>
-        <norma-ontology:hasLegalSource rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act"/>
-        <norma-ontology:hasNormStatus rdf:resource="https://w3id.org/norma-ontology#Active"/>
-        <norma-ontology:hasObject rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Object_generate_content"/>
-        <norma-ontology:hasReviewStatus rdf:resource="https://w3id.org/norma-ontology#PendingReview"/>
-        <norma-ontology:sourceURI rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">hhtps://...</norma-ontology:sourceURI>
+        <norma-o:actionText>Adopt volutary codes of conduct</norma-o:actionText>
+        <norma-o:annotationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-02-13</norma-o:annotationDate>
+        <norma-o:annotator>Juana</norma-o:annotator>
+        <norma-o:confidenceScore rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.0</norma-o:confidenceScore>
+        <norma-o:deonticId>REC_1</norma-o:deonticId>
+        <norma-o:fromArticle>5</norma-o:fromArticle>
+        <norma-o:fromParagraph>2</norma-o:fromParagraph>
+        <norma-o:fromRegulation>EU AI Act</norma-o:fromRegulation>
+        <norma-o:hasBindingForce rdf:resource="https://w3id.org/norma-o#SoftLaw"/>
+        <norma-o:hasComplianceCriticality rdf:resource="https://w3id.org/norma-o#Low"/>
+        <norma-o:hasExtractionMethod rdf:resource="https://w3id.org/norma-o#ManualLawyer"/>
+        <norma-o:hasLegalAgent rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Agent_AI_owner"/>
+        <norma-o:hasLegalSource rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act"/>
+        <norma-o:hasNormStatus rdf:resource="https://w3id.org/norma-o#Active"/>
+        <norma-o:hasObject rdf:resource="https://w3id.org/norma-abox/eu-ai-act#Object_generate_content"/>
+        <norma-o:hasReviewStatus rdf:resource="https://w3id.org/norma-o#PendingReview"/>
+        <norma-o:sourceURI rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">hhtps://...</norma-o:sourceURI>
     </owl:NamedIndividual>
     
 
@@ -382,14 +382,14 @@ of conduct</rdfs:label>
 
 
     <owl:NamedIndividual rdf:about="https://w3id.org/norma-abox/eu-ai-act#Regulation_EU_AI_Act">
-        <rdf:type rdf:resource="https://w3id.org/norma-ontology#LegalSource"/>
-        <norma-ontology:articleNumber>4</norma-ontology:articleNumber>
-        <norma-ontology:articleNumber>5</norma-ontology:articleNumber>
-        <norma-ontology:originalText>BLABLABLA</norma-ontology:originalText>
-        <norma-ontology:originalText>BLABLABLAadhjadjajf</norma-ontology:originalText>
-        <norma-ontology:paragraphNumber>2</norma-ontology:paragraphNumber>
-        <norma-ontology:regulationName>EU AI Act</norma-ontology:regulationName>
-        <norma-ontology:regulationURI rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">hhtps://</norma-ontology:regulationURI>
+        <rdf:type rdf:resource="https://w3id.org/norma-o#LegalSource"/>
+        <norma-o:articleNumber>4</norma-o:articleNumber>
+        <norma-o:articleNumber>5</norma-o:articleNumber>
+        <norma-o:originalText>BLABLABLA</norma-o:originalText>
+        <norma-o:originalText>BLABLABLAadhjadjajf</norma-o:originalText>
+        <norma-o:paragraphNumber>2</norma-o:paragraphNumber>
+        <norma-o:regulationName>EU AI Act</norma-o:regulationName>
+        <norma-o:regulationURI rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">hhtps://</norma-o:regulationURI>
     </owl:NamedIndividual>
 </rdf:RDF>
 
