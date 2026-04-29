@@ -1,3 +1,158 @@
 <h2 id="desc" class="list">NORMA ontology: Description <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
 
-<span class="markdown">Formal ontology for representing machine-readable legal norm annotations, their legal context, conditional applicability, provenance, source traceability, lifecycle status, and controlled classification values in the NORMA toolkit.</span>
+<p>The NORMA ontology is a domain ontology for representing machine-readable legal norm annotations as structured semantic resources. It supports the semantic publication, integration, and reuse of annotations derived from regulatory texts, while preserving full traceability to the legal source and accountability for the annotation process.</p>
+
+<h3 id="desc-scope" class="list">Scope</h3>
+
+<p>The ontology models normative content together with the legal context needed to interpret it. Its scope covers:</p>
+<ul>
+  <li>regulative norms — obligations, prohibitions, permissions, recommendations, and negative recommendations;</li>
+  <li>constitutive rules that define statuses, classifications, or institutional facts;</li>
+  <li>legal conditions and their evaluated outcomes;</li>
+  <li>the triggering relation between a condition outcome and the normative content it activates;</li>
+  <li>legal agents, legal actions, legal objects, and legal sources;</li>
+  <li>provenance, extraction method, review status, lifecycle status, and source traceability.</li>
+</ul>
+
+<h3 id="desc-objectives" class="list">Design objectives</h3>
+
+<p>The ontology was designed to meet a set of practical and conceptual goals typical of professional ontology engineering for legal and regulatory domains:</p>
+<ul>
+  <li>distinguish clearly between prescriptive content (what is required, permitted, or prohibited) and definitional content (what counts as what);</li>
+  <li>support traceability from each annotation back to the legal source from which it was derived;</li>
+  <li>preserve information about who created an annotation, how it was produced, and with what confidence or review state;</li>
+  <li>represent conditional applicability in a way that supports querying, validation, and downstream reasoning;</li>
+  <li>reuse established standards where possible, rather than introducing isolated project-specific patterns.</li>
+</ul>
+
+<h3 id="desc-organization" class="list">Conceptual organisation</h3>
+
+<p>The conceptual centre of the ontology is <code>norma:NormativeContent</code> — the machine-readable legal content extracted, formulated, or curated from a legal source. Two principal subclasses organise this content:</p>
+<ul>
+  <li><code>norma:RegulativeNorm</code>, for normative statements governing conduct;</li>
+  <li><code>norma:ConstitutiveRule</code>, for statements that define or qualify legal or institutional situations.</li>
+</ul>
+<p>Regulative norms may be further specialised as obligations, prohibitions, permissions, recommendations, or negative recommendations. They can be linked to a legal agent, a legal action, a legal object, a binding-force classification, and a compliance-criticality level. Constitutive rules are modelled separately so that definitional and classificatory legal content is not conflated with prescriptive content.</p>
+
+<h3 id="desc-conditions" class="list">Modelling conditional applicability</h3>
+
+<p>One of the distinguishing features of the ontology is its treatment of legal conditions. Rather than recording conditionality as an informal text fragment alone, the ontology provides three complementary elements:</p>
+<ul>
+  <li><code>norma:LegalCondition</code>, representing the relevant condition or criterion;</li>
+  <li><code>norma:ConditionOutcome</code>, representing the evaluated branch — for example, whether the condition is true or false;</li>
+  <li><code>norma:TriggerEvent</code>, reifying the relation between one specific outcome and the normative content that outcome activates.</li>
+</ul>
+<p>This n-ary relation pattern makes branch-sensitive activation explicit. It is particularly useful when a single legal condition may activate different norms depending on which branch applies.</p>
+
+<h3 id="desc-conventions" class="list">Modelling conventions</h3>
+
+<p>Several conventions are important for interpreting the ontology correctly.</p>
+<ul>
+  <li>Literal shortcut properties — <code>norma:agentText</code>, <code>norma:actionText</code>, <code>norma:objectText</code>, and <code>norma:conditionTrigger</code> — are convenience properties for low-overhead annotation and pipeline interoperability. They complement rather than replace the object-level modelling with <code>norma:LegalAgent</code>, <code>norma:LegalAction</code>, <code>norma:LegalObject</code>, and <code>norma:LegalCondition</code>.</li>
+  <li>Controlled-value classes — <code>norma:BindingForce</code>, <code>norma:ComplianceCriticality</code>, <code>norma:NormStatus</code>, <code>norma:ReviewStatus</code>, <code>norma:ExtractionMethod</code>, and <code>norma:ConditionOutcome</code> — are represented as extensible SKOS concept classes with named individuals. Classification values are therefore stable, queryable, and extensible without modifying the core model.</li>
+  <li>Some properties are intentionally functional because the ontology assumes exactly one value per annotation for a given management dimension. Examples include <code>norma:hasNormStatus</code>, <code>norma:hasReviewStatus</code>, and <code>norma:hasExtractionMethod</code>.</li>
+  <li>Conditional activation is available at two levels of detail: the full n-ary pattern through <code>norma:TriggerEvent</code>, and the shortcut binary property <code>norma:triggersNorm</code>, derived via a property chain. Systems that only need to know whether a triggering relation exists may use the shortcut; systems that need branch-sensitive semantics should traverse the full trigger-event structure.</li>
+</ul>
+
+<h3 id="desc-provenance" class="list">Provenance and legal traceability</h3>
+
+<p>NORMA models the provenance of annotations through <code>norma:AnnotationActivity</code>, which represents the activity that produced an annotation, and <code>norma:AnnotatorAgent</code>, which identifies the responsible agent. Both are aligned with PROV-O, making attribution and source usage explicit. <code>norma:LegalSource</code> and <code>norma:LegalSourceExpression</code>, aligned with ELI, support work-level and expression-level references to legal materials. This allows consumers of the ontology to trace any normative statement back to the specific legal source from which it was derived.</p>
+
+<h3 id="desc-vocab" class="list">Controlled vocabularies and lifecycle information</h3>
+
+<p>Annotation management is supported through six controlled vocabularies: <code>norma:BindingForce</code>, <code>norma:ComplianceCriticality</code>, <code>norma:ExtractionMethod</code>, <code>norma:NormStatus</code>, <code>norma:ReviewStatus</code>, and <code>norma:ConditionOutcome</code>. These SKOS-based schemes enable consistent classification and querying across regulatory knowledge graphs and annotation workflows.</p>
+
+<h3 id="desc-examples" class="list">Illustrative examples</h3>
+
+<p>The following examples show how the ontology is used in practice.</p>
+
+<div class="description">
+<p><strong>Example 1: a regulative norm — EU AI Act, Article 4(2)</strong></p>
+<pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
+@prefix :      &lt;https://w3id.org/norma-abox/eu-ai-act#&gt; .
+
+:OBL_1
+    a norma:Obligation ;
+    rdfs:label "Marking obligation"@en ;
+    norma:deonticId "OBL_1" ;
+    norma:actionText "Marking obligation" ;
+    norma:fromRegulation "EU AI Act" ;
+    norma:fromArticle "4" ;
+    norma:fromParagraph "2" ;
+    norma:hasBindingForce    norma:HardLaw ;
+    norma:hasNormStatus      norma:Active ;
+    norma:hasComplianceCriticality norma:High ;
+    norma:hasExtractionMethod norma:ManualLawyer ;
+    norma:hasReviewStatus    norma:PendingReview ;
+    norma:hasLegalAgent      :Agent_AI_owner ;
+    norma:hasLegalObject     :Object_generate_content ;
+    norma:hasLegalSource     :Regulation_EU_AI_Act ;
+    norma:annotationDate     "2026-02-13"^^xsd:date ;
+    norma:confidenceScore    1.0 .</code></pre>
+<p>A real obligation from the EU AI Act knowledge graph in this repository. It is classified as hard law, active, and high criticality, and was manually annotated by a legal expert. The agent bearing the obligation is the AI owner; the object is the act of generating content. All controlled-vocabulary values are named individuals declared in the TBox.</p>
+</div>
+
+<div class="description">
+<p><strong>Example 2: a constitutive rule</strong></p>
+<pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
+@prefix ex: &lt;https://example.org/norma/&gt; .
+
+ex:cr_high_risk_system
+    a norma:ConstitutiveRule ;
+    norma:deonticId "CR_High_Risk_AI_System" ;
+    norma:factStatement "An AI system used for biometric identification in critical infrastructure is classified as high-risk." ;
+    norma:normStatement "Certain biometric-identification systems are legally classified as high-risk AI systems." .</code></pre>
+<p>Classificatory legal content: not a prescription directed at an agent, but a constitutive determination that establishes a legal status or category.</p>
+</div>
+
+<div class="description">
+<p><strong>Example 3: conditional activation</strong></p>
+<pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
+@prefix ex: &lt;https://example.org/norma/&gt; .
+
+ex:condition_disclosure_required
+    a norma:LegalCondition ;
+    norma:conditionStatement "The content is capable of misleading recipients as to whether it was generated by AI." ;
+    norma:hasTrigger ex:trigger_true .
+
+ex:trigger_true
+    a norma:TriggerEvent ;
+    norma:hasOutcome norma:TrueOutcome ;
+    norma:activatesNorm ex:obl_mark_content .</code></pre>
+<p>The ontology does not simply record that a condition exists; it explicitly records which evaluated outcome activates which norm. This makes branch-sensitive compliance queries possible.</p>
+</div>
+
+<div class="description">
+<p><strong>Example 4: provenance and source traceability</strong></p>
+<pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
+@prefix ex: &lt;https://example.org/norma/&gt; .
+
+ex:activity_001
+    a norma:AnnotationActivity ;
+    norma:generatedNormativeContent ex:obl_mark_content ;
+    norma:usedLegalSource ex:source_ai_act ;
+    norma:confidenceScore 0.93 .
+
+ex:source_ai_act
+    a norma:LegalSource ;
+    norma:regulationName "EU AI Act" ;
+    norma:articleNumber "50" .</code></pre>
+<p>An annotation linked to the activity that produced it and to the source material on which it is based, enabling full audit trails.</p>
+</div>
+
+<div class="description">
+<p><strong>Example 5: status and review metadata</strong></p>
+<pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
+@prefix ex: &lt;https://example.org/norma/&gt; .
+
+ex:obl_mark_content
+    norma:hasNormStatus norma:Active ;
+    norma:hasReviewStatus norma:Approved ;
+    norma:hasExtractionMethod norma:ManualLawyer ;
+    norma:lastReviewDate "2026-04-20"^^&lt;http://www.w3.org/2001/XMLSchema#date&gt; .</code></pre>
+<p>Governance metadata essential in professional annotation workflows: lifecycle status, review state, and production method.</p>
+</div>
+
+<h3 id="desc-use" class="list">Intended use</h3>
+
+<p>The ontology is designed for semantic annotation, publication, validation, querying, and reuse. It is suitable for knowledge graph generation pipelines, ontology-driven documentation, provenance-aware annotation environments, and compliance-support applications. Implementations may extend the model with domain-specific subclasses, additional controlled vocabularies, or validation constraints, provided that such extensions preserve the core conceptual commitments of the ontology and its interoperability with reused vocabularies.</p>

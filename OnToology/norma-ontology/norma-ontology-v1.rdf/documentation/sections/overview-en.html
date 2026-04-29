@@ -1,12 +1,99 @@
 <h2 id="overv" class="list">NORMA ontology: Overview <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
-<span class="markdown">
-This ontology has the following classes and properties.</span>
+<p>The ontology is organised around four complementary concerns: (1) normative content and its deontic type; (2) legal context — the conditions, agents, actions, objects, and sources that make a norm meaningful; (3) annotation provenance and lifecycle governance; and (4) controlled concept schemes for classifying key annotation dimensions. The diagram below gives a bird's-eye view of the principal classes and their relationships. Click the image to open the full-resolution version.</p>
+
+<figure class="ontology-diagram">
+  <a href="norma-o.svg" target="_blank" title="Open full-resolution diagram">
+    <img src="norma-o.svg"
+         alt="NORMA ontology diagram — principal classes and their relationships"
+         style="max-width:100%; cursor:zoom-in;" />
+  </a>
+  <figcaption>
+    <strong>Figure 1.</strong> Principal classes and relationships of the NORMA ontology (click to enlarge).
+  </figcaption>
+</figure>
+
+<h3 id="overv-groups" class="list">Conceptual groups</h3>
+
+<div class="concept-group">
+  <h4>Normative content</h4>
+  <p>
+    <code>norma:NormativeContent</code> is the central class. It branches into
+    <code>norma:RegulativeNorm</code> — prescriptive statements that govern conduct — and
+    <code>norma:ConstitutiveRule</code> — definitional statements that establish legal statuses or categories.
+    Regulative norms are further specialised as
+    <code>norma:Obligation</code>, <code>norma:Prohibition</code>,
+    <code>norma:Permission</code>, <code>norma:Recommendation</code>, and
+    <code>norma:NegativeRecommendation</code>.
+  </p>
+</div>
+
+<div class="concept-group">
+  <h4>Legal context</h4>
+  <p>
+    Each normative content item can be linked to the legal elements that give it meaning:
+    a <code>norma:LegalAgent</code> (the party bearing an obligation or right),
+    a <code>norma:LegalAction</code> (the required, permitted, or prohibited act),
+    a <code>norma:LegalObject</code> (the thing the action concerns), and a
+    <code>norma:LegalSource</code> or <code>norma:LegalSourceExpression</code>
+    (the legal instrument from which the norm derives, aligned with ELI).
+    Shortcut literal properties (<code>norma:agentText</code>,
+    <code>norma:actionText</code>, <code>norma:objectText</code>) support
+    lightweight annotation pipelines without losing the richer object-level model.
+  </p>
+</div>
+
+<div class="concept-group">
+  <h4>Conditional activation — the TriggerEvent pattern</h4>
+  <p>
+    Legal norms often apply only when certain conditions hold.
+    NORMA makes conditional applicability explicit through a reified n-ary pattern:
+    a <code>norma:LegalCondition</code> links to one or more
+    <code>norma:TriggerEvent</code> instances, each pairing a specific
+    <code>norma:ConditionOutcome</code> (true, false, or other) with the
+    <code>norma:NormativeContent</code> activated by that outcome.
+    The shortcut property <code>norma:triggersNorm</code>, derived via a property chain,
+    serves systems that only need to know whether a triggering relation exists.
+  </p>
+</div>
+
+<div class="concept-group">
+  <h4>Provenance and annotation governance</h4>
+  <p>
+    <code>norma:AnnotationActivity</code> (aligned with <code>prov:Activity</code>)
+    records the act that produced a normative content item.
+    <code>norma:AnnotatorAgent</code> (aligned with <code>prov:Agent</code>)
+    identifies the responsible party. Data properties such as
+    <code>norma:confidenceScore</code>, <code>norma:annotationDate</code>,
+    and <code>norma:lastReviewDate</code> support accountability and auditability.
+  </p>
+</div>
+
+<div class="concept-group">
+  <h4>Controlled vocabularies</h4>
+  <p>
+    Six SKOS-based concept classes provide stable, queryable classification values:
+    <code>norma:BindingForce</code> (hard law, soft law, contractual, internal policy),
+    <code>norma:ComplianceCriticality</code> (critical, high, medium, low),
+    <code>norma:ExtractionMethod</code> (manual by lawyer or analyst, LLM extraction,
+    pattern matching, rule-based extraction),
+    <code>norma:NormStatus</code> (active, not yet in force, superseded),
+    <code>norma:ReviewStatus</code> (not reviewed, pending review, under review,
+    approved, disputed), and
+    <code>norma:ConditionOutcome</code> (true outcome, false outcome).
+    Each has a corresponding SKOS concept scheme individual (e.g., <code>norma:BindingForceScheme</code>).
+  </p>
+</div>
+
+<h3 id="overv-terms" class="list">Full term index</h3>
+<p>The tables below list all ontology terms. In the detailed cross-reference, the abbreviations <code>c</code>, <code>op</code>, <code>dp</code>, and <code>ni</code> denote class, object property, data property, and named individual respectively.</p>
+
 <h4>Classes</h4>
 <ul xmlns:widoco="https://w3id.org/widoco/vocab#"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     class="hlist">
    <li>
-      <a href="#AnnotationActivity" title="https://w3id.org/def/norma-o#AnnotationActivity">Annotation Activity</a>
+      <a href="#AnnotationActivity"
+         title="https://w3id.org/def/norma-o#AnnotationActivity">Annotation Activity</a>
    </li>
    <li>
       <a href="#AnnotatorAgent" title="https://w3id.org/def/norma-o#AnnotatorAgent">Annotator Agent</a>
@@ -19,13 +106,22 @@ This ontology has the following classes and properties.</span>
          title="https://w3id.org/def/norma-o#ComplianceCriticality">Compliance Criticality</a>
    </li>
    <li>
-      <a href="#ConditionOutcome" title="https://w3id.org/def/norma-o#ConditionOutcome">Condition Outcome</a>
+      <a href="#ConditionOutcome"
+         title="https://w3id.org/def/norma-o#ConditionOutcome">Condition Outcome</a>
    </li>
    <li>
-      <a href="#ConstitutiveRule" title="https://w3id.org/def/norma-o#ConstitutiveRule">Constitutive Rule</a>
+      <a href="#ConstitutiveRule"
+         title="https://w3id.org/def/norma-o#ConstitutiveRule">Constitutive Rule</a>
    </li>
    <li>
-      <a href="#ExtractionMethod" title="https://w3id.org/def/norma-o#ExtractionMethod">Extraction Method</a>
+      <a href="#ExtractionMethod"
+         title="https://w3id.org/def/norma-o#ExtractionMethod">Extraction Method</a>
+   </li>
+   <li>
+      <a href="#LegalAction" title="https://w3id.org/def/norma-o#LegalAction">Legal Action</a>
+   </li>
+   <li>
+      <a href="#LegalAgent" title="https://w3id.org/def/norma-o#LegalAgent">Legal Agent</a>
    </li>
    <li>
       <a href="#LegalCondition" title="https://w3id.org/def/norma-o#LegalCondition">Legal Condition</a>
@@ -50,7 +146,8 @@ This ontology has the following classes and properties.</span>
       <a href="#NormStatus" title="https://w3id.org/def/norma-o#NormStatus">Norm Status</a>
    </li>
    <li>
-      <a href="#NormativeContent" title="https://w3id.org/def/norma-o#NormativeContent">Normative Content</a>
+      <a href="#NormativeContent"
+         title="https://w3id.org/def/norma-o#NormativeContent">Normative Content</a>
    </li>
    <li>
       <a href="#Obligation" title="https://w3id.org/def/norma-o#Obligation">
@@ -73,9 +170,7 @@ This ontology has the following classes and properties.</span>
       </a>
    </li>
    <li>
-      <a href="#RegulativeNorm" title="https://w3id.org/def/norma-o#RegulativeNorm">
-         <span>Regulative Norm</span>
-      </a>
+      <a href="#RegulativeNorm" title="https://w3id.org/def/norma-o#RegulativeNorm">Regulative Norm</a>
    </li>
    <li>
       <a href="#ReviewStatus" title="https://w3id.org/def/norma-o#ReviewStatus">Review Status</a>
@@ -101,7 +196,8 @@ This ontology has the following classes and properties.</span>
          title="https://w3id.org/def/norma-o#hasComplianceCriticality">has compliance criticality</a>
    </li>
    <li>
-      <a href="#hasExtractionMethod" title="https://w3id.org/def/norma-o#hasExtractionMethod">has extraction method</a>
+      <a href="#hasExtractionMethod"
+         title="https://w3id.org/def/norma-o#hasExtractionMethod">has extraction method</a>
    </li>
    <li>
       <a href="#hasLegalAction" title="https://w3id.org/def/norma-o#hasLegalAction">has legal action</a>
@@ -125,7 +221,8 @@ This ontology has the following classes and properties.</span>
       <a href="#hasReviewStatus" title="https://w3id.org/def/norma-o#hasReviewStatus">has review status</a>
    </li>
    <li>
-      <a href="#hasSourceExpression" title="https://w3id.org/def/norma-o#hasSourceExpression">has source expression</a>
+      <a href="#hasSourceExpression"
+         title="https://w3id.org/def/norma-o#hasSourceExpression">has source expression</a>
    </li>
    <li>
       <a href="#hasTrigger" title="https://w3id.org/def/norma-o#hasTrigger">has trigger</a>
@@ -241,10 +338,12 @@ This ontology has the following classes and properties.</span>
       <a href="#articleNumber" title="https://w3id.org/def/norma-o#articleNumber">article number</a>
    </li>
    <li>
-      <a href="#conditionStatement" title="https://w3id.org/def/norma-o#conditionStatement">condition statement</a>
+      <a href="#conditionStatement"
+         title="https://w3id.org/def/norma-o#conditionStatement">condition statement</a>
    </li>
    <li>
-      <a href="#conditionTrigger" title="https://w3id.org/def/norma-o#conditionTrigger">condition trigger</a>
+      <a href="#conditionTrigger"
+         title="https://w3id.org/def/norma-o#conditionTrigger">condition trigger</a>
    </li>
    <li>
       <a href="#confidenceScore" title="https://w3id.org/def/norma-o#confidenceScore">confidence score</a>
@@ -310,7 +409,8 @@ This ontology has the following classes and properties.</span>
       <a href="#Approved" title="https://w3id.org/def/norma-o#Approved">Approved</a>
    </li>
    <li>
-      <a href="#BindingForceScheme" title="https://w3id.org/def/norma-o#BindingForceScheme">Binding force scheme</a>
+      <a href="#BindingForceScheme"
+         title="https://w3id.org/def/norma-o#BindingForceScheme">Binding force scheme</a>
    </li>
    <li>
       <a href="#ComplianceCriticalityScheme"
@@ -346,16 +446,6 @@ This ontology has the following classes and properties.</span>
       <a href="#InternalPolicy" title="https://w3id.org/def/norma-o#InternalPolicy">Internal Policy</a>
    </li>
    <li>
-      <a href="#LegalAction" title="https://w3id.org/def/norma-o#LegalAction">
-         <span>Legal Action</span>
-      </a>
-   </li>
-   <li>
-      <a href="#LegalAgent" title="https://w3id.org/def/norma-o#LegalAgent">
-         <span>Legal Agent</span>
-      </a>
-   </li>
-   <li>
       <a href="#LLMExtraction" title="https://w3id.org/def/norma-o#LLMExtraction">LLM extraction</a>
    </li>
    <li>
@@ -377,7 +467,8 @@ This ontology has the following classes and properties.</span>
       </a>
    </li>
    <li>
-      <a href="#NormStatusScheme" title="https://w3id.org/def/norma-o#NormStatusScheme">Norm status scheme</a>
+      <a href="#NormStatusScheme"
+         title="https://w3id.org/def/norma-o#NormStatusScheme">Norm status scheme</a>
    </li>
    <li>
       <a href="#https://w3id.org/def/norma-o" title="https://w3id.org/def/norma-o">
@@ -417,12 +508,8 @@ This ontology has the following classes and properties.</span>
       </a>
    </li>
    <li>
-      <a href="#RegulativeNorm" title="https://w3id.org/def/norma-o#RegulativeNorm">
-         <span>Regulative Norm</span>
-      </a>
-   </li>
-   <li>
-      <a href="#ReviewStatusScheme" title="https://w3id.org/def/norma-o#ReviewStatusScheme">Review status scheme</a>
+      <a href="#ReviewStatusScheme"
+         title="https://w3id.org/def/norma-o#ReviewStatusScheme">Review status scheme</a>
    </li>
    <li>
       <a href="#RuleBased" title="https://w3id.org/def/norma-o#RuleBased">Rule-based extraction</a>

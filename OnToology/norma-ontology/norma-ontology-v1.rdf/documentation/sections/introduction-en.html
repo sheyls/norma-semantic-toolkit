@@ -1,3 +1,11 @@
 <h2 id="intro" class="list">Introduction <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
-<span class="markdown">
-This is a place holder text for the introduction. The introduction should briefly describe the ontology, its motivation, state of the art and goals.</span>
+
+<p>Regulatory requirements are increasingly expected to be machine-readable: traceable to their legal source, classifiable by type and binding force, and queryable in automated pipelines. The NORMA ontology provides the semantic backbone for achieving this in the context of the NORMA toolkit, where legal experts annotate regulatory texts through BPMN-based workflows and the results are transformed into structured knowledge graph artifacts.</p>
+
+<p>The ontology answers a core set of questions about each annotation: <em>what</em> is being regulated (a norm or a definitional rule), <em>under which conditions</em> it applies, <em>who</em> bears the obligation or right, <em>what action</em> is required or prohibited, <em>what object</em> the action concerns, and <em>from which legal source</em> the norm derives. To answer these questions consistently, the model separates regulative norms (which govern conduct) from constitutive rules (which define or qualify legal statuses), and represents each legal element — agent, action, object, condition, source — as a distinct entity rather than a free-text blob.</p>
+
+<p>Three design principles shape the ontology. First, conditional applicability is made explicit rather than left as unstructured text: a <code>norma:TriggerEvent</code> links a specific condition outcome to the normative content it activates, following the W3C n-ary relation pattern. Second, established vocabularies are reused wherever they improve interoperability — PROV-O for annotation provenance, ELI for legal resource references, FOAF for agent and project metadata, and SKOS for controlled classification values. Third, annotation provenance is treated as first-class: the ontology records not just what a norm says, but who produced the annotation, by what method, and with what review status.</p>
+
+<p>The intended users of this documentation are ontology engineers who need a conceptual specification, legal knowledge engineers who need a reliable annotation model, developers building transformation or publication pipelines, and researchers working on formal representations of legal norms.</p>
+
+<p>The sections that follow cover, in order: the namespace declarations, a visual overview of the principal classes and their relationships, a detailed description of design decisions and illustrative examples, a full cross-reference of all ontology terms, and a reference list of the standards and patterns on which NORMA builds.</p>
