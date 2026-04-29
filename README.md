@@ -22,7 +22,7 @@
   - [Overview](#overview)
   - [Motivations and Design Goals](#motivations-and-design-goals)
   - [Repository Structure](#repository-structure)
-  - [The NORMA Ontology (TBox)](#the-norma-o-tbox)
+  - [The NORMA Ontology (TBox)](#the-norma-ontology-tbox)
     - [Statistics](#statistics)
     - [Class Hierarchy](#class-hierarchy)
     - [Controlled Vocabularies (SKOS ConceptSchemes)](#controlled-vocabularies-skos-conceptschemes)
@@ -159,7 +159,7 @@ norma-semantic-toolkit/
 **License:** CC BY-NC 4.0  
 **DOI:** 10.5281/zenodo.19765302
 
-![NORMA-O ontology diagram](norma-o/norma-o.png)
+![NORMA-O ontology diagram](norma-ontology/norma-o.png)
 
 ### Statistics
 

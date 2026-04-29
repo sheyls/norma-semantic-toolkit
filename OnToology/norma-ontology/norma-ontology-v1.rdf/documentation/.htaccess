@@ -13,6 +13,9 @@ RewriteEngine On
 #Change the path to the folder here
 RewriteBase /documentation 
 
+# Version IRI: https://w3id.org/def/norma-o/1.0
+RewriteRule ^1.0/?$ ontology.owl [R=303,L]
+
 # Rewrite rule to serve JSON-LD content from the vocabulary URI if requested
 # Placed before HTML to support serving JSON-LD from a browser (e.g., JSON Playground)
 RewriteCond %{HTTP_ACCEPT} application/ld\+json
