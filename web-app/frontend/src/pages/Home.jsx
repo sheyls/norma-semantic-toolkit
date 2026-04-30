@@ -67,11 +67,10 @@ export default function Home() {
               <img src={normaLogo} alt="" className="home__brand-mark__logo" />
               <span>NORMA Semantic toolkit</span>
             </div>
-            <h1>From annotated BPMN to normative knowledge graphs.</h1>
+            <h1>From annotated BPMN to norm knowledge graph.</h1>
             <p className="home__lead">
               NORMA converts legally annotated process models into semantic, linked normative
-              knowledge — producing OWL 2 ABoxes, SWRL rules, and queryable RDF graphs aligned
-              to PROV-O, ELI, and FOAF.
+              knowledge, producing OWL 2 ABoxes, SWRL rules, and queryable RDF graphs
             </p>
 
             <div className="hero__actions">
