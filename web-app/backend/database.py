@@ -33,7 +33,7 @@ REGULATIONS_DIR = _resolve_asset_path(
 )
 ONTOLOGY_PATH = _resolve_asset_path(
     "NORMA_ONTOLOGY_PATH",
-    CORE_ROOT / "ontology" / "norma-o-v1.ttl",
+    CORE_ROOT / "norma-ontology" / "norma-ontology-v1.ttl",
 )
 CAMUNDA_TEMPLATE_PATH = _resolve_asset_path(
     "NORMA_CAMUNDA_TEMPLATE_PATH",

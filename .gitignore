@@ -31,12 +31,17 @@ outputs/*.txt
 .idea/
 
 # Web app generated/runtime files
+# This is the single repo-wide ignore file, including web-app/.
 web-app/frontend/node_modules/
 web-app/frontend/dist/
 web-app/.env.production
 web-app/backend/data/norma.sqlite3
+web-app/backend/data/norma.sqlite3-shm
+web-app/backend/data/norma.sqlite3-wal
 web-app/backend/data/graph-stores/
 web-app/backend/data/uploads/
+!web-app/backend/data/.gitkeep
+!web-app/backend/data/bpmn/.gitkeep
 
 # OWL/Protégé catalog files (machine-specific paths)
 catalog-v001.xml

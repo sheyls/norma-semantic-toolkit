@@ -19,7 +19,7 @@ WORKDIR /app
 
 COPY pyproject.toml README.md ./
 COPY norma_engine ./norma_engine
-COPY ontology ./ontology
+COPY norma-ontology ./norma-ontology
 COPY regulations ./regulations
 COPY camunda-template ./camunda-template
 COPY web-app ./web-app
