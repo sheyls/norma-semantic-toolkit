@@ -25,6 +25,7 @@ class Condition:
     subject: Ref          # must usually be Ref("var", ...)
     value: bool
     condition_local: str = ""  # ABox LegalCondition local name (slug-based), e.g. "Condition_IsHighRisk"
+    condition_label: str = ""  # Human-readable gateway condition text from BPMN
 
 
 @dataclass(frozen=True)
@@ -68,8 +69,11 @@ class TriggerAtom:
     Example:
       norma:activatesNorm(:TriggerEvent_Condition_IsHighRisk_True_OBL_1, :OBL_1)
     """
-    te_ref: Ref    # Ref("abox", "TriggerEvent_{condition_local}_{True|False}_{norm_local}")
-    norm_ref: Ref  # Ref("abox", norm_local)
+    te_ref: Ref             # Ref("abox", "TriggerEvent_{condition_local}_{True|False}_{norm_local}")
+    norm_ref: Ref           # Ref("abox", norm_local)
+    condition_local: str    # ABox local name of the decisive atomic LegalCondition individual
+    condition_label: str = ""  # Human-readable gateway condition text from BPMN
+    outcome: bool = True       # branch outcome that activates the norm
 
 
 @dataclass(frozen=True)

@@ -3,6 +3,7 @@ from __future__ import annotations
 import io
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any, Optional
 
@@ -60,6 +61,21 @@ def binding_value(row: Any, key: str) -> Optional[str]:
     return value.value if value is not None else None
 
 
+def _condition_key(value: Optional[str]) -> str:
+    text = str(value or "").lower()
+    return re.sub(r"[^a-z0-9]+", "", text)
+
+
+def _rule_norm_ids(rule: Any) -> list[str]:
+    seen: set[str] = set()
+    norm_ids: list[str] = []
+    for atom in getattr(rule, "data_atoms", []):
+        if getattr(getattr(atom, "predicate", None), "name", "") == "deonticId" and atom.value not in seen:
+            seen.add(atom.value)
+            norm_ids.append(atom.value)
+    return norm_ids
+
+
 def _node_payload_from_store(store: Any, node_uri: str) -> Optional[dict[str, Any]]:
     metadata_query = f"""
 PREFIX norma: <https://w3id.org/def/norma-o#>
@@ -68,7 +84,7 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT DISTINCT ?type ?label ?regulation ?article ?paragraph ?source
                 ?deonticId ?normStatement ?conditionStatement ?trigger
-                ?agentText ?actionText ?objectText ?trueBranch ?falseBranch
+                ?agentText ?actionText ?objectText ?trueBranch ?falseBranch ?outcome
                 ?annotationDate ?confidenceScore
 WHERE {{
   BIND(<{node_uri}> AS ?node)
@@ -92,6 +108,7 @@ WHERE {{
   OPTIONAL {{ ?node norma:objectText ?objectText . }}
   OPTIONAL {{ ?node norma:trueBranchLabel ?trueBranch . }}
   OPTIONAL {{ ?node norma:falseBranchLabel ?falseBranch . }}
+  OPTIONAL {{ ?node norma:hasOutcome ?outcome . }}
   OPTIONAL {{ ?node norma:annotationDate ?annotationDate . }}
   OPTIONAL {{ ?node norma:confidenceScore ?confidenceScore . }}
 }}
@@ -119,6 +136,7 @@ LIMIT 1
             "object": binding_value(row, "objectText"),
             "true_branch": binding_value(row, "trueBranch"),
             "false_branch": binding_value(row, "falseBranch"),
+            "outcome": local_name(binding_value(row, "outcome") or ""),
             "annotation_date": binding_value(row, "annotationDate"),
             "confidence": binding_value(row, "confidenceScore"),
         }
@@ -136,7 +154,7 @@ PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT DISTINCT ?node ?type ?label ?regulation ?article ?paragraph ?source
                 ?deonticId ?normStatement ?conditionStatement ?trigger
-                ?agentText ?actionText ?objectText
+                ?agentText ?actionText ?objectText ?outcome
                 ?annotationDate ?confidenceScore
 WHERE {
   ?node rdf:type ?type .
@@ -159,14 +177,13 @@ WHERE {
   OPTIONAL { ?node norma:agentText ?agentText . }
   OPTIONAL { ?node norma:actionText ?actionText . }
   OPTIONAL { ?node norma:objectText ?objectText . }
+  OPTIONAL { ?node norma:hasOutcome ?outcome . }
   OPTIONAL { ?node norma:annotationDate ?annotationDate . }
   OPTIONAL { ?node norma:confidenceScore ?confidenceScore . }
 }
 ORDER BY ?type ?node
 """
 
-    # TriggerEvent is a reification node — collapse the n-ary chain into a
-    # direct LegalCondition → Norm edge labelled with the branch outcome.
     edge_query = """
 PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
@@ -229,13 +246,18 @@ ORDER BY ?label ?source ?target
         agent_text = binding_value(row, "agentText")
         action_text = binding_value(row, "actionText")
         object_text = binding_value(row, "objectText")
+        outcome = binding_value(row, "outcome")
         annotation_date = binding_value(row, "annotationDate")
         confidence = binding_value(row, "confidenceScore")
         existing = nodes.get(node_id)
+        outcome_name = local_name(outcome) if outcome else None
         if existing is None:
+            effective_label = label
+            if node_type == "TriggerEvent" and not binding_value(row, "label"):
+                effective_label = f"Trigger event{f' ({outcome_name})' if outcome_name else ''}"
             nodes[node_id] = {
                 "id": node_id,
-                "label": label,
+                "label": effective_label,
                 "type": node_type,
                 "regulation": regulation,
                 "article": article,
@@ -248,6 +270,7 @@ ORDER BY ?label ?source ?target
                 "agent": agent_text,
                 "action": action_text,
                 "object": object_text,
+                "outcome": outcome_name,
                 "annotation_date": annotation_date,
                 "confidence": confidence,
             }
@@ -276,6 +299,8 @@ ORDER BY ?label ?source ?target
                 existing["action"] = action_text
             if object_text and not existing.get("object"):
                 existing["object"] = object_text
+            if outcome_name and not existing.get("outcome"):
+                existing["outcome"] = outcome_name
             if annotation_date and not existing.get("annotation_date"):
                 existing["annotation_date"] = annotation_date
             if confidence and not existing.get("confidence"):
@@ -295,6 +320,41 @@ ORDER BY ?label ?source ?target
             continue
         seen_edges.add(key)
         edges.append({"source": source_uri, "target": target_uri, "label": label})
+
+    if pack is not None:
+        condition_nodes_by_key: dict[str, str] = {}
+        norm_nodes_by_id: dict[str, str] = {}
+
+        for node_id, payload in nodes.items():
+            node_type = payload.get("type")
+            if node_type == "LegalCondition":
+                for raw in (payload.get("condition_statement"), payload.get("label"), local_name(node_id)):
+                    key = _condition_key(raw)
+                    if key:
+                        condition_nodes_by_key.setdefault(key, node_id)
+            if payload.get("deontic_id"):
+                norm_nodes_by_id[payload["deontic_id"]] = node_id
+            else:
+                norm_nodes_by_id.setdefault(local_name(node_id), node_id)
+
+        for rule in pack.get("rules_ir", []):
+            rule_norm_ids = _rule_norm_ids(rule)
+            if not rule_norm_ids:
+                continue
+            for norm_id in rule_norm_ids:
+                norm_node_id = norm_nodes_by_id.get(norm_id)
+                if not norm_node_id:
+                    continue
+                for condition in getattr(rule, "conditions", []):
+                    cond_node_id = condition_nodes_by_key.get(_condition_key(condition.predicate.name))
+                    if not cond_node_id:
+                        continue
+                    edge_label = "when true" if bool(condition.value) else "when false"
+                    key = (cond_node_id, norm_node_id, edge_label)
+                    if key in seen_edges:
+                        continue
+                    seen_edges.add(key)
+                    edges.append({"source": cond_node_id, "target": norm_node_id, "label": edge_label})
 
     return {"nodes": list(nodes.values()), "edges": edges}
 

@@ -197,6 +197,30 @@ def export_rules_to_owl(
         )
     rules = exportable
 
+    # Rule IR may be aggregated across several BPMN files; ensure each SWRL rule
+    # gets a unique ontology-local IRI even if upstream rule ids repeat.
+    seen_counts: dict[str, int] = {}
+    unique_rules: list[RuleIR] = []
+    for rule in rules:
+        count = seen_counts.get(rule.rid, 0)
+        seen_counts[rule.rid] = count + 1
+        if count == 0:
+            unique_rules.append(rule)
+        else:
+            unique_rules.append(
+                RuleIR(
+                    rid=f"{rule.rid}_{count + 1}",
+                    conditions=rule.conditions,
+                    actions=rule.actions,
+                    relations=rule.relations,
+                    data_atoms=rule.data_atoms,
+                    class_atoms=rule.class_atoms,
+                    trigger_atoms=rule.trigger_atoms,
+                    source=rule.source,
+                )
+            )
+    rules = unique_rules
+
     vars_, body_data_preds = _collect_vars_and_predicates(rules)
 
     data_props_xml = "\n".join(

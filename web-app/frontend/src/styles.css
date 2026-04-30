@@ -817,6 +817,13 @@ h1 {
   gap: 8px;
 }
 
+.sidebar__pack-helper {
+  margin: 0;
+  color: rgba(244, 251, 253, 0.74);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
 .sidebar__menu-item--accent {
   background: rgba(255, 255, 255, 0.08);
   color: white;
@@ -834,11 +841,29 @@ h1 {
   color: var(--sidebar-muted);
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  justify-content: flex-start;
+  text-align: left;
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
+}
+
+.sidebar__upload-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.sidebar__upload-copy strong {
+  color: white;
+  font-size: 0.82rem;
+  line-height: 1.25;
+}
+
+.sidebar__upload-copy small {
+  color: rgba(244, 251, 253, 0.72);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 .sidebar__upload:hover {
@@ -1141,6 +1166,8 @@ h1 {
   border-radius: var(--r-md);
   padding: 16px 18px;
   transition: border-color 0.12s, box-shadow 0.12s;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .list-card:hover {
@@ -1166,6 +1193,14 @@ h1 {
   color: var(--muted);
   margin: 4px 0 10px;
   font-size: 0.88rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.norm-clause {
+  color: var(--ink) !important;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .ontology-panel {
@@ -1622,6 +1657,83 @@ input::placeholder, textarea::placeholder {
   min-height: 44px;
 }
 
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.workflow-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  box-shadow: 0 12px 32px rgba(16, 24, 40, 0.04);
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.workflow-card__kicker {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.workflow-card h3,
+.workflow-card p {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.workflow-card p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.workflow-card h3 {
+  line-height: 1.25;
+}
+
+.workflow-card .button {
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+  text-align: center;
+}
+
+.workspace-grid > *,
+.workflow-grid > * {
+  min-width: 0;
+}
+
+.dropzone {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  min-width: 0;
+}
+
+.dropzone strong,
+.dropzone span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
 .dropzone.is-over {
   background: var(--brand-soft);
   border-color: var(--brand);
@@ -1694,6 +1806,8 @@ input::placeholder, textarea::placeholder {
   display: block;
   font-size: 0.9rem;
   margin-bottom: 4px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .question-card small {
@@ -1702,6 +1816,8 @@ input::placeholder, textarea::placeholder {
   font-family: "JetBrains Mono", monospace;
   display: block;
   margin-bottom: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .norm-toolbar {
@@ -1834,7 +1950,7 @@ details.norm-section[open] > .norm-section__header {
 .deontic-badge--prohibition { background: rgba(166, 58, 80, 0.12); color: #a63a50; }
 .deontic-badge--permission { background: rgba(26, 122, 74, 0.12); color: #1a7a4a; }
 .deontic-badge--recommendation { background: rgba(80, 125, 188, 0.08); color: var(--brand); }
-.deontic-badge--negativerecommendation { background: rgba(166, 58, 80, 0.08); color: #7c3aed; }
+.deontic-badge--recommendation_not { background: rgba(166, 58, 80, 0.12); color: #8f1d35; }
 .deontic-badge--fact { background: rgba(92, 107, 115, 0.1); color: var(--muted); }
 .deontic-badge--gateway { background: rgba(180, 83, 9, 0.1); color: var(--warn); }
 
@@ -1863,6 +1979,9 @@ details.norm-section[open] > .norm-section__header {
   border-radius: 999px;
   margin-right: 4px;
   font-weight: 700;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .cond-chip--yes {
@@ -1889,6 +2008,9 @@ details.norm-section[open] > .norm-section__header {
   border: 1px solid var(--line);
   color: var(--muted);
   background: var(--paper-tint);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .law-link {
@@ -2276,6 +2398,45 @@ details.norm-section[open] > .norm-section__header {
   color: var(--muted);
 }
 
+.graph-legend {
+  display: grid;
+  gap: 10px;
+  padding: 0 0 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(37, 50, 55, 0.08);
+}
+
+.graph-legend__title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.graph-legend__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 10px;
+}
+
+.graph-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--ink);
+  font-size: 0.78rem;
+}
+
+
+.graph-legend__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 34, 47, 0.16);
+  flex: 0 0 auto;
+}
+
 .graph-details__rows {
   display: grid;
   gap: 10px;
@@ -2371,6 +2532,42 @@ details.norm-section[open] > .norm-section__header {
 }
 
 .sparql-result-wrap {
+  margin-top: 12px;
+}
+
+.sparql-competency {
+  margin: 12px 0 14px;
+  padding: 16px 18px;
+  border: 1px solid rgba(194, 223, 227, 0.72);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(240, 248, 248, 0.92));
+}
+
+.sparql-competency__eyebrow {
+  margin: 0 0 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.sparql-competency h3 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.sparql-competency p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.sparql-competency__terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 12px;
 }
 
@@ -2536,6 +2733,7 @@ details.norm-section[open] > .norm-section__header {
   .graph-explorer,
   .graph-summary,
   .workspace-grid,
+  .workflow-grid,
   .action-grid,
   .rules-grid,
   .qa-grid,
@@ -3212,6 +3410,7 @@ select:focus-visible {
 .deontic-badge--prohibition   { background: rgba(220,38,38,0.1);   color: var(--danger); }
 .deontic-badge--permission    { background: rgba(22,163,74,0.1);   color: var(--success); }
 .deontic-badge--recommendation { background: rgba(59,111,212,0.08); color: var(--brand); }
+.deontic-badge--recommendation_not { background: rgba(166,58,80,0.12); color: #8f1d35; }
 .deontic-badge--gateway       { background: rgba(217,119,6,0.1);   color: var(--warn); }
 .deontic-badge--fact          { background: rgba(100,116,139,0.1); color: var(--muted); }
 

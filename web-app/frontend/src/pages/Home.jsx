@@ -85,15 +85,6 @@ export default function Home() {
                 <span>Interactive workspace</span>
                 <strong>Open toolkit →</strong>
               </Link>
-              <a
-                href="https://w3id.org/def/norma-o"
-                className="button button--hero-secondary"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span>Ontology reference</span>
-                <strong>View ontology</strong>
-              </a>
             </div>
 
             <div className="home__ribbon">

@@ -504,7 +504,7 @@ def build_rule_ir_from_path(
     gateway_outgoing_index: Optional[Dict[str, Dict[str, int]]] = None,
     allowed_deontic: Optional[set[str]] = None,
     ignore_non_compliance_tasks: bool = True,
-) -> RuleIR:
+) -> Optional[RuleIR]:
     conds: List[Condition] = []
     actions: List[Action] = []
     all_relations: List[RelationAtom] = []
@@ -539,6 +539,7 @@ def build_rule_ir_from_path(
                             subject=v("x"),
                             value=value,
                             condition_local=cond_local,
+                            condition_label=cond_text,
                         )
                     )
 
@@ -553,6 +554,7 @@ def build_rule_ir_from_path(
                         subject=v("x"),
                         value=value,
                         condition_local=cond_local,
+                        condition_label=cond_text,
                     )
                 )
 
@@ -580,13 +582,22 @@ def build_rule_ir_from_path(
             all_data.extend(dats)
             all_class_atoms.extend(cats)
 
-    seen_c = set()
-    out_c: List[Condition] = []
+    seen_c: dict[tuple[str, str, str, str], Condition] = {}
+    contradiction = False
     for c in conds:
-        key = (c.predicate.kind, c.predicate.name, c.subject.kind, c.subject.name, c.value)
-        if key not in seen_c:
-            seen_c.add(key)
-            out_c.append(c)
+        key = (c.predicate.kind, c.predicate.name, c.subject.kind, c.subject.name)
+        existing = seen_c.get(key)
+        if existing is None:
+            seen_c[key] = c
+            continue
+        if existing.value != c.value:
+            contradiction = True
+            break
+
+    if contradiction:
+        return None
+
+    out_c = list(seen_c.values())
 
     seen_a = set()
     out_a: List[Action] = []
@@ -633,8 +644,8 @@ def build_rule_ir_from_path(
             out_ca.append(ca)
 
     # TriggerAtoms: SWRL head uses norma:activatesNorm(TriggerEvent, norm).
-    # The last condition in the conjunction is the decisive gateway; its TriggerEvent
-    # is the one whose activatesNorm link is conditionally derived by SWRL.
+    # The decisive trigger event is still anchored to the final atomic
+    # LegalCondition individual already present in the ABox.
     out_ta: List[TriggerAtom] = []
     last_cond = out_c[-1] if out_c else None
     if last_cond and last_cond.condition_local:
@@ -648,6 +659,9 @@ def build_rule_ir_from_path(
                 out_ta.append(TriggerAtom(
                     te_ref=Ref("abox", te_local),
                     norm_ref=ca.subject,
+                    condition_local=last_cond.condition_local,
+                    condition_label=last_cond.condition_label,
+                    outcome=last_cond.value,
                 ))
 
     return RuleIR(
@@ -711,6 +725,8 @@ def enumerate_paths_and_build_ir(
                 task_props,
                 gateway_outgoing_index=gateway_outgoing_index,
             )
+            if ir is None:
+                return
             rules_ir.append(ir)
 
             if last_rule is not None:

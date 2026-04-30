@@ -276,6 +276,10 @@ export default function Sidebar({
             </div>
           ) : null}
 
+          <p className="sidebar__pack-helper">
+            Choose one path: create a new temporary pack, or add a BPMN into the selected pack.
+          </p>
+
           <div className="sidebar__pack-actions">
             <button
               type="button"
@@ -283,11 +287,14 @@ export default function Sidebar({
               onClick={onOpenPackCreator}
             >
               <NavIcon>{ICONS.pack}</NavIcon>
-              Create new pack
+              Open BPMN actions
             </button>
             <label className="sidebar__upload">
               <input type="file" accept=".bpmn" onChange={onUploadFile} disabled={isUploading} />
-              <span>{isUploading ? "Uploading…" : "Import BPMN as new pack"}</span>
+              <span className="sidebar__upload-copy">
+                <strong>{isUploading ? "Uploading..." : "Create new temporary pack"}</strong>
+                <small>Build a separate temporary pack from one BPMN file</small>
+              </span>
             </label>
             <label className={`sidebar__upload ${!selectedPack ? "is-disabled" : ""}`}>
               <input
@@ -296,12 +303,19 @@ export default function Sidebar({
                 onChange={onAppendFile}
                 disabled={isUploading || !selectedPack}
               />
-              <span>
-                {isUploading
-                  ? "Uploading…"
-                  : selectedPackMeta?.can_rebuild
-                    ? "Add BPMN to temporary pack"
-                    : "Add BPMN to selected pack"}
+              <span className="sidebar__upload-copy">
+                <strong>
+                  {isUploading
+                    ? "Uploading..."
+                    : selectedPackMeta?.can_rebuild
+                      ? "Add BPMN to selected official pack"
+                      : "Add BPMN to selected temporary pack"}
+                </strong>
+                <small>
+                  {selectedPackMeta?.can_rebuild
+                    ? "Creates a new temporary workspace copied from the official pack"
+                    : "Extends the currently selected temporary pack"}
+                </small>
               </span>
             </label>
           </div>

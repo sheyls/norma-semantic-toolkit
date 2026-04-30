@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   evaluatePack,
   getAboxDownloadUrl,
@@ -34,10 +34,11 @@ const VIEW_LABELS = {
 };
 
 const ONTOLOGY_ITEMS = [
-  "LegalNorm to Obligation, Prohibition, Permission, Recommendation, NegativeRecommendation",
-  "LegalCondition for gateway predicates and branch labels",
-  "LegalAgent and LegalObject as reusable ABox entities",
-  "BindingForce and ComplianceCriticality for legal classification",
+  "NormativeContent covers Obligation, Prohibition, Permission, Recommendation, NegativeRecommendation, and ConstitutiveRule",
+  "LegalCondition and TriggerEvent model branch-sensitive norm activation",
+  "ConditionOutcome captures evaluated branches such as TrueOutcome and FalseOutcome",
+  "LegalAgent, LegalAction, LegalObject, and LegalSource capture who acts, on what, and under which source",
+  "AnnotationActivity, BindingForce, and ComplianceCriticality support provenance and legal classification",
 ];
 
 const ONTOLOGY_DOCS_URL = "https://w3id.org/def/norma-o";
@@ -62,6 +63,12 @@ const EXTERNAL_ONTOLOGIES = [
     note: "Used for deontic notations such as OBL, PRH, PER, and REC.",
   },
   {
+    name: "LKIF-Core",
+    prefix: "lkif:",
+    url: "https://github.com/RinkeHoekstra/lkif-core",
+    note: "Used as an informative alignment layer through mapping relations rather than direct ontology import.",
+  },
+  {
     name: "Dublin Core Terms",
     prefix: "dcterms:",
     url: "http://purl.org/dc/terms/",
@@ -71,7 +78,7 @@ const EXTERNAL_ONTOLOGIES = [
     name: "FOAF",
     prefix: "foaf:",
     url: "http://xmlns.com/foaf/0.1/",
-    note: "Used for legal agents plus creator, contributor, publisher, and logo metadata.",
+    note: "Used mainly for agent-oriented instance metadata such as people, organizations, names, and logo metadata.",
   },
   {
     name: "BIBO",
@@ -195,8 +202,123 @@ function titleCaseLabel(value) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+function normalizeDeonticType(value, fallback = "gateway") {
+  const raw = String(value || fallback).trim().toLowerCase();
+  if (raw === "negativerecommendation") {
+    return "recommendation_not";
+  }
+  if (raw === "constitutiverule") {
+    return "fact";
+  }
+  return raw || fallback;
+}
+
+function formatDeonticTypeLabel(value, fallback = "gateway") {
+  const raw = normalizeDeonticType(value, fallback);
+  if (raw === "recommendation_not") {
+    return "Negative recommendation";
+  }
+  if (raw === "gateway") {
+    return "Gateways";
+  }
+  return raw.charAt(0).toUpperCase() + raw.slice(1);
+}
+
+function deonticKeyword(value) {
+  const raw = normalizeDeonticType(value, "");
+  if (raw === "obligation") {
+    return "MUST";
+  }
+  if (raw === "prohibition") {
+    return "MUST NOT";
+  }
+  if (raw === "permission") {
+    return "MAY";
+  }
+  if (raw === "recommendation") {
+    return "SHOULD";
+  }
+  if (raw === "recommendation_not") {
+    return "SHOULD NOT";
+  }
+  if (raw === "fact") {
+    return "IS";
+  }
+  return "";
+}
+
 function getReadableNormLabel(norm) {
   return titleCaseLabel(norm.norm_statement || norm.gw_condition_statement || humanizeNormId(norm.norm_id));
+}
+
+function getReadableNormClause(norm) {
+  if (isGatewayNorm(norm)) {
+    return getReadableNormLabel(norm);
+  }
+
+  const keyword = deonticKeyword(norm.deontic_type);
+  const agent = titleCaseLabel(norm.agent);
+  const rawAction = humanizeUnderscoredText(norm.action);
+  const object = humanizeUnderscoredText(norm.object);
+  const fallback = titleCaseLabel(norm.norm_statement || humanizeNormId(norm.norm_id));
+
+  if (!keyword) {
+    return fallback || "Not provided";
+  }
+
+  const action = rawAction
+    .replace(/^must not\s+/i, "")
+    .replace(/^must\s+/i, "")
+    .replace(/^shall not\s+/i, "")
+    .replace(/^shall\s+/i, "")
+    .trim();
+
+  const normalizedAction = slugify(action);
+  const normalizedObject = slugify(object);
+  let tail = action;
+
+  if (object) {
+    if (!action) {
+      tail = object;
+    } else if (!normalizedObject || !normalizedAction.includes(normalizedObject)) {
+      let preposition = "on";
+      if (/\b(comply|respect|exempt)\b/i.test(action)) {
+        preposition = "for";
+      } else if (/\b(grant|provide|assign)\b/i.test(action)) {
+        preposition = "to";
+      }
+      tail = `${action} ${preposition} ${object}`;
+    }
+  }
+
+  if (agent && tail) {
+    const clause = `${agent} ${keyword} ${tail}`;
+    const statement = String(norm.norm_statement || "").trim();
+    if (statement && !clause.toLowerCase().includes(statement.toLowerCase())) {
+      return `${clause}: ${statement}`;
+    }
+    return clause;
+  }
+  if (agent) {
+    const clause = `${agent} ${keyword}`;
+    const statement = String(norm.norm_statement || "").trim();
+    if (statement && !clause.toLowerCase().includes(statement.toLowerCase())) {
+      return `${clause}: ${statement}`;
+    }
+    return clause;
+  }
+  if (tail) {
+    const clause = `${keyword} ${tail}`;
+    const statement = String(norm.norm_statement || "").trim();
+    if (statement && !clause.toLowerCase().includes(statement.toLowerCase())) {
+      return `${clause}: ${statement}`;
+    }
+    return clause;
+  }
+  if (fallback) {
+    return `${keyword} ${fallback}`;
+  }
+  return "Not provided";
 }
 
 function isGatewayNorm(norm) {
@@ -227,9 +349,11 @@ export default function Dashboard() {
   const [conditions, setConditions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [evaluation, setEvaluation] = useState([]);
+  const [evaluationEngine, setEvaluationEngine] = useState("");
   const [entities, setEntities] = useState(null);
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
   const [presets, setPresets] = useState([]);
+  const [selectedPresetId, setSelectedPresetId] = useState("");
   const [sparqlQuery, setSparqlQuery] = useState("");
   const [sparqlResult, setSparqlResult] = useState(null);
   const [normSearch, setNormSearch] = useState("");
@@ -242,7 +366,8 @@ export default function Dashboard() {
   const [graphSearch, setGraphSearch] = useState("");
   const [showGraphProvenance, setShowGraphProvenance] = useState(false);
   const [pasteName, setPasteName] = useState("uploaded pack");
-  const [pasteXml, setPasteXml] = useState("");
+  const newPackFileInputRef = useRef(null);
+  const appendPackFileInputRef = useRef(null);
 
   useEffect(() => {
     async function loadInitialData() {
@@ -251,6 +376,7 @@ export default function Dashboard() {
         setPacks(packData);
         setPresets(presetData.presets || []);
         if (presetData.presets?.[0]?.query) {
+          setSelectedPresetId(presetData.presets[0].id || "");
           setSparqlQuery(presetData.presets[0].query);
         }
         if (packData[0]?.name) {
@@ -272,6 +398,7 @@ export default function Dashboard() {
       setEntities(null);
       setGraph({ nodes: [], edges: [] });
       setEvaluation([]);
+      setEvaluationEngine("");
       setAnswers({});
       setArtifactText("");
       return;
@@ -296,6 +423,7 @@ export default function Dashboard() {
         setEntities(entitiesData);
         setGraph(graphData);
         setEvaluation([]);
+        setEvaluationEngine("");
         setAnswers({});
       } catch (err) {
         setError(err.message);
@@ -346,11 +474,20 @@ export default function Dashboard() {
     }
 
     loadSwrl();
-  }, [selectedPack]);
+  }, [selectedPack, reloadToken]);
+
+  useEffect(() => {
+    setSparqlResult(null);
+  }, [selectedPack, reloadToken]);
 
   const selectedPackSummary = useMemo(
     () => packs.find((pack) => pack.name === selectedPack) || null,
     [packs, selectedPack],
+  );
+
+  const selectedPreset = useMemo(
+    () => presets.find((preset) => preset.id === selectedPresetId) || presets[0] || null,
+    [presets, selectedPresetId],
   );
 
   const answeredCount = Object.keys(answers).length;
@@ -358,7 +495,7 @@ export default function Dashboard() {
   const filteredNorms = useMemo(() => {
     const query = normSearch.trim().toLowerCase();
     return norms.filter((norm) => {
-      const type = String(norm.deontic_type || "").toLowerCase();
+      const type = normalizeDeonticType(norm.deontic_type, "");
       const gatewayNorm = isGatewayNorm(norm);
 
       if (normTypeFilter === "gateway") {
@@ -391,6 +528,11 @@ export default function Dashboard() {
       return haystack.includes(query);
     });
   }, [norms, normSearch, normTypeFilter]);
+
+  const legalNormCount = useMemo(
+    () => norms.filter((norm) => !isGatewayNorm(norm)).length,
+    [norms],
+  );
 
   const filteredGraph = useMemo(() => {
     const hiddenTypes = new Set(["AnnotationActivity", "AnnotatorAgent"]);
@@ -436,6 +578,7 @@ export default function Dashboard() {
           node.agent,
           node.action,
           node.object,
+          node.outcome,
           node.true_branch,
           node.false_branch,
           node.bpmn_source,
@@ -448,29 +591,23 @@ export default function Dashboard() {
     };
 
     const matchedIds = new Set(visibleNodesBase.filter(matchesNode).map((node) => node.id));
-    const visibleIds = new Set(matchedIds);
-    const neighborIds = new Set();
-
-    visibleEdgesBase.forEach((edge) => {
+    const edgeMatchedIds = new Set();
+    const matchedEdges = visibleEdgesBase.filter((edge) => {
       const edgeText = normalizeSearch(`${edge.label || ""} ${edge.source} ${edge.target}`);
       const edgeMatches = queryTokens.every((token) => edgeText.includes(token));
-      if (matchedIds.has(edge.source) || matchedIds.has(edge.target) || edgeMatches) {
-        if (matchedIds.has(edge.source) || edgeMatches) {
-          neighborIds.add(edge.target);
-        }
-        if (matchedIds.has(edge.target) || edgeMatches) {
-          neighborIds.add(edge.source);
-        }
+      if (edgeMatches) {
+        edgeMatchedIds.add(edge.source);
+        edgeMatchedIds.add(edge.target);
+        return true;
       }
+      return matchedIds.has(edge.source) && matchedIds.has(edge.target);
     });
 
-    neighborIds.forEach((id) => visibleIds.add(id));
+    const visibleIds = new Set([...matchedIds, ...edgeMatchedIds]);
 
     return {
       nodes: visibleNodesBase.filter((node) => visibleIds.has(node.id)),
-      edges: visibleEdgesBase.filter(
-        (edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target),
-      ),
+      edges: matchedEdges.filter((edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target)),
     };
   }, [graph.nodes, graph.edges, graphSearch, showGraphProvenance]);
 
@@ -512,7 +649,7 @@ export default function Dashboard() {
   const filteredEvaluation = useMemo(() => {
     if (evalTypeFilter === "all") return evaluation;
     return evaluation.filter(
-      (item) => String(item.deontic_type || "").toLowerCase() === evalTypeFilter,
+      (item) => normalizeDeonticType(item.deontic_type, "other") === evalTypeFilter,
     );
   }, [evaluation, evalTypeFilter]);
 
@@ -557,9 +694,7 @@ export default function Dashboard() {
       } else {
         setNotice(`Pack "${uploaded.pack}" processed successfully.`);
       }
-      if (pasteXml.trim()) {
-        setPasteXml("");
-      }
+      setReloadToken((current) => current + 1);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -567,12 +702,22 @@ export default function Dashboard() {
     }
   }
 
+  function fileForNewPack(file) {
+    const nextName = slugify(pasteName || "");
+    if (!nextName) {
+      return file;
+    }
+    return new File([file], `${nextName}.bpmn`, {
+      type: file.type || "application/xml",
+    });
+  }
+
   async function handleUpload(event) {
     const file = event.target.files?.[0];
     if (!file) {
       return;
     }
-    await processUpload(file, "new");
+    await processUpload(fileForNewPack(file), "new");
     event.target.value = "";
   }
 
@@ -589,15 +734,20 @@ export default function Dashboard() {
     setActiveView("overview");
   }
 
-  async function handlePasteUpload() {
-    const xml = pasteXml.trim();
-    if (!xml) {
-      setError("Paste BPMN XML before uploading.");
+  function openNewPackFilePicker() {
+    newPackFileInputRef.current?.click();
+  }
+
+  function openAppendPackFilePicker() {
+    appendPackFileInputRef.current?.click();
+  }
+
+  async function handleDropToSelectedPack(file) {
+    if (!selectedPack) {
+      setError("Select a pack before dropping a BPMN file.");
       return;
     }
-    const filename = `${slugify(pasteName || "pasted pack") || "pasted-pack"}.bpmn`;
-    const file = new File([xml], filename, { type: "application/xml" });
-    await processUpload(file);
+    await processUpload(file, "append");
   }
 
   async function handleRunEvaluation() {
@@ -609,6 +759,7 @@ export default function Dashboard() {
     try {
       const result = await evaluatePack(selectedPack, answers);
       setEvaluation(result.matched_rules || []);
+      setEvaluationEngine(result.engine || "");
       setEvalTypeFilter("all");
     } catch (err) {
       setError(err.message);
@@ -631,6 +782,12 @@ export default function Dashboard() {
     } finally {
       setIsRunningSparql(false);
     }
+  }
+
+  function applySparqlPreset(preset) {
+    setSelectedPresetId(preset.id);
+    setSparqlQuery(preset.query);
+    setSparqlResult(null);
   }
 
   async function handleRebuildPack() {
@@ -665,15 +822,19 @@ export default function Dashboard() {
             <p className="eyebrow">Selected pack</p>
             <h2>{selectedPack || "Select a regulation pack from the left sidebar"}</h2>
             <p className="section-copy">
-              Choose a pack, inspect the generated knowledge artifacts, review extracted norms, and
-              query the graph when deeper semantic inspection is needed.
+              Review the selected pack, inspect its knowledge artifacts, and explore the extracted
+              norms.
+            </p>
+            <p className="section-copy">
+              Official packs are curated by legal experts, approved in NORMA, and maintained by
+              NORMA maintainers.
             </p>
           </div>
           <div className="stat-grid">
             <div className="stat-card">
               <span className="stat-card__label">Norms</span>
-              <span className="stat-card__value">{norms.length}</span>
-              <span className="stat-card__sub">extracted annotations</span>
+              <span className="stat-card__value">{legalNormCount}</span>
+              <span className="stat-card__sub">legal norms</span>
             </div>
             <div className="stat-card">
               <span className="stat-card__label">Conditions</span>
@@ -683,7 +844,7 @@ export default function Dashboard() {
             <div className="stat-card">
               <span className="stat-card__label">Rules</span>
               <span className="stat-card__value">{selectedPackSummary?.rule_count || 0}</span>
-              <span className="stat-card__sub">indexed SWRL rules</span>
+              <span className="stat-card__sub">extracted path rules</span>
             </div>
           </div>
           <div className="summary-list">
@@ -712,13 +873,62 @@ export default function Dashboard() {
         <section className="panel panel--soft">
           <div className="section-intro">
             <div className="overview-pack-kicker">
-              Create new pack
+              Open BPMN actions
             </div>
-            <h2>Create a new regulation pack for exploration</h2>
+            <h2>BPMN upload</h2>
             <p className="section-copy">
-              Create a temporary regulation pack by uploading a BPMN file or by pasting BPMN XML.
-              The generated artifacts can then be inspected like any other pack.
+              Choose one path: create a new temporary pack, or add a BPMN into the selected pack.
             </p>
+          </div>
+          <div className="workflow-grid">
+            <article className="workflow-card">
+              <span className="workflow-card__kicker">New pack</span>
+              <h3>Create new temporary pack</h3>
+              <p>
+                Build a separate temporary pack from one BPMN file.
+              </p>
+              <button className="button button--cta" type="button" onClick={openNewPackFilePicker} disabled={isUploading}>
+                {isUploading ? "Uploading..." : "Create temporary pack from BPMN"}
+              </button>
+              <input
+                ref={newPackFileInputRef}
+                type="file"
+                accept=".bpmn"
+                onChange={handleUpload}
+                hidden
+              />
+            </article>
+
+            <article className="workflow-card">
+              <span className="workflow-card__kicker">Selected pack</span>
+              <h3>
+                {selectedPackSummary?.can_rebuild
+                  ? "Add BPMN to selected official pack"
+                  : "Add BPMN to selected temporary pack"}
+              </h3>
+              <p>
+                {selectedPack
+                  ? selectedPackSummary?.can_rebuild
+                    ? "Creates a new temporary workspace copied from the official pack."
+                    : "Extends the currently selected temporary pack."
+                  : "Select a pack first, then upload a BPMN to add to it."}
+              </p>
+              <button
+                className="button button--cta"
+                type="button"
+                onClick={openAppendPackFilePicker}
+                disabled={isUploading || !selectedPack}
+              >
+                {isUploading ? "Uploading..." : "Add BPMN to selected pack"}
+              </button>
+              <input
+                ref={appendPackFileInputRef}
+                type="file"
+                accept=".bpmn"
+                onChange={handleAppendUpload}
+                hidden
+              />
+            </article>
           </div>
           <div
             className="dropzone"
@@ -734,30 +944,17 @@ export default function Dashboard() {
               event.currentTarget.classList.remove("is-over");
               const file = event.dataTransfer.files?.[0];
               if (file) {
-                processUpload(file, "new");
+                handleDropToSelectedPack(file);
               }
             }}
           >
             <strong>Drop a BPMN file here</strong>
-            <span>or import a BPMN file from the sidebar</span>
+            <span>
+              {selectedPack
+                ? "Dropping here adds the BPMN to the selected pack"
+                : "Select a pack first, then drop a BPMN file here"}
+            </span>
           </div>
-          <div className="form-grid pack-create-panel__grid">
-            <label className="pack-create-panel__field">
-              <span>New pack name</span>
-              <input value={pasteName} onChange={(event) => setPasteName(event.target.value)} />
-            </label>
-            <div className="upload-actions pack-create-panel__actions">
-              <button className="button button--primary" type="button" onClick={handlePasteUpload} disabled={isUploading}>
-                {isUploading ? "Processing..." : "Create pack from pasted BPMN"}
-              </button>
-            </div>
-          </div>
-          <textarea
-            className="editor editor--small"
-            value={pasteXml}
-            onChange={(event) => setPasteXml(event.target.value)}
-            placeholder="Paste BPMN XML here to create a temporary regulation pack."
-          />
         </section>
       </div>
     );
@@ -845,7 +1042,7 @@ export default function Dashboard() {
 
   function renderEvaluator() {
     const typeCounts = evaluation.reduce((acc, item) => {
-      const key = String(item.deontic_type || "other").toLowerCase();
+      const key = normalizeDeonticType(item.deontic_type, "other");
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {});
@@ -856,6 +1053,7 @@ export default function Dashboard() {
       { id: "prohibition", label: "Prohibitions", count: typeCounts.prohibition || 0 },
       { id: "permission", label: "Permissions", count: typeCounts.permission || 0 },
       { id: "recommendation", label: "Recommendations", count: typeCounts.recommendation || 0 },
+      { id: "recommendation_not", label: "Negative recommendations", count: typeCounts.recommendation_not || 0 },
     ].filter((tab) => tab.id === "all" || tab.count > 0);
 
     return (
@@ -873,7 +1071,12 @@ export default function Dashboard() {
               <button
                 className="pill"
                 type="button"
-                onClick={() => { setAnswers({}); setEvaluation([]); setEvalTypeFilter("all"); }}
+                onClick={() => {
+                  setAnswers({});
+                  setEvaluation([]);
+                  setEvaluationEngine("");
+                  setEvalTypeFilter("all");
+                }}
               >
                 Reset
               </button>
@@ -892,6 +1095,12 @@ export default function Dashboard() {
             <span style={{ width: `${conditions.length ? (answeredCount / conditions.length) * 100 : 0}%` }} />
           </div>
         </div>
+
+        {evaluationEngine && (
+          <div className="alert alert--info" style={{ marginTop: 14 }}>
+            Evaluation engine: <strong>{evaluationEngine.toUpperCase()}</strong>
+          </div>
+        )}
 
         <div className="qa-grid">
           {conditions.map((condition, index) => (
@@ -955,15 +1164,11 @@ export default function Dashboard() {
             <article className="list-card" key={`${item.rule_id}-${item.norm_id}`}>
               <div className="list-card__head">
                 <strong>{getReadableNormLabel(item)}</strong>
-                <span className={`deontic-badge deontic-badge--${String(item.deontic_type || "norm").toLowerCase()}`}>
-                  {item.deontic_type || "Norm"}
+                <span className={`deontic-badge deontic-badge--${normalizeDeonticType(item.deontic_type, "norm")}`}>
+                  {formatDeonticTypeLabel(item.deontic_type || "norm", "norm")}
                 </span>
               </div>
-              <p>
-                <strong>{humanizeUnderscoredText(item.agent) || "Unknown agent"}</strong>
-                {item.action ? ` · ${humanizeUnderscoredText(item.action)}` : ""}
-                {item.object ? ` · ${humanizeUnderscoredText(item.object)}` : ""}
-              </p>
+              <p className="norm-clause">{getReadableNormClause(item)}</p>
               <div className="norm-pills">
                 {item.binding_force && <span className="norm-pill">{humanizeUnderscoredText(item.binding_force)}</span>}
                 {item.risk_level && <span className="norm-pill">{humanizeUnderscoredText(item.risk_level)}</span>}
@@ -995,7 +1200,9 @@ export default function Dashboard() {
             </article>
           ))}
           {filteredEvaluation.length === 0 && evaluation.length > 0 ? (
-            <div className="table__empty">No {evalTypeFilter} norms matched.</div>
+            <div className="table__empty">
+              No {evalTypeFilter === "all" ? "norms" : formatDeonticTypeLabel(evalTypeFilter).toLowerCase()} matched.
+            </div>
           ) : null}
           {evaluation.length === 0 ? (
             <div className="table__empty">Answer the conditions and run the evaluator to see applicable norms.</div>
@@ -1069,6 +1276,10 @@ export default function Dashboard() {
           <div>
             <p className="eyebrow">SPARQL</p>
             <h2>Query the selected knowledge graph</h2>
+            <p className="section-copy">
+              Each preset is framed as a competency question and paired with a runnable SPARQL query
+              that uses the NORMA vocabulary generated by the toolkit.
+            </p>
           </div>
           <div className="pill-row">
             <button className="button button--primary" type="button" onClick={handleRunSparql} disabled={isRunningSparql}>
@@ -1086,14 +1297,28 @@ export default function Dashboard() {
             <button
               key={preset.id}
               type="button"
-              className="pill"
-              title={preset.description}
-              onClick={() => setSparqlQuery(preset.query)}
+              className={`pill ${selectedPreset?.id === preset.id ? "is-selected" : ""}`}
+              title={preset.question || preset.description}
+              onClick={() => applySparqlPreset(preset)}
             >
               {preset.label}
             </button>
           ))}
         </div>
+        {selectedPreset && (
+          <article className="sparql-competency">
+            <p className="sparql-competency__eyebrow">What this query answers</p>
+            <h3>{selectedPreset.question}</h3>
+            {selectedPreset.description && <p>{selectedPreset.description}</p>}
+            {selectedPreset.vocabulary?.length ? (
+              <div className="sparql-competency__terms">
+                {selectedPreset.vocabulary.map((term) => (
+                  <span className="norm-pill" key={term}>{term}</span>
+                ))}
+              </div>
+            ) : null}
+          </article>
+        )}
         <textarea
           className="editor"
           value={sparqlQuery}
@@ -1141,14 +1366,14 @@ export default function Dashboard() {
             placeholder="Search ID, action, agent, regulation, or article..."
           />
           <div className="pill-row">
-            {["all", "obligation", "prohibition", "permission", "recommendation", "fact", "gateway"].map((t) => (
+            {["all", "obligation", "prohibition", "permission", "recommendation", "recommendation_not", "fact", "gateway"].map((t) => (
               <button
                 key={t}
                 type="button"
                 className={`pill ${normTypeFilter === t ? "is-selected" : ""}`}
                 onClick={() => setNormTypeFilter(t)}
               >
-                {t === "all" ? "All" : t === "gateway" ? "Gateways" : t.charAt(0).toUpperCase() + t.slice(1)}
+                {t === "all" ? "All" : formatDeonticTypeLabel(t)}
               </button>
             ))}
           </div>
@@ -1173,18 +1398,11 @@ export default function Dashboard() {
               >
                 <div className="list-card__head">
                   <strong>{getReadableNormLabel(norm)}</strong>
-                  <span className={`deontic-badge deontic-badge--${String(norm.deontic_type || "fact").toLowerCase()}`}>
-                    {norm.deontic_type || norm.element_type || "gateway"}
+                  <span className={`deontic-badge deontic-badge--${normalizeDeonticType(norm.deontic_type, "fact")}`}>
+                    {formatDeonticTypeLabel(norm.deontic_type || norm.element_type || "gateway")}
                   </span>
                 </div>
-                <p>
-                  {titleCaseLabel(
-                    norm.action ||
-                      norm.gw_condition_statement ||
-                      norm.norm_statement ||
-                      humanizeNormId(norm.norm_id),
-                  ) || "Not provided"}
-                </p>
+                <p className="norm-clause">{getReadableNormClause(norm)}</p>
                 <div className="norm-meta-grid">
                   <span>{norm.bpmn_source || "unknown source"}</span>
                   <span>{norm.regulation || "Not provided"}</span>
@@ -1248,8 +1466,8 @@ export default function Dashboard() {
               {normDuplicateCandidates.map((candidate, index) => (
                 <div className="decision-card" key={`${candidate.left_norm_id}-${candidate.right_norm_id}-${index}`}>
                   <div className="inline-meta">
-                    <span className={`deontic-badge deontic-badge--${String(candidate.deontic_type || "fact").toLowerCase()}`}>
-                      {candidate.deontic_type || "norm"}
+                    <span className={`deontic-badge deontic-badge--${normalizeDeonticType(candidate.deontic_type, "fact")}`}>
+                      {formatDeonticTypeLabel(candidate.deontic_type || "fact", "fact")}
                     </span>
                     <span className="sim-score">score {Math.round((candidate.score || 0) * 100)}%</span>
                   </div>
@@ -1367,22 +1585,6 @@ export default function Dashboard() {
               details or click it to keep the details panel open.
             </p>
           </div>
-          <div className="graph-legend">
-            {[
-              { type: "Obligation", color: "#a64a1d" },
-              { type: "Prohibition", color: "#6b1f0e" },
-              { type: "Permission", color: "#225c63" },
-              { type: "Recommendation", color: "#3d7c84" },
-              { type: "LegalAgent", color: "#1b2131" },
-              { type: "LegalObject", color: "#626b7e" },
-              { type: "LegalCondition", color: "#b45309" },
-            ].map((item) => (
-              <span key={item.type} className="legend-item">
-                <span className="legend-dot" style={{ background: item.color }} />
-                {item.type}
-              </span>
-            ))}
-          </div>
         </div>
 
         <div className="form-grid graph-controls">
@@ -1452,7 +1654,7 @@ export default function Dashboard() {
             <h2>TBox reference</h2>
             <p className="section-copy">
               Review the core NORMA modeling layer used by the rules, ABox, and visual KG.
-              This tab is a compact orientation view for the ontology used by the toolkit.
+              This tab is a compact orientation view for the current ontology used by the toolkit.
             </p>
           </div>
           <div className="ontology-panel__actions" />
@@ -1473,7 +1675,7 @@ export default function Dashboard() {
           </div>
           <div className="ontology-panel__meta-item">
             <span>Core alignments</span>
-            <strong>PROV O, ELI, and FOAF</strong>
+            <strong>PROV O, ELI, and SKOS, with LKIF-Core mappings and FOAF instance metadata</strong>
           </div>
         </div>
         <div className="ontology-panel__sections">
@@ -1482,7 +1684,7 @@ export default function Dashboard() {
               <strong>Core NORMA classes</strong>
             </div>
             <p className="ontology-panel__section-copy">
-              These are the main categories exposed in the rules, ABox, and graph views.
+              These are the main categories currently exposed across the rules, ABox, graph, and review views.
             </p>
             <div className="ontology-panel__row-list">
               {ONTOLOGY_ITEMS.map((item) => (
@@ -1495,12 +1697,36 @@ export default function Dashboard() {
 
           <section className="ontology-panel__section">
             <div className="ontology-panel__section-head">
+              <strong>Core modeling pattern</strong>
+            </div>
+            <div className="ontology-panel__row-list">
+              <div className="ontology-panel__row">
+                <span>
+                  NORMA does not link a legal condition directly to a branch outcome in the TBox. Instead, a <code>norma:LegalCondition</code> points to a <code>norma:TriggerEvent</code> with <code>norma:hasTrigger</code>.
+                </span>
+              </div>
+              <div className="ontology-panel__row">
+                <span>
+                  The trigger event records the evaluated branch with <code>norma:hasOutcome</code> and activates the relevant norm with <code>norma:activatesNorm</code>.
+                </span>
+              </div>
+              <div className="ontology-panel__row">
+                <span>
+                  The shortcut property <code>norma:triggersNorm</code> is derived from that pattern, but clients that need the true or false branch should inspect the trigger event and its outcome.
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section className="ontology-panel__section">
+            <div className="ontology-panel__section-head">
               <strong>External standards and vocabularies</strong>
               <span className="ontology-panel__count">{EXTERNAL_ONTOLOGIES.length}</span>
             </div>
             <p className="ontology-panel__section-copy">
-              PROV O, ELI, and FOAF are part of the semantic alignment layer. SKOS, Dublin Core,
-              BIBO, and VANN are mainly used for classification and ontology metadata.
+              PROV O and ELI provide the main semantic alignments. SKOS supports controlled
+              vocabularies, LKIF-Core appears as an informative mapping layer, and Dublin Core,
+              BIBO, VANN, and FOAF are mainly used for ontology and instance metadata.
             </p>
             <div className="ontology-panel__table">
               {EXTERNAL_ONTOLOGIES.map((item) => (
@@ -1529,6 +1755,11 @@ export default function Dashboard() {
               <div className="ontology-panel__row">
                 <span>
                   Use this tab as a quick reference to check whether the ABox, SWRL rules, graph view, and ontology are aligned semantically.
+                </span>
+              </div>
+              <div className="ontology-panel__row">
+                <span>
+                  If you see <code>Obligation</code>, <code>Prohibition</code>, or <code>Recommendation</code> in the app, they are ABox individuals typed with these ontology classes rather than separate ontologies or ad hoc UI categories.
                 </span>
               </div>
             </div>

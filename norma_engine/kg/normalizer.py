@@ -128,6 +128,17 @@ def _canonical(label: str) -> str:
     return s
 
 
+def _singularize(s: str) -> str:
+    """Naive singularization of a canonical label for plural detection."""
+    if s.endswith("ies"):
+        return s[:-3] + "y"
+    if s.endswith("ses") or s.endswith("xes") or s.endswith("zes") or s.endswith("ches") or s.endswith("shes"):
+        return s[:-2]
+    if s.endswith("s") and not s.endswith("ss"):
+        return s[:-1]
+    return s
+
+
 def _similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, _canonical(a), _canonical(b)).ratio()
 
@@ -207,22 +218,72 @@ def _normalize_field(
         for label in group:
             mapping[label] = winner
 
-    # Fuzzy check: look for near-matches across groups
+    # Plural/singular merge: auto-consolidate winners that differ only by a plural suffix.
+    # Groups winners by their singularized canonical form; the shorter (singular) label wins.
+    current_winners = list({v for v in mapping.values()})
+    singular_groups: Dict[str, List[str]] = defaultdict(list)
+    for w in current_winners:
+        singular_groups[_singularize(_canonical(w))].append(w)
+
+    for _sing_key, group in singular_groups.items():
+        if len(group) < 2:
+            continue
+        # Prefer the label whose canonical form is already singular (i.e. unchanged by _singularize)
+        already_singular = [w for w in group if _singularize(_canonical(w)) == _canonical(w)]
+        winner = already_singular[0] if already_singular else sorted(group, key=lambda w: len(_canonical(w)))[0]
+        losers = [w for w in group if w != winner]
+        report.decisions.append(NormalizationDecision(
+            field      = field_name,
+            raw_labels = group,
+            winner     = winner,
+            reason     = "plural_variant",
+            confidence = 1.0,
+        ))
+        for raw, mapped in list(mapping.items()):
+            if mapped in losers:
+                mapping[raw] = winner
+
+    # Fuzzy merge: auto-consolidate remaining winners with high similarity.
+    # Union-find over fuzzy-similar pairs so transitive chains collapse correctly.
     winners = list({v for v in mapping.values()})
+    parent: Dict[str, str] = {w: w for w in winners}
+
+    def _find(x: str) -> str:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
     for i in range(len(winners)):
         for j in range(i + 1, len(winners)):
-            sim = _similarity(winners[i], winners[j])
-            if sim >= threshold:
-                report.warnings.append(NormalizationWarning(
-                    field      = field_name,
-                    labels     = [winners[i], winners[j]],
-                    message    = f"High similarity ({sim:.0%}) — may be the same entity.",
-                    suggestion = (
-                        f"Add to override map: "
-                        f'{{"{winners[i]}": "{winners[j]}"}}'
-                        f" or vice versa."
-                    ),
-                ))
+            if _similarity(winners[i], winners[j]) >= threshold:
+                ri, rj = _find(winners[i]), _find(winners[j])
+                if ri != rj:
+                    # Keep the label that appears first (lower first_seen index)
+                    if first_seen.get(ri, 0) <= first_seen.get(rj, 0):
+                        parent[rj] = ri
+                    else:
+                        parent[ri] = rj
+
+    fuzzy_groups: Dict[str, List[str]] = defaultdict(list)
+    for w in winners:
+        fuzzy_groups[_find(w)].append(w)
+
+    for root, group in fuzzy_groups.items():
+        if len(group) < 2:
+            continue
+        winner, reason = _pick_winner(group, first_seen)
+        report.decisions.append(NormalizationDecision(
+            field      = field_name,
+            raw_labels = group,
+            winner     = winner,
+            reason     = f"fuzzy ({reason})",
+            confidence = round(max(_similarity(winner, l) for l in group if l != winner), 2),
+        ))
+        losers = [w for w in group if w != winner]
+        for raw, mapped in list(mapping.items()):
+            if mapped in losers:
+                mapping[raw] = winner
 
     return mapping
 

@@ -23,6 +23,86 @@ def _run(sample_bpmn_xml):
     return paths, rules, superiority
 
 
+REPEATED_CONDITION_SAME_VALUE_BPMN = """\
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+    xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+    xmlns:zeebe="http://camunda.org/schema/zeebe/1.0"
+    id="Definitions_repeat_same" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_repeat_same" isExecutable="true">
+    <bpmn:startEvent id="Start_1">
+      <bpmn:outgoing>Flow_start_gw1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:exclusiveGateway id="GW_1" name="Is the system used in public spaces?">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Is the system used in public spaces?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_start_gw1</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw1_gw2</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw1_end</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:exclusiveGateway id="GW_2" name="Is the system used in public spaces?">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Is the system used in public spaces?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_gw1_gw2</bpmn:incoming>
+      <bpmn:outgoing>Flow_gw2_task</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gw2_end</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task_OBL" name="Apply public-space safeguards">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="task" />
+          <zeebe:property name="compliance_deonticType" value="obligation" />
+          <zeebe:property name="compliance_deonticId" value="OBL_REPEAT" />
+          <zeebe:property name="compliance_agent" value="AI provider" />
+          <zeebe:property name="compliance_action" value="apply safeguards" />
+          <zeebe:property name="compliance_object" value="AI system" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_gw2_task</bpmn:incoming>
+      <bpmn:outgoing>Flow_task_end</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:sequenceFlow id="Flow_start_gw1" sourceRef="Start_1" targetRef="GW_1" />
+    <bpmn:sequenceFlow id="Flow_gw1_gw2" name="Yes" sourceRef="GW_1" targetRef="GW_2" />
+    <bpmn:sequenceFlow id="Flow_gw1_end" name="No" sourceRef="GW_1" targetRef="End_1" />
+    <bpmn:sequenceFlow id="Flow_gw2_task" name="Yes" sourceRef="GW_2" targetRef="Task_OBL" />
+    <bpmn:sequenceFlow id="Flow_gw2_end" name="No" sourceRef="GW_2" targetRef="End_1" />
+    <bpmn:sequenceFlow id="Flow_task_end" sourceRef="Task_OBL" targetRef="End_1" />
+
+    <bpmn:endEvent id="End_1">
+      <bpmn:incoming>Flow_gw1_end</bpmn:incoming>
+      <bpmn:incoming>Flow_gw2_end</bpmn:incoming>
+      <bpmn:incoming>Flow_task_end</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+</bpmn:definitions>
+"""
+
+
+REPEATED_CONDITION_CONTRADICTION_BPMN = REPEATED_CONDITION_SAME_VALUE_BPMN.replace(
+    'id="Flow_gw2_task" name="Yes" sourceRef="GW_2" targetRef="Task_OBL" />',
+    'id="Flow_gw2_task" name="No" sourceRef="GW_2" targetRef="Task_OBL" />',
+).replace(
+    'id="Flow_gw2_end" name="No" sourceRef="GW_2" targetRef="End_1" />',
+    'id="Flow_gw2_end" name="Yes" sourceRef="GW_2" targetRef="End_1" />',
+)
+
+
 class TestPathEnumeration:
     def test_two_paths_found(self, sample_bpmn_xml):
         paths, _, _ = _run(sample_bpmn_xml)
@@ -147,6 +227,18 @@ class TestRuleIR:
         _, rules, _ = _run(xml)
         condition_values = {r.conditions[0].value for r in rules}
         assert condition_values == {True, False}
+
+    def test_repeated_same_condition_with_same_value_is_deduplicated(self):
+        _, rules, _ = _run(REPEATED_CONDITION_SAME_VALUE_BPMN)
+        activating_rules = [rule for rule in rules if rule.trigger_atoms]
+        assert len(activating_rules) == 1
+        assert len(activating_rules[0].conditions) == 1
+        assert activating_rules[0].conditions[0].predicate.name == "Is_the_system_used_in_public_spaces"
+        assert activating_rules[0].conditions[0].value is True
+
+    def test_contradictory_repeated_condition_path_is_skipped(self):
+        _, rules, _ = _run(REPEATED_CONDITION_CONTRADICTION_BPMN)
+        assert [rule for rule in rules if rule.trigger_atoms] == []
 
 
 class TestSuperiority:
