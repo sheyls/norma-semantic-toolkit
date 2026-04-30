@@ -16,6 +16,7 @@ env/
 backend/data/norma.sqlite3
 backend/data/graph-stores/
 backend/data/uploads/
+.env.production
 
 # Keep the data/assets directory structure in git
 !backend/data/.gitkeep
