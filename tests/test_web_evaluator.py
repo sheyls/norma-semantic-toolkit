@@ -18,7 +18,7 @@ from backend.services.storage import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-CASE_FILE = ROOT / "test" / "eu_ai_act_cases.json"
+CASE_FILE = ROOT / "tests" / "eu_ai_act_cases.json"
 
 
 def _load_cases() -> list[dict]:
