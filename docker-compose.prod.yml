@@ -1,0 +1,13 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: norma-semantic-toolkit:prod
+    restart: unless-stopped
+    env_file:
+      - web-app/.env.production
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./web-app/backend/data:/data
