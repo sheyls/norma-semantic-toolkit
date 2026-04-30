@@ -1,11 +1,16 @@
 SPARQL_PRESETS = [
     {
-        "id": "obligations-by-agent",
-        "label": "Obligations by agent",
-        "question": "Which obligations apply to a given legal agent?",
-        "description": "Returns all obligation norms grouped by their linked legal agent. Add or edit the commented FILTER to focus on one agent.",
+        "id": "norms-by-agent",
+        "label": "Norms by agent",
+        "question": "Which norms apply to a given legal agent?",
+        "description": "Returns all norm types grouped by their linked legal agent. Add or edit the commented FILTER to focus on one agent.",
         "vocabulary": [
             "norma:Obligation",
+            "norma:Prohibition",
+            "norma:Permission",
+            "norma:Recommendation",
+            "norma:NegativeRecommendation",
+            "norma:ConstitutiveRule",
             "norma:hasLegalAgent",
             "norma:deonticId",
             "norma:fromRegulation",
@@ -14,9 +19,17 @@ SPARQL_PRESETS = [
         "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?agentLabel ?deonticId ?label ?regulation ?article ?paragraph
+SELECT ?type ?agentLabel ?deonticId ?label ?regulation ?article ?paragraph
 WHERE {
-  ?norm a norma:Obligation ;
+  VALUES ?type {
+    norma:Obligation
+    norma:Prohibition
+    norma:Permission
+    norma:Recommendation
+    norma:NegativeRecommendation
+    norma:ConstitutiveRule
+  }
+  ?norm a ?type ;
         norma:deonticId ?deonticId ;
         rdfs:label ?label ;
         norma:hasLegalAgent ?agent .
@@ -26,15 +39,20 @@ WHERE {
   OPTIONAL { ?norm norma:fromParagraph ?paragraph . }
   # FILTER(LCASE(STR(?agentLabel)) = "ai provider")
 }
-ORDER BY ?agentLabel ?deonticId""",
+ORDER BY ?agentLabel ?type ?deonticId""",
     },
     {
-        "id": "prohibitions-by-object",
-        "label": "Prohibitions by object",
-        "question": "Which prohibitions constrain a given legal object?",
-        "description": "Returns prohibition norms grouped by the linked legal object. Add or edit the commented FILTER to focus on one object.",
+        "id": "norms-by-object",
+        "label": "Norms by object",
+        "question": "Which norms concern a given legal object?",
+        "description": "Returns all norm types grouped by their linked legal object. Add or edit the commented FILTER to focus on one object.",
         "vocabulary": [
+            "norma:Obligation",
             "norma:Prohibition",
+            "norma:Permission",
+            "norma:Recommendation",
+            "norma:NegativeRecommendation",
+            "norma:ConstitutiveRule",
             "norma:hasLegalObject",
             "norma:deonticId",
             "norma:fromRegulation",
@@ -43,9 +61,17 @@ ORDER BY ?agentLabel ?deonticId""",
         "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?objectLabel ?deonticId ?label ?regulation ?article ?paragraph
+SELECT ?type ?objectLabel ?deonticId ?label ?regulation ?article ?paragraph
 WHERE {
-  ?norm a norma:Prohibition ;
+  VALUES ?type {
+    norma:Obligation
+    norma:Prohibition
+    norma:Permission
+    norma:Recommendation
+    norma:NegativeRecommendation
+    norma:ConstitutiveRule
+  }
+  ?norm a ?type ;
         norma:deonticId ?deonticId ;
         rdfs:label ?label ;
         norma:hasLegalObject ?object .
@@ -55,35 +81,47 @@ WHERE {
   OPTIONAL { ?norm norma:fromParagraph ?paragraph . }
   # FILTER(LCASE(STR(?objectLabel)) = "ai system")
 }
-ORDER BY ?objectLabel ?deonticId""",
+ORDER BY ?objectLabel ?type ?deonticId""",
     },
     {
-        "id": "recommendations-by-agent",
-        "label": "Recommendations by agent",
-        "question": "Which recommendations or negative recommendations are associated with a given legal agent?",
-        "description": "Returns both recommendation modalities together with their linked agent and source anchor.",
+        "id": "norms-by-action",
+        "label": "Norms by action",
+        "question": "Which norms are attached to a given legal action?",
+        "description": "Returns all norm types grouped by their linked legal action. Add or edit the commented FILTER to focus on one action.",
         "vocabulary": [
+            "norma:Obligation",
+            "norma:Prohibition",
+            "norma:Permission",
             "norma:Recommendation",
             "norma:NegativeRecommendation",
-            "norma:hasLegalAgent",
+            "norma:ConstitutiveRule",
+            "norma:hasLegalAction",
             "norma:deonticId",
         ],
         "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?type ?agentLabel ?deonticId ?label ?regulation ?article
+SELECT ?type ?actionLabel ?deonticId ?label ?regulation ?article ?paragraph
 WHERE {
-  VALUES ?type { norma:Recommendation norma:NegativeRecommendation }
+  VALUES ?type {
+    norma:Obligation
+    norma:Prohibition
+    norma:Permission
+    norma:Recommendation
+    norma:NegativeRecommendation
+    norma:ConstitutiveRule
+  }
   ?norm a ?type ;
         norma:deonticId ?deonticId ;
         rdfs:label ?label ;
-        norma:hasLegalAgent ?agent .
-  ?agent rdfs:label ?agentLabel .
+        norma:hasLegalAction ?action .
+  ?action rdfs:label ?actionLabel .
   OPTIONAL { ?norm norma:fromRegulation ?regulation . }
   OPTIONAL { ?norm norma:fromArticle ?article . }
-  # FILTER(LCASE(STR(?agentLabel)) = "ai provider")
+  OPTIONAL { ?norm norma:fromParagraph ?paragraph . }
+  # FILTER(CONTAINS(LCASE(STR(?actionLabel)), "report"))
 }
-ORDER BY ?agentLabel ?type ?deonticId""",
+ORDER BY ?actionLabel ?type ?deonticId""",
     },
     {
         "id": "norms-by-source-anchor",
@@ -104,8 +142,10 @@ WHERE {
   VALUES ?type {
     norma:Obligation
     norma:Prohibition
+    norma:Permission
     norma:Recommendation
     norma:NegativeRecommendation
+    norma:ConstitutiveRule
   }
   ?norm a ?type ;
         norma:deonticId ?deonticId ;
@@ -167,32 +207,6 @@ HAVING (COUNT(DISTINCT ?norm) > 1)
 ORDER BY DESC(?normCount) ?regulationName ?articleNumber""",
     },
     {
-        "id": "condition-branches",
-        "label": "Condition branches",
-        "question": "Which legal conditions and TriggerEvent branches are explicitly represented in the knowledge graph?",
-        "description": "Shows the explicit LegalCondition → TriggerEvent → ConditionOutcome pattern present in the generated ABox.",
-        "vocabulary": [
-            "norma:LegalCondition",
-            "norma:conditionStatement",
-            "norma:hasTrigger",
-            "norma:TriggerEvent",
-            "norma:hasOutcome",
-        ],
-        "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
-PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
-
-SELECT ?statement ?triggerEvent ?outcome ?outcomeLabel
-WHERE {
-  ?condition a norma:LegalCondition ;
-             norma:conditionStatement ?statement ;
-             norma:hasTrigger ?triggerEvent .
-  ?triggerEvent a norma:TriggerEvent ;
-                norma:hasOutcome ?outcome .
-  OPTIONAL { ?outcome rdfs:label ?outcomeLabel . }
-}
-ORDER BY ?statement ?outcomeLabel""",
-    },
-    {
         "id": "annotation-provenance",
         "label": "Annotation provenance",
         "question": "Which annotator, annotation activity, extraction method, and confidence score are recorded for each norm?",
@@ -227,14 +241,13 @@ WHERE {
 ORDER BY ?deonticId""",
     },
     {
-        "id": "pending-review",
-        "label": "Pending review",
-        "question": "Which norms have not yet passed legal review?",
-        "description": "Filters norms to the review states typically used before legal validation is complete.",
+        "id": "norms-by-review-status",
+        "label": "Norms by review status",
+        "question": "Which norms have each legal review status?",
+        "description": "Lists norms together with their review status so you can inspect what has been approved, left pending, or not reviewed.",
         "vocabulary": [
             "norma:hasReviewStatus",
-            "norma:PendingReview",
-            "norma:NotReviewed",
+            "norma:deonticId",
             "norma:lastReviewDate",
         ],
         "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
@@ -245,7 +258,6 @@ WHERE {
   ?norm norma:deonticId ?deonticId ;
         rdfs:label ?label ;
         norma:hasReviewStatus ?reviewStatus .
-  VALUES ?reviewStatus { norma:PendingReview norma:NotReviewed }
   OPTIONAL { ?norm norma:lastReviewDate ?lastReviewDate . }
 }
 ORDER BY ?reviewStatus ?deonticId""",
@@ -276,12 +288,17 @@ WHERE {
 ORDER BY ?status ?bindingForce ?criticality ?deonticId""",
     },
     {
-        "id": "high-criticality-obligations",
-        "label": "High-criticality obligations",
-        "question": "Which obligations have a compliance criticality of Critical or High?",
-        "description": "Returns the obligations classified as the highest compliance priorities.",
+        "id": "high-priority-norms",
+        "label": "High-priority norms",
+        "question": "Which norms have a compliance criticality of Critical or High?",
+        "description": "Returns the norms classified as the highest compliance priorities, regardless of modality.",
         "vocabulary": [
             "norma:Obligation",
+            "norma:Prohibition",
+            "norma:Permission",
+            "norma:Recommendation",
+            "norma:NegativeRecommendation",
+            "norma:ConstitutiveRule",
             "norma:hasComplianceCriticality",
             "norma:Critical",
             "norma:High",
@@ -289,9 +306,17 @@ ORDER BY ?status ?bindingForce ?criticality ?deonticId""",
         "query": """PREFIX norma: <https://w3id.org/def/norma-o#>
 PREFIX rdfs:  <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?deonticId ?label ?criticality ?regulation ?article
+SELECT ?type ?deonticId ?label ?criticality ?regulation ?article
 WHERE {
-  ?norm a norma:Obligation ;
+  VALUES ?type {
+    norma:Obligation
+    norma:Prohibition
+    norma:Permission
+    norma:Recommendation
+    norma:NegativeRecommendation
+    norma:ConstitutiveRule
+  }
+  ?norm a ?type ;
         norma:deonticId ?deonticId ;
         rdfs:label ?label ;
         norma:hasComplianceCriticality ?criticality .
@@ -299,6 +324,6 @@ WHERE {
   OPTIONAL { ?norm norma:fromRegulation ?regulation . }
   OPTIONAL { ?norm norma:fromArticle ?article . }
 }
-ORDER BY ?criticality ?deonticId""",
+ORDER BY ?criticality ?type ?deonticId""",
     },
 ]

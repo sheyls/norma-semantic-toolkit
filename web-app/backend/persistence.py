@@ -270,3 +270,8 @@ def record_uploaded_pack(
             """,
             (name, source_filename, storage_dir, abox_ttl_path, swrl_owl_path, utc_now_iso()),
         )
+
+
+def clear_uploaded_pack_rows() -> None:
+    with connect_db() as conn:
+        conn.execute("DELETE FROM uploaded_packs")

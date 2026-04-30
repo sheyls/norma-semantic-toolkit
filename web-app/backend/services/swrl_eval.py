@@ -1,28 +1,7 @@
-#!/usr/bin/env python3
-"""
-Run NORMA's exported SWRL rules against concrete boolean scenarios.
-
-This is a lightweight, repo-local alternative to testing rules in Protégé.
-It intentionally supports the SWRL fragment currently emitted by
-`norma_engine.exporters.swrl`:
-
-- body atoms: `swrl:DatavaluedPropertyAtom` with xsd:boolean literals
-- head atoms: `swrl:IndividualPropertyAtom` asserting `norma:activatesNorm`
-
-It is not a general-purpose SWRL engine. The goal is to exercise the
-exported rules in the same practical way we would in Protégé: provide a
-scenario, see which trigger events and norms activate, and compare that
-with expectations.
-"""
-
 from __future__ import annotations
 
-import argparse
-import json
-import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Iterable
 
 
@@ -42,12 +21,6 @@ NS = {
 
 def _tag(local: str, ns: str) -> str:
     return f"{{{ns}}}{local}"
-
-
-def _short(iri: str) -> str:
-    if "#" in iri:
-        return iri.rsplit("#", 1)[1]
-    return iri.rstrip("/").rsplit("/", 1)[-1]
 
 
 def _unique_preserve_order(values: Iterable[str]) -> list[str]:
@@ -89,8 +62,7 @@ class ParsedRuleset:
 
 
 @dataclass(frozen=True)
-class CaseOutcome:
-    case_id: str
+class SwrlEvaluationOutcome:
     matched_rule_iris: tuple[str, ...]
     trigger_events: tuple[str, ...]
     norms: tuple[str, ...]
@@ -195,17 +167,16 @@ def _parse_head_atom(atom: ET.Element) -> HeadActivationAtom:
     )
 
 
-def parse_swrl_rules(swrl_path: str | Path) -> ParsedRuleset:
-    swrl_path = Path(swrl_path)
-    root = ET.parse(swrl_path).getroot()
+def parse_swrl_rules_xml(xml_text: str) -> ParsedRuleset:
+    root = ET.fromstring(xml_text)
 
     ontology = root.find("owl:Ontology", NS)
     if ontology is None:
-        raise ValueError(f"No owl:Ontology found in {swrl_path}")
+        raise ValueError("No owl:Ontology found in SWRL RDF/XML")
 
     rules_iri = ontology.attrib.get(_tag("about", RDF_NS)) or root.attrib.get("base")
     if not rules_iri:
-        raise ValueError(f"Could not determine rules ontology IRI from {swrl_path}")
+        raise ValueError("Could not determine rules ontology IRI from SWRL RDF/XML")
 
     import_node = ontology.find("owl:imports", NS)
     imports_iri = _resource_attr(import_node) if import_node is not None else None
@@ -231,7 +202,7 @@ def parse_swrl_rules(swrl_path: str | Path) -> ParsedRuleset:
         if len(subjects) > 1:
             raise ValueError(
                 f"Rule {rule_iri} uses multiple body subjects {sorted(subjects)}; "
-                "this runner only supports one scenario subject variable per rule"
+                "this evaluator only supports one scenario subject variable per rule"
             )
 
         parsed_rules.append(ParsedRule(iri=rule_iri, body=body_atoms, head=head_atoms))
@@ -252,21 +223,10 @@ def _normalize_fact_key(key: str, *, rules_iri: str) -> str:
     return f"{rules_iri}#{key}"
 
 
-def _normalize_expected_norm_key(key: str, *, imports_iri: str | None) -> str:
-    if key.startswith("http://") or key.startswith("https://"):
-        return key
-    if not imports_iri:
-        raise ValueError(
-            "Expected norm local names require the SWRL ontology to declare owl:imports"
-        )
-    return f"{imports_iri}#{key}"
-
-
-def evaluate_case(
+def evaluate_swrl_rules(
     ruleset: ParsedRuleset,
-    case_id: str,
     facts: dict[str, bool],
-) -> CaseOutcome:
+) -> SwrlEvaluationOutcome:
     normalized_facts = {
         _normalize_fact_key(key, rules_iri=ruleset.rules_iri): bool(value)
         for key, value in facts.items()
@@ -282,121 +242,9 @@ def evaluate_case(
             trigger_events.extend(atom.trigger_event_iri for atom in rule.head)
             norms.extend(atom.norm_iri for atom in rule.head)
 
-    return CaseOutcome(
-        case_id=case_id,
+    return SwrlEvaluationOutcome(
         matched_rule_iris=tuple(_unique_preserve_order(matched_rule_iris)),
         trigger_events=tuple(_unique_preserve_order(trigger_events)),
         norms=tuple(_unique_preserve_order(norms)),
     )
 
-
-def _load_case_file(path: Path) -> dict:
-    with path.open("r", encoding="utf-8") as handle:
-        return json.load(handle)
-
-
-def _check_expectations(
-    ruleset: ParsedRuleset,
-    outcome: CaseOutcome,
-    case_spec: dict,
-) -> list[str]:
-    errors: list[str] = []
-
-    expected_norms = case_spec.get("expect_norms")
-    if expected_norms is not None:
-        expected = {
-            _normalize_expected_norm_key(norm, imports_iri=ruleset.imports_iri)
-            for norm in expected_norms
-        }
-        actual = set(outcome.norms)
-        if expected != actual:
-            errors.append(
-                "expected norms "
-                f"{sorted(_short(norm) for norm in expected)} "
-                f"but got {sorted(_short(norm) for norm in actual)}"
-            )
-
-    expected_triggers = case_spec.get("expect_trigger_events")
-    if expected_triggers is not None:
-        expected = {
-            _normalize_expected_norm_key(trigger, imports_iri=ruleset.imports_iri)
-            for trigger in expected_triggers
-        }
-        actual = set(outcome.trigger_events)
-        if expected != actual:
-            errors.append(
-                "expected trigger events "
-                f"{sorted(_short(trigger) for trigger in expected)} "
-                f"but got {sorted(_short(trigger) for trigger in actual)}"
-            )
-
-    return errors
-
-
-def _print_case_result(outcome: CaseOutcome, errors: list[str]) -> None:
-    status = "PASS" if not errors else "FAIL"
-    print(f"[{status}] {outcome.case_id}")
-    print(f"  trigger events: {', '.join(_short(item) for item in outcome.trigger_events) or '(none)'}")
-    print(f"  norms: {', '.join(_short(item) for item in outcome.norms) or '(none)'}")
-    for error in errors:
-        print(f"  error: {error}")
-
-
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(
-        description="Run NORMA's exported SWRL rules against JSON scenario cases."
-    )
-    parser.add_argument(
-        "--swrl",
-        default="regulations/eu-ai-act/eu-ai-act.swrl.owl",
-        help="Path to the exported SWRL RDF/XML file.",
-    )
-    parser.add_argument(
-        "--cases",
-        default="test/eu_ai_act_cases.json",
-        help="Path to a JSON file containing scenario facts and expectations.",
-    )
-    parser.add_argument(
-        "--strict-duplicate-rule-ids",
-        action="store_true",
-        help="Fail if the SWRL file reuses swrl:Imp rdf:about IRIs.",
-    )
-    args = parser.parse_args(argv)
-
-    swrl_path = Path(args.swrl)
-    case_path = Path(args.cases)
-
-    ruleset = parse_swrl_rules(swrl_path)
-    if ruleset.duplicate_rule_iris:
-        message = (
-            "warning: duplicate swrl:Imp IRIs detected: "
-            + ", ".join(_short(iri) for iri in ruleset.duplicate_rule_iris)
-            + ". This runner evaluates each XML rule entry independently, "
-              "but an OWL/SWRL engine may merge entries that share the same IRI."
-        )
-        print(message, file=sys.stderr)
-        if args.strict_duplicate_rule_ids:
-            return 2
-
-    spec = _load_case_file(case_path)
-    case_specs = spec.get("cases")
-    if not isinstance(case_specs, list):
-        raise ValueError(f"{case_path} must contain a top-level 'cases' array")
-
-    failed = False
-    for index, case_spec in enumerate(case_specs, start=1):
-        case_id = case_spec.get("id") or f"case_{index}"
-        facts = case_spec.get("facts")
-        if not isinstance(facts, dict):
-            raise ValueError(f"Case {case_id!r} is missing a 'facts' object")
-
-        outcome = evaluate_case(ruleset, case_id=case_id, facts=facts)
-        errors = _check_expectations(ruleset, outcome, case_spec)
-        _print_case_result(outcome, errors)
-        failed = failed or bool(errors)
-
-    return 1 if failed else 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

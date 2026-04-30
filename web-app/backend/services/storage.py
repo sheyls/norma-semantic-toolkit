@@ -23,15 +23,16 @@ from backend.database import (
     pack_registry,
 )
 from backend.persistence import (
+    clear_uploaded_pack_rows,
     compute_pack_fingerprint,
     deserialize_rules_ir,
     init_db,
     load_official_pack_row,
-    record_uploaded_pack,
     sync_official_pack_files,
     upsert_official_pack,
 )
 from backend.services.graphdb import OX_AVAILABLE, build_store, open_store, semantic_graph_data
+from backend.services.swrl_eval import evaluate_swrl_rules, parse_swrl_rules_xml
 from backend.services.pipeline import (
     KG_AVAILABLE,
     NORM_FIELD_MAP,
@@ -50,6 +51,79 @@ from backend.services.pipeline import (
 
 log = logging.getLogger(__name__)
 
+
+def _coerce_answer_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    text = str(value).strip().lower()
+    if text in {"true", "t", "yes", "y", "1"}:
+        return True
+    if text in {"false", "f", "no", "n", "0", "", "null", "none"}:
+        return False
+    return bool(value)
+
+
+def _rule_iri_suffix(rule_iri: str) -> str:
+    if "#" in rule_iri:
+        return rule_iri.rsplit("#", 1)[-1]
+    return rule_iri.rstrip("/").rsplit("/", 1)[-1]
+
+
+def _rule_ids_to_lookup(pack: dict[str, Any]) -> dict[str, Any]:
+    return {str(rule.rid): rule for rule in pack.get("rules_ir", [])}
+
+
+def _get_parsed_swrl_ruleset(pack: dict[str, Any]):
+    swrl_text = pack.get("swrl_owl") or ""
+    if not swrl_text.strip():
+        return None
+    if pack.get("_parsed_swrl_source") == swrl_text and pack.get("_parsed_swrl_ruleset") is not None:
+        return pack["_parsed_swrl_ruleset"]
+    ruleset = parse_swrl_rules_xml(swrl_text)
+    pack["_parsed_swrl_source"] = swrl_text
+    pack["_parsed_swrl_ruleset"] = ruleset
+    return ruleset
+
+
+def _evaluate_pack_via_rule_ir(pack: dict[str, Any], answers: dict[str, bool]) -> list[dict[str, Any]]:
+    seen_norm_ids: set[str] = set()
+    matched: list[dict[str, Any]] = []
+    for rule in pack["rules_ir"]:
+        condition_names = {c.predicate.name for c in rule.conditions}
+        if not condition_names.issubset(answers.keys()):
+            continue
+        if not all(answers[c.predicate.name] == c.value for c in rule.conditions):
+            continue
+        for norm_id in norm_ids_in_rule(rule):
+            if norm_id in seen_norm_ids:
+                continue
+            seen_norm_ids.add(norm_id)
+            matched.append(norm_to_dict(norm_id, rule))
+    return matched
+
+
+def _evaluate_pack_via_swrl(pack: dict[str, Any], answers: dict[str, bool]) -> tuple[list[dict[str, Any]], int]:
+    ruleset = _get_parsed_swrl_ruleset(pack)
+    if ruleset is None:
+        raise ValueError("Pack has no SWRL ruleset to evaluate")
+
+    outcome = evaluate_swrl_rules(ruleset, answers)
+    rule_lookup = _rule_ids_to_lookup(pack)
+    seen_norm_ids: set[str] = set()
+    matched: list[dict[str, Any]] = []
+
+    for rule_iri in outcome.matched_rule_iris:
+        rule = rule_lookup.get(_rule_iri_suffix(rule_iri))
+        if rule is None:
+            continue
+        for norm_id in norm_ids_in_rule(rule):
+            if norm_id in seen_norm_ids:
+                continue
+            seen_norm_ids.add(norm_id)
+            matched.append(norm_to_dict(norm_id, rule))
+    return matched, len(outcome.matched_rule_iris)
 
 def require_pack(name: str) -> dict[str, Any]:
     pack = pack_registry.get(name)
@@ -122,14 +196,6 @@ def _build_runtime_pack_from_dir(pack_name: str, storage_dir: Path) -> dict[str,
         swrl_path = storage_dir / f"{pack_name}.swrl.owl"
         swrl_path.write_text(swrl_text, encoding="utf-8")
 
-    record_uploaded_pack(
-        name=pack_name,
-        source_filename=next(iter((storage_dir / "bpmn").glob("*.bpmn")), Path("upload.bpmn")).name,
-        storage_dir=str(storage_dir),
-        abox_ttl_path=str(abox_path) if abox_path else None,
-        swrl_owl_path=str(swrl_path) if swrl_path else None,
-    )
-
     pack_registry[pack_name] = {
         "abox_ttl": abox_ttl or "",
         "swrl_owl": swrl_text,
@@ -183,6 +249,7 @@ def _pack_from_db_row(row: Any) -> dict[str, Any]:
 
 def load_regulation_packs() -> None:
     init_db()
+    clear_uploaded_pack_rows()
     if not REGULATIONS_DIR.exists():
         return
     for reg_dir in sorted(REGULATIONS_DIR.iterdir()):
@@ -331,23 +398,20 @@ def evaluate_pack(pack_name: str, answers: Any) -> dict[str, Any]:
     pack = require_pack(pack_name)
     if not isinstance(answers, dict):
         raise HTTPException(422, "Request body must be a JSON object mapping condition names to booleans")
-    # Coerce all values to bool so JSON "true"/"false" strings and integers work transparently.
-    coerced: dict[str, bool] = {str(k): bool(v) for k, v in answers.items()}
-    seen_norm_ids = set()
-    matched = []
-
-    for rule in pack["rules_ir"]:
-        condition_names = {c.predicate.name for c in rule.conditions}
-        if not condition_names.issubset(coerced.keys()):
-            continue
-        if not all(coerced[c.predicate.name] == c.value for c in rule.conditions):
-            continue
-        for norm_id in norm_ids_in_rule(rule):
-            if norm_id in seen_norm_ids:
-                continue
-            seen_norm_ids.add(norm_id)
-            matched.append(norm_to_dict(norm_id, rule))
-    return {"matched_rules": matched}
+    coerced: dict[str, bool] = {str(k): _coerce_answer_bool(v) for k, v in answers.items()}
+    try:
+        matched, matched_rule_count = _evaluate_pack_via_swrl(pack, coerced)
+        return {
+            "matched_rules": matched,
+            "engine": "swrl",
+            "matched_rule_count": matched_rule_count,
+        }
+    except Exception as exc:
+        log.warning("SWRL evaluation failed for %s, falling back to RuleIR matcher: %s", pack_name, exc)
+        return {
+            "matched_rules": _evaluate_pack_via_rule_ir(pack, coerced),
+            "engine": "rule_ir",
+        }
 
 
 def graph_for_pack(pack_name: str) -> dict[str, Any]:
@@ -355,6 +419,24 @@ def graph_for_pack(pack_name: str) -> dict[str, Any]:
     if pack.get("store") is not None:
         return semantic_graph_data(pack["store"], pack=pack)
     return pack_graph_data(pack)
+
+
+def sparql_store_for_pack(pack_name: str):
+    pack = require_pack(pack_name)
+    if not OX_AVAILABLE:
+        return None
+
+    # Runtime packs should always query against the latest generated ABox.
+    # Rebuilding the in-memory store here avoids any stale cache edge case
+    # after appending BPMN files to an existing temporary pack.
+    if pack.get("storage_dir"):
+        abox_ttl = pack.get("abox_ttl") or ""
+        if not abox_ttl:
+            return None
+        pack["store"] = build_store(abox_ttl, ONTOLOGY_PATH)
+        return pack["store"]
+
+    return pack.get("store")
 
 
 def norms_for_pack(pack_name: str) -> dict[str, Any]:

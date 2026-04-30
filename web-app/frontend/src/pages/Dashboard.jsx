@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   evaluatePack,
   getAboxDownloadUrl,
@@ -258,7 +258,7 @@ function getReadableNormClause(norm) {
 
   const keyword = deonticKeyword(norm.deontic_type);
   const agent = titleCaseLabel(norm.agent);
-  const action = humanizeUnderscoredText(norm.action);
+  const rawAction = humanizeUnderscoredText(norm.action);
   const object = humanizeUnderscoredText(norm.object);
   const fallback = titleCaseLabel(norm.norm_statement || humanizeNormId(norm.norm_id));
 
@@ -266,15 +266,54 @@ function getReadableNormClause(norm) {
     return fallback || "Not provided";
   }
 
-  const tail = [action, object].filter(Boolean).join(" ");
+  const action = rawAction
+    .replace(/^must not\s+/i, "")
+    .replace(/^must\s+/i, "")
+    .replace(/^shall not\s+/i, "")
+    .replace(/^shall\s+/i, "")
+    .trim();
+
+  const normalizedAction = slugify(action);
+  const normalizedObject = slugify(object);
+  let tail = action;
+
+  if (object) {
+    if (!action) {
+      tail = object;
+    } else if (!normalizedObject || !normalizedAction.includes(normalizedObject)) {
+      let preposition = "on";
+      if (/\b(comply|respect|exempt)\b/i.test(action)) {
+        preposition = "for";
+      } else if (/\b(grant|provide|assign)\b/i.test(action)) {
+        preposition = "to";
+      }
+      tail = `${action} ${preposition} ${object}`;
+    }
+  }
+
   if (agent && tail) {
-    return `${agent} ${keyword} ${tail}`;
+    const clause = `${agent} ${keyword} ${tail}`;
+    const statement = String(norm.norm_statement || "").trim();
+    if (statement && !clause.toLowerCase().includes(statement.toLowerCase())) {
+      return `${clause}: ${statement}`;
+    }
+    return clause;
   }
   if (agent) {
-    return `${agent} ${keyword}`;
+    const clause = `${agent} ${keyword}`;
+    const statement = String(norm.norm_statement || "").trim();
+    if (statement && !clause.toLowerCase().includes(statement.toLowerCase())) {
+      return `${clause}: ${statement}`;
+    }
+    return clause;
   }
   if (tail) {
-    return `${keyword} ${tail}`;
+    const clause = `${keyword} ${tail}`;
+    const statement = String(norm.norm_statement || "").trim();
+    if (statement && !clause.toLowerCase().includes(statement.toLowerCase())) {
+      return `${clause}: ${statement}`;
+    }
+    return clause;
   }
   if (fallback) {
     return `${keyword} ${fallback}`;
@@ -310,6 +349,7 @@ export default function Dashboard() {
   const [conditions, setConditions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [evaluation, setEvaluation] = useState([]);
+  const [evaluationEngine, setEvaluationEngine] = useState("");
   const [entities, setEntities] = useState(null);
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
   const [presets, setPresets] = useState([]);
@@ -326,7 +366,8 @@ export default function Dashboard() {
   const [graphSearch, setGraphSearch] = useState("");
   const [showGraphProvenance, setShowGraphProvenance] = useState(false);
   const [pasteName, setPasteName] = useState("uploaded pack");
-  const [pasteXml, setPasteXml] = useState("");
+  const newPackFileInputRef = useRef(null);
+  const appendPackFileInputRef = useRef(null);
 
   useEffect(() => {
     async function loadInitialData() {
@@ -357,6 +398,7 @@ export default function Dashboard() {
       setEntities(null);
       setGraph({ nodes: [], edges: [] });
       setEvaluation([]);
+      setEvaluationEngine("");
       setAnswers({});
       setArtifactText("");
       return;
@@ -381,6 +423,7 @@ export default function Dashboard() {
         setEntities(entitiesData);
         setGraph(graphData);
         setEvaluation([]);
+        setEvaluationEngine("");
         setAnswers({});
       } catch (err) {
         setError(err.message);
@@ -431,7 +474,11 @@ export default function Dashboard() {
     }
 
     loadSwrl();
-  }, [selectedPack]);
+  }, [selectedPack, reloadToken]);
+
+  useEffect(() => {
+    setSparqlResult(null);
+  }, [selectedPack, reloadToken]);
 
   const selectedPackSummary = useMemo(
     () => packs.find((pack) => pack.name === selectedPack) || null,
@@ -647,9 +694,7 @@ export default function Dashboard() {
       } else {
         setNotice(`Pack "${uploaded.pack}" processed successfully.`);
       }
-      if (pasteXml.trim()) {
-        setPasteXml("");
-      }
+      setReloadToken((current) => current + 1);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -657,12 +702,22 @@ export default function Dashboard() {
     }
   }
 
+  function fileForNewPack(file) {
+    const nextName = slugify(pasteName || "");
+    if (!nextName) {
+      return file;
+    }
+    return new File([file], `${nextName}.bpmn`, {
+      type: file.type || "application/xml",
+    });
+  }
+
   async function handleUpload(event) {
     const file = event.target.files?.[0];
     if (!file) {
       return;
     }
-    await processUpload(file, "new");
+    await processUpload(fileForNewPack(file), "new");
     event.target.value = "";
   }
 
@@ -679,15 +734,20 @@ export default function Dashboard() {
     setActiveView("overview");
   }
 
-  async function handlePasteUpload() {
-    const xml = pasteXml.trim();
-    if (!xml) {
-      setError("Paste BPMN XML before uploading.");
+  function openNewPackFilePicker() {
+    newPackFileInputRef.current?.click();
+  }
+
+  function openAppendPackFilePicker() {
+    appendPackFileInputRef.current?.click();
+  }
+
+  async function handleDropToSelectedPack(file) {
+    if (!selectedPack) {
+      setError("Select a pack before dropping a BPMN file.");
       return;
     }
-    const filename = `${slugify(pasteName || "pasted pack") || "pasted-pack"}.bpmn`;
-    const file = new File([xml], filename, { type: "application/xml" });
-    await processUpload(file);
+    await processUpload(file, "append");
   }
 
   async function handleRunEvaluation() {
@@ -699,6 +759,7 @@ export default function Dashboard() {
     try {
       const result = await evaluatePack(selectedPack, answers);
       setEvaluation(result.matched_rules || []);
+      setEvaluationEngine(result.engine || "");
       setEvalTypeFilter("all");
     } catch (err) {
       setError(err.message);
@@ -761,8 +822,12 @@ export default function Dashboard() {
             <p className="eyebrow">Selected pack</p>
             <h2>{selectedPack || "Select a regulation pack from the left sidebar"}</h2>
             <p className="section-copy">
-              Choose a pack, inspect the generated knowledge artifacts, review extracted norms, and
-              query the graph when deeper semantic inspection is needed.
+              Review the selected pack, inspect its knowledge artifacts, and explore the extracted
+              norms.
+            </p>
+            <p className="section-copy">
+              Official packs are curated by legal experts, approved in NORMA, and maintained by
+              NORMA maintainers.
             </p>
           </div>
           <div className="stat-grid">
@@ -808,13 +873,62 @@ export default function Dashboard() {
         <section className="panel panel--soft">
           <div className="section-intro">
             <div className="overview-pack-kicker">
-              Create new pack
+              Open BPMN actions
             </div>
-            <h2>Create a new regulation pack for exploration</h2>
+            <h2>BPMN upload</h2>
             <p className="section-copy">
-              Create a temporary regulation pack by uploading a BPMN file or by pasting BPMN XML.
-              The generated artifacts can then be inspected like any other pack.
+              Choose one path: create a new temporary pack, or add a BPMN into the selected pack.
             </p>
+          </div>
+          <div className="workflow-grid">
+            <article className="workflow-card">
+              <span className="workflow-card__kicker">New pack</span>
+              <h3>Create new temporary pack</h3>
+              <p>
+                Build a separate temporary pack from one BPMN file.
+              </p>
+              <button className="button button--cta" type="button" onClick={openNewPackFilePicker} disabled={isUploading}>
+                {isUploading ? "Uploading..." : "Create temporary pack from BPMN"}
+              </button>
+              <input
+                ref={newPackFileInputRef}
+                type="file"
+                accept=".bpmn"
+                onChange={handleUpload}
+                hidden
+              />
+            </article>
+
+            <article className="workflow-card">
+              <span className="workflow-card__kicker">Selected pack</span>
+              <h3>
+                {selectedPackSummary?.can_rebuild
+                  ? "Add BPMN to selected official pack"
+                  : "Add BPMN to selected temporary pack"}
+              </h3>
+              <p>
+                {selectedPack
+                  ? selectedPackSummary?.can_rebuild
+                    ? "Creates a new temporary workspace copied from the official pack."
+                    : "Extends the currently selected temporary pack."
+                  : "Select a pack first, then upload a BPMN to add to it."}
+              </p>
+              <button
+                className="button button--cta"
+                type="button"
+                onClick={openAppendPackFilePicker}
+                disabled={isUploading || !selectedPack}
+              >
+                {isUploading ? "Uploading..." : "Add BPMN to selected pack"}
+              </button>
+              <input
+                ref={appendPackFileInputRef}
+                type="file"
+                accept=".bpmn"
+                onChange={handleAppendUpload}
+                hidden
+              />
+            </article>
           </div>
           <div
             className="dropzone"
@@ -830,30 +944,17 @@ export default function Dashboard() {
               event.currentTarget.classList.remove("is-over");
               const file = event.dataTransfer.files?.[0];
               if (file) {
-                processUpload(file, "new");
+                handleDropToSelectedPack(file);
               }
             }}
           >
             <strong>Drop a BPMN file here</strong>
-            <span>or import a BPMN file from the sidebar</span>
+            <span>
+              {selectedPack
+                ? "Dropping here adds the BPMN to the selected pack"
+                : "Select a pack first, then drop a BPMN file here"}
+            </span>
           </div>
-          <div className="form-grid pack-create-panel__grid">
-            <label className="pack-create-panel__field">
-              <span>New pack name</span>
-              <input value={pasteName} onChange={(event) => setPasteName(event.target.value)} />
-            </label>
-            <div className="upload-actions pack-create-panel__actions">
-              <button className="button button--primary" type="button" onClick={handlePasteUpload} disabled={isUploading}>
-                {isUploading ? "Processing..." : "Create pack from pasted BPMN"}
-              </button>
-            </div>
-          </div>
-          <textarea
-            className="editor editor--small"
-            value={pasteXml}
-            onChange={(event) => setPasteXml(event.target.value)}
-            placeholder="Paste BPMN XML here to create a temporary regulation pack."
-          />
         </section>
       </div>
     );
@@ -970,7 +1071,12 @@ export default function Dashboard() {
               <button
                 className="pill"
                 type="button"
-                onClick={() => { setAnswers({}); setEvaluation([]); setEvalTypeFilter("all"); }}
+                onClick={() => {
+                  setAnswers({});
+                  setEvaluation([]);
+                  setEvaluationEngine("");
+                  setEvalTypeFilter("all");
+                }}
               >
                 Reset
               </button>
@@ -989,6 +1095,12 @@ export default function Dashboard() {
             <span style={{ width: `${conditions.length ? (answeredCount / conditions.length) * 100 : 0}%` }} />
           </div>
         </div>
+
+        {evaluationEngine && (
+          <div className="alert alert--info" style={{ marginTop: 14 }}>
+            Evaluation engine: <strong>{evaluationEngine.toUpperCase()}</strong>
+          </div>
+        )}
 
         <div className="qa-grid">
           {conditions.map((condition, index) => (

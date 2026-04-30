@@ -46,6 +46,7 @@ from backend.services.storage import (
     pack_rules,
     rebuild_pack,
     require_pack,
+    sparql_store_for_pack,
     sparql_presets_payload,
     swrl_response,
     template_download,
@@ -153,13 +154,14 @@ async def sparql_endpoint(pack: str, request: Request):
     if not OX_AVAILABLE:
         raise HTTPException(503, "pyoxigraph not installed")
     current = require_pack(pack)
-    if current.get("store") is None:
+    store = sparql_store_for_pack(pack)
+    if store is None:
         raise HTTPException(503, "SPARQL store unavailable for this pack")
     query = await extract_sparql_query(request)
     if not query:
         raise HTTPException(400, "Missing SPARQL query")
     try:
-        results = current["store"].query(query)
+        results = store.query(query)
     except Exception as exc:
         raise HTTPException(400, f"SPARQL error: {exc}")
     return sparql_response(results)

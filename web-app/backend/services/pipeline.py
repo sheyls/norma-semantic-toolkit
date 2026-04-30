@@ -287,6 +287,7 @@ def norm_to_dict(norm_id: str, rule: RuleIR) -> dict[str, Any]:
         "deontic_type": dtype,
         "bpmn_source": rule.source,
         "conditions": [{"predicate": c.predicate.name, "value": c.value} for c in rule.conditions],
+        "norm_statement": dat("normStatement"),
         "agent": agent_id,
         "action": dat("actionText"),
         "object": object_label,

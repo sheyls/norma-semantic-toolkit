@@ -19,11 +19,11 @@ def _load_runner_module():
     return module
 
 
-def test_parser_detects_duplicate_rule_ids():
+def test_parser_has_unique_rule_ids_after_regeneration():
     module = _load_runner_module()
     ruleset = module.parse_swrl_rules(SWRL_PATH)
     duplicate_names = {module._short(iri) for iri in ruleset.duplicate_rule_iris}
-    assert duplicate_names == {"r1", "r2", "r3", "r4"}
+    assert duplicate_names == set()
 
 
 def test_high_risk_biometric_not_tested_case():

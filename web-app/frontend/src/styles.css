@@ -817,6 +817,13 @@ h1 {
   gap: 8px;
 }
 
+.sidebar__pack-helper {
+  margin: 0;
+  color: rgba(244, 251, 253, 0.74);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
 .sidebar__menu-item--accent {
   background: rgba(255, 255, 255, 0.08);
   color: white;
@@ -834,11 +841,29 @@ h1 {
   color: var(--sidebar-muted);
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  justify-content: flex-start;
+  text-align: left;
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
+}
+
+.sidebar__upload-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.sidebar__upload-copy strong {
+  color: white;
+  font-size: 0.82rem;
+  line-height: 1.25;
+}
+
+.sidebar__upload-copy small {
+  color: rgba(244, 251, 253, 0.72);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 .sidebar__upload:hover {
@@ -1630,6 +1655,83 @@ input::placeholder, textarea::placeholder {
 
 .pack-create-panel__actions .button {
   min-height: 44px;
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+
+.workflow-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  box-shadow: 0 12px 32px rgba(16, 24, 40, 0.04);
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.workflow-card__kicker {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.workflow-card h3,
+.workflow-card p {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.workflow-card p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.workflow-card h3 {
+  line-height: 1.25;
+}
+
+.workflow-card .button {
+  width: 100%;
+  min-width: 0;
+  white-space: normal;
+  text-align: center;
+}
+
+.workspace-grid > *,
+.workflow-grid > * {
+  min-width: 0;
+}
+
+.dropzone {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  min-width: 0;
+}
+
+.dropzone strong,
+.dropzone span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .dropzone.is-over {
@@ -2631,6 +2733,7 @@ details.norm-section[open] > .norm-section__header {
   .graph-explorer,
   .graph-summary,
   .workspace-grid,
+  .workflow-grid,
   .action-grid,
   .rules-grid,
   .qa-grid,
