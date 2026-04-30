@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RUNNER_PATH = ROOT / "test" / "run_swrl_cases.py"
+RUNNER_PATH = ROOT / "tests" / "run_swrl_cases.py"
 SWRL_PATH = ROOT / "regulations" / "eu-ai-act" / "eu-ai-act.swrl.owl"
 
 
