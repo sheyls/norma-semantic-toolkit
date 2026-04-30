@@ -13,6 +13,7 @@ import {
   getPackSwrl,
   getSparqlPresets,
   getSwrlDownloadUrl,
+  getTemplateDownloadUrl,
   rebuildPack,
   runSparql,
   appendBpmnToPack,
@@ -31,6 +32,7 @@ const VIEW_LABELS = {
   graph: "KG Visualisation",
   norms: "Norm Review",
   ontology: "Ontology",
+  annotation: "BPMN Annotation",
 };
 
 const ONTOLOGY_ITEMS = [
@@ -960,6 +962,132 @@ export default function Dashboard() {
     );
   }
 
+  function renderAnnotation() {
+    return (
+      <section className="panel">
+        <div className="panel__head">
+          <div>
+            <p className="eyebrow">Annotation</p>
+            <h2>BPMN Annotation Guide</h2>
+            <p className="section-copy">
+              This template is designed for <strong>legal professionals familiar with
+              Camunda Modeler 8</strong> and with the formal distinction between obligations,
+              prohibitions, permissions, and recommendations as used in compliance modelling.
+            </p>
+          </div>
+        </div>
+
+        <div className="action-grid">
+          <a className="action-card" href={getTemplateDownloadUrl()}>
+            <strong>Download Camunda 8 Template</strong>
+            <span>
+              Zeebe element template (.json) for Camunda Modeler 8 — import this file to annotate
+              BPMN tasks and gateways with NORMA normative metadata.
+            </span>
+          </a>
+          <a
+            className="action-card"
+            href="https://docs.camunda.io/docs/components/modeler/desktop-modeler/element-templates/configuring-templates/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <strong>Camunda Template Docs ↗</strong>
+            <span>Official Camunda 8 documentation on importing and using element templates.</span>
+          </a>
+        </div>
+
+        <div className="annotation-steps">
+          <h3 className="annotation-steps__title">How to annotate a regulation</h3>
+          <ol className="annotation-steps__list">
+            <li>
+              <strong>Import the template.</strong> In Camunda Modeler 8, go to
+              {" "}<em>Edit → Element Templates</em> and click <strong>Import</strong>, then
+              select the downloaded <code>.json</code> file. The template is then available for
+              any diagram open in that session.
+            </li>
+            <li>
+              <strong>Applying the template to an existing element.</strong> Select the task or
+              gateway element in your diagram. In the properties panel on the right, look for
+              the <strong>Template</strong> section and click <strong>Select</strong>. Choose
+              {" "}<em>NORMA — Legal Norm Annotations</em>.{" "}
+              <span className="annotation-steps__note">
+                Note: Camunda applies the template by replacing the element's extension
+                properties — it does not create a new shape. If Camunda opens a new element
+                instead, make sure you have the correct element selected before clicking Select
+                Template, and that the element type matches one of the types the template
+                supports (Task, User Task, Service Task, etc., or Exclusive Gateway).
+              </span>
+            </li>
+            <li>
+              <strong>Annotate tasks (legal norms).</strong> For each task that represents a
+              norm, set the <em>Type of Norm</em>, fill in the <em>Responsible Party</em>
+              (subject), <em>Legal Action</em> (verb phrase), and <em>Object of the Action</em>
+              (what or whom the action concerns). Complete the Legal Source, Article, Binding
+              Force, and Annotation Metadata sections. Use the <em>Norm Statement</em> field
+              for a plain-language restatement of the full norm.
+            </li>
+            <li>
+              <strong>Annotate exclusive gateways (decision points).</strong> Exclusive gateways
+              represent a choice between two mutually exclusive process paths — both are valid
+              alternatives, not a judgment of right or wrong. Select the gateway, set Element
+              Type to <em>Exclusive Gateway</em>, and fill in the{" "}
+              <strong>Decision Criterion</strong>: the factual or legal circumstance that
+              determines which path is taken. Phrase it as a yes/no question. The pipeline uses
+              this to generate SWRL rules — one rule per path leading to a conditional norm.
+            </li>
+            <li>
+              <strong>Upload here.</strong> Save the BPMN file and upload it using the sidebar
+              upload button. The pipeline will parse it, reconcile shared entities across
+              diagrams, build the ABox, and extract SWRL rules in one step.
+            </li>
+          </ol>
+
+          <div className="annotation-fields">
+            <h4 className="annotation-fields__title">Annotation fields reference</h4>
+            <table className="annotation-fields__table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Notes</th>
+                  <th>Ontology mapping</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ["Type of Norm", "Obligation / Prohibition / Permission / Recommendation / Negative Recommendation / Constitutive Rule", "rdf:type → norma class"],
+                  ["Norm Statement", "Plain-language restatement of the full norm for audit purposes", "norma:normStatement"],
+                  ["Responsible Party", "Subject of the norm — who must, must not, or may act", "norma:LegalAgent"],
+                  ["Legal Action", "Verb phrase — what the subject must/may/must not do", "norma:LegalAction"],
+                  ["Object of the Action", "The entity, system, person, or matter the regulated action concerns — a system, dataset, document, person, or organisation", "norma:LegalObject"],
+                  ["Binding Force", "Hard law (legally binding) / Soft law / Internal policy / Contractual", "norma:hasBindingForce"],
+                  ["Decision Criterion (gateway)", "Yes/no question describing the choice at this gateway. Both outgoing paths are valid alternatives", "norma:LegalCondition / TriggerEvent → SWRL body"],
+                  ["Regulation Name", "Name of the legal instrument (e.g. EU AI Act, GDPR)", "norma:LegalSource"],
+                  ["Article / Section", "Single article, range (Articles 8–15), or structural block (Chapter III). Higher-level instruments may require broader references", "norma:fromArticle"],
+                  ["Paragraph / Subsection", "More specific locator within the article or section", "norma:articleNumber"],
+                  ["Original Legal Text", "Verbatim or near-verbatim excerpt. May be a sentence, paragraph, or block of provisions", "norma:originalText"],
+                  ["Jurisdiction (Administrative Area)", "The political or geographic territory where the norm applies — country, supranational union, or subnational region. ELI provides authoritative URIs for EU jurisdictions; non-EU values get a provisional identifier for later alignment", "eli:jurisdiction → eli:AdministrativeArea"],
+                  ["Compliance Criticality", "Severity of non-compliance: Critical / High / Medium / Low", "norma:hasComplianceCriticality"],
+                  ["Norm Status", "Active / Under review / Disputed / Superseded / Not yet in force", "norma:hasNormStatus"],
+                  ["Extraction Method", "How the annotation was produced (manual lawyer, analyst, LLM…)", "norma:hasExtractionMethod"],
+                  ["Legal Review Status", "Reviewed and approved / Pending / Not reviewed", "norma:hasReviewStatus"],
+                  ["Annotator", "Name or identifier of the person creating the annotation", "norma:AnnotatorAgent"],
+                  ["Annotation Date", "ISO date (YYYY-MM-DD)", "norma:annotationDate"],
+                  ["Confidence Score", "Annotator confidence in the interpretation — decimal between 0.0 and 1.0", "norma:confidenceScore"],
+                ].map(([field, notes, mapping]) => (
+                  <tr key={field}>
+                    <td><code>{field}</code></td>
+                    <td className="annotation-fields__notes">{notes}</td>
+                    <td className="annotation-fields__mapping">{mapping}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   function renderArtifacts() {
     return (
       <section className="panel">
@@ -1787,6 +1915,8 @@ export default function Dashboard() {
         return renderGraphPanel();
       case "ontology":
         return renderOntology();
+      case "annotation":
+        return renderAnnotation();
       default:
         return renderOverview();
     }

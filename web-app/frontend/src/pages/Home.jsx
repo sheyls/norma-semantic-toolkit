@@ -54,12 +54,6 @@ const STACK = [
   { label: "Open source research" },
 ];
 
-const REFERENCE_LINKS = [
-  { label: "Semantic toolkit repository", href: "https://github.com/sheyls/norma-semantic-toolkit" },
-  { label: "NORMA ontology repository", href: "https://github.com/sheyls/norma-semantic-toolkit" },
-  { label: "CC BY 4.0 licence", href: "https://creativecommons.org/licenses/by/4.0/" },
-  { label: "Ontology IRI (w3id)", href: "https://w3id.org/def/norma-o" },
-];
 
 export default function Home() {
   return (
@@ -142,10 +136,6 @@ export default function Home() {
               <p className="eyebrow">About</p>
               <h2>Open research toolkit for legal BPMN annotations</h2>
             </div>
-            <p className="section-copy">
-              Developed at the Ontology Engineering Group, Universidad Politécnica de Madrid,
-              as part of research into legal knowledge graph generation from process models.
-            </p>
           </div>
 
           <div className="home__about-grid">
@@ -165,25 +155,47 @@ export default function Home() {
 
             <article className="home__about-card">
               <p className="eyebrow">Maintainer</p>
-              <h3>Sheyla Leyva-Sánchez</h3>
-              <p>
-                Creator and primary contributor. NORMA project contributors are acknowledged
-                in the ontology metadata.
-              </p>
-              <div className="home__contact-list">
-                <a href="https://github.com/sheyls/norma-semantic-toolkit" target="_blank" rel="noreferrer">
-                  Source repository
+              <div className="home__person-row">
+                <h3>Sheyla Leyva-Sánchez</h3>
+                <a href="https://github.com/sheyls" target="_blank" rel="noreferrer" className="home__inline-link">
+                  GitHub ↗
                 </a>
-                <a href="https://github.com/sheyls" target="_blank" rel="noreferrer">
-                  GitHub profile
-                </a>
-                <a
-                  href="https://oa.upm.es/cgi/search/simple?q=leyva&_action_search=Search&_order=bytitle&basic_srchtype=ALL&sr=5"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Publications (UPM OA)
-                </a>
+              </div>
+              <p>Creator and primary contributor — Ontology Engineering Group, UPM.</p>
+              <a href="https://github.com/sheyls/norma-semantic-toolkit" target="_blank" rel="noreferrer" className="home__repo-link">
+                Source repository ↗
+              </a>
+            </article>
+
+            <article className="home__about-card">
+              <p className="eyebrow">Contributors</p>
+              <div className="home__contributor-columns">
+                <div>
+                  <p className="home__contributor-subheading">Ontology Engineering</p>
+                  <ul className="home__contributor-list">
+                    <li>
+                      <strong>María Poveda-Villalón</strong>
+                      <span>Ontology Engineering Group, UPM</span>
+                    </li>
+                    <li>
+                      <strong>Víctor Rodríguez-Doncel</strong>
+                      <span>Ontology Engineering Group, UPM</span>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="home__contributor-subheading">Legal Experts</p>
+                  <ul className="home__contributor-list">
+                    <li>
+                      <strong>Ilaria Angela Amantea</strong>
+                      <span>University of Turin</span>
+                    </li>
+                    <li>
+                      <strong>Marinella Quaranta</strong>
+                      <span>University of Bologna</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </article>
 
@@ -205,17 +217,6 @@ export default function Home() {
               </a>
             </article>
 
-            <article className="home__about-card">
-              <p className="eyebrow">Project Links</p>
-              <h3>References</h3>
-              <div className="home__reference-list">
-                {REFERENCE_LINKS.map((item) => (
-                  <a key={item.label} href={item.href} target="_blank" rel="noreferrer">
-                    {item.label}
-                  </a>
-                ))}
-              </div>
-            </article>
           </div>
         </section>
 
