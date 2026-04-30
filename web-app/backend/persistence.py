@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from backend.database import DB_PATH, GRAPH_STORES_DIR, UPLOADS_DIR
-from norma_engine.rules.ir import Action, ClassAtom, Condition, DataAtom, Ref, RelationAtom, RuleIR
+from norma_engine.rules.ir import Action, ClassAtom, Condition, DataAtom, Ref, RelationAtom, RuleIR, TriggerAtom
 
 
 def utc_now_iso() -> str:
@@ -99,6 +99,8 @@ def _condition_from_json(data: dict[str, Any]) -> Condition:
         predicate=_ref_from_json(data["predicate"]),
         subject=_ref_from_json(data["subject"]),
         value=bool(data["value"]),
+        condition_local=data.get("condition_local", ""),
+        condition_label=data.get("condition_label", ""),
     )
 
 
@@ -136,6 +138,16 @@ def _class_atom_from_json(data: dict[str, Any]) -> ClassAtom:
     )
 
 
+def _trigger_atom_from_json(data: dict[str, Any]) -> TriggerAtom:
+    return TriggerAtom(
+        te_ref=_ref_from_json(data["te_ref"]),
+        norm_ref=_ref_from_json(data["norm_ref"]),
+        condition_local=data.get("condition_local", ""),
+        condition_label=data.get("condition_label", ""),
+        outcome=bool(data.get("outcome", True)),
+    )
+
+
 def deserialize_rules_ir(payload: str) -> list[RuleIR]:
     raw_rules = json.loads(payload or "[]")
     rules: list[RuleIR] = []
@@ -148,6 +160,7 @@ def deserialize_rules_ir(payload: str) -> list[RuleIR]:
                 relations=tuple(_relation_from_json(r) for r in item.get("relations", [])),
                 data_atoms=tuple(_data_atom_from_json(d) for d in item.get("data_atoms", [])),
                 class_atoms=tuple(_class_atom_from_json(c) for c in item.get("class_atoms", [])),
+                trigger_atoms=tuple(_trigger_atom_from_json(t) for t in item.get("trigger_atoms", [])),
                 source=item.get("source", ""),
             )
         )

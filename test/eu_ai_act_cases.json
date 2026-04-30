@@ -1,0 +1,62 @@
+{
+  "cases": [
+    {
+      "id": "high_risk_biometric_not_tested",
+      "facts": {
+        "Is_the_AI_system_used_for_biometric_purposes": true,
+        "Is_the_AI_system_tested_in_reallife_before_entering_into_the_market": false
+      },
+      "expect_norms": [
+        "OBL_Respect_high_risk_obligations"
+      ]
+    },
+    {
+      "id": "high_risk_biometric_tested",
+      "facts": {
+        "Is_the_AI_system_used_for_biometric_purposes": true,
+        "Is_the_AI_system_tested_in_reallife_before_entering_into_the_market": true
+      },
+      "expect_norms": [
+        "OBL_ADD_testing_obligations",
+        "OBL_Respect_high_risk_obligations"
+      ]
+    },
+    {
+      "id": "biometric_law_enforcement_with_safeguards",
+      "facts": {
+        "Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes": true,
+        "Is_the_system_used_in_public_spaces": true,
+        "Is_it_used_for_searching_missing_persons": false,
+        "Is_it_used_to_prevene_imminent_life_threats_or_terrorist_attacks": false,
+        "Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence": true,
+        "Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration": true
+      },
+      "expect_norms": [
+        "OBL_Respect_prescribed_obligations"
+      ]
+    },
+    {
+      "id": "biometric_law_enforcement_without_safeguards",
+      "facts": {
+        "Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes": true,
+        "Is_the_system_used_in_public_spaces": true,
+        "Is_it_used_for_searching_missing_persons": false,
+        "Is_it_used_to_prevene_imminent_life_threats_or_terrorist_attacks": false,
+        "Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence": true,
+        "Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration": false
+      },
+      "expect_norms": [
+        "PRH_Ban_the_system"
+      ]
+    },
+    {
+      "id": "certified_cybersecurity_case",
+      "facts": {
+        "Has_it_been_certified_under_the_EU_cybersecurity_scheme": true
+      },
+      "expect_norms": [
+        "REC_NOT_Cybersecurity_Exemption"
+      ]
+    }
+  ]
+}

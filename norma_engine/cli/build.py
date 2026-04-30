@@ -45,6 +45,7 @@ python -m norma_engine.cli.build regulations/eu-ai-act/ --template overrides.jso
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import json
 import sys
 from pathlib import Path
@@ -185,7 +186,8 @@ def build_kg(
                 nodes=nodes, edges=edges,
                 gateway_outgoing_index=gw_index, task_props=task_props,
             )
-            all_rules.extend(rules_ir)
+            for rule in rules_ir:
+                all_rules.append(dataclasses.replace(rule, rid=f"r{len(all_rules) + 1}", source=bpmn_file.name))
 
     # Step 5: Write ABox Turtle — pass rules_ir so TriggerEvent shells are generated.
     abox_iri  = _abox_iri(pack_name)
@@ -226,7 +228,8 @@ def build_rules(
                 nodes=nodes, edges=edges,
                 gateway_outgoing_index=gw_index, task_props=task_props,
             )
-            all_rules.extend(rules_ir)
+            for rule in rules_ir:
+                all_rules.append(dataclasses.replace(rule, rid=f"r{len(all_rules) + 1}", source=bpmn_file.name))
             print(f"   {bpmn_file.name}: {len(rules_ir)} rule(s)")
 
     if not all_rules:

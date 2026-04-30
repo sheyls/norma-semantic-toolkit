@@ -353,7 +353,7 @@ def evaluate_pack(pack_name: str, answers: Any) -> dict[str, Any]:
 def graph_for_pack(pack_name: str) -> dict[str, Any]:
     pack = require_pack(pack_name)
     if pack.get("store") is not None:
-        return semantic_graph_data(pack["store"])
+        return semantic_graph_data(pack["store"], pack=pack)
     return pack_graph_data(pack)
 
 

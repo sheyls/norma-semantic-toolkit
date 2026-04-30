@@ -13,8 +13,20 @@
   </owl:Ontology>
 
   <!-- Rules-local datatype properties used in SWRL bodies -->
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Has_it_been_certified_under_the_EU_cybersecurity_scheme"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_supported_and_based_on_previous_offences"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_searching_missing_persons"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_substantially_alter_the_input_data_or_the_input_semantic"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_just_for_editing_purposes"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_generate_syntetic_content"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_prevene_imminent_life_threats_or_terrorist_attacks"/>
   <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_tested_in_reallife_before_entering_into_the_market"/>
   <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_AI_system_used_for_biometric_purposes"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_for_criminal_offence_purposes"/>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_in_public_spaces"/>
 
   <!-- SWRL Variables -->
   <swrl:Variable rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
@@ -103,6 +115,938 @@
               <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             </swrl:AtomList>
           </rdf:rest>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r6">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_in_public_spaces"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_searching_missing_persons"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <swrl:AtomList>
+                      <rdf:first>
+                        <swrl:DatavaluedPropertyAtom>
+                          <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_prevene_imminent_life_threats_or_terrorist_attacks"/>
+                          <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                          <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                        </swrl:DatavaluedPropertyAtom>
+                      </rdf:first>
+                      <rdf:rest>
+                        <swrl:AtomList>
+                          <rdf:first>
+                            <swrl:DatavaluedPropertyAtom>
+                              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence"/>
+                              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                            </swrl:DatavaluedPropertyAtom>
+                          </rdf:first>
+                          <rdf:rest>
+                            <swrl:AtomList>
+                              <rdf:first>
+                                <swrl:DatavaluedPropertyAtom>
+                                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration"/>
+                                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                                </swrl:DatavaluedPropertyAtom>
+                              </rdf:first>
+                              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </swrl:AtomList>
+                          </rdf:rest>
+                        </swrl:AtomList>
+                      </rdf:rest>
+                    </swrl:AtomList>
+                  </rdf:rest>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration_True_OBL_Respect_prescribed_obligations"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_prescribed_obligations"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r7">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_in_public_spaces"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_searching_missing_persons"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <swrl:AtomList>
+                      <rdf:first>
+                        <swrl:DatavaluedPropertyAtom>
+                          <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_prevene_imminent_life_threats_or_terrorist_attacks"/>
+                          <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                          <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                        </swrl:DatavaluedPropertyAtom>
+                      </rdf:first>
+                      <rdf:rest>
+                        <swrl:AtomList>
+                          <rdf:first>
+                            <swrl:DatavaluedPropertyAtom>
+                              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence"/>
+                              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                            </swrl:DatavaluedPropertyAtom>
+                          </rdf:first>
+                          <rdf:rest>
+                            <swrl:AtomList>
+                              <rdf:first>
+                                <swrl:DatavaluedPropertyAtom>
+                                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration"/>
+                                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                                </swrl:DatavaluedPropertyAtom>
+                              </rdf:first>
+                              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </swrl:AtomList>
+                          </rdf:rest>
+                        </swrl:AtomList>
+                      </rdf:rest>
+                    </swrl:AtomList>
+                  </rdf:rest>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration_False_PRH_Ban_the_system"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#PRH_Ban_the_system"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r8">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_in_public_spaces"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_searching_missing_persons"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <swrl:AtomList>
+                      <rdf:first>
+                        <swrl:DatavaluedPropertyAtom>
+                          <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_prevene_imminent_life_threats_or_terrorist_attacks"/>
+                          <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                          <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                        </swrl:DatavaluedPropertyAtom>
+                      </rdf:first>
+                      <rdf:rest>
+                        <swrl:AtomList>
+                          <rdf:first>
+                            <swrl:DatavaluedPropertyAtom>
+                              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration"/>
+                              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                            </swrl:DatavaluedPropertyAtom>
+                          </rdf:first>
+                          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </swrl:AtomList>
+                      </rdf:rest>
+                    </swrl:AtomList>
+                  </rdf:rest>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration_True_OBL_Respect_prescribed_obligations"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_prescribed_obligations"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r10">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_in_public_spaces"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_searching_missing_persons"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <swrl:AtomList>
+                      <rdf:first>
+                        <swrl:DatavaluedPropertyAtom>
+                          <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_prevene_imminent_life_threats_or_terrorist_attacks"/>
+                          <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                          <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                        </swrl:DatavaluedPropertyAtom>
+                      </rdf:first>
+                      <rdf:rest>
+                        <swrl:AtomList>
+                          <rdf:first>
+                            <swrl:DatavaluedPropertyAtom>
+                              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration"/>
+                              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                            </swrl:DatavaluedPropertyAtom>
+                          </rdf:first>
+                          <rdf:rest>
+                            <swrl:AtomList>
+                              <rdf:first>
+                                <swrl:DatavaluedPropertyAtom>
+                                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence"/>
+                                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                                </swrl:DatavaluedPropertyAtom>
+                              </rdf:first>
+                              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </swrl:AtomList>
+                          </rdf:rest>
+                        </swrl:AtomList>
+                      </rdf:rest>
+                    </swrl:AtomList>
+                  </rdf:rest>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence_True_PRH_Ban_the_system"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#PRH_Ban_the_system"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r11">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_in_public_spaces"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_searching_missing_persons"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <swrl:AtomList>
+                      <rdf:first>
+                        <swrl:DatavaluedPropertyAtom>
+                          <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration"/>
+                          <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                          <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                        </swrl:DatavaluedPropertyAtom>
+                      </rdf:first>
+                      <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </swrl:AtomList>
+                  </rdf:rest>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration_True_OBL_Respect_prescribed_obligations"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_prescribed_obligations"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r13">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_in_public_spaces"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_searching_missing_persons"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <swrl:AtomList>
+                      <rdf:first>
+                        <swrl:DatavaluedPropertyAtom>
+                          <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration"/>
+                          <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                          <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                        </swrl:DatavaluedPropertyAtom>
+                      </rdf:first>
+                      <rdf:rest>
+                        <swrl:AtomList>
+                          <rdf:first>
+                            <swrl:DatavaluedPropertyAtom>
+                              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_prevene_imminent_life_threats_or_terrorist_attacks"/>
+                              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                            </swrl:DatavaluedPropertyAtom>
+                          </rdf:first>
+                          <rdf:rest>
+                            <swrl:AtomList>
+                              <rdf:first>
+                                <swrl:DatavaluedPropertyAtom>
+                                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence"/>
+                                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                                </swrl:DatavaluedPropertyAtom>
+                              </rdf:first>
+                              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </swrl:AtomList>
+                          </rdf:rest>
+                        </swrl:AtomList>
+                      </rdf:rest>
+                    </swrl:AtomList>
+                  </rdf:rest>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence_True_PRH_Ban_the_system"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#PRH_Ban_the_system"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r15">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_a_realtime_biometric_identification_system_used_for_law_purposes"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_in_public_spaces"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_searching_missing_persons"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <swrl:AtomList>
+                      <rdf:first>
+                        <swrl:DatavaluedPropertyAtom>
+                          <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration"/>
+                          <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                          <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                        </swrl:DatavaluedPropertyAtom>
+                      </rdf:first>
+                      <rdf:rest>
+                        <swrl:AtomList>
+                          <rdf:first>
+                            <swrl:DatavaluedPropertyAtom>
+                              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_prevene_imminent_life_threats_or_terrorist_attacks"/>
+                              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                            </swrl:DatavaluedPropertyAtom>
+                          </rdf:first>
+                          <rdf:rest>
+                            <swrl:AtomList>
+                              <rdf:first>
+                                <swrl:DatavaluedPropertyAtom>
+                                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence"/>
+                                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                                </swrl:DatavaluedPropertyAtom>
+                              </rdf:first>
+                              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </swrl:AtomList>
+                          </rdf:rest>
+                        </swrl:AtomList>
+                      </rdf:rest>
+                    </swrl:AtomList>
+                  </rdf:rest>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_for_localisation_or_identification_of_a_person_suspected_of_having_committed_a_criminal_offence_True_PRH_Ban_the_system"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#PRH_Ban_the_system"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r18">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Has_it_been_certified_under_the_EU_cybersecurity_scheme"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Has_it_been_certified_under_the_EU_cybersecurity_scheme_True_REC_NOT_Cybersecurity_Exemption"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_NOT_Cybersecurity_Exemption"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r19">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_generate_syntetic_content"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_just_for_editing_purposes"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_substantially_alter_the_input_data_or_the_input_semantic"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_for_substantially_alter_the_input_data_or_the_input_semantic_True_REC_Respect_voluntary_codes_of_conducts"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_Respect_voluntary_codes_of_conducts"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r20">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_generate_syntetic_content"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_just_for_editing_purposes"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_substantially_alter_the_input_data_or_the_input_semantic"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_for_substantially_alter_the_input_data_or_the_input_semantic_True_OBL_Respect_marking_obligations"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_marking_obligations"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r21">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_generate_syntetic_content"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_just_for_editing_purposes"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_just_for_editing_purposes_True_REC_Respect_voluntary_codes_of_conducts"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_Respect_voluntary_codes_of_conducts"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r22">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_generate_syntetic_content"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_to_generate_syntetic_content_False_REC_Respect_voluntary_codes_of_conducts"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_Respect_voluntary_codes_of_conducts"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r23">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_generate_syntetic_content"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_just_for_editing_purposes"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_substantially_alter_the_input_data_or_the_input_semantic"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_for_substantially_alter_the_input_data_or_the_input_semantic_True_REC_Respect_voluntary_codes_of_conducts"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_Respect_voluntary_codes_of_conducts"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r24">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_generate_syntetic_content"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_just_for_editing_purposes"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <swrl:AtomList>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_for_substantially_alter_the_input_data_or_the_input_semantic"/>
+                      <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </swrl:AtomList>
+              </rdf:rest>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_for_substantially_alter_the_input_data_or_the_input_semantic_True_OBL_Respect_marking_obligations"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#OBL_Respect_marking_obligations"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r25">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_generate_syntetic_content"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_just_for_editing_purposes"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_just_for_editing_purposes_True_REC_Respect_voluntary_codes_of_conducts"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_Respect_voluntary_codes_of_conducts"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r26">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_used_to_generate_syntetic_content"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_used_to_generate_syntetic_content_False_REC_Respect_voluntary_codes_of_conducts"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_Respect_voluntary_codes_of_conducts"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r29">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_the_system_used_for_criminal_offence_purposes"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <swrl:AtomList>
+              <rdf:first>
+                <swrl:DatavaluedPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Is_it_supported_and_based_on_previous_offences"/>
+                  <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                </swrl:DatavaluedPropertyAtom>
+              </rdf:first>
+              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </swrl:AtomList>
+          </rdf:rest>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_supported_and_based_on_previous_offences_False_PRH_Ban_the_system"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#PRH_Ban_the_system"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
         </swrl:AtomList>
     </swrl:head>
   </swrl:Imp>

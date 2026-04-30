@@ -410,48 +410,18 @@ def to_turtle(
         local = conditions.get(key, f"Condition_{slug(r['bpmn_id'])}")
         condition_predicates[to_symbol(cond or r["bpmn_name"])] = local
 
+    # triggered_norms maps condition_local → {(outcome, norm_local)} pairs.
+    # Populated exclusively from trigger_atoms so the ABox only creates the
+    # atomic TriggerEvents that SWRL may activate.
     triggered_norms: dict[str, set[tuple[bool, str]]] = {}
     for rule in rules_ir or []:
-        rule_norm_ids: set[str] = set()
-
-        for atom in getattr(rule, "class_atoms", []):
-            subject = getattr(atom, "subject", None)
-            if getattr(subject, "kind", None) != "abox":
-                continue
-            norm_id = getattr(subject, "name", "")
-            if norm_id in norm_locals:
-                rule_norm_ids.add(norm_id)
-
-        for atom in getattr(rule, "relations", []):
-            for ref in (getattr(atom, "subject", None), getattr(atom, "object", None)):
-                if getattr(ref, "kind", None) != "abox":
-                    continue
-                norm_id = getattr(ref, "name", "")
-                if norm_id in norm_locals:
-                    rule_norm_ids.add(norm_id)
-
-        for atom in getattr(rule, "data_atoms", []):
-            subject = getattr(atom, "subject", None)
-            if getattr(subject, "kind", None) != "abox":
-                continue
-            norm_id = getattr(subject, "name", "")
-            if norm_id in norm_locals:
-                rule_norm_ids.add(norm_id)
-
-        if not rule_norm_ids:
-            continue
-
-        for cond in getattr(rule, "conditions", []):
-            predicate_name = to_symbol(getattr(getattr(cond, "predicate", None), "name", ""))
-            condition_local = condition_predicates.get(predicate_name)
-            if not condition_local:
-                continue
-            outcome = getattr(cond, "value", True)
-            triggered_norms.setdefault(condition_local, set()).update(
-                (outcome, norm_locals[norm_id])
-                for norm_id in rule_norm_ids
-                if norm_id in norm_locals
-            )
+        for ta in getattr(rule, "trigger_atoms", []):
+            cond_local = getattr(ta, "condition_local", "")
+            outcome    = getattr(ta, "outcome", True)
+            norm_name  = getattr(getattr(ta, "norm_ref", None), "name", "")
+            norm_local = norm_locals.get(norm_name, "")
+            if cond_local and norm_local:
+                triggered_norms.setdefault(cond_local, set()).add((outcome, norm_local))
 
     # ── Agents ────────────────────────────────────────────────────────────────
     if agents:
@@ -517,8 +487,11 @@ def to_turtle(
             ]
             if prov["uri"]:
                 T.append(f'    norma:regulationURI "{esc(prov["uri"])}"^^xsd:anyURI ;')
+            emitted_art_numbers: set[str] = set()
             for art, par, txt in prov["articles"]:
-                T.append(f"    norma:articleNumber {lit(art)} ;")
+                if art not in emitted_art_numbers:
+                    T.append(f"    norma:articleNumber {lit(art)} ;")
+                    emitted_art_numbers.add(art)
                 if par:
                     T.append(f"    norma:paragraphNumber {lit(par)} ;")
                 if txt:

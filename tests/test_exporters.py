@@ -11,6 +11,7 @@ import pytest
 import tempfile
 import os
 import xml.etree.ElementTree as ET
+from collections import Counter
 
 from norma_engine.parsing.bpmn_parser import parse_bpmn_to_reduced_graph
 from norma_engine.rules.extractor import enumerate_paths_and_build_ir
@@ -58,6 +59,16 @@ class TestSWRLExporter:
 
     def test_two_swrl_rules_present(self, sample_bpmn_xml):
         assert _export(sample_bpmn_xml).count("<swrl:Imp ") == 2
+
+    def test_rule_ids_are_unique(self, sample_bpmn_xml):
+        content = _export(sample_bpmn_xml)
+        root = ET.fromstring(content)
+        rule_ids = [
+            node.attrib["{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about"]
+            for node in root.findall("{http://www.w3.org/2003/11/swrl#}Imp")
+        ]
+        duplicates = [iri for iri, count in Counter(rule_ids).items() if count > 1]
+        assert duplicates == []
 
     def test_imports_abox(self, sample_bpmn_xml):
         content = _export(sample_bpmn_xml)

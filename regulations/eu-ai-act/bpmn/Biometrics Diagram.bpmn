@@ -49,7 +49,7 @@
           <zeebe:property name="compliance_deonticType" value="obligation" />
           <zeebe:property name="compliance_normStatement" value="" />
           <zeebe:property name="compliance_agent" value="AI provider" />
-          <zeebe:property name="compliance_action" value="comply" />
+          <zeebe:property name="compliance_action" value="comply high-risk obligations" />
           <zeebe:property name="compliance_object" value="AI system" />
           <zeebe:property name="compliance_bindingForce" value="hard_law" />
           <zeebe:property name="compliance_triggerCondition" value="" />
@@ -87,7 +87,7 @@
           <zeebe:property name="compliance_deonticType" value="obligation" />
           <zeebe:property name="compliance_normStatement" value="" />
           <zeebe:property name="compliance_agent" value="AI provider" />
-          <zeebe:property name="compliance_action" value="comply" />
+          <zeebe:property name="compliance_action" value="comply testing obligations" />
           <zeebe:property name="compliance_object" value="AI system" />
           <zeebe:property name="compliance_bindingForce" value="hard_law" />
           <zeebe:property name="compliance_triggerCondition" value="" />

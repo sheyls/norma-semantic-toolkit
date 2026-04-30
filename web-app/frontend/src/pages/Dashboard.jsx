@@ -34,10 +34,11 @@ const VIEW_LABELS = {
 };
 
 const ONTOLOGY_ITEMS = [
-  "LegalNorm to Obligation, Prohibition, Permission, Recommendation, NegativeRecommendation",
-  "LegalCondition for gateway predicates and branch labels",
-  "LegalAgent and LegalObject as reusable ABox entities",
-  "BindingForce and ComplianceCriticality for legal classification",
+  "NormativeContent covers Obligation, Prohibition, Permission, Recommendation, NegativeRecommendation, and ConstitutiveRule",
+  "LegalCondition and TriggerEvent model branch-sensitive norm activation",
+  "ConditionOutcome captures evaluated branches such as TrueOutcome and FalseOutcome",
+  "LegalAgent, LegalAction, LegalObject, and LegalSource capture who acts, on what, and under which source",
+  "AnnotationActivity, BindingForce, and ComplianceCriticality support provenance and legal classification",
 ];
 
 const ONTOLOGY_DOCS_URL = "https://w3id.org/def/norma-o";
@@ -62,6 +63,12 @@ const EXTERNAL_ONTOLOGIES = [
     note: "Used for deontic notations such as OBL, PRH, PER, and REC.",
   },
   {
+    name: "LKIF-Core",
+    prefix: "lkif:",
+    url: "https://github.com/RinkeHoekstra/lkif-core",
+    note: "Used as an informative alignment layer through mapping relations rather than direct ontology import.",
+  },
+  {
     name: "Dublin Core Terms",
     prefix: "dcterms:",
     url: "http://purl.org/dc/terms/",
@@ -71,7 +78,7 @@ const EXTERNAL_ONTOLOGIES = [
     name: "FOAF",
     prefix: "foaf:",
     url: "http://xmlns.com/foaf/0.1/",
-    note: "Used for legal agents plus creator, contributor, publisher, and logo metadata.",
+    note: "Used mainly for agent-oriented instance metadata such as people, organizations, names, and logo metadata.",
   },
   {
     name: "BIBO",
@@ -195,8 +202,84 @@ function titleCaseLabel(value) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+function normalizeDeonticType(value, fallback = "gateway") {
+  const raw = String(value || fallback).trim().toLowerCase();
+  if (raw === "negativerecommendation") {
+    return "recommendation_not";
+  }
+  if (raw === "constitutiverule") {
+    return "fact";
+  }
+  return raw || fallback;
+}
+
+function formatDeonticTypeLabel(value, fallback = "gateway") {
+  const raw = normalizeDeonticType(value, fallback);
+  if (raw === "recommendation_not") {
+    return "Negative recommendation";
+  }
+  if (raw === "gateway") {
+    return "Gateways";
+  }
+  return raw.charAt(0).toUpperCase() + raw.slice(1);
+}
+
+function deonticKeyword(value) {
+  const raw = normalizeDeonticType(value, "");
+  if (raw === "obligation") {
+    return "MUST";
+  }
+  if (raw === "prohibition") {
+    return "MUST NOT";
+  }
+  if (raw === "permission") {
+    return "MAY";
+  }
+  if (raw === "recommendation") {
+    return "SHOULD";
+  }
+  if (raw === "recommendation_not") {
+    return "SHOULD NOT";
+  }
+  if (raw === "fact") {
+    return "IS";
+  }
+  return "";
+}
+
 function getReadableNormLabel(norm) {
   return titleCaseLabel(norm.norm_statement || norm.gw_condition_statement || humanizeNormId(norm.norm_id));
+}
+
+function getReadableNormClause(norm) {
+  if (isGatewayNorm(norm)) {
+    return getReadableNormLabel(norm);
+  }
+
+  const keyword = deonticKeyword(norm.deontic_type);
+  const agent = titleCaseLabel(norm.agent);
+  const action = humanizeUnderscoredText(norm.action);
+  const object = humanizeUnderscoredText(norm.object);
+  const fallback = titleCaseLabel(norm.norm_statement || humanizeNormId(norm.norm_id));
+
+  if (!keyword) {
+    return fallback || "Not provided";
+  }
+
+  const tail = [action, object].filter(Boolean).join(" ");
+  if (agent && tail) {
+    return `${agent} ${keyword} ${tail}`;
+  }
+  if (agent) {
+    return `${agent} ${keyword}`;
+  }
+  if (tail) {
+    return `${keyword} ${tail}`;
+  }
+  if (fallback) {
+    return `${keyword} ${fallback}`;
+  }
+  return "Not provided";
 }
 
 function isGatewayNorm(norm) {
@@ -230,6 +313,7 @@ export default function Dashboard() {
   const [entities, setEntities] = useState(null);
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
   const [presets, setPresets] = useState([]);
+  const [selectedPresetId, setSelectedPresetId] = useState("");
   const [sparqlQuery, setSparqlQuery] = useState("");
   const [sparqlResult, setSparqlResult] = useState(null);
   const [normSearch, setNormSearch] = useState("");
@@ -251,6 +335,7 @@ export default function Dashboard() {
         setPacks(packData);
         setPresets(presetData.presets || []);
         if (presetData.presets?.[0]?.query) {
+          setSelectedPresetId(presetData.presets[0].id || "");
           setSparqlQuery(presetData.presets[0].query);
         }
         if (packData[0]?.name) {
@@ -353,12 +438,17 @@ export default function Dashboard() {
     [packs, selectedPack],
   );
 
+  const selectedPreset = useMemo(
+    () => presets.find((preset) => preset.id === selectedPresetId) || presets[0] || null,
+    [presets, selectedPresetId],
+  );
+
   const answeredCount = Object.keys(answers).length;
 
   const filteredNorms = useMemo(() => {
     const query = normSearch.trim().toLowerCase();
     return norms.filter((norm) => {
-      const type = String(norm.deontic_type || "").toLowerCase();
+      const type = normalizeDeonticType(norm.deontic_type, "");
       const gatewayNorm = isGatewayNorm(norm);
 
       if (normTypeFilter === "gateway") {
@@ -391,6 +481,11 @@ export default function Dashboard() {
       return haystack.includes(query);
     });
   }, [norms, normSearch, normTypeFilter]);
+
+  const legalNormCount = useMemo(
+    () => norms.filter((norm) => !isGatewayNorm(norm)).length,
+    [norms],
+  );
 
   const filteredGraph = useMemo(() => {
     const hiddenTypes = new Set(["AnnotationActivity", "AnnotatorAgent"]);
@@ -436,6 +531,7 @@ export default function Dashboard() {
           node.agent,
           node.action,
           node.object,
+          node.outcome,
           node.true_branch,
           node.false_branch,
           node.bpmn_source,
@@ -448,29 +544,23 @@ export default function Dashboard() {
     };
 
     const matchedIds = new Set(visibleNodesBase.filter(matchesNode).map((node) => node.id));
-    const visibleIds = new Set(matchedIds);
-    const neighborIds = new Set();
-
-    visibleEdgesBase.forEach((edge) => {
+    const edgeMatchedIds = new Set();
+    const matchedEdges = visibleEdgesBase.filter((edge) => {
       const edgeText = normalizeSearch(`${edge.label || ""} ${edge.source} ${edge.target}`);
       const edgeMatches = queryTokens.every((token) => edgeText.includes(token));
-      if (matchedIds.has(edge.source) || matchedIds.has(edge.target) || edgeMatches) {
-        if (matchedIds.has(edge.source) || edgeMatches) {
-          neighborIds.add(edge.target);
-        }
-        if (matchedIds.has(edge.target) || edgeMatches) {
-          neighborIds.add(edge.source);
-        }
+      if (edgeMatches) {
+        edgeMatchedIds.add(edge.source);
+        edgeMatchedIds.add(edge.target);
+        return true;
       }
+      return matchedIds.has(edge.source) && matchedIds.has(edge.target);
     });
 
-    neighborIds.forEach((id) => visibleIds.add(id));
+    const visibleIds = new Set([...matchedIds, ...edgeMatchedIds]);
 
     return {
       nodes: visibleNodesBase.filter((node) => visibleIds.has(node.id)),
-      edges: visibleEdgesBase.filter(
-        (edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target),
-      ),
+      edges: matchedEdges.filter((edge) => visibleIds.has(edge.source) && visibleIds.has(edge.target)),
     };
   }, [graph.nodes, graph.edges, graphSearch, showGraphProvenance]);
 
@@ -512,7 +602,7 @@ export default function Dashboard() {
   const filteredEvaluation = useMemo(() => {
     if (evalTypeFilter === "all") return evaluation;
     return evaluation.filter(
-      (item) => String(item.deontic_type || "").toLowerCase() === evalTypeFilter,
+      (item) => normalizeDeonticType(item.deontic_type, "other") === evalTypeFilter,
     );
   }, [evaluation, evalTypeFilter]);
 
@@ -633,6 +723,12 @@ export default function Dashboard() {
     }
   }
 
+  function applySparqlPreset(preset) {
+    setSelectedPresetId(preset.id);
+    setSparqlQuery(preset.query);
+    setSparqlResult(null);
+  }
+
   async function handleRebuildPack() {
     if (!selectedPack) {
       return;
@@ -672,8 +768,8 @@ export default function Dashboard() {
           <div className="stat-grid">
             <div className="stat-card">
               <span className="stat-card__label">Norms</span>
-              <span className="stat-card__value">{norms.length}</span>
-              <span className="stat-card__sub">extracted annotations</span>
+              <span className="stat-card__value">{legalNormCount}</span>
+              <span className="stat-card__sub">legal norms</span>
             </div>
             <div className="stat-card">
               <span className="stat-card__label">Conditions</span>
@@ -683,7 +779,7 @@ export default function Dashboard() {
             <div className="stat-card">
               <span className="stat-card__label">Rules</span>
               <span className="stat-card__value">{selectedPackSummary?.rule_count || 0}</span>
-              <span className="stat-card__sub">indexed SWRL rules</span>
+              <span className="stat-card__sub">extracted path rules</span>
             </div>
           </div>
           <div className="summary-list">
@@ -845,7 +941,7 @@ export default function Dashboard() {
 
   function renderEvaluator() {
     const typeCounts = evaluation.reduce((acc, item) => {
-      const key = String(item.deontic_type || "other").toLowerCase();
+      const key = normalizeDeonticType(item.deontic_type, "other");
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {});
@@ -856,6 +952,7 @@ export default function Dashboard() {
       { id: "prohibition", label: "Prohibitions", count: typeCounts.prohibition || 0 },
       { id: "permission", label: "Permissions", count: typeCounts.permission || 0 },
       { id: "recommendation", label: "Recommendations", count: typeCounts.recommendation || 0 },
+      { id: "recommendation_not", label: "Negative recommendations", count: typeCounts.recommendation_not || 0 },
     ].filter((tab) => tab.id === "all" || tab.count > 0);
 
     return (
@@ -955,15 +1052,11 @@ export default function Dashboard() {
             <article className="list-card" key={`${item.rule_id}-${item.norm_id}`}>
               <div className="list-card__head">
                 <strong>{getReadableNormLabel(item)}</strong>
-                <span className={`deontic-badge deontic-badge--${String(item.deontic_type || "norm").toLowerCase()}`}>
-                  {item.deontic_type || "Norm"}
+                <span className={`deontic-badge deontic-badge--${normalizeDeonticType(item.deontic_type, "norm")}`}>
+                  {formatDeonticTypeLabel(item.deontic_type || "norm", "norm")}
                 </span>
               </div>
-              <p>
-                <strong>{humanizeUnderscoredText(item.agent) || "Unknown agent"}</strong>
-                {item.action ? ` · ${humanizeUnderscoredText(item.action)}` : ""}
-                {item.object ? ` · ${humanizeUnderscoredText(item.object)}` : ""}
-              </p>
+              <p className="norm-clause">{getReadableNormClause(item)}</p>
               <div className="norm-pills">
                 {item.binding_force && <span className="norm-pill">{humanizeUnderscoredText(item.binding_force)}</span>}
                 {item.risk_level && <span className="norm-pill">{humanizeUnderscoredText(item.risk_level)}</span>}
@@ -995,7 +1088,9 @@ export default function Dashboard() {
             </article>
           ))}
           {filteredEvaluation.length === 0 && evaluation.length > 0 ? (
-            <div className="table__empty">No {evalTypeFilter} norms matched.</div>
+            <div className="table__empty">
+              No {evalTypeFilter === "all" ? "norms" : formatDeonticTypeLabel(evalTypeFilter).toLowerCase()} matched.
+            </div>
           ) : null}
           {evaluation.length === 0 ? (
             <div className="table__empty">Answer the conditions and run the evaluator to see applicable norms.</div>
@@ -1069,6 +1164,10 @@ export default function Dashboard() {
           <div>
             <p className="eyebrow">SPARQL</p>
             <h2>Query the selected knowledge graph</h2>
+            <p className="section-copy">
+              Each preset is framed as a competency question and paired with a runnable SPARQL query
+              that uses the NORMA vocabulary generated by the toolkit.
+            </p>
           </div>
           <div className="pill-row">
             <button className="button button--primary" type="button" onClick={handleRunSparql} disabled={isRunningSparql}>
@@ -1086,14 +1185,28 @@ export default function Dashboard() {
             <button
               key={preset.id}
               type="button"
-              className="pill"
-              title={preset.description}
-              onClick={() => setSparqlQuery(preset.query)}
+              className={`pill ${selectedPreset?.id === preset.id ? "is-selected" : ""}`}
+              title={preset.question || preset.description}
+              onClick={() => applySparqlPreset(preset)}
             >
               {preset.label}
             </button>
           ))}
         </div>
+        {selectedPreset && (
+          <article className="sparql-competency">
+            <p className="sparql-competency__eyebrow">What this query answers</p>
+            <h3>{selectedPreset.question}</h3>
+            {selectedPreset.description && <p>{selectedPreset.description}</p>}
+            {selectedPreset.vocabulary?.length ? (
+              <div className="sparql-competency__terms">
+                {selectedPreset.vocabulary.map((term) => (
+                  <span className="norm-pill" key={term}>{term}</span>
+                ))}
+              </div>
+            ) : null}
+          </article>
+        )}
         <textarea
           className="editor"
           value={sparqlQuery}
@@ -1141,14 +1254,14 @@ export default function Dashboard() {
             placeholder="Search ID, action, agent, regulation, or article..."
           />
           <div className="pill-row">
-            {["all", "obligation", "prohibition", "permission", "recommendation", "fact", "gateway"].map((t) => (
+            {["all", "obligation", "prohibition", "permission", "recommendation", "recommendation_not", "fact", "gateway"].map((t) => (
               <button
                 key={t}
                 type="button"
                 className={`pill ${normTypeFilter === t ? "is-selected" : ""}`}
                 onClick={() => setNormTypeFilter(t)}
               >
-                {t === "all" ? "All" : t === "gateway" ? "Gateways" : t.charAt(0).toUpperCase() + t.slice(1)}
+                {t === "all" ? "All" : formatDeonticTypeLabel(t)}
               </button>
             ))}
           </div>
@@ -1173,18 +1286,11 @@ export default function Dashboard() {
               >
                 <div className="list-card__head">
                   <strong>{getReadableNormLabel(norm)}</strong>
-                  <span className={`deontic-badge deontic-badge--${String(norm.deontic_type || "fact").toLowerCase()}`}>
-                    {norm.deontic_type || norm.element_type || "gateway"}
+                  <span className={`deontic-badge deontic-badge--${normalizeDeonticType(norm.deontic_type, "fact")}`}>
+                    {formatDeonticTypeLabel(norm.deontic_type || norm.element_type || "gateway")}
                   </span>
                 </div>
-                <p>
-                  {titleCaseLabel(
-                    norm.action ||
-                      norm.gw_condition_statement ||
-                      norm.norm_statement ||
-                      humanizeNormId(norm.norm_id),
-                  ) || "Not provided"}
-                </p>
+                <p className="norm-clause">{getReadableNormClause(norm)}</p>
                 <div className="norm-meta-grid">
                   <span>{norm.bpmn_source || "unknown source"}</span>
                   <span>{norm.regulation || "Not provided"}</span>
@@ -1248,8 +1354,8 @@ export default function Dashboard() {
               {normDuplicateCandidates.map((candidate, index) => (
                 <div className="decision-card" key={`${candidate.left_norm_id}-${candidate.right_norm_id}-${index}`}>
                   <div className="inline-meta">
-                    <span className={`deontic-badge deontic-badge--${String(candidate.deontic_type || "fact").toLowerCase()}`}>
-                      {candidate.deontic_type || "norm"}
+                    <span className={`deontic-badge deontic-badge--${normalizeDeonticType(candidate.deontic_type, "fact")}`}>
+                      {formatDeonticTypeLabel(candidate.deontic_type || "fact", "fact")}
                     </span>
                     <span className="sim-score">score {Math.round((candidate.score || 0) * 100)}%</span>
                   </div>
@@ -1367,22 +1473,6 @@ export default function Dashboard() {
               details or click it to keep the details panel open.
             </p>
           </div>
-          <div className="graph-legend">
-            {[
-              { type: "Obligation", color: "#a64a1d" },
-              { type: "Prohibition", color: "#6b1f0e" },
-              { type: "Permission", color: "#225c63" },
-              { type: "Recommendation", color: "#3d7c84" },
-              { type: "LegalAgent", color: "#1b2131" },
-              { type: "LegalObject", color: "#626b7e" },
-              { type: "LegalCondition", color: "#b45309" },
-            ].map((item) => (
-              <span key={item.type} className="legend-item">
-                <span className="legend-dot" style={{ background: item.color }} />
-                {item.type}
-              </span>
-            ))}
-          </div>
         </div>
 
         <div className="form-grid graph-controls">
@@ -1452,7 +1542,7 @@ export default function Dashboard() {
             <h2>TBox reference</h2>
             <p className="section-copy">
               Review the core NORMA modeling layer used by the rules, ABox, and visual KG.
-              This tab is a compact orientation view for the ontology used by the toolkit.
+              This tab is a compact orientation view for the current ontology used by the toolkit.
             </p>
           </div>
           <div className="ontology-panel__actions" />
@@ -1473,7 +1563,7 @@ export default function Dashboard() {
           </div>
           <div className="ontology-panel__meta-item">
             <span>Core alignments</span>
-            <strong>PROV O, ELI, and FOAF</strong>
+            <strong>PROV O, ELI, and SKOS, with LKIF-Core mappings and FOAF instance metadata</strong>
           </div>
         </div>
         <div className="ontology-panel__sections">
@@ -1482,7 +1572,7 @@ export default function Dashboard() {
               <strong>Core NORMA classes</strong>
             </div>
             <p className="ontology-panel__section-copy">
-              These are the main categories exposed in the rules, ABox, and graph views.
+              These are the main categories currently exposed across the rules, ABox, graph, and review views.
             </p>
             <div className="ontology-panel__row-list">
               {ONTOLOGY_ITEMS.map((item) => (
@@ -1495,12 +1585,36 @@ export default function Dashboard() {
 
           <section className="ontology-panel__section">
             <div className="ontology-panel__section-head">
+              <strong>Core modeling pattern</strong>
+            </div>
+            <div className="ontology-panel__row-list">
+              <div className="ontology-panel__row">
+                <span>
+                  NORMA does not link a legal condition directly to a branch outcome in the TBox. Instead, a <code>norma:LegalCondition</code> points to a <code>norma:TriggerEvent</code> with <code>norma:hasTrigger</code>.
+                </span>
+              </div>
+              <div className="ontology-panel__row">
+                <span>
+                  The trigger event records the evaluated branch with <code>norma:hasOutcome</code> and activates the relevant norm with <code>norma:activatesNorm</code>.
+                </span>
+              </div>
+              <div className="ontology-panel__row">
+                <span>
+                  The shortcut property <code>norma:triggersNorm</code> is derived from that pattern, but clients that need the true or false branch should inspect the trigger event and its outcome.
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <section className="ontology-panel__section">
+            <div className="ontology-panel__section-head">
               <strong>External standards and vocabularies</strong>
               <span className="ontology-panel__count">{EXTERNAL_ONTOLOGIES.length}</span>
             </div>
             <p className="ontology-panel__section-copy">
-              PROV O, ELI, and FOAF are part of the semantic alignment layer. SKOS, Dublin Core,
-              BIBO, and VANN are mainly used for classification and ontology metadata.
+              PROV O and ELI provide the main semantic alignments. SKOS supports controlled
+              vocabularies, LKIF-Core appears as an informative mapping layer, and Dublin Core,
+              BIBO, VANN, and FOAF are mainly used for ontology and instance metadata.
             </p>
             <div className="ontology-panel__table">
               {EXTERNAL_ONTOLOGIES.map((item) => (
@@ -1529,6 +1643,11 @@ export default function Dashboard() {
               <div className="ontology-panel__row">
                 <span>
                   Use this tab as a quick reference to check whether the ABox, SWRL rules, graph view, and ontology are aligned semantically.
+                </span>
+              </div>
+              <div className="ontology-panel__row">
+                <span>
+                  If you see <code>Obligation</code>, <code>Prohibition</code>, or <code>Recommendation</code> in the app, they are ABox individuals typed with these ontology classes rather than separate ontologies or ad hoc UI categories.
                 </span>
               </div>
             </div>

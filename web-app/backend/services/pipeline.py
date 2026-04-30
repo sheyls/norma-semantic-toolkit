@@ -129,6 +129,10 @@ def canonicalize_task_prop_norm_ids(
     return canonicalized
 
 
+def merged_task_prop_key(bpmn_file: Path, element_id: str) -> str:
+    return f"{bpmn_file.name}::{element_id}"
+
+
 def rules_from_bpmn_dir(reg_dir: Path, override_path: Optional[Path] = None):
     bpmn_dir = reg_dir / "bpmn"
     if not bpmn_dir.is_dir():
@@ -157,14 +161,22 @@ def rules_from_bpmn_dir(reg_dir: Path, override_path: Optional[Path] = None):
     rules_ir = []
     all_task_props: dict[str, dict[str, str]] = {}
     for (bpmn_file, _, nodes, edges, gw_index), (_, task_props) in zip(parsed_task_groups, canonicalized_props):
-        all_task_props.update(task_props)
+        for element_id, props in task_props.items():
+            all_task_props[merged_task_prop_key(bpmn_file, element_id)] = dict(props)
         _, ir, _ = enumerate_paths_and_build_ir(
             nodes=nodes,
             edges=edges,
             gateway_outgoing_index=gw_index,
             task_props=task_props,
         )
-        rules_ir.extend(dataclasses.replace(rule, source=bpmn_file.name) for rule in ir)
+        for rule in ir:
+            rules_ir.append(
+                dataclasses.replace(
+                    rule,
+                    rid=f"r{len(rules_ir) + 1}",
+                    source=bpmn_file.name,
+                )
+            )
     return rules_ir, all_task_props
 
 
@@ -376,13 +388,26 @@ def all_norms(pack: dict[str, Any]) -> dict[str, Any]:
     def field(props: dict[str, str], key: str) -> str:
         return (props.get(key) or "").strip()
 
+    def semantic_entry_id(bpmn_id: str, props: dict[str, str]) -> str:
+        dtype = field(props, "compliance_deonticType").lower()
+        bpmn_name = field(props, "_bpmn_name")
+        raw_did = field(props, "compliance_deonticId")
+        if dtype:
+            return raw_did or (auto_deontic_id(dtype, bpmn_name, bpmn_id) if dtype else bpmn_id)
+
+        condition_statement = field(props, "gw_conditionStatement") or bpmn_name or bpmn_id
+        true_branch = field(props, "gw_trueBranch")
+        false_branch = field(props, "gw_falseBranch")
+        branch_suffix = "__".join(part for part in (true_branch, false_branch) if part)
+        if branch_suffix:
+            return f"Gateway_{to_symbol(condition_statement)}__{to_symbol(branch_suffix)}"
+        return f"Gateway_{to_symbol(condition_statement)}"
+
     result = []
     seen = set()
     for bpmn_id, props in raw_props.items():
         dtype = field(props, "compliance_deonticType").lower()
-        bpmn_name = field(props, "_bpmn_name")
-        raw_did = field(props, "compliance_deonticId")
-        norm_id = raw_did or (auto_deontic_id(dtype, bpmn_name, bpmn_id) if dtype else bpmn_id)
+        norm_id = semantic_entry_id(bpmn_id, props)
         if norm_id in seen:
             continue
         seen.add(norm_id)

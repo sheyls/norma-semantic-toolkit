@@ -1,27 +1,52 @@
 import * as d3 from "d3";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const NODE_COLORS = {
-  Obligation: "#a64a1d",
-  Prohibition: "#6b1f0e",
-  Permission: "#225c63",
-  Recommendation: "#3d7c84",
-  NegativeRecommendation: "#7c3aed",
-  ConstitutiveRule: "#059669",
-  LegalAgent: "#1b2131",
-  OrganizationalLegalAgent: "#1b2131",
-  LegalAction: "#2f6f91",
-  LegalObject: "#626b7e",
-  LegalCondition: "#b45309",
-  LegalSource: "#6c5b7b",
-  LegalSourceExpression: "#8d7ea3",
-  AnnotationActivity: "#b2c046",
-  AnnotatorAgent: "#b2c046",
-  BindingForce: "#0d3b66",
-  ComplianceCriticality: "#a63a50",
-  NormStatus: "#5c6b73",
-  Resource: "#225c63",
+  Obligation: "#c25b2a",
+  Prohibition: "#b42318",
+  Permission: "#0f766e",
+  Recommendation: "#2563eb",
+  NegativeRecommendation: "#8b5cf6",
+  ConstitutiveRule: "#15803d",
+  LegalAgent: "#1d4ed8",
+  OrganizationalLegalAgent: "#1e3a8a",
+  LegalAction: "#0891b2",
+  LegalObject: "#7c3f8c",
+  LegalCondition: "#d97706",
+  TriggerEvent: "#475569",
+  TrueOutcome: "#15803d",
+  FalseOutcome: "#b91c1c",
+  LegalSource: "#7c2d12",
+  LegalSourceExpression: "#a16207",
+  AnnotationActivity: "#64748b",
+  AnnotatorAgent: "#334155",
+  BindingForce: "#0f4c81",
+  ComplianceCriticality: "#be123c",
+  NormStatus: "#4b5563",
+  Resource: "#6b7280",
 };
+
+const LEGEND_ORDER = [
+  "Obligation",
+  "Prohibition",
+  "Permission",
+  "Recommendation",
+  "NegativeRecommendation",
+  "ConstitutiveRule",
+  "LegalCondition",
+  "LegalAgent",
+  "OrganizationalLegalAgent",
+  "LegalAction",
+  "LegalObject",
+  "LegalSource",
+  "LegalSourceExpression",
+  "AnnotationActivity",
+  "AnnotatorAgent",
+  "BindingForce",
+  "ComplianceCriticality",
+  "NormStatus",
+  "Resource",
+];
 
 function nodeColor(type) {
   return NODE_COLORS[type] || "#225c63";
@@ -145,6 +170,10 @@ function nodeDetailRows(node) {
     rows.push({ label: "Trigger condition", value: node.trigger_condition });
   }
 
+  if (node.outcome) {
+    rows.push({ label: "Outcome", value: node.outcome });
+  }
+
 
   if (node.source) {
     rows.push({ label: "Linked source", value: node.source, tone: "code" });
@@ -176,6 +205,19 @@ export default function GraphForce({ nodes, edges }) {
   const [hoveredNode, setHoveredNode] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const pinnedNodesRef = useRef(new Set());
+  const legendTypes = useMemo(() => {
+    const presentTypes = new Set(nodes.map((node) => node.type).filter(Boolean));
+    return [...presentTypes].sort((left, right) => {
+      const leftIndex = LEGEND_ORDER.indexOf(left);
+      const rightIndex = LEGEND_ORDER.indexOf(right);
+      const safeLeft = leftIndex === -1 ? LEGEND_ORDER.length : leftIndex;
+      const safeRight = rightIndex === -1 ? LEGEND_ORDER.length : rightIndex;
+      if (safeLeft !== safeRight) {
+        return safeLeft - safeRight;
+      }
+      return left.localeCompare(right);
+    });
+  }, [nodes]);
 
   useEffect(() => {
     const svgEl = svgRef.current;
@@ -536,6 +578,17 @@ export default function GraphForce({ nodes, edges }) {
           ) : (
             <span>{inspectorNode ? inspectorNode.type : "Hover a node"}</span>
           )}
+        </div>
+        <div className="graph-legend">
+          <strong className="graph-legend__title">Legend</strong>
+          <div className="graph-legend__list">
+            {legendTypes.map((type) => (
+              <div key={type} className="graph-legend__item">
+                <span className="graph-legend__swatch" style={{ backgroundColor: nodeColor(type) }} />
+                <span>{type}</span>
+              </div>
+            ))}
+          </div>
         </div>
         {inspectorNode ? (
           <>
