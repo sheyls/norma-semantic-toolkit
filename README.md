@@ -2,7 +2,7 @@
 
 [![Ontology DOI](https://img.shields.io/badge/Ontology%20DOI-10.5281%2Fzenodo.19765302-blue)](https://doi.org/10.5281/zenodo.19765302)
 [![Zenodo Community](https://img.shields.io/badge/Zenodo-NORMA%20Community-blue?logo=zenodo)](https://zenodo.org/communities/norma)
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
 [![Tests](https://img.shields.io/badge/Tests-64%20passing-brightgreen)](#testing)
 [![OWL 2 DL](https://img.shields.io/badge/Ontology-OWL%202%20DL-orange)](https://www.w3.org/TR/owl2-overview/)
@@ -10,7 +10,7 @@
 
 **NORMA** is an open semantic resource for the formal representation and computational processing of legal norms extracted from regulatory documents. It combines an OWL 2 DL ontology, a structured annotation methodology based on BPMN, an automated knowledge-graph construction pipeline, and a SWRL rule generation engine. The result is a self-consistent, queryable, and reasoner ready knowledge graph that faithfully instantiates the ontology from annotated process models.
 
-> Sheyla Leyva-Sánchez · Ontology Engineering Group, Universidad Politécnica de Madrid · CC BY-NC 4.0  
+> Sheyla Leyva-Sánchez · Ontology Engineering Group, Universidad Politécnica de Madrid · CC BY 4.0  
 > Ontology DOI: [10.5281/zenodo.19765302](https://doi.org/10.5281/zenodo.19765302) · All resources: [zenodo.org/communities/norma](https://zenodo.org/communities/norma)
 
 ---
@@ -156,7 +156,7 @@ norma-semantic-toolkit/
 **Version IRI:** `https://w3id.org/def/norma-o/1.0`  
 **Documentation:** [https://w3id.org/def/norma-o](https://w3id.org/def/norma-o)  
 **Serialisations:** Turtle and RDF/XML (both provided)  
-**License:** CC BY-NC 4.0  
+**License:** CC BY 4.0  
 **DOI:** 10.5281/zenodo.19765302
 
 ![NORMA-O ontology diagram](norma-ontology/norma-o.png)
@@ -509,7 +509,7 @@ If you use the **NORMA Semantic Toolkit** (pipeline, web application, or annotat
   author       = {Leyva-S{\'a}nchez, Sheyla},
   year         = {2026},
   url          = {https://github.com/sheyls/norma-semantic-toolkit},
-  note         = {OWL 2 ontology, BPMN annotation methodology, knowledge graph construction pipeline, and SWRL rule generator for legal norm formalisation. CC BY-NC 4.0.}
+  note         = {OWL 2 ontology, BPMN annotation methodology, knowledge graph construction pipeline, and SWRL rule generator for legal norm formalisation. CC BY 4.0.}
 }
 ```
 
@@ -522,7 +522,7 @@ If you use the **NORMA-O ontology** specifically, please also cite:
   year         = {2026},
   doi          = {10.5281/zenodo.19765302},
   url          = {https://doi.org/10.5281/zenodo.19765302},
-  note         = {OWL 2 DL ontology for machine-readable legal norm annotation. CC BY-NC 4.0.}
+  note         = {OWL 2 DL ontology for machine-readable legal norm annotation. CC BY 4.0.}
 }
 ```
 
@@ -530,8 +530,8 @@ If you use the **NORMA-O ontology** specifically, please also cite:
 
 ## License
 
-The ontology, annotation template, pipeline source code, and example artifacts are released under the **Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)**.
+The ontology, annotation template, pipeline source code, and example artifacts are released under the **Creative Commons Attribution 4.0 International License (CC BY 4.0)**.
 
-You are free to share and adapt this material for any non-commercial purpose, provided appropriate credit is given to the original authors and the DOI is cited. Commercial use is not permitted without explicit written permission from the authors.
+You are free to share and adapt this material for any purpose, including commercially, provided appropriate credit is given to the original authors and the DOI is cited.
 
 See [LICENSE](LICENSE) for the full text.
