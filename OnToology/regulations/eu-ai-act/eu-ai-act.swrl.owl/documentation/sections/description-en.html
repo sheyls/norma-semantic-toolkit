@@ -1,5 +1,23 @@
-<h2 id="desc" class="list">[Ontology Name]: Description <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
+<h2 id="desc" class="list">EU AI Act SWRL Rules: Description <span class="backlink"> back to <a href="#toc">ToC</a></span></h2>
 
-<span class="markdown">This is a placeholder text for the description of your ontology. The description should include an explanation and a diagram explaining how the classes are related, examples of usage, etc.
+<p>This ontology provides the SWRL (Semantic Web Rule Language) rule layer for the EU AI Act compliance knowledge graph. It imports the EU AI Act ABox (<code>https://w3id.org/norma-abox/eu-ai-act</code>) and adds sixteen rules that make conditional applicability executable by an OWL reasoner with SWRL support.</p>
 
-</span>
+<h3 id="desc-structure" class="list">Rule structure</h3>
+
+<p>Each rule follows a uniform pattern: the rule body tests one or more boolean datatype properties on a variable <code>?x</code> representing an AI system under evaluation; the rule head asserts <code>norma:activatesNorm</code> between the corresponding trigger–event individual and the applicable normative content item. The datatype properties used in rule bodies are declared locally within this ontology and represent the yes/no compliance questions posed to a system during an assessment workflow.</p>
+
+<h3 id="desc-coverage" class="list">Regulatory coverage</h3>
+
+<p>The sixteen rules cover the following EU AI Act compliance decision paths:</p>
+<ul>
+  <li><strong>General-purpose AI obligations</strong> — activating norms for systems that serve a wide range of tasks and operate on large volumes of data (GPAI obligations);</li>
+  <li><strong>High-risk AI obligations</strong> — obligations for systems classified as high-risk under the regulation, including requirements for testing, documentation, and conformity assessment;</li>
+  <li><strong>Biometric identification</strong> — obligations and prohibitions for systems used for biometric purposes, with sub-rules for real-time use in public spaces;</li>
+  <li><strong>Criminal offence prediction</strong> — norms applicable to systems used for profiling or predictive policing, conditioned on prior offence data and law enforcement context;</li>
+  <li><strong>Real-time remote biometric identification</strong> — conditional permissions and restrictions on real-time biometric surveillance, considering law enforcement purpose, search for missing persons, and imminent threat scenarios;</li>
+  <li><strong>Cybersecurity exemptions</strong> — exemption from cybersecurity requirements when an AI system holds a valid EU cybersecurity certification scheme.</li>
+</ul>
+
+<h3 id="desc-use" class="list">Usage</h3>
+
+<p>To evaluate a specific AI system, load this ontology together with its imports into a reasoner that supports SWRL (such as Pellet or HermiT with SWRL extensions), create an individual representing the system, assert the relevant boolean property values reflecting its characteristics, and run the reasoner. The inferred <code>norma:activatesNorm</code> assertions will identify which EU AI Act norms apply to that system.</p>

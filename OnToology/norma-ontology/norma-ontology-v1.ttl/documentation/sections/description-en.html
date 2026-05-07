@@ -67,29 +67,37 @@
 <p>The following examples show how the ontology is used in practice.</p>
 
 <div class="description">
-<p><strong>Example 1: a regulative norm — EU AI Act, Article 4(2)</strong></p>
+<p><strong>Example 1: a regulative norm — EU AI Act, Article 50(2)</strong></p>
 <pre><code>@prefix norma: &lt;https://w3id.org/def/norma-o#&gt; .
 @prefix :      &lt;https://w3id.org/norma-abox/eu-ai-act#&gt; .
 
-:OBL_1
+:OBL_Respect_marking_obligations
     a norma:Obligation ;
-    rdfs:label "Marking obligation"@en ;
-    norma:deonticId "OBL_1" ;
-    norma:actionText "Marking obligation" ;
+    rdfs:label "Respect marking obligations"@en ;
+    norma:deonticId "OBL_Respect_marking_obligations" ;
+    norma:normStatement "AI providers must mark outputs of AI systems generating synthetic content in a machine-readable format." ;
+    norma:actionText "comply high-risk obligations" ;
     norma:fromRegulation "EU AI Act" ;
-    norma:fromArticle "4" ;
+    norma:fromArticle "50" ;
     norma:fromParagraph "2" ;
     norma:hasBindingForce    norma:HardLaw ;
     norma:hasNormStatus      norma:Active ;
     norma:hasComplianceCriticality norma:High ;
     norma:hasExtractionMethod norma:ManualLawyer ;
     norma:hasReviewStatus    norma:PendingReview ;
-    norma:hasLegalAgent      :Agent_AI_owner ;
-    norma:hasLegalObject     :Object_generate_content ;
+    norma:hasLegalAgent      :Agent_AI_provider ;
+    norma:hasLegalObject     :Object_AI_system ;
     norma:hasLegalSource     :Regulation_EU_AI_Act ;
-    norma:annotationDate     "2026-02-13"^^xsd:date ;
-    norma:confidenceScore    1.0 .</code></pre>
-<p>A real obligation from the EU AI Act knowledge graph in this repository. It is classified as hard law, active, and high criticality, and was manually annotated by a legal expert. The agent bearing the obligation is the AI owner; the object is the act of generating content. All controlled-vocabulary values are named individuals declared in the TBox.</p>
+    norma:wasAttributedToAnnotator :NORMAAnnotator ;
+    norma:wasGeneratedByAnnotationActivity :AnnotationActivity_OBL_Respect_marking_obligations .
+
+:AnnotationActivity_OBL_Respect_marking_obligations
+    a norma:AnnotationActivity ;
+    norma:annotationDate     "2026-04-30"^^xsd:date ;
+    norma:confidenceScore    1.0 ;
+    norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
+    norma:usedLegalSource    :Regulation_EU_AI_Act .</code></pre>
+<p>An obligation from the EU AI Act knowledge graph in this repository (Article 50(2) — transparency obligations for AI-generated synthetic content). Note that <code>norma:annotationDate</code> and <code>norma:confidenceScore</code> are properties of the <code>norma:AnnotationActivity</code>, not of the norm individual itself — the annotation act is what has a date and a confidence, not the legal obligation. All controlled-vocabulary values are named individuals declared in the TBox.</p>
 </div>
 
 <div class="description">

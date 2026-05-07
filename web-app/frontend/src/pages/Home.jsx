@@ -180,6 +180,10 @@ export default function Home() {
                       <strong>Víctor Rodríguez-Doncel</strong>
                       <span>Ontology Engineering Group, UPM</span>
                     </li>
+                    <li>
+                      <strong>Meem Arafat Manab</strong>
+                      <span>Ontology Engineering Group, UPM</span>
+                    </li>
                   </ul>
                 </div>
                 <div>
@@ -200,20 +204,32 @@ export default function Home() {
 
             <article className="home__about-card">
               <p className="eyebrow">Licence</p>
-              <h3>CC BY 4.0</h3>
+              <h3>Apache 2.0 + CC BY 4.0</h3>
               <p>
-                Repository and ontology metadata reference a Creative Commons Attribution 4.0
-                licence, supporting reuse with appropriate attribution.
+                Code is released under Apache 2.0, while the ontology and research artifacts use
+                Creative Commons Attribution 4.0.
               </p>
-              <a
-                href="https://creativecommons.org/licenses/by/4.0/"
-                className="license-badge"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img src={ccByLogo} alt="CC BY 4.0" className="license-badge__logo" />
-                <span className="license-badge__text">CC BY 4.0</span>
-              </a>
+              <div>
+                <a
+                  href="https://www.apache.org/licenses/LICENSE-2.0"
+                  className="license-badge"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="license-badge__text">Apache 2.0</span>
+                </a>
+              </div>
+              <div style={{ marginTop: "0.8rem" }}>
+                <a
+                  href="https://creativecommons.org/licenses/by/4.0/"
+                  className="license-badge"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={ccByLogo} alt="CC BY 4.0" className="license-badge__logo" />
+                  <span className="license-badge__text">CC BY 4.0</span>
+                </a>
+              </div>
             </article>
 
           </div>

@@ -26,7 +26,7 @@
     <bpmn:sequenceFlow id="Flow_0razsvf" name="No" sourceRef="Gateway_0xwlzaj" targetRef="Event_086rz81">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:task id="Activity_136kc4k" name="Respect ban" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+    <bpmn:task id="Activity_136kc4k" name="Respect criminal-risk assessment ban" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
       <bpmn:extensionElements>
         <zeebe:properties>
           <zeebe:property name="compliance_elementType" value="task" />

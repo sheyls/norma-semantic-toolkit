@@ -28,14 +28,14 @@
     <bpmn:sequenceFlow id="Flow_0razsvf" name="No" sourceRef="Gateway_0xwlzaj" targetRef="Event_086rz81">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:task id="Activity_136kc4k" name="Respect ban" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+    <bpmn:task id="Activity_136kc4k" name="Respect real-time biometric identification ban" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
       <bpmn:extensionElements>
         <zeebe:properties>
           <zeebe:property name="compliance_elementType" value="task" />
           <zeebe:property name="compliance_deonticType" value="prohibition" />
-          <zeebe:property name="compliance_normStatement" value="AI systems must not enter the EU market or be developed or used in the EU territories." />
+          <zeebe:property name="compliance_normStatement" value="The use of real-time remote biometric identification systems in publicly accessible spaces for the purposes of law enforcement shall be prohibited." />
           <zeebe:property name="compliance_agent" value="AI provider" />
-          <zeebe:property name="compliance_action" value="must not develop, deploy or sell" />
+          <zeebe:property name="compliance_action" value="use real-time remote biometric identification systems" />
           <zeebe:property name="compliance_object" value="AI system" />
           <zeebe:property name="compliance_bindingForce" value="hard_law" />
           <zeebe:property name="compliance_triggerCondition" value="" />
