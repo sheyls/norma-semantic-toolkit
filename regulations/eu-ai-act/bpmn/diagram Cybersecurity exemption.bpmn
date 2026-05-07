@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1t2iyiy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1t2iyiy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
   <bpmn:process id="Process_0rlw4ph" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Check the Cybersecurity exemption">
       <bpmn:outgoing>Flow_0p6ujjw</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0p6ujjw" sourceRef="StartEvent_1" targetRef="Gateway_0xwlzaj" />
-    <bpmn:exclusiveGateway id="Gateway_0xwlzaj" name="Has it been certified under the EU cybersecurity scheme?">
+    <bpmn:exclusiveGateway id="Gateway_0xwlzaj" name="Has it been certified under the EU cybersecurity scheme?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Has it been certified under the EU cybersecurity scheme?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0p6ujjw</bpmn:incoming>
       <bpmn:outgoing>Flow_0razsvf</bpmn:outgoing>
       <bpmn:outgoing>Flow_00kmoam</bpmn:outgoing>
@@ -14,7 +22,9 @@
       <bpmn:incoming>Flow_0razsvf</bpmn:incoming>
       <bpmn:incoming>Flow_1ddnwa9</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0razsvf" name="No" sourceRef="Gateway_0xwlzaj" targetRef="Event_086rz81" />
+    <bpmn:sequenceFlow id="Flow_0razsvf" name="No" sourceRef="Gateway_0xwlzaj" targetRef="Event_086rz81">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:task id="Activity_136kc4k" name="Respect cybersecurity exemption" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
       <bpmn:extensionElements>
         <zeebe:properties>
@@ -49,7 +59,9 @@
       <bpmn:incoming>Flow_00kmoam</bpmn:incoming>
       <bpmn:outgoing>Flow_1ddnwa9</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:sequenceFlow id="Flow_00kmoam" name="Yes" sourceRef="Gateway_0xwlzaj" targetRef="Activity_136kc4k" />
+    <bpmn:sequenceFlow id="Flow_00kmoam" name="Yes" sourceRef="Gateway_0xwlzaj" targetRef="Activity_136kc4k">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1ddnwa9" sourceRef="Activity_136kc4k" targetRef="Event_086rz81" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -63,7 +75,7 @@
       <bpmndi:BPMNShape id="Gateway_0xwlzaj_di" bpmnElement="Gateway_0xwlzaj" isMarkerVisible="true">
         <dc:Bounds x="295" y="155" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="284" y="77" width="71" height="66" />
+          <dc:Bounds x="285" y="77" width="70" height="66" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_086rz81_di" bpmnElement="Event_086rz81">
