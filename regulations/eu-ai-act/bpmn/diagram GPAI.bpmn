@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1t2iyiy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
   <bpmn:process id="Process_0rlw4ph" isExecutable="true">
-    <bpmn:startEvent id="StartEvent_1" name="Check the Cybersecurity exemption">
+    <bpmn:startEvent id="StartEvent_1" name="Check if the AI model is a General Purpose AI system">
       <bpmn:outgoing>Flow_0p6ujjw</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0p6ujjw" sourceRef="StartEvent_1" targetRef="Gateway_0xwlzaj" />
-    <bpmn:exclusiveGateway id="Gateway_0xwlzaj" name="Has it been certified under the EU cybersecurity scheme?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
-      <bpmn:extensionElements>
-        <zeebe:properties>
-          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
-          <zeebe:property name="gw_conditionStatement" value="Has it been certified under the EU cybersecurity scheme?" />
-          <zeebe:property name="gw_trueBranch" value="Yes" />
-          <zeebe:property name="gw_falseBranch" value="No" />
-        </zeebe:properties>
-      </bpmn:extensionElements>
+    <bpmn:exclusiveGateway id="Gateway_0xwlzaj" name="Does it serve a wide range of tasks?">
       <bpmn:incoming>Flow_0p6ujjw</bpmn:incoming>
       <bpmn:outgoing>Flow_0razsvf</bpmn:outgoing>
-      <bpmn:outgoing>Flow_00kmoam</bpmn:outgoing>
+      <bpmn:outgoing>Flow_129o3by</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="Event_086rz81">
       <bpmn:incoming>Flow_0razsvf</bpmn:incoming>
-      <bpmn:incoming>Flow_1ddnwa9</bpmn:incoming>
+      <bpmn:incoming>Flow_15a4wyn</bpmn:incoming>
+      <bpmn:incoming>Flow_182d3uw</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0razsvf" name="No" sourceRef="Gateway_0xwlzaj" targetRef="Event_086rz81">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:task id="Activity_136kc4k" name="Cybersecurity Exemption" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+    <bpmn:exclusiveGateway id="Gateway_06exjdz" name="Does it work on a large amount of data?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Does it work on a large amount of data?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_129o3by</bpmn:incoming>
+      <bpmn:outgoing>Flow_15a4wyn</bpmn:outgoing>
+      <bpmn:outgoing>Flow_01e9ifv</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_15a4wyn" name="No" sourceRef="Gateway_06exjdz" targetRef="Event_086rz81">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_129o3by" name="Yes" sourceRef="Gateway_0xwlzaj" targetRef="Gateway_06exjdz">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:task id="Activity_136kc4k" name="Respect general purpose obligations" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
       <bpmn:extensionElements>
         <zeebe:properties>
           <zeebe:property name="compliance_elementType" value="task" />
-          <zeebe:property name="compliance_deonticType" value="recommendation_not" />
-          <zeebe:property name="compliance_normStatement" value="AI systems that have been certified under a cybersecurity scheme shall be presumed to comply with the cybersecurity requirements" />
+          <zeebe:property name="compliance_deonticType" value="obligation" />
+          <zeebe:property name="compliance_normStatement" value="" />
           <zeebe:property name="compliance_agent" value="AI provider" />
-          <zeebe:property name="compliance_action" value="be exempted from cybersecurity requirements" />
+          <zeebe:property name="compliance_action" value="respect obligations" />
           <zeebe:property name="compliance_object" value="AI system" />
           <zeebe:property name="compliance_bindingForce" value="hard_law" />
           <zeebe:property name="compliance_triggerCondition" value="" />
@@ -44,9 +56,9 @@
           <zeebe:property name="compliance_sanction" value="" />
           <zeebe:property name="compliance_riskLevel" value="high" />
           <zeebe:property name="compliance_regulation" value="AI Act" />
-          <zeebe:property name="compliance_article" value="42" />
-          <zeebe:property name="compliance_paragraph" value="2" />
-          <zeebe:property name="compliance_originalText" value="High-risk AI systems that have been certified or for which a statement of conformity has been issued under a cybersecurity scheme pursuant to Regulation (EU) 2019/881 and the references of which have been published in the Official Journal of the European Union shall be presumed to comply with the cybersecurity requirements set out in Article 15 of this Regulation in so far as the cybersecurity certificate or statement of conformity or parts thereof cover those requirements" />
+          <zeebe:property name="compliance_article" value="53" />
+          <zeebe:property name="compliance_paragraph" value="" />
+          <zeebe:property name="compliance_originalText" value="" />
           <zeebe:property name="compliance_regulationURI" value="" />
           <zeebe:property name="compliance_extractionMethod" value="manual_lawyer" />
           <zeebe:property name="compliance_confidence" value="1.0" />
@@ -56,36 +68,42 @@
           <zeebe:property name="compliance_lastReviewDate" value="" />
         </zeebe:properties>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_00kmoam</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ddnwa9</bpmn:outgoing>
+      <bpmn:incoming>Flow_01e9ifv</bpmn:incoming>
+      <bpmn:outgoing>Flow_182d3uw</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:sequenceFlow id="Flow_00kmoam" name="Yes" sourceRef="Gateway_0xwlzaj" targetRef="Activity_136kc4k">
+    <bpmn:sequenceFlow id="Flow_01e9ifv" name="Yes" sourceRef="Gateway_06exjdz" targetRef="Activity_136kc4k">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1ddnwa9" sourceRef="Activity_136kc4k" targetRef="Event_086rz81" />
+    <bpmn:sequenceFlow id="Flow_182d3uw" sourceRef="Activity_136kc4k" targetRef="Event_086rz81" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0rlw4ph">
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
         <dc:Bounds x="182" y="162" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="167" y="205" width="68" height="40" />
+          <dc:Bounds x="159" y="205" width="84" height="53" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0xwlzaj_di" bpmnElement="Gateway_0xwlzaj" isMarkerVisible="true">
         <dc:Bounds x="295" y="155" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="285" y="77" width="70" height="66" />
+          <dc:Bounds x="283" y="93" width="74" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_086rz81_di" bpmnElement="Event_086rz81">
-        <dc:Bounds x="433" y="286" width="36" height="36" />
+        <dc:Bounds x="433" y="414" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="386" y="415" width="90" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_06exjdz_di" bpmnElement="Gateway_06exjdz" isMarkerVisible="true">
+        <dc:Bounds x="295" y="275" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="203" y="273" width="85" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_136kc4k_di" bpmnElement="Activity_136kc4k">
-        <dc:Bounds x="270" y="264" width="100" height="80" />
+        <dc:Bounds x="270" y="392" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0p6ujjw_di" bpmnElement="Flow_0p6ujjw">
@@ -95,21 +113,36 @@
       <bpmndi:BPMNEdge id="Flow_0razsvf_di" bpmnElement="Flow_0razsvf">
         <di:waypoint x="345" y="180" />
         <di:waypoint x="451" y="180" />
-        <di:waypoint x="451" y="286" />
+        <di:waypoint x="451" y="414" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="391" y="162" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_00kmoam_di" bpmnElement="Flow_00kmoam">
-        <di:waypoint x="320" y="205" />
-        <di:waypoint x="320" y="264" />
+      <bpmndi:BPMNEdge id="Flow_15a4wyn_di" bpmnElement="Flow_15a4wyn">
+        <di:waypoint x="345" y="300" />
+        <di:waypoint x="451" y="300" />
+        <di:waypoint x="451" y="414" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="326" y="213" width="18" height="14" />
+          <dc:Bounds x="391" y="282" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ddnwa9_di" bpmnElement="Flow_1ddnwa9">
-        <di:waypoint x="370" y="304" />
-        <di:waypoint x="433" y="304" />
+      <bpmndi:BPMNEdge id="Flow_129o3by_di" bpmnElement="Flow_129o3by">
+        <di:waypoint x="320" y="205" />
+        <di:waypoint x="320" y="275" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="326" y="214" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01e9ifv_di" bpmnElement="Flow_01e9ifv">
+        <di:waypoint x="320" y="325" />
+        <di:waypoint x="320" y="392" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="326" y="333" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_182d3uw_di" bpmnElement="Flow_182d3uw">
+        <di:waypoint x="370" y="432" />
+        <di:waypoint x="433" y="432" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

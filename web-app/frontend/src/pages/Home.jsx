@@ -31,7 +31,7 @@ const FEATURES = [
         <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
       </svg>
     ),
-    title: "Knowledge Graph",
+    title: "Generated Graph",
     description: "Interactive D3 force graph of ABox instances, relations, and ontology alignments.",
     tag: "Graph · SPARQL",
   },
@@ -42,7 +42,7 @@ const FEATURES = [
       </svg>
     ),
     title: "SPARQL Queries",
-    description: "Query the generated knowledge graph directly with curated presets or custom queries.",
+    description: "Query the generated graph directly with curated presets or custom queries.",
     tag: "SPARQL 1.1",
   },
 ];
@@ -67,7 +67,7 @@ export default function Home() {
               <img src={normaLogo} alt="" className="home__brand-mark__logo" />
               <span>NORMA Semantic toolkit</span>
             </div>
-            <h1>From annotated BPMN to norm knowledge graph.</h1>
+            <h1>From annotated BPMN to semantic artifacts.</h1>
             <p className="home__lead">
               NORMA converts legally annotated process models into semantic, linked normative
               knowledge, producing OWL 2 ABoxes, SWRL rules, and queryable RDF graphs
@@ -146,7 +146,7 @@ export default function Home() {
                 <p className="eyebrow" style={{ color: "rgba(147,197,253,0.82)" }}>Affiliation</p>
                 <h3 style={{ color: "white" }}>Ontology Engineering Group — UPM</h3>
                 <p style={{ color: "rgba(226,232,240,0.8)" }}>
-                  The toolkit targets users working with legal knowledge graphs, ontology
+                  The toolkit targets users working with legal graphs, ontology
                   engineering, and regulation-based semantic workflows.
                 </p>
               </div>
@@ -180,6 +180,10 @@ export default function Home() {
                       <strong>Víctor Rodríguez-Doncel</strong>
                       <span>Ontology Engineering Group, UPM</span>
                     </li>
+                    <li>
+                      <strong>Meem Arafat Manab</strong>
+                      <span>Ontology Engineering Group, UPM</span>
+                    </li>
                   </ul>
                 </div>
                 <div>
@@ -200,20 +204,32 @@ export default function Home() {
 
             <article className="home__about-card">
               <p className="eyebrow">Licence</p>
-              <h3>CC BY 4.0</h3>
+              <h3>Apache 2.0 + CC BY 4.0</h3>
               <p>
-                Repository and ontology metadata reference a Creative Commons Attribution 4.0
-                licence, supporting reuse with appropriate attribution.
+                Code is released under Apache 2.0, while the ontology and research artifacts use
+                Creative Commons Attribution 4.0.
               </p>
-              <a
-                href="https://creativecommons.org/licenses/by/4.0/"
-                className="license-badge"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img src={ccByLogo} alt="CC BY 4.0" className="license-badge__logo" />
-                <span className="license-badge__text">CC BY 4.0</span>
-              </a>
+              <div>
+                <a
+                  href="https://www.apache.org/licenses/LICENSE-2.0"
+                  className="license-badge"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="license-badge__text">Apache 2.0</span>
+                </a>
+              </div>
+              <div style={{ marginTop: "0.8rem" }}>
+                <a
+                  href="https://creativecommons.org/licenses/by/4.0/"
+                  className="license-badge"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={ccByLogo} alt="CC BY 4.0" className="license-badge__logo" />
+                  <span className="license-badge__text">CC BY 4.0</span>
+                </a>
+              </div>
             </article>
 
           </div>

@@ -2,57 +2,45 @@
 
 [![Ontology DOI](https://img.shields.io/badge/Ontology%20DOI-10.5281%2Fzenodo.19765302-blue)](https://doi.org/10.5281/zenodo.19765302)
 [![Zenodo Community](https://img.shields.io/badge/Zenodo-NORMA%20Community-blue?logo=zenodo)](https://zenodo.org/communities/norma)
-[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Code License: Apache 2.0](https://img.shields.io/badge/Code-Apache%202.0-0b7285.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Content License: CC BY 4.0](https://img.shields.io/badge/Content-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/Tests-64%20passing-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/Tests-73%20passing-brightgreen)](#testing)
 [![OWL 2 DL](https://img.shields.io/badge/Ontology-OWL%202%20DL-orange)](https://www.w3.org/TR/owl2-overview/)
 [![Ontology Docs](https://img.shields.io/badge/Docs-NORMA--O%20Ontology-navy)](https://w3id.org/def/norma-o)
 
-**NORMA** is an open semantic resource for the formal representation and computational processing of legal norms extracted from regulatory documents. It combines an OWL 2 DL ontology, a structured annotation methodology based on BPMN, an automated knowledge-graph construction pipeline, and a SWRL rule generation engine. The result is a self-consistent, queryable, and reasoner ready knowledge graph that faithfully instantiates the ontology from annotated process models.
+**NORMA** is an open semantic resource for the formal representation and computational processing of legal norms extracted from regulatory documents. It combines an OWL 2 DL ontology, a structured annotation methodology based on BPMN, an automated knowledge-graph construction pipeline, and a SWRL rule generation engine. The result is a self-consistent, queryable, and reasoner-ready knowledge graph that faithfully instantiates the ontology from annotated process models.
 
-> Sheyla Leyva-Sánchez · Ontology Engineering Group, Universidad Politécnica de Madrid · CC BY 4.0  
+> Sheyla Leyva-Sánchez · Ontology Engineering Group, Universidad Politécnica de Madrid · Code: Apache-2.0 · Ontology and research artifacts: CC BY 4.0  
 > Ontology DOI: [10.5281/zenodo.19765302](https://doi.org/10.5281/zenodo.19765302) · All resources: [zenodo.org/communities/norma](https://zenodo.org/communities/norma)
 
 ---
 
 ## Table of Contents
 
-- [NORMA Semantic Toolkit](#norma-semantic-toolkit)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Motivations and Design Goals](#motivations-and-design-goals)
-  - [Repository Structure](#repository-structure)
-  - [The NORMA Ontology (TBox)](#the-norma-ontology-tbox)
-    - [Statistics](#statistics)
-    - [Class Hierarchy](#class-hierarchy)
-    - [Controlled Vocabularies (SKOS ConceptSchemes)](#controlled-vocabularies-skos-conceptschemes)
-    - [External Alignments](#external-alignments)
-  - [Annotation Methodology](#annotation-methodology)
-    - [Why BPMN?](#why-bpmn)
-    - [Annotation Fields](#annotation-fields)
-  - [Knowledge Graph Construction Pipeline](#knowledge-graph-construction-pipeline)
-    - [Stage 1 — BPMN Parsing](#stage-1--bpmn-parsing)
-    - [Stage 2 — Entity Reconciliation](#stage-2--entity-reconciliation)
-    - [Stage 3 — ABox Construction](#stage-3--abox-construction)
-    - [Stage 4 — SWRL Rule Extraction](#stage-4--swrl-rule-extraction)
-  - [SWRL Rule Generation](#swrl-rule-generation)
-  - [SPARQL Interface](#sparql-interface)
-  - [Web Application](#web-application)
-    - [Key Features](#key-features)
-    - [REST API (selected endpoints)](#rest-api-selected-endpoints)
-  - [Example — EU AI Act](#example--eu-ai-act)
-  - [Alignment with Established Standards](#alignment-with-established-standards)
-  - [Constraints and Limitations](#constraints-and-limitations)
-  - [Quick Start](#quick-start)
-    - [1. Install the core engine](#1-install-the-core-engine)
-    - [2. Build the EU AI Act knowledge graph](#2-build-the-eu-ai-act-knowledge-graph)
-    - [3. Extract SWRL rules](#3-extract-swrl-rules)
-    - [4. Run the web application](#4-run-the-web-application)
-  - [Requirements](#requirements)
-  - [Testing](#testing)
-  - [Contributing](#contributing)
-  - [Citation](#citation)
-  - [License](#license)
+- [Overview](#overview)
+- [Motivations and Design Goals](#motivations-and-design-goals)
+- [Repository Structure](#repository-structure)
+- [The NORMA Ontology (TBox)](#the-norma-ontology-tbox)
+- [Annotation Methodology](#annotation-methodology)
+- [Knowledge Graph Construction Pipeline](#knowledge-graph-construction-pipeline)
+- [SWRL Rule Generation](#swrl-rule-generation)
+- [SPARQL Interface](#sparql-interface)
+- [Web Application](#web-application)
+- [Example — EU AI Act](#example--eu-ai-act)
+- [Quick Start](#quick-start)
+  - [Option A — Docker (zero configuration)](#option-a--docker-zero-configuration)
+  - [Option B — Local install](#option-b--local-install)
+  - [Option C — Reproduce the paper results](#option-c--reproduce-the-paper-results)
+- [Step-by-Step Tutorial: From a blank BPMN to a knowledge graph](#step-by-step-tutorial-from-a-blank-bpmn-to-a-knowledge-graph)
+- [Reproducibility](#reproducibility)
+- [Alignment with Established Standards](#alignment-with-established-standards)
+- [Constraints and Limitations](#constraints-and-limitations)
+- [Requirements](#requirements)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [Citation](#citation)
+- [License](#license)
 
 ---
 
@@ -62,30 +50,30 @@ Regulatory compliance requires understanding which legal obligations, prohibitio
 
 NORMA addresses this by providing:
 
-1. **An OWL 2 DL ontology** (`norma-o-v1`) that formally defines the vocabulary of legal norms, their structural components, provenance metadata, and condition-triggering mechanisms.
-2. **A Camunda 8 element template** that enables legal experts to annotate BPMN process diagrams with structured normative metadata directly inside a standard process modelling tool.
+1. **An OWL 2 DL ontology** (`norma-o`) that formally defines the vocabulary of legal norms, their structural components, provenance metadata, and condition-triggering mechanisms.
+2. **A Camunda 8 element template** that enables legal experts to annotate BPMN process diagrams with structured normative metadata directly inside a standard process modelling tool — no RDF or SPARQL knowledge required.
 3. **An automated construction pipeline** (`norma_engine`) that transforms annotated BPMN files into a validated OWL ABox, resolving entity references and enforcing ontological constraints.
 4. **A SWRL rule generator** that derives condition-aware inference rules from the gateway logic embedded in the BPMN, enabling norm determination under a reasoner.
-5. **A REST API and web application** for interactive exploration, SPARQL querying, norm editing, and artifact download.
+5. **A REST API and web application** for interactive exploration, SPARQL querying, norm editing, SWRL inspection, and artifact download.
 
 The pipeline is end-to-end: from a BPMN file annotated by a legal expert to a downloadable, reasoner-ready OWL knowledge graph in a single command.
 
 ```
-Annotated BPMN
-      │
-      ▼
-norma_engine (parse → reconcile → build ABox → extract SWRL)
-      │
-      ├──▶  ABox Turtle   (.abox.ttl)   — OWL named individuals
-      ├──▶  SWRL OWL/XML  (.swrl.owl)  — condition-aware inference rules
-      └──▶  REST API / Web UI           — SPARQL, graph, norm editor
+Annotated BPMN diagram(s)
+        │
+        ▼
+  norma-build <regulation-folder>/
+        │
+        ├──▶  <pack>.abox.ttl    OWL ABox (named individuals, all triples)
+        ├──▶  <pack>.swrl.owl    SWRL rules (conditional norm activation)
+        ├──▶  <pack>.json        JSON intermediate (for inspection/debugging)
+        │
+        └──▶  REST API / Web UI  SPARQL · graph · norm editor · download
 ```
 
 ---
 
 ## Motivations and Design Goals
-
-The design of NORMA is guided by four principles:
 
 **Ontological fidelity.** Every individual in the ABox is an exact instantiation of a TBox class; every property triple respects the declared domain, range, and cardinality constraints. The pipeline enforces this automatically — ghost properties and domain violations cannot enter the graph.
 
@@ -95,6 +83,8 @@ The design of NORMA is guided by four principles:
 
 **Practical usability.** The annotation interface is a standard Camunda Modeler element template — no RDF tooling is required from the legal expert. The web application allows non-technical users to inspect, query, and export the knowledge graph without writing SPARQL or OWL.
 
+**Deterministic and reproducible.** The pipeline is a pure, stateless transformation of BPMN input to RDF output. Given the same input, every run produces byte-for-byte identical ABox and SWRL files. This is verified by `reproduce.sh` on every commit.
+
 ---
 
 ## Repository Structure
@@ -102,50 +92,62 @@ The design of NORMA is guided by four principles:
 ```
 norma-semantic-toolkit/
 │
-├── norma-o/
-│   ├── norma-o-v1.ttl        # OWL 2 DL ontology (Turtle)
-│   └── norma-o-v1.rdf        # OWL 2 DL ontology (RDF/XML)
+├── norma-ontology/
+│   ├── norma-ontology-v1.ttl          # OWL 2 DL ontology (Turtle)
+│   ├── norma-ontology-v1.rdf          # OWL 2 DL ontology (RDF/XML)
+│   └── norma-o.svg                    # Visual diagram of the ontology
 │
 ├── camunda-template/
-│   └── camunda8-compliance-template.json   # Camunda 8 element template
+│   └── camunda8-compliance-template.json  # Camunda 8 element template
 │
-├── norma_engine/                    # Core Python package
+├── norma_engine/                      # Core Python package (stdlib only)
 │   ├── parsing/
-│   │   └── bpmn_parser.py           # BPMN → reduced graph (nodes, edges, gateways)
+│   │   └── bpmn_parser.py             # BPMN XML → reduced graph (nodes, edges, gateways)
 │   ├── kg/
-│   │   ├── builder.py               # ABox Turtle generator
-│   │   └── normalizer.py            # Entity label reconciliation
+│   │   ├── builder.py                 # ABox Turtle generator
+│   │   └── normalizer.py              # Entity label reconciliation (fuzzy + override)
 │   ├── rules/
-│   │   ├── ir.py                    # Intermediate representation (RuleIR, Atom types)
-│   │   └── extractor.py             # Path enumeration → SWRL IR
+│   │   ├── ir.py                      # Intermediate representation (RuleIR, Atom types)
+│   │   └── extractor.py               # Path enumeration (DFS) → SWRL IR
 │   ├── exporters/
-│   │   ├── swrl.py                  # IR → OWL/XML SWRL export
-│   │   └── human_readable.py        # IR → natural-language rule strings
+│   │   ├── swrl.py                    # RuleIR → OWL/XML SWRL serialisation
+│   │   └── human_readable.py          # RuleIR → natural-language rule strings
 │   └── cli/
-│       ├── build.py                 # CLI: build ABox
-│       └── rules.py                 # CLI: extract and export SWRL
+│       ├── build.py                   # `norma-build` — full pipeline orchestrator
+│       └── rules.py                   # `norma-rules` — standalone SWRL extractor
 │
 ├── regulations/
 │   └── eu-ai-act/
-│       ├── bpmn/                    # Annotated BPMN files
-│       └── entities.json            # Entity reconciliation overrides
+│       ├── bpmn/                      # 6 annotated BPMN diagrams (source corpus)
+│       ├── entities.json              # Entity reconciliation overrides
+│       ├── eu-ai-act.abox.ttl         # Generated ABox (committed)
+│       ├── eu-ai-act.swrl.owl         # Generated SWRL rules (committed)
+│       └── eu-ai-act.json             # Generated JSON intermediate (committed)
 │
 ├── web-app/
-│   ├── backend/                     # FastAPI application
-│   │   ├── main.py                  # REST API routes
+│   ├── backend/                       # FastAPI application
+│   │   ├── main.py                    # REST API routes and startup
 │   │   ├── services/
-│   │   │   ├── pipeline.py          # Build, export, and query orchestration
-│   │   │   ├── storage.py           # Pack registry and persistence
-│   │   │   └── graphdb.py           # Oxigraph store + SPARQL graph builder
-│   │   └── sparql_presets.py        # Curated SPARQL query library
-│   └── frontend/                    # React + Vite + D3 single-page application
+│   │   │   ├── pipeline.py            # Build, export, and query orchestration
+│   │   │   ├── storage.py             # Pack registry, persistence, and auto-load
+│   │   │   └── graphdb.py             # Oxigraph SPARQL store + graph builder
+│   │   └── sparql_presets.py          # Curated SPARQL query library
+│   └── frontend/                      # React + Vite + D3.js single-page application
 │
-└── tests/                           # 64 unit and integration tests
-    ├── test_parsing.py
-    ├── test_rules.py
-    ├── test_kg.py
-    ├── test_normalizer.py
-    └── test_exporters.py
+├── tests/                             # 73 unit and integration tests
+│   ├── test_parsing.py
+│   ├── test_rules.py
+│   ├── test_kg.py
+│   ├── test_normalizer.py
+│   ├── test_exporters.py
+│   ├── test_swrl_case_runner.py
+│   └── eu_ai_act_cases.json           # 5 end-to-end SWRL evaluation scenarios
+│
+├── reproduce.sh                       # Reproducibility script (build + test + determinism check)
+├── Dockerfile                         # Multistage build (Node 20 + Python 3.11)
+├── docker-compose.yml                 # Local development stack
+├── docker-compose.prod.yml            # Production stack
+└── pyproject.toml                     # Package definition (norma-engine v1.0.0)
 ```
 
 ---
@@ -155,11 +157,12 @@ norma-semantic-toolkit/
 **IRI:** `https://w3id.org/def/norma-o`  
 **Version IRI:** `https://w3id.org/def/norma-o/1.0`  
 **Documentation:** [https://w3id.org/def/norma-o](https://w3id.org/def/norma-o)  
-**Serialisations:** Turtle and RDF/XML (both provided)  
+**Serialisations:** Turtle (`norma-ontology-v1.ttl`) and RDF/XML (`norma-ontology-v1.rdf`)  
 **License:** CC BY 4.0  
-**DOI:** 10.5281/zenodo.19765302
+**DOI:** [10.5281/zenodo.19765302](https://doi.org/10.5281/zenodo.19765302)  
+**Dedicated repository:** [sheyls/NORMA-O](https://github.com/sheyls/NORMA-O)
 
-![NORMA-O ontology diagram](norma-ontology/norma-o.png)
+![NORMA-O ontology diagram](norma-ontology/norma-o.svg)
 
 ### Statistics
 
@@ -207,29 +210,38 @@ Each enumerated dimension is modelled as a SKOS scheme with declared `owl:NamedI
 
 | Standard | Usage in NORMA |
 |---|---|
-| **ELI** (European Legislation Identifier) | `LegalSource ⊑ eli:LegalResource`; `eli:jurisdiction` with `eli:AdministrativeArea` for jurisdiction |
+| **ELI** | `LegalSource ⊑ eli:LegalResource`; `eli:jurisdiction` with `eli:AdministrativeArea` for jurisdiction |
 | **PROV-O** | `AnnotationActivity ⊑ prov:Activity`; `NormativeContent ⊑ prov:Entity`; `AnnotatorAgent ⊑ prov:Agent` |
-| **FOAF** | Imported for agent-level interoperability; `foaf:Person`, `foaf:Organization`, `foaf:Group` available for instance-level typing of `LegalAgent` individuals (not asserted at the TBox level) |
+| **FOAF** | Imported for agent-level interoperability; `foaf:Person`, `foaf:Organization`, `foaf:Group` available for instance-level typing |
 | **SKOS** | All controlled vocabularies use SKOS `ConceptScheme` / `Concept` structure |
 | **BIBO** | `bibo:doi`, `bibo:status` for ontology-level bibliographic metadata |
-| **LKIF-Core** | Informative alignments via `skos:closeMatch`: `RegulativeNorm` ↔ `lkif:Norm`; `Obligation`, `Prohibition`, `Permission` ↔ LKIF deontic counterparts; `LegalAgent` ↔ `lkif-la:Legal_Person`; `LegalAction` ↔ `lkif-la:Legal_Action`; `SoftLaw` ↔ `lkif:Soft_Law`; `rdfs:seeAlso` for `ConstitutiveRule`, `LegalSource` |
+| **LKIF-Core** | Informative alignments via `rdfs:seeAlso`: `RegulativeNorm` ↔ `lkif:Norm`; `Obligation`, `Prohibition`, `Permission` ↔ LKIF deontic counterparts |
 
 ---
 
 ## Annotation Methodology
 
-NORMA uses **BPMN (Business Process Model and Notation)** as the annotation surface. Process diagrams are modelled in [Camunda Modeler 8](https://camunda.com/platform/modeler/) and enriched with normative metadata through a structured element template (Zeebe extension properties).
+NORMA uses **BPMN (Business Process Model and Notation)** as the annotation surface. Process diagrams are created in [Camunda Modeler 8](https://camunda.com/platform/modeler/) and enriched with normative metadata through a structured element template (Zeebe extension properties).
 
 ### Why BPMN?
 
 BPMN is already widely used in compliance and regulatory contexts to represent procedural obligations. Using it as the annotation medium means:
 - Legal experts work in a familiar visual environment with explicit control-flow semantics.
-- Gateway conditions (exclusive gateways) directly encode the conditional applicability of norms — no additional formalisation step is needed.
-- The process graph provides a machine-readable structure from which inference rules can be derived automatically.
+- Exclusive gateway conditions directly encode the conditional applicability of norms — no additional formalisation step is needed.
+- The process graph provides a machine-readable structure from which SWRL inference rules can be derived automatically.
+
+### Loading the Camunda Template
+
+Before annotating, import the element template into Camunda Modeler:
+
+1. Open Camunda Modeler 8.
+2. Go to **File → Templates → Open Templates Folder**.
+3. Copy `camunda-template/camunda8-compliance-template.json` into that folder.
+4. Restart Modeler. The **NORMA Norm Annotation** template will appear in the element properties panel when you select a task.
 
 ### Annotation Fields
 
-Each BPMN task (norm) can carry the following metadata:
+Each BPMN **task** represents one normative statement. Select a task and choose the NORMA template to fill in:
 
 | Field | Ontology mapping | Type |
 |---|---|---|
@@ -246,27 +258,48 @@ Each BPMN task (norm) can carry the following metadata:
 | `compliance_riskLevel` | `norma:hasComplianceCriticality` | Controlled vocab |
 | `compliance_extractionMethod` | `norma:hasExtractionMethod` | Controlled vocab |
 | `compliance_legalReview` | `norma:hasReviewStatus` | Controlled vocab |
-| `compliance_jurisdiction` | `eli:jurisdiction` → provisional `eli:AdministrativeArea` | String → IRI |
+| `compliance_jurisdiction` | `eli:jurisdiction` → `eli:AdministrativeArea` | String → IRI |
 | `compliance_annotator` | `norma:AnnotatorAgent` individual | String → IRI |
 | `compliance_annotationDate` | `norma:annotationDate` | ISO date |
 | `compliance_confidence` | `norma:confidenceScore` | Decimal [0, 1] |
 | `compliance_originalText` | `norma:originalText` (on source) | Free text |
 
-Gateway elements carry condition metadata (`gw_conditionStatement`) that the pipeline uses to construct `LegalCondition` and `TriggerEvent` individuals and the corresponding SWRL rule bodies.
+**Exclusive gateways** carry condition metadata (`gw_conditionStatement`) that the pipeline uses to construct `LegalCondition` and `TriggerEvent` individuals and to build SWRL rule bodies.
 
 ---
 
 ## Knowledge Graph Construction Pipeline
 
-The `norma_engine` package implements a four-stage pipeline:
+The `norma_engine` package implements a four-stage pipeline, invoked with a single command:
+
+```bash
+norma-build regulations/eu-ai-act/
+```
 
 ### Stage 1 — BPMN Parsing
 
-`norma_engine.parsing.bpmn_parser` reads one or more `.bpmn` files, extracts Zeebe extension properties from task and gateway elements, and constructs a reduced graph: a list of annotated nodes, directed edges, and a gateway outgoing-edge index.
+`norma_engine.parsing.bpmn_parser` reads all `.bpmn` files in the `bpmn/` subfolder, extracts Zeebe extension properties from task and gateway elements, and constructs a **reduced graph**: a list of annotated nodes, directed edges, and a gateway outgoing-edge index. The parser handles multiple files in a single pass and merges their element lists.
 
 ### Stage 2 — Entity Reconciliation
 
-`norma_engine.kg.normalizer` detects near-duplicate entity labels across BPMN files (e.g., `"AI provider"` vs `"AI Provider"`) using fuzzy string matching. Canonical labels are selected automatically or via an override file (`entities.json`), ensuring that a single ontological individual is not minted twice under different surface forms. This is critical for multi-file regulation packs where different process diagrams may refer to the same legal agent or action.
+`norma_engine.kg.normalizer` detects near-duplicate entity labels across BPMN files (e.g., `"AI provider"` vs `"AI providers"`) using fuzzy string matching (SequenceMatcher ratio, default threshold 0.82). Canonical labels are selected automatically by frequency and first-seen order, with a fallback to a `KNOWN_ALIASES` table for well-known regulatory terms. Uncertain merges are flagged as warnings so the operator can review them.
+
+An **override file** (`entities.json`, optional) lets you lock specific merges or confirm that two similar labels are intentionally distinct:
+
+```json
+{
+  "regulation": { "AI Act": "EU AI Act" },
+  "_confirmed_separate": [["comply with obligations", "comply with marking obligations"]]
+}
+```
+
+Generate a template to fill in:
+
+```bash
+norma-build regulations/eu-ai-act/ --template overrides.json
+# edit overrides.json, then:
+norma-build regulations/eu-ai-act/ --override overrides.json
+```
 
 ### Stage 3 — ABox Construction
 
@@ -274,38 +307,60 @@ The `norma_engine` package implements a four-stage pipeline:
 - Declares all named individuals with correct `rdf:type` assertions.
 - Asserts all data and object properties with domain/range compliance.
 - Instantiates the n-ary `LegalCondition → TriggerEvent → NormativeContent` pattern for each exclusive gateway and its outgoing branches.
-- Creates `AnnotationActivity` individuals linked to each norm, stamping `norma:annotationDate` (from the annotation metadata or the generation date) and `norma:wasAssociatedWithAnnotator` (from the annotator field or the default `NORMAAnnotator` individual).
-- Mints provisional `eli:AdministrativeArea` individuals for jurisdiction strings, ready for later alignment to authoritative URIs.
-
-The resulting ABox imports the TBox (`owl:imports <https://w3id.org/def/norma-o>`) and is self-contained.
+- Creates `AnnotationActivity` individuals linked to each norm, stamping `norma:annotationDate` and `norma:wasAssociatedWithAnnotator`.
+- Mints provisional `eli:AdministrativeArea` individuals for jurisdiction strings.
+- Imports the TBox (`owl:imports <https://w3id.org/def/norma-o>`), making the ABox self-contained for any OWL reasoner.
 
 ### Stage 4 — SWRL Rule Extraction
 
-`norma_engine.rules.extractor` enumerates paths through the BPMN graph from source to norm-bearing tasks. For each path, it collects gateway conditions (boolean constraints) and the norms they activate, constructing an intermediate representation (`RuleIR`) that encodes:
-- **Body:** one `DatavaluedPropertyAtom` per gateway condition (`conditionPredicate(?x, true/false)`)
-- **Head:** one `ClassAtom` asserting the deontic type of the activated norm
+`norma_engine.rules.extractor` enumerates all paths through the BPMN graph from start event to norm-bearing tasks using depth-first search. For each path, it collects gateway conditions and the norms they activate, constructing a `RuleIR` object:
 
-`norma_engine.exporters.swrl` serialises the IR to OWL/XML SWRL. The rule file imports the ABox so that individual declarations need not be repeated in the rule head. The head is intentionally compact: only `ClassAtom` assertions for the norm's modality are emitted; all other property triples are already in the ABox.
+- **Body:** one `DatavaluedPropertyAtom` per gateway condition on the path (`conditionPredicate(?x, true)` or `(?x, false)`)
+- **Head:** one `IndividualPropertyAtom` asserting `norma:activatesNorm` from the trigger event to the applicable norm individual
+
+`norma_engine.exporters.swrl` serialises the IR to OWL/XML SWRL. Unconditional norms (not guarded by any gateway) are fully declared in the ABox and are not emitted as rules — they always apply.
 
 ---
 
 ## SWRL Rule Generation
 
-SWRL rules take the following form. Given a BPMN with an exclusive gateway *G* and a downstream obligation *OBL*:
+SWRL rules encode conditional norm applicability in a standard, reasoner-executable format. Each rule follows this pattern:
 
-**Body:** `Is_the_system_high_risk(?x, true)`  
-**Head:** `Obligation(:OBL_comply_with_high_risk_requirements)`
+**Example rule (EU AI Act, biometric identification):**
 
-The condition predicate (`Is_the_system_high_risk`) is declared as a local `owl:DatatypeProperty` in the SWRL file. A SWRL-capable reasoner (e.g., Pellet, Drools with a SWRL bridge) can evaluate the rule against any ABox individual that carries the relevant property value and infer its deontic type.
+```xml
+<swrl:Imp>
+  <swrl:body>
+    <swrl:AtomList>
+      <swrl:DatavaluedPropertyAtom>
+        <swrl:propertyPredicate rdf:resource="…#Is_the_AI_system_used_for_biometric_purposes"/>
+        <swrl:argument1 rdf:resource="…#var_x"/>
+        <swrl:argument2 rdf:datatype="xsd:boolean">true</swrl:argument2>
+      </swrl:DatavaluedPropertyAtom>
+    </swrl:AtomList>
+  </swrl:body>
+  <swrl:head>
+    <swrl:AtomList>
+      <swrl:IndividualPropertyAtom>
+        <swrl:propertyPredicate rdf:resource="norma:activatesNorm"/>
+        <swrl:argument1 rdf:resource="…#TriggerEvent_…"/>
+        <swrl:argument2 rdf:resource="…#OBL_Respect_high_risk_obligations"/>
+      </swrl:IndividualPropertyAtom>
+    </swrl:AtomList>
+  </swrl:head>
+</swrl:Imp>
+```
 
-Human-readable equivalents are also generated:
+**Human-readable equivalent (also generated):**
 
 ```
 Is_the_AI_system_used_for_biometric_purposes(?x, true)
-  ⇒ Obligation(:OBL_Respect_high_risk_obligations)
+  ⇒ activatesNorm(TriggerEvent_…, OBL_Respect_high_risk_obligations)
 ```
 
-**Note on unconditional norms.** Norms that are not guarded by any gateway are fully asserted in the ABox and are not emitted as SWRL rules. Rules are generated only where conditionality exists.
+To evaluate which norms apply to a specific AI system, load the ABox + SWRL into a SWRL-capable reasoner (Pellet, HermiT with SWRL extension), create an individual representing the system, assert the relevant boolean properties, and run the reasoner. The inferred `norma:activatesNorm` triples identify the applicable norms.
+
+The web application's **Evaluate** panel does this directly in the browser: select a regulation pack, toggle yes/no for each condition, and the applicable norms are highlighted immediately.
 
 ---
 
@@ -313,7 +368,7 @@ Is_the_AI_system_used_for_biometric_purposes(?x, true)
 
 The web application exposes a SPARQL 1.1 endpoint backed by [Oxigraph](https://github.com/oxigraph/oxigraph). The ABox and TBox are loaded into the same dataset, enabling queries that combine instance-level and schema-level information.
 
-A library of curated preset queries is provided:
+A library of curated preset queries is provided in `web-app/backend/sparql_presets.py`:
 
 | Query | Description |
 |---|---|
@@ -326,21 +381,26 @@ A library of curated preset queries is provided:
 | Norms by regulation | All norms grouped by their source regulation |
 | Count by type | Summary count of each deontic modality |
 
+Each preset includes commented-out `FILTER` clauses ready to be activated for targeted queries. The SPARQL console in the web app lets you run presets or write free-form queries and download results as CSV.
+
 ---
 
 ## Web Application
 
 The web application provides a graphical interface for the full artifact stack. It is built with FastAPI (backend) and React + Vite + D3.js (frontend).
 
+**On startup, the EU AI Act knowledge graph is automatically loaded** — no configuration required. Open the app and the corpus is already there, fully queryable.
+
 ### Key Features
 
-- **Knowledge graph visualisation** — force-directed graph of all ABox individuals and their semantic relationships. Nodes are colour-coded by ontological type. Provenance nodes (`AnnotationActivity`, `AnnotatorAgent`) share a distinct visual identity. `TriggerEvent` reification nodes are collapsed into direct `LegalCondition --when true/false→ Norm` edges for readability.
+- **Knowledge graph visualisation** — force-directed graph of all ABox individuals and their semantic relationships. Nodes are colour-coded by ontological type (norms, agents, actions, objects, sources, conditions). `TriggerEvent` reification nodes are collapsed into direct `LegalCondition --when true/false→ Norm` edges for readability.
 - **Norm editor** — inline editing of norm metadata (binding force, status, risk level, review status, annotator, annotation date) with immediate ABox regeneration.
 - **SWRL viewer** — OWL/XML syntax and human-readable rule display side by side.
-- **SPARQL console** — free-form and preset queries against the Oxigraph store.
+- **Evaluate panel** — interactive condition checker: toggle yes/no for each gateway condition and see which norms activate in real time, without a reasoner.
+- **SPARQL console** — free-form and preset queries against the Oxigraph store; results downloadable as CSV.
 - **Entity reconciliation panel** — review and resolve near-duplicate entity labels, confirm intentional distinctions, and trigger pack rebuilds.
-- **Artifact download** — ABox (Turtle and RDF/XML), SWRL (OWL/XML), and Camunda element template.
-- **Multi-pack support** — official regulation packs (folder-backed, rebuilding from BPMN) and user-uploaded BPMN files coexist in the same session.
+- **Artifact download** — ABox (Turtle and RDF/XML), SWRL (OWL/XML), JSON intermediate, and Camunda element template.
+- **Multi-pack support** — official regulation packs (folder-backed, built from BPMN) and user-uploaded BPMN files coexist in the same session.
 
 ### REST API (selected endpoints)
 
@@ -353,25 +413,246 @@ The web application provides a graphical interface for the full artifact stack. 
 | `POST` | `/api/pack/{pack}/rebuild` | Rebuild pack from source BPMN |
 | `GET/POST` | `/api/sparql/{pack}` | SPARQL 1.1 query endpoint |
 | `GET` | `/api/pack/{pack}/conditions` | All gateway conditions with evaluatable predicates |
-| `POST` | `/api/pack/{pack}/evaluate` | Evaluate a condition set and return applicable norms |
-| `POST` | `/api/upload` | Upload a new BPMN file as a pack |
+| `POST` | `/api/pack/{pack}/evaluate` | Evaluate a condition set → applicable norms |
+| `POST` | `/api/upload` | Upload a new BPMN file as a user pack |
 
 ---
 
 ## Example — EU AI Act
 
-The repository includes an annotated BPMN model for a fragment of the **EU Artificial Intelligence Act** covering the biometric-system obligations (Articles 8–22 and 60–61). This serves as the primary end-to-end example.
+The repository includes annotated BPMN models for a fragment of the **EU Artificial Intelligence Act**, covering prohibited practices (Article 5), high-risk system obligations (Articles 8–22), conformity presumption (Article 42), transparency obligations (Article 50), real-world testing (Articles 60–61), and voluntary codes of conduct (Article 95). This serves as the primary end-to-end example.
 
-From this single BPMN file, the pipeline produces:
+**Six BPMN process models** are provided in `regulations/eu-ai-act/bpmn/`:
 
-- **2 norms**: `OBL_Respect_high_risk_obligations`, `OBL_ADD_testing_obligations`
-- **2 gateway conditions**: biometric-purpose check, real-world testing check
-- **3 SWRL rules**: one per conditional norm-activation path
-- **1 legal source**: `Regulation_EU_AI_Act` (with article references)
-- **3 legal individuals**: `Agent_AI_provider`, `Action_comply`, `Object_AI_system`
-- **Full provenance triangle**: `AnnotationActivity` → `NORMAAnnotator` → `LegalSource`
+| File | Regulatory scope |
+|---|---|
+| `diagram GPAI.bpmn` | General-purpose AI model obligations |
+| `diagram biometrics .bpmn` | Biometric identification system obligations |
+| `diagram criminal purpose.bpmn` | Criminal-purpose profiling norms |
+| `diagram cybersecurity exemption.bpmn` | Cybersecurity certification exemptions |
+| `diagram generating content.bpmn` | AI-generated content transparency |
+| `diagram real time biometrics.bpmn` | Real-time remote biometric identification |
 
-The ABox is a valid OWL 2 DL ontology that can be loaded directly into Protégé or any OWL reasoner.
+After entity normalisation across diagrams, the pipeline produces:
+
+- **9 unique norms**: 5 obligations, 2 prohibitions, 1 recommendation, 1 negative recommendation
+- **15 gateway conditions** across all diagrams, encoding conditional norm applicability
+- **13 trigger events** linking conditions to applicable norms
+- **16 SWRL rules** derived from conditional paths through the BPMN graphs
+- **1 legal source**: `Regulation_EU_AI_Act` with article-level references per norm
+- **8 legal actions**, **1 legal agent** (`Agent_AI_provider`), **1 legal object** (`Object_AI_system`)
+- **Full provenance** per norm: 9 `AnnotationActivity` individuals → `NORMAAnnotator` → `LegalSource`
+
+The generated ABox (`regulations/eu-ai-act/eu-ai-act.abox.ttl`) is a valid OWL 2 DL ontology importable directly into Protégé or any OWL reasoner.
+
+---
+
+## Quick Start
+
+### Option A — Docker (zero configuration)
+
+Requires [Docker](https://docs.docker.com/get-docker/) and Docker Compose.
+
+```bash
+git clone https://github.com/anaigmo/norma-semantic-toolkit.git
+cd norma-semantic-toolkit
+docker compose up
+```
+
+Open [http://localhost:5173](http://localhost:5173). The EU AI Act knowledge graph is pre-loaded automatically.
+
+To stop: `docker compose down`.
+
+### Option B — Local install
+
+Requires Python ≥ 3.10 and Node.js ≥ 20.
+
+**1. Install the core engine**
+
+```bash
+git clone https://github.com/anaigmo/norma-semantic-toolkit.git
+cd norma-semantic-toolkit
+pip install -e .
+```
+
+This installs the `norma-engine` package and registers two CLI commands: `norma-build` and `norma-rules`.
+
+**2. Build the EU AI Act knowledge graph**
+
+```bash
+norma-build regulations/eu-ai-act/
+```
+
+This runs all four pipeline stages and writes three files into `regulations/eu-ai-act/`:
+- `eu-ai-act.abox.ttl` — OWL ABox (all named individuals and triples)
+- `eu-ai-act.swrl.owl` — SWRL rules (conditional norm activation)
+- `eu-ai-act.json` — JSON intermediate (for inspection)
+
+**3. (Optional) Extract SWRL rules for a single BPMN file**
+
+```bash
+norma-rules "regulations/eu-ai-act/bpmn/diagram GPAI.bpmn"
+```
+
+Output is written alongside the input file as `diagram GPAI.swrl.owl`.
+
+**4. Run the web application**
+
+```bash
+# Backend (terminal 1)
+pip install -r web-app/backend/requirements.txt
+cd web-app && uvicorn backend.main:app --host 0.0.0.0 --port 8000
+
+# Frontend (terminal 2)
+cd web-app/frontend && npm install && npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173). The `eu-ai-act` pack is pre-loaded.
+
+### Option C — Reproduce the paper results
+
+```bash
+pip install -e .
+bash reproduce.sh
+```
+
+`reproduce.sh` does four things:
+1. Regenerates the EU AI Act ABox and SWRL from the source BPMN corpus.
+2. Runs the engine test suite (73 tests).
+3. Builds the knowledge graph twice in isolated environments.
+4. Asserts SHA-256 identity of all output files (determinism check).
+
+Expected output ends with:
+
+```
+  [OK]   eu-ai-act.abox.ttl  sha256=36a224af398155391f69e8588164f3971f5db743ef53b92bcf1c6fad2fa87240
+  [OK]   eu-ai-act.swrl.owl  sha256=22705dbf4e452c1781ae235a7736ef1d52ccdce473ff9c3ffdb0c2ba735104ee
+  [OK]   entities.json  sha256=f4c9894c371d1584f263beef45689b67e06ceebc1b76d8469ec009f13c3d46f3
+
+  Reproducibility: PASSED — pipeline is deterministic.
+```
+
+---
+
+## Step-by-Step Tutorial: From a blank BPMN to a knowledge graph
+
+This walkthrough takes you from an empty Camunda diagram to a generated ABox and SWRL file in under 10 minutes. You will annotate a simple norm — *"AI providers must comply with transparency obligations"* — conditional on the system generating synthetic content.
+
+### Prerequisites
+
+- Camunda Modeler 8 installed ([download](https://camunda.com/platform/modeler/))
+- NORMA engine installed: `pip install -e .`
+- NORMA element template loaded (see [Loading the Camunda Template](#loading-the-camunda-template))
+
+### Step 1 — Create the BPMN diagram
+
+1. Open Camunda Modeler and create a new **BPMN diagram**.
+2. Add a **Start Event**, an **Exclusive Gateway**, and two outgoing branches.
+3. Label the gateway `gw_conditionStatement = "Is the AI system used to generate synthetic content?"`.
+4. On the **true** branch, add a **Task** (this will be your norm). Label it: `Comply with transparency obligations`.
+5. On the **false** branch, add an **End Event** (no norm applies).
+6. Connect the task to an **End Event** on the true branch as well.
+
+Your diagram should look like:
+
+```
+[Start] → [Gateway: generates synthetic content?]
+               ├── yes → [Task: Comply with transparency obligations] → [End]
+               └── no  → [End]
+```
+
+### Step 2 — Annotate the task
+
+1. Select the task `Comply with transparency obligations`.
+2. In the properties panel, click **+ Template** and choose **NORMA Norm Annotation**.
+3. Fill in the fields:
+
+| Field | Value |
+|---|---|
+| Deontic type | `Obligation` |
+| Norm ID | `OBL_transparency_synthetic_content` (or leave blank to auto-generate) |
+| Norm statement | `AI providers must label AI-generated synthetic content as such.` |
+| Agent | `AI provider` |
+| Action | `label synthetic content` |
+| Object | `AI system` |
+| Regulation | `EU AI Act` |
+| Article | `50` |
+| Binding force | `HardLaw` |
+| Compliance criticality | `High` |
+| Extraction method | `ManualLawyer` |
+| Review status | `PendingReview` |
+
+4. Select the **gateway** and set `gw_conditionStatement` to: `Is it used to generate synthetic content?`
+
+### Step 3 — Save the BPMN file
+
+Save the file as `regulations/my-regulation/bpmn/diagram transparency.bpmn` (create the folder if needed).
+
+### Step 4 — Run the pipeline
+
+```bash
+norma-build regulations/my-regulation/
+```
+
+The pipeline prints:
+```
+── KG Build: my-regulation ──────────────────────────────────────────
+   BPMN source: regulations/my-regulation/bpmn
+    diagram transparency.bpmn: 1 elements
+   Total: 1 elements from 1 file(s)
+
+[✓] JSON:  regulations/my-regulation/my-regulation.json
+[✓] ABox:  regulations/my-regulation/my-regulation.abox.ttl
+
+── Rule Extraction: my-regulation ─────────────────────────────────
+   diagram transparency.bpmn: 1 rule(s)
+[✓] SWRL:  regulations/my-regulation/my-regulation.swrl.owl
+```
+
+### Step 5 — Inspect the ABox
+
+Open `regulations/my-regulation/my-regulation.abox.ttl` in a text editor or Protégé. You will find:
+
+```turtle
+:OBL_transparency_synthetic_content
+    a owl:NamedIndividual, norma:Obligation ;
+    norma:normStatement "AI providers must label AI-generated synthetic content as such." ;
+    norma:hasLegalAgent :Agent_AI_provider ;
+    norma:hasLegalAction :Action_label_synthetic_content ;
+    norma:hasLegalObject :Object_AI_system ;
+    norma:hasLegalSource :Regulation_EU_AI_Act ;
+    norma:fromArticle "50" ;
+    norma:hasBindingForce norma:HardLaw ;
+    norma:hasComplianceCriticality norma:High ;
+    norma:wasGeneratedBy :Ann_OBL_transparency_synthetic_content .
+```
+
+### Step 6 — Inspect the SWRL rule
+
+Open `regulations/my-regulation/my-regulation.swrl.owl`. You will find one rule:
+
+```
+Is_it_used_to_generate_synthetic_content(?x, true)
+  ⇒ activatesNorm(TriggerEvent_…, OBL_transparency_synthetic_content)
+```
+
+### Step 7 — View in the web application
+
+Start the web application (Option B, step 4 above) and upload your BPMN file via the **Upload** button. The norm, graph, SWRL rule, and SPARQL interface are immediately available.
+
+---
+
+## Reproducibility
+
+The pipeline is a deterministic, stateless transformation. Given the same BPMN input, every run produces byte-for-byte identical outputs. This is enforced by `reproduce.sh`, which builds the EU AI Act knowledge graph twice in isolated environments and asserts SHA-256 identity:
+
+| Artifact | SHA-256 |
+|---|---|
+| `eu-ai-act.abox.ttl` | `36a224af398155391f69e8588164f3971f5db743ef53b92bcf1c6fad2fa87240` |
+| `eu-ai-act.swrl.owl` | `22705dbf4e452c1781ae235a7736ef1d52ccdce473ff9c3ffdb0c2ba735104ee` |
+| `eu-ai-act.json` | `f4c9894c371d1584f263beef45689b67e06ceebc1b76d8469ec009f13c3d46f3` |
+
+The full EU AI Act annotation corpus (6 BPMN diagrams) is committed in `regulations/eu-ai-act/bpmn/`. Every result reported in the accompanying paper can be regenerated and verified by running `bash reproduce.sh`.
 
 ---
 
@@ -385,8 +666,8 @@ The ABox is a valid OWL 2 DL ontology that can be loaded directly into Protégé
 | **BPMN 2.0** | Annotation surface; processed via standard XML parsing |
 | **ELI** | Legal source typing and jurisdiction; aligns with European linked-data legal infrastructure |
 | **PROV-O** | Annotation provenance; sub-properties of `prov:wasGeneratedBy`, `prov:wasAssociatedWith`, `prov:wasAttributedTo` |
-| **FOAF** | Agent-level interoperability; imported at TBox level; `foaf:Person`, `foaf:Organization`, `foaf:Group` available for instance-level typing |
-| **LKIF-Core** | Informative cross-vocabulary alignment via `skos:closeMatch` and `rdfs:seeAlso`; no formal import |
+| **FOAF** | Agent-level interoperability; imported at TBox level |
+| **LKIF-Core** | Informative cross-vocabulary alignment via `rdfs:seeAlso`; no formal import |
 | **SKOS** | Extensible controlled vocabularies; each dimension is an open `ConceptScheme` |
 | **Camunda 8 / Zeebe** | Annotation tooling; element template distributable via Camunda marketplace |
 
@@ -394,83 +675,41 @@ The ABox is a valid OWL 2 DL ontology that can be loaded directly into Protégé
 
 ## Constraints and Limitations
 
-Transparency about the scope and limitations of this resource is important for reuse:
+**Single regulation granularity.** The pipeline operates on a folder of BPMN files representing a single regulation or regulatory domain. Cross-regulation norm interaction and derogation are not modelled; multi-regulation inference would require additional axioms.
 
-**Single regulation granularity.** The pipeline is designed to operate on a folder of BPMN files representing a single regulation or regulatory domain. Cross-regulation norm interaction and derogation are not modelled; multi-regulation inference would require additional axioms.
+**Jurisdiction URIs.** When a jurisdiction string is provided in the annotation template but no authoritative URI is available, the pipeline mints a provisional local individual (`rdfs:label`-only). These provisional resources must be aligned to authoritative URIs (EU Vocabularies, Wikidata) as a post-processing step.
 
-**Jurisdiction URIs.** The ontology correctly uses `eli:jurisdiction` with `eli:AdministrativeArea` individuals. When a jurisdiction string is provided in the annotation template but no authoritative URI is available, the pipeline mints a provisional local individual (`rdfs:label`-only). These provisional resources must be aligned to authoritative URIs (EU Vocabularies, Wikidata) as a post-processing step.
+**SWRL reasoning scope.** SWRL rules are generated only for conditionally applicable norms. Unconditional norms are fully declared in the ABox. Reasoner compatibility is verified with Pellet; other SWRL-capable reasoners may require adaptation of the OWL/XML serialisation.
 
-**SWRL reasoning scope.** SWRL rules are generated for conditionally applicable norms only. Unconditional norms are fully declared in the ABox and do not need rules. Reasoner compatibility is tested with Pellet; other SWRL-capable reasoners may require adaptation of the OWL/XML serialisation.
+**SWRL expressivity.** Rule bodies currently encode boolean condition values (true/false gateway branches). Numeric comparisons, date ranges, and other complex condition types are not yet supported.
 
-**SWRL expressivity.** The rule bodies currently encode boolean condition values (true/false gateway branches). Numeric comparisons, date ranges, and other complex condition types found in real regulations are not yet supported.
-
-**Annotation coverage.** The EU AI Act example covers one process fragment (biometric AI systems). Full regulatory coverage would require annotation of the complete Act, which is an ongoing effort outside the scope of this resource.
+**Annotation coverage.** The EU AI Act example covers six process fragments. Full regulatory coverage would require annotation of the complete Act, which is ongoing work outside the scope of this resource.
 
 **No automated extraction.** NORMA is a structured annotation framework, not an NLP-based extraction system. Legal experts annotate BPMN diagrams manually. This ensures precision and controlled vocabulary compliance but requires domain expertise.
 
-**Reasoner not bundled.** The SWRL rules and ABox are fully standard and can be loaded into any OWL 2 reasoner, but no reasoner is bundled with the web application. The SPARQL interface operates over asserted triples only; inferred triples (e.g., from SWRL execution or OWL property chains) require an external reasoner.
-
----
-
-## Quick Start
-
-### 1. Install the core engine
-
-```bash
-git clone https://github.com/sheyls/norma-semantic-toolkit.git
-cd norma-semantic-toolkit
-pip install -e .[dev]
-```
-
-### 2. Build the EU AI Act knowledge graph
-
-```bash
-norma-build regulations/eu-ai-act/bpmn/ \
-  --base https://w3id.org/norma-abox/eu-ai-act \
-  --ttl eu-ai-act.abox.ttl
-```
-
-### 3. Extract SWRL rules
-
-```bash
-norma-rules regulations/eu-ai-act/bpmn/ \
-  --abox-iri https://w3id.org/norma-abox/eu-ai-act \
-  --rules-iri https://w3id.org/norma-abox/eu-ai-act/rules \
-  --out eu-ai-act.swrl.owl
-```
-
-### 4. Run the web application
-
-```bash
-# Backend
-pip install -r web-app/backend/requirements.txt
-cd web-app && uvicorn backend.main:app --host 0.0.0.0 --port 8000
-
-# Frontend (separate terminal)
-cd web-app/frontend && npm install && npm run dev
-```
-
-Open `http://localhost:5173` and select the `eu-ai-act` pack.
+**Reasoner not bundled.** The SWRL rules and ABox are standard and load into any OWL 2 reasoner, but no reasoner is bundled with the web application. The SPARQL interface and Evaluate panel operate over asserted triples only; SWRL-inferred triples require an external reasoner.
 
 ---
 
 ## Requirements
 
-| Component | Version |
-|---|---|
-| Python | 3.10+ |
-| Node.js | 20+ (frontend only) |
-| Camunda Modeler | 8.x (annotation only) |
+| Component | Version | Purpose |
+|---|---|---|
+| Python | 3.10+ | Core engine and web backend |
+| Node.js | 20+ | Frontend (development and Docker build) |
+| Camunda Modeler | 8.x | Annotation (optional — only for creating new diagrams) |
 
-Python dependencies (core engine): `lxml`, `rdflib`, `rapidfuzz`  
-Python dependencies (web backend): `fastapi`, `uvicorn`, `pyoxigraph`  
-Frontend: `react`, `vite`, `d3`
+**Core engine** (`norma_engine`): no third-party runtime dependencies — stdlib only (`xml.etree`, `difflib`, `re`, `json`, `pathlib`).
+
+**Web backend** (`web-app/backend/requirements.txt`): `fastapi`, `uvicorn`, `python-multipart`, `pyoxigraph`, `pydantic`, `jinja2`.
+
+**Frontend** (`web-app/frontend/package.json`): `react`, `vite`, `d3`.
 
 ---
 
 ## Testing
 
-The test suite covers parsing, rule extraction, ABox construction, entity normalisation, and SWRL export. All 64 tests pass against the current codebase.
+The test suite covers parsing, rule extraction, ABox construction, entity normalisation, SWRL export, and end-to-end SWRL evaluation. All 73 tests pass against the current codebase.
 
 ```bash
 pip install -e .[dev]
@@ -479,11 +718,22 @@ pytest
 
 | Module | Tests | Coverage |
 |---|---|---|
-| `test_parsing.py` | 14 | BPMN parsing and graph construction |
-| `test_rules.py` | 21 | Path enumeration, IR construction, condition handling |
-| `test_kg.py` | 11 | ABox Turtle output, individual minting, provenance |
-| `test_normalizer.py` | 7 | Fuzzy matching, override resolution |
-| `test_exporters.py` | 11 | SWRL OWL/XML serialisation, head compactness |
+| `test_parsing.py` | 14 | BPMN parsing, reduced graph construction, gateway indexing |
+| `test_rules.py` | 21 | Path enumeration (DFS), RuleIR construction, condition handling |
+| `test_kg.py` | 11 | ABox Turtle output, individual minting, provenance, deduplication |
+| `test_normalizer.py` | 9 | Fuzzy matching, alias resolution, override application, warning generation |
+| `test_exporters.py` | 11 | SWRL OWL/XML serialisation, head compactness, unconditional exclusion |
+| `test_swrl_case_runner.py` | 7 | End-to-end SWRL evaluation against 5 EU AI Act scenarios |
+
+End-to-end SWRL test cases are defined in `tests/eu_ai_act_cases.json`. Each case provides a set of boolean condition values and asserts which norms should be activated:
+
+| Case | Conditions | Expected norm |
+|---|---|---|
+| `high_risk_biometric_not_tested` | biometric=true, tested=false | `OBL_Respect_high_risk_obligations` |
+| `high_risk_biometric_tested` | biometric=true, tested=true | `OBL_ADD_testing_obligations` + high-risk |
+| `biometric_law_enforcement_with_safeguards` | 6 conditions incl. safeguards=true | `OBL_Respect_prescribed_obligations` |
+| `biometric_law_enforcement_without_safeguards` | same minus safeguards | `PRH_Ban_the_system` |
+| `certified_cybersecurity_case` | cybersecurity_certified=true | `REC_NOT_Cybersecurity_Exemption` |
 
 ---
 
@@ -491,11 +741,11 @@ pytest
 
 Contributions are welcome from two communities:
 
-**Legal experts and annotators**: if you work with regulatory documents, you can contribute by annotating new BPMN process models for regulations not yet covered, reviewing or correcting existing annotations in `regulations/`, improving the controlled vocabulary definitions, or providing feedback on whether the ontology correctly captures legal distinctions in your domain.
+**Legal experts and annotators**: contribute by annotating new BPMN process models for regulations not yet covered, reviewing or correcting existing annotations in `regulations/`, improving controlled vocabulary definitions, or providing feedback on whether the ontology correctly captures legal distinctions in your domain.
 
-**Ontology engineers and researchers**: you can contribute by extending the TBox with new classes or properties, improving alignments with external vocabularies (ELI, PROV-O, SKOS), proposing new SPARQL query presets, filing issues for modelling inconsistencies, or adapting the pipeline for new annotation tools beyond Camunda.
+**Ontology engineers and researchers**: contribute by extending the TBox with new classes or properties, improving alignments with external vocabularies (ELI, PROV-O, SKOS), proposing new SPARQL query presets, filing issues for modelling inconsistencies, or adapting the pipeline for new annotation tools beyond Camunda.
 
-Please open an issue or pull request at [github.com/sheyls/norma-semantic-toolkit](https://github.com/sheyls/norma-semantic-toolkit) to get started.
+Please open an issue or pull request at [github.com/anaigmo/norma-semantic-toolkit](https://github.com/anaigmo/norma-semantic-toolkit) to get started.
 
 ---
 
@@ -508,8 +758,8 @@ If you use the **NORMA Semantic Toolkit** (pipeline, web application, or annotat
   title        = {{NORMA} Semantic Toolkit},
   author       = {Leyva-S{\'a}nchez, Sheyla},
   year         = {2026},
-  url          = {https://github.com/sheyls/norma-semantic-toolkit},
-  note         = {OWL 2 ontology, BPMN annotation methodology, knowledge graph construction pipeline, and SWRL rule generator for legal norm formalisation. CC BY 4.0.}
+  url          = {https://github.com/anaigmo/norma-semantic-toolkit},
+  note         = {Software components released under Apache-2.0; ontology and research artifacts released under CC BY 4.0.}
 }
 ```
 
@@ -530,8 +780,9 @@ If you use the **NORMA-O ontology** specifically, please also cite:
 
 ## License
 
-The ontology, annotation template, pipeline source code, and example artifacts are released under the **Creative Commons Attribution 4.0 International License (CC BY 4.0)**.
+This repository uses split licensing by artifact type.
 
-You are free to share and adapt this material for any purpose, including commercially, provided appropriate credit is given to the original authors and the DOI is cited.
+- Source code in `norma_engine/`, `web-app/`, `tests/`, and deployment/build files is released under the **Apache License 2.0**. See [LICENSE](LICENSE).
+- The ontology, ontology documentation, annotation template, BPMN examples, diagrams, and other research artifacts are released under the **Creative Commons Attribution 4.0 International License (CC BY 4.0)**. See [LICENSE-CC-BY](LICENSE-CC-BY).
 
-See [LICENSE](LICENSE) for the full text.
+This keeps the software under a standard open-source software license while preserving an attribution-oriented license for the ontology and scholarly content.

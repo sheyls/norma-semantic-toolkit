@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1t2iyiy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <bpmn:process id="Process_0rlw4ph" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Check the identification system">
+      <bpmn:outgoing>Flow_0p6ujjw</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0p6ujjw" sourceRef="StartEvent_1" targetRef="Gateway_0xwlzaj" />
+    <bpmn:exclusiveGateway id="Gateway_0xwlzaj" name="Is the system a real-time biometric identification system used for law purposes?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Is the system a real-time biometric identification system used for law purposes?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0p6ujjw</bpmn:incoming>
+      <bpmn:outgoing>Flow_0razsvf</bpmn:outgoing>
+      <bpmn:outgoing>Flow_00kmoam</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_086rz81">
+      <bpmn:incoming>Flow_1ddnwa9</bpmn:incoming>
+      <bpmn:incoming>Flow_1vatdtn</bpmn:incoming>
+      <bpmn:incoming>Flow_0sxzsr1</bpmn:incoming>
+      <bpmn:incoming>Flow_1w3rdpm</bpmn:incoming>
+      <bpmn:incoming>Flow_0razsvf</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0razsvf" name="No" sourceRef="Gateway_0xwlzaj" targetRef="Event_086rz81">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:task id="Activity_136kc4k" name="Respect real-time biometric identification ban" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="task" />
+          <zeebe:property name="compliance_deonticType" value="prohibition" />
+          <zeebe:property name="compliance_normStatement" value="The use of real-time remote biometric identification systems in publicly accessible spaces for the purposes of law enforcement shall be prohibited." />
+          <zeebe:property name="compliance_agent" value="AI provider" />
+          <zeebe:property name="compliance_action" value="use real-time remote biometric identification systems" />
+          <zeebe:property name="compliance_object" value="AI system" />
+          <zeebe:property name="compliance_bindingForce" value="hard_law" />
+          <zeebe:property name="compliance_triggerCondition" value="" />
+          <zeebe:property name="compliance_jurisdiction" value="" />
+          <zeebe:property name="compliance_effectiveDate" value="" />
+          <zeebe:property name="compliance_deadline" value="" />
+          <zeebe:property name="compliance_status" value="active" />
+          <zeebe:property name="compliance_exception" value="" />
+          <zeebe:property name="compliance_sanction" value="" />
+          <zeebe:property name="compliance_riskLevel" value="high" />
+          <zeebe:property name="compliance_regulation" value="AI Act" />
+          <zeebe:property name="compliance_article" value="5" />
+          <zeebe:property name="compliance_paragraph" value="1 (h)" />
+          <zeebe:property name="compliance_originalText" value="The following AI practices shall be prohibited:&#10;the use of ‘real-time’ remote biometric identification systems in publicly accessible spaces for the purposes of law enforcement, unless and in so far as such use is strictly necessary for one of the following objectives:&#10;&#10;(i)&#10;&#10;the targeted search for specific victims of abduction, trafficking in human beings or sexual exploitation of human beings, as well as the search for missing persons;&#10;&#10;(ii)&#10;&#10;the prevention of a specific, substantial and imminent threat to the life or physical safety of natural persons or a genuine and present or genuine and foreseeable threat of a terrorist attack;&#10;&#10;(iii)&#10;&#10;the localisation or identification of a person suspected of having committed a criminal offence, for the purpose of conducting a criminal investigation or prosecution or executing a criminal penalty for offences referred to in Annex II and punishable in the Member State concerned by a custodial sentence or a detention order for a maximum period of at least four years." />
+          <zeebe:property name="compliance_regulationURI" value="" />
+          <zeebe:property name="compliance_extractionMethod" value="manual_lawyer" />
+          <zeebe:property name="compliance_confidence" value="1.0" />
+          <zeebe:property name="compliance_legalReview" value="pending" />
+          <zeebe:property name="compliance_annotator" value="" />
+          <zeebe:property name="compliance_annotationDate" value="" />
+          <zeebe:property name="compliance_lastReviewDate" value="" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0yuhowh</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ddnwa9</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_00kmoam" name="Yes" sourceRef="Gateway_0xwlzaj" targetRef="Gateway_1y4jw50">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1ddnwa9" sourceRef="Activity_136kc4k" targetRef="Event_086rz81" />
+    <bpmn:exclusiveGateway id="Gateway_1y4jw50" name="Is the system used in public spaces?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Is the system used in public spaces?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_00kmoam</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tj0g3y</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1w3rdpm</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1tj0g3y" name="Yes" sourceRef="Gateway_1y4jw50" targetRef="Gateway_06knqjz">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_06knqjz" name="Is it used for searching missing persons?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Is it used for searching missing persons?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1tj0g3y</bpmn:incoming>
+      <bpmn:outgoing>Flow_1uv5ope</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0kkcj6v</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1uv5ope" name="No" sourceRef="Gateway_06knqjz" targetRef="Gateway_1bmkdet">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1bmkdet" name="Is it used for searching missing persons?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Is it used for searching missing persons?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1uv5ope</bpmn:incoming>
+      <bpmn:incoming>Flow_0t35q19</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wrtgjm</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1ti85h5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1w3rdpm" name="No" sourceRef="Gateway_1y4jw50" targetRef="Event_086rz81">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0kkcj6v" name="Yes" sourceRef="Gateway_06knqjz" targetRef="Gateway_1nf21s2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_043ke54" name="Is it used to prevene  imminent life  threats or terrorist attacks?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Is it used to prevene  imminent life  threats or terrorist attacks?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1wrtgjm</bpmn:incoming>
+      <bpmn:incoming>Flow_1xkde50</bpmn:incoming>
+      <bpmn:outgoing>Flow_1d7l300</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1r5kwtu</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1wrtgjm" name="No" sourceRef="Gateway_1bmkdet" targetRef="Gateway_043ke54">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1jx1kas" name="Is it used to prevene  imminent life  threats or terrorist attacks?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Is it used to prevene  imminent life  threats or terrorist attacks?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1d7l300</bpmn:incoming>
+      <bpmn:incoming>Flow_0yicysh</bpmn:incoming>
+      <bpmn:outgoing>Flow_07rbdkk</bpmn:outgoing>
+      <bpmn:outgoing>Flow_16x9yg6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1d7l300" name="No" sourceRef="Gateway_043ke54" targetRef="Gateway_1jx1kas">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_07rbdkk" name="No" sourceRef="Gateway_1jx1kas" targetRef="Gateway_15ckfwa">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_15ckfwa" name="Is it used for localisation or identification of a person suspected of having committed a criminal offence?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Is it used for localisation or identification of a person suspected of having committed a criminal offence?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07rbdkk</bpmn:incoming>
+      <bpmn:incoming>Flow_1tm16d2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0sxzsr1</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1ri5j27</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0sxzsr1" name="No" sourceRef="Gateway_15ckfwa" targetRef="Event_086rz81">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1r5kwtu" name="Yes" sourceRef="Gateway_043ke54" targetRef="Gateway_1wg8vjh">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_16x9yg6" name="Yes" sourceRef="Gateway_1jx1kas" targetRef="Gateway_0ecd5ui">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1ri5j27" name="Yes" sourceRef="Gateway_15ckfwa" targetRef="Gateway_0vpo6zz">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1nf21s2" name="Have safeguards on nature of the system and consequence of its use been taken into consideration?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Have safeguards on nature of the system and consequence of its use been taken into consideration?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0kkcj6v</bpmn:incoming>
+      <bpmn:outgoing>Flow_19s5eaw</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0t35q19</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_19s5eaw" name="Yes" sourceRef="Gateway_1nf21s2" targetRef="Activity_0o68pdp">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1wg8vjh" name="Have safeguards on nature of the system and consequence of its use been taken into consideration?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Have safeguards on nature of the system and consequence of its use been taken into consideration?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1r5kwtu</bpmn:incoming>
+      <bpmn:outgoing>Flow_11s5t0t</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0yicysh</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0ecd5ui" name="Have safeguards on nature of the system and consequence of its use been taken into consideration?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Have safeguards on nature of the system and consequence of its use been taken into consideration?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16x9yg6</bpmn:incoming>
+      <bpmn:outgoing>Flow_12cez8d</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1tm16d2</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0vpo6zz" name="Have safeguards on nature of the system and consequence of its use been taken into consideration?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Have safeguards on nature of the system and consequence of its use been taken into consideration?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ri5j27</bpmn:incoming>
+      <bpmn:outgoing>Flow_0cgatxi</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0yuhowh</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0v99b8k" name="Have safeguards on nature of the system and consequence of its use been taken into consideration?" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="exclusiveGateway" />
+          <zeebe:property name="gw_conditionStatement" value="Have safeguards on nature of the system and consequence of its use been taken into consideration?" />
+          <zeebe:property name="gw_trueBranch" value="Yes" />
+          <zeebe:property name="gw_falseBranch" value="No" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ti85h5</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xkde50</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1y1c1fo</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0t35q19" name="No" sourceRef="Gateway_1nf21s2" targetRef="Gateway_1bmkdet">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0cgatxi" name="Yes" sourceRef="Gateway_0vpo6zz" targetRef="Activity_0o68pdp">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_12cez8d" name="Yes" sourceRef="Gateway_0ecd5ui" targetRef="Activity_0o68pdp">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1ti85h5" name="Yes" sourceRef="Gateway_1bmkdet" targetRef="Gateway_0v99b8k">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_11s5t0t" name="Yes" sourceRef="Gateway_1wg8vjh" targetRef="Activity_0o68pdp">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1xkde50" name="No" sourceRef="Gateway_0v99b8k" targetRef="Gateway_043ke54">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1y1c1fo" name="Yes" sourceRef="Gateway_0v99b8k" targetRef="Activity_0o68pdp">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0yicysh" name="No" sourceRef="Gateway_1wg8vjh" targetRef="Gateway_1jx1kas">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1tm16d2" name="No" sourceRef="Gateway_0ecd5ui" targetRef="Gateway_15ckfwa">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0yuhowh" name="No" sourceRef="Gateway_0vpo6zz" targetRef="Activity_136kc4k">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=none</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:task id="Activity_0o68pdp" name="Respect prescribed obligations" zeebe:modelerTemplate="norma.compliance.annotation.v1" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="compliance_elementType" value="task" />
+          <zeebe:property name="compliance_deonticType" value="obligation" />
+          <zeebe:property name="compliance_normStatement" value="Respect the fundamental right impact assessment and the registration obligation" />
+          <zeebe:property name="compliance_agent" value="AI provider" />
+          <zeebe:property name="compliance_action" value="comply with obligations" />
+          <zeebe:property name="compliance_object" value="AI systems" />
+          <zeebe:property name="compliance_bindingForce" value="hard_law" />
+          <zeebe:property name="compliance_triggerCondition" value="" />
+          <zeebe:property name="compliance_jurisdiction" value="" />
+          <zeebe:property name="compliance_effectiveDate" value="" />
+          <zeebe:property name="compliance_deadline" value="" />
+          <zeebe:property name="compliance_status" value="active" />
+          <zeebe:property name="compliance_exception" value="" />
+          <zeebe:property name="compliance_sanction" value="" />
+          <zeebe:property name="compliance_riskLevel" value="high" />
+          <zeebe:property name="compliance_regulation" value="AI Act" />
+          <zeebe:property name="compliance_article" value="5(2), 27, 49" />
+          <zeebe:property name="compliance_paragraph" value="" />
+          <zeebe:property name="compliance_originalText" value="" />
+          <zeebe:property name="compliance_regulationURI" value="" />
+          <zeebe:property name="compliance_extractionMethod" value="manual_lawyer" />
+          <zeebe:property name="compliance_confidence" value="1.0" />
+          <zeebe:property name="compliance_legalReview" value="pending" />
+          <zeebe:property name="compliance_annotator" value="" />
+          <zeebe:property name="compliance_annotationDate" value="" />
+          <zeebe:property name="compliance_lastReviewDate" value="" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1y1c1fo</bpmn:incoming>
+      <bpmn:incoming>Flow_11s5t0t</bpmn:incoming>
+      <bpmn:incoming>Flow_12cez8d</bpmn:incoming>
+      <bpmn:incoming>Flow_0cgatxi</bpmn:incoming>
+      <bpmn:incoming>Flow_19s5eaw</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vatdtn</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_1vatdtn" sourceRef="Activity_0o68pdp" targetRef="Event_086rz81" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0rlw4ph">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="182" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="170" y="205" width="62" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0xwlzaj_di" bpmnElement="Gateway_0xwlzaj" isMarkerVisible="true">
+        <dc:Bounds x="295" y="155" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="281" y="70" width="78" height="80" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_086rz81_di" bpmnElement="Event_086rz81">
+        <dc:Bounds x="554" y="1306" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="386" y="415" width="90" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_136kc4k_di" bpmnElement="Activity_136kc4k">
+        <dc:Bounds x="390" y="1194" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1y4jw50_di" bpmnElement="Gateway_1y4jw50" isMarkerVisible="true">
+        <dc:Bounds x="295" y="242" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="207" y="257" width="68" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1o0aers" bpmnElement="Gateway_06knqjz" isMarkerVisible="true">
+        <dc:Bounds x="295" y="409" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="196" y="414" width="89" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1wsuzr8" bpmnElement="Gateway_1bmkdet" isMarkerVisible="true">
+        <dc:Bounds x="295" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="196" y="560" width="89" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1izl3gb" bpmnElement="Gateway_043ke54" isMarkerVisible="true">
+        <dc:Bounds x="295" y="742" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="200" y="734" width="82" height="66" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ixnn1d" bpmnElement="Gateway_1jx1kas" isMarkerVisible="true">
+        <dc:Bounds x="295" y="907" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="200" y="899" width="82" height="66" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_15ckfwa_di" bpmnElement="Gateway_15ckfwa" isMarkerVisible="true">
+        <dc:Bounds x="295" y="1080" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="197" y="1062" width="87" height="106" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1nf21s2_di" bpmnElement="Gateway_1nf21s2" isMarkerVisible="true">
+        <dc:Bounds x="415" y="409" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="395" y="306" width="90" height="93" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0jtg1vq" bpmnElement="Gateway_1wg8vjh" isMarkerVisible="true">
+        <dc:Bounds x="415" y="742" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="435" y="639" width="90" height="93" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1t7wrpv" bpmnElement="Gateway_0ecd5ui" isMarkerVisible="true">
+        <dc:Bounds x="415" y="907" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="445" y="804" width="90" height="93" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1bhw6b3" bpmnElement="Gateway_0vpo6zz" isMarkerVisible="true">
+        <dc:Bounds x="415" y="1080" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="445" y="983" width="90" height="93" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_00yn6yy" bpmnElement="Gateway_0v99b8k" isMarkerVisible="true">
+        <dc:Bounds x="430" y="555" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="445" y="453" width="90" height="93" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0o68pdp_di" bpmnElement="Activity_0o68pdp">
+        <dc:Bounds x="522" y="1170" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0p6ujjw_di" bpmnElement="Flow_0p6ujjw">
+        <di:waypoint x="218" y="180" />
+        <di:waypoint x="295" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0razsvf_di" bpmnElement="Flow_0razsvf">
+        <di:waypoint x="345" y="180" />
+        <di:waypoint x="650" y="180" />
+        <di:waypoint x="650" y="1324" />
+        <di:waypoint x="590" y="1324" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="374" y="162" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00kmoam_di" bpmnElement="Flow_00kmoam">
+        <di:waypoint x="320" y="205" />
+        <di:waypoint x="320" y="242" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="326" y="206" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ddnwa9_di" bpmnElement="Flow_1ddnwa9">
+        <di:waypoint x="440" y="1274" />
+        <di:waypoint x="440" y="1324" />
+        <di:waypoint x="554" y="1324" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tj0g3y_di" bpmnElement="Flow_1tj0g3y">
+        <di:waypoint x="320" y="292" />
+        <di:waypoint x="320" y="409" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="326" y="303" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1uv5ope_di" bpmnElement="Flow_1uv5ope">
+        <di:waypoint x="320" y="459" />
+        <di:waypoint x="320" y="555" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="327" y="463" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1w3rdpm_di" bpmnElement="Flow_1w3rdpm">
+        <di:waypoint x="345" y="267" />
+        <di:waypoint x="650" y="270" />
+        <di:waypoint x="650" y="1324" />
+        <di:waypoint x="590" y="1324" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="374" y="243" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kkcj6v_di" bpmnElement="Flow_0kkcj6v">
+        <di:waypoint x="345" y="434" />
+        <di:waypoint x="415" y="434" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="351" y="416" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wrtgjm_di" bpmnElement="Flow_1wrtgjm">
+        <di:waypoint x="320" y="605" />
+        <di:waypoint x="320" y="742" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="328" y="671" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1d7l300_di" bpmnElement="Flow_1d7l300">
+        <di:waypoint x="320" y="792" />
+        <di:waypoint x="320" y="907" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="328" y="847" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07rbdkk_di" bpmnElement="Flow_07rbdkk">
+        <di:waypoint x="320" y="957" />
+        <di:waypoint x="320" y="1080" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="328" y="1016" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sxzsr1_di" bpmnElement="Flow_0sxzsr1">
+        <di:waypoint x="320" y="1130" />
+        <di:waypoint x="320" y="1324" />
+        <di:waypoint x="554" y="1324" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="327" y="1133" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1r5kwtu_di" bpmnElement="Flow_1r5kwtu">
+        <di:waypoint x="345" y="767" />
+        <di:waypoint x="415" y="767" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="371" y="749" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16x9yg6_di" bpmnElement="Flow_16x9yg6">
+        <di:waypoint x="345" y="932" />
+        <di:waypoint x="415" y="932" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="371" y="914" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ri5j27_di" bpmnElement="Flow_1ri5j27">
+        <di:waypoint x="345" y="1105" />
+        <di:waypoint x="415" y="1105" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="371" y="1087" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19s5eaw_di" bpmnElement="Flow_19s5eaw">
+        <di:waypoint x="465" y="434" />
+        <di:waypoint x="572" y="434" />
+        <di:waypoint x="572" y="1170" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="530" y="416" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0t35q19_di" bpmnElement="Flow_0t35q19">
+        <di:waypoint x="440" y="460" />
+        <di:waypoint x="323" y="558" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="374" y="491" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cgatxi_di" bpmnElement="Flow_0cgatxi">
+        <di:waypoint x="465" y="1105" />
+        <di:waypoint x="572" y="1105" />
+        <di:waypoint x="572" y="1170" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="530" y="1087" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12cez8d_di" bpmnElement="Flow_12cez8d">
+        <di:waypoint x="465" y="932" />
+        <di:waypoint x="572" y="932" />
+        <di:waypoint x="572" y="1170" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="530" y="914" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ti85h5_di" bpmnElement="Flow_1ti85h5">
+        <di:waypoint x="345" y="580" />
+        <di:waypoint x="430" y="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="379" y="562" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11s5t0t_di" bpmnElement="Flow_11s5t0t">
+        <di:waypoint x="465" y="767" />
+        <di:waypoint x="572" y="767" />
+        <di:waypoint x="572" y="1170" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="530" y="749" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xkde50_di" bpmnElement="Flow_1xkde50">
+        <di:waypoint x="455" y="605" />
+        <di:waypoint x="324" y="746" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="432" y="603" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y1c1fo_di" bpmnElement="Flow_1y1c1fo">
+        <di:waypoint x="480" y="580" />
+        <di:waypoint x="572" y="580" />
+        <di:waypoint x="572" y="1170" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="538" y="562" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yicysh_di" bpmnElement="Flow_0yicysh">
+        <di:waypoint x="439" y="791" />
+        <di:waypoint x="331" y="918" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="402" y="803" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tm16d2_di" bpmnElement="Flow_1tm16d2">
+        <di:waypoint x="430" y="947" />
+        <di:waypoint x="331" y="1091" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="422" y="963" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yuhowh_di" bpmnElement="Flow_0yuhowh">
+        <di:waypoint x="440" y="1130" />
+        <di:waypoint x="440" y="1194" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="416" y="1155" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vatdtn_di" bpmnElement="Flow_1vatdtn">
+        <di:waypoint x="572" y="1250" />
+        <di:waypoint x="572" y="1306" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

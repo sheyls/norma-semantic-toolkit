@@ -232,6 +232,14 @@ _FRONTEND_DIST = APP_ROOT / "frontend" / "dist"
 if _FRONTEND_DIST.is_dir():
     app.mount("/assets", StaticFiles(directory=str(_FRONTEND_DIST / "assets")), name="assets")
 
+    @app.get("/favicon.png", include_in_schema=False)
+    async def favicon():
+        return FileResponse(str(_FRONTEND_DIST / "favicon.png"))
+
+    @app.get("/apple-touch-icon.png", include_in_schema=False)
+    async def apple_touch_icon():
+        return FileResponse(str(_FRONTEND_DIST / "apple-touch-icon.png"))
+
     @app.get("/{full_path:path}", include_in_schema=False)
     async def spa_fallback(full_path: str):
         index = _FRONTEND_DIST / "index.html"

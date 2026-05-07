@@ -565,7 +565,7 @@ export default function GraphForce({ nodes, edges }) {
         <svg
           ref={svgRef}
           style={{ width: "100%", height: "580px", display: "block" }}
-          aria-label="Knowledge graph layout"
+          aria-label="Generated graph layout"
         />
       </div>
       <aside className="graph-details graph-details--side">

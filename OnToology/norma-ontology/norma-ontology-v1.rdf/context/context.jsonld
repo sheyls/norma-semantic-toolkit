@@ -168,8 +168,8 @@
     "Person" : {
       "@id" : "http://xmlns.com/foaf/0.1/Person"
     },
-    "closeMatch" : {
-      "@id" : "http://www.w3.org/2004/02/skos/core#closeMatch"
+    "seeAlso" : {
+      "@id" : "http://www.w3.org/2000/01/rdf-schema#seeAlso"
     },
     "hasLegalSource" : {
       "@id" : "https://w3id.org/def/norma-o#hasLegalSource",

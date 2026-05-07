@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(PYENV_VERSION=3.10.13 python -c \"import sys; print\\(sys.executable\\)\")",
+      "Bash(PYENV_VERSION=3.10.13 python -m site --user-base)",
+      "Bash(bash reproduce.sh)",
+      "WebFetch(domain:github.com)"
+    ]
+  }
+}

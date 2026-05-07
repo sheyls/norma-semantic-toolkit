@@ -273,12 +273,19 @@ def _normalize_field(
         if len(group) < 2:
             continue
         winner, reason = _pick_winner(group, first_seen)
+        confidence = round(max(_similarity(winner, l) for l in group if l != winner), 2)
         report.decisions.append(NormalizationDecision(
             field      = field_name,
             raw_labels = group,
             winner     = winner,
             reason     = f"fuzzy ({reason})",
-            confidence = round(max(_similarity(winner, l) for l in group if l != winner), 2),
+            confidence = confidence,
+        ))
+        report.warnings.append(NormalizationWarning(
+            field      = field_name,
+            labels     = group,
+            message    = f"Labels merged automatically by similarity ({confidence:.0%}) — verify this is correct.",
+            suggestion = f"If they should stay distinct, add a '_confirmed_separate' entry in the override file.",
         ))
         losers = [w for w in group if w != winner]
         for raw, mapped in list(mapping.items()):

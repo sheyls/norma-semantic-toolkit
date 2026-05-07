@@ -207,7 +207,7 @@
     "@id" : "http://id.loc.gov/vocabulary/iso639-1/en"
   } ],
   "http://purl.org/dc/terms/license" : [ {
-    "@id" : "https://creativecommons.org/licenses/by-nc/4.0/"
+    "@id" : "https://creativecommons.org/licenses/by/4.0/"
   } ],
   "http://purl.org/dc/terms/modified" : [ {
     "@type" : "http://www.w3.org/2001/XMLSchema#date",
@@ -771,7 +771,7 @@
     "@language" : "en",
     "@value" : "Legal Action"
   } ],
-  "http://www.w3.org/2004/02/skos/core#closeMatch" : [ {
+  "http://www.w3.org/2000/01/rdf-schema#seeAlso" : [ {
     "@id" : "http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Action"
   } ]
 }, {
@@ -788,12 +788,12 @@
     "@language" : "en",
     "@value" : "Legal Agent"
   } ],
-  "http://www.w3.org/2004/02/skos/core#closeMatch" : [ {
+  "http://www.w3.org/2000/01/rdf-schema#seeAlso" : [ {
     "@id" : "http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Person"
   } ],
   "http://www.w3.org/2004/02/skos/core#scopeNote" : [ {
     "@language" : "en",
-    "@value" : "Conceptually close to lkif-la:Legal_Person (Natural_Person, Private_Legal_Person, Public_Body). skos:closeMatch is used rather than rdfs:subClassOf because lkif-la:Legal_Person also covers Legislative_Body — entities that utter norms rather than bear them — which falls outside NORMA's LegalAgent role, and because lkif-core/legal-action.owl is not imported. foaf:Agent is intentionally not asserted as a TBox parent because it is broader than legal personhood (it includes software agents and other non-legal entities); FOAF classes remain available for instance-level annotation."
+    "@value" : "Conceptually close to lkif-la:Legal_Person (Natural_Person, Private_Legal_Person, Public_Body). rdfs:seeAlso is used rather than rdfs:subClassOf because lkif-la:Legal_Person also covers Legislative_Body — entities that utter norms rather than bear them — which falls outside NORMA's LegalAgent role, and because lkif-core/legal-action.owl is not imported. foaf:Agent is intentionally not asserted as a TBox parent because it is broader than legal personhood (it includes software agents and other non-legal entities); FOAF classes remain available for instance-level annotation."
   } ]
 }, {
   "@id" : "https://w3id.org/def/norma-o#LegalCondition",
@@ -1128,7 +1128,7 @@
   "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
     "@id" : "https://w3id.org/def/norma-o#RegulativeNorm"
   } ],
-  "http://www.w3.org/2004/02/skos/core#closeMatch" : [ {
+  "http://www.w3.org/2000/01/rdf-schema#seeAlso" : [ {
     "@id" : "http://www.estrellaproject.org/lkif-core/norm.owl#Obligation"
   } ],
   "http://www.w3.org/2004/02/skos/core#notation" : [ {
@@ -1205,7 +1205,7 @@
   "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
     "@id" : "https://w3id.org/def/norma-o#RegulativeNorm"
   } ],
-  "http://www.w3.org/2004/02/skos/core#closeMatch" : [ {
+  "http://www.w3.org/2000/01/rdf-schema#seeAlso" : [ {
     "@id" : "http://www.estrellaproject.org/lkif-core/norm.owl#Permission"
   } ],
   "http://www.w3.org/2004/02/skos/core#notation" : [ {
@@ -1228,7 +1228,7 @@
   "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
     "@id" : "https://w3id.org/def/norma-o#RegulativeNorm"
   } ],
-  "http://www.w3.org/2004/02/skos/core#closeMatch" : [ {
+  "http://www.w3.org/2000/01/rdf-schema#seeAlso" : [ {
     "@id" : "http://www.estrellaproject.org/lkif-core/norm.owl#Prohibition"
   } ],
   "http://www.w3.org/2004/02/skos/core#notation" : [ {
@@ -1271,12 +1271,12 @@
   "http://www.w3.org/2000/01/rdf-schema#subClassOf" : [ {
     "@id" : "https://w3id.org/def/norma-o#NormativeContent"
   } ],
-  "http://www.w3.org/2004/02/skos/core#closeMatch" : [ {
+  "http://www.w3.org/2000/01/rdf-schema#seeAlso" : [ {
     "@id" : "http://www.estrellaproject.org/lkif-core/norm.owl#Norm"
   } ],
   "http://www.w3.org/2004/02/skos/core#scopeNote" : [ {
     "@language" : "en",
-    "@value" : "Conceptually close to lkif:Norm in LKIF-Core. SKOS closeMatch is used rather than rdfs:subClassOf because lkif:Norm is equivalentClass to a restriction on lkif:qualifies (a property NORMA does not use) and because LKIF axiomatises the deontic operators as interdefinable (lkif:Obligation owl:equivalentClass lkif:Prohibition), which would conflict with NORMA's pairwise disjointness of regulative subclasses if formal subsumption were asserted."
+    "@value" : "Conceptually close to lkif:Norm in LKIF-Core. rdfs:seeAlso is used rather than rdfs:subClassOf because lkif:Norm is equivalentClass to a restriction on lkif:qualifies (a property NORMA does not use) and because LKIF axiomatises the deontic operators as interdefinable (lkif:Obligation owl:equivalentClass lkif:Prohibition), which would conflict with NORMA's pairwise disjointness of regulative subclasses if formal subsumption were asserted."
   } ]
 }, {
   "@id" : "https://w3id.org/def/norma-o#ReviewStatus",
@@ -1357,7 +1357,7 @@
     "@language" : "en",
     "@value" : "Soft Law"
   } ],
-  "http://www.w3.org/2004/02/skos/core#closeMatch" : [ {
+  "http://www.w3.org/2000/01/rdf-schema#seeAlso" : [ {
     "@id" : "http://www.estrellaproject.org/lkif-core/norm.owl#Soft_Law"
   } ],
   "http://www.w3.org/2004/02/skos/core#inScheme" : [ {

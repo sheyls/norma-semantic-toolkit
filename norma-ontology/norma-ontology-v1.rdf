@@ -49,7 +49,7 @@
     <dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-17</dcterms:issued>
     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-28</dcterms:modified>
     <dcterms:language rdf:resource="http://id.loc.gov/vocabulary/iso639-1/en"/>
-    <dcterms:license rdf:resource="https://creativecommons.org/licenses/by-nc/4.0/"/>
+    <dcterms:license rdf:resource="https://creativecommons.org/licenses/by/4.0/"/>
     <dcterms:source rdf:resource="https://github.com/sheyls/norma-semantic-toolkit"/>
     <dcterms:bibliographicCitation xml:lang="en">Leyva-Sánchez, S. et al. (2026). NORMA-O: The NORMA Ontology for Legal Norm Annotations (Version 1.0) [Ontology]. https://w3id.org/def/norma-o/1.0</dcterms:bibliographicCitation>
     <bibo:doi>10.5281/zenodo.19765302</bibo:doi>
@@ -89,8 +89,8 @@
     <rdfs:isDefinedBy rdf:resource="https://w3id.org/def/norma-o"/>
     <rdfs:subClassOf rdf:resource="https://w3id.org/def/norma-o#NormativeContent"/>
     <owl:disjointWith rdf:resource="https://w3id.org/def/norma-o#ConstitutiveRule"/>
-    <skos:closeMatch rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Norm"/>
-    <skos:scopeNote xml:lang="en">Conceptually close to lkif:Norm in LKIF-Core. SKOS closeMatch is used rather than rdfs:subClassOf because lkif:Norm is equivalentClass to a restriction on lkif:qualifies (a property NORMA does not use) and because LKIF axiomatises the deontic operators as interdefinable (lkif:Obligation owl:equivalentClass lkif:Prohibition), which would conflict with NORMA's pairwise disjointness of regulative subclasses if formal subsumption were asserted.</skos:scopeNote>
+    <rdfs:seeAlso rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Norm"/>
+    <skos:scopeNote xml:lang="en">Conceptually close to lkif:Norm in LKIF-Core. rdfs:seeAlso is used rather than rdfs:subClassOf because lkif:Norm is equivalentClass to a restriction on lkif:qualifies (a property NORMA does not use) and because LKIF axiomatises the deontic operators as interdefinable (lkif:Obligation owl:equivalentClass lkif:Prohibition), which would conflict with NORMA's pairwise disjointness of regulative subclasses if formal subsumption were asserted.</skos:scopeNote>
   </owl:Class>
 
   <owl:Class rdf:about="https://w3id.org/def/norma-o#ConstitutiveRule">
@@ -107,7 +107,7 @@
     <rdfs:comment xml:lang="en">A regulative norm stating that a legal action is required.</rdfs:comment>
     <rdfs:isDefinedBy rdf:resource="https://w3id.org/def/norma-o"/>
     <rdfs:subClassOf rdf:resource="https://w3id.org/def/norma-o#RegulativeNorm"/>
-    <skos:closeMatch rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Obligation"/>
+    <rdfs:seeAlso rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Obligation"/>
     <skos:notation>OBL</skos:notation>
   </owl:Class>
 
@@ -116,7 +116,7 @@
     <rdfs:comment xml:lang="en">A regulative norm stating that a legal action is forbidden.</rdfs:comment>
     <rdfs:isDefinedBy rdf:resource="https://w3id.org/def/norma-o"/>
     <rdfs:subClassOf rdf:resource="https://w3id.org/def/norma-o#RegulativeNorm"/>
-    <skos:closeMatch rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Prohibition"/>
+    <rdfs:seeAlso rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Prohibition"/>
     <skos:notation>PRH</skos:notation>
   </owl:Class>
 
@@ -125,7 +125,7 @@
     <rdfs:comment xml:lang="en">A regulative norm stating that a legal action is allowed.</rdfs:comment>
     <rdfs:isDefinedBy rdf:resource="https://w3id.org/def/norma-o"/>
     <rdfs:subClassOf rdf:resource="https://w3id.org/def/norma-o#RegulativeNorm"/>
-    <skos:closeMatch rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Permission"/>
+    <rdfs:seeAlso rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Permission"/>
     <skos:notation>PER</skos:notation>
   </owl:Class>
 
@@ -175,7 +175,7 @@
     <rdfs:label xml:lang="en">Legal Action</rdfs:label>
     <rdfs:comment xml:lang="en">A normalized legal action that is prescribed, prohibited, permitted, or recommended by a regulative norm. NORMA pipeline consumers may work with the literal shortcut `norma:actionText` for low-ceremony use and mint LegalAction individuals only when the knowledge graph needs action-level reuse across norms.</rdfs:comment>
     <rdfs:isDefinedBy rdf:resource="https://w3id.org/def/norma-o"/>
-    <skos:closeMatch rdf:resource="http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Action"/>
+    <rdfs:seeAlso rdf:resource="http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Action"/>
   </owl:Class>
 
   <owl:Class rdf:about="https://w3id.org/def/norma-o#LegalObject">
@@ -188,8 +188,8 @@
     <rdfs:label xml:lang="en">Legal Agent</rdfs:label>
     <rdfs:comment xml:lang="en">An entity that bears the legally relevant role of subject of a regulative norm: the party that is obliged, prohibited, permitted, or recommended to perform a legal action.</rdfs:comment>
     <rdfs:isDefinedBy rdf:resource="https://w3id.org/def/norma-o"/>
-    <skos:closeMatch rdf:resource="http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Person"/>
-    <skos:scopeNote xml:lang="en">Conceptually close to lkif-la:Legal_Person (Natural_Person, Private_Legal_Person, Public_Body). skos:closeMatch is used rather than rdfs:subClassOf because lkif-la:Legal_Person also covers Legislative_Body — entities that utter norms rather than bear them — which falls outside NORMA's LegalAgent role, and because lkif-core/legal-action.owl is not imported. foaf:Agent is intentionally not asserted as a TBox parent because it is broader than legal personhood (it includes software agents and other non-legal entities); FOAF classes remain available for instance-level annotation.</skos:scopeNote>
+    <rdfs:seeAlso rdf:resource="http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Person"/>
+    <skos:scopeNote xml:lang="en">Conceptually close to lkif-la:Legal_Person (Natural_Person, Private_Legal_Person, Public_Body). rdfs:seeAlso is used rather than rdfs:subClassOf because lkif-la:Legal_Person also covers Legislative_Body — entities that utter norms rather than bear them — which falls outside NORMA's LegalAgent role, and because lkif-core/legal-action.owl is not imported. foaf:Agent is intentionally not asserted as a TBox parent because it is broader than legal personhood (it includes software agents and other non-legal entities); FOAF classes remain available for instance-level annotation.</skos:scopeNote>
   </owl:Class>
 
   <owl:Class rdf:about="https://w3id.org/def/norma-o#AnnotatorAgent">
@@ -1056,7 +1056,7 @@
     <rdf:type rdf:resource="https://w3id.org/def/norma-o#BindingForce"/>
     <rdfs:label xml:lang="en">Soft Law</rdfs:label>
     <rdfs:comment xml:lang="en">Binding force category for non-binding guidance, recommendations, codes of conduct, or policy instruments.</rdfs:comment>
-    <skos:closeMatch rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Soft_Law"/>
+    <rdfs:seeAlso rdf:resource="http://www.estrellaproject.org/lkif-core/norm.owl#Soft_Law"/>
     <skos:notation>SOFT_LAW</skos:notation>
     <skos:prefLabel xml:lang="en">Soft Law</skos:prefLabel>
     <skos:inScheme rdf:resource="https://w3id.org/def/norma-o#BindingForceScheme"/>

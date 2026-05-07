@@ -329,8 +329,11 @@ def to_turtle(
     lines: list[str] = []
 
     # ── Ontology header ───────────────────────────────────────────────────────
+    from pathlib import Path as _Path
+    _src = _Path(source)
+    _src_label = "/".join(_src.parts[-2:]) if len(_src.parts) >= 2 else _src.name
     lines += [
-        f"# ABox from: {source}",
+        f"# ABox from: {_src_label}",
         f"# TBox:    {NORMA_ONT}",
         "",
         f"@prefix norma: <{NORMA_IRI}> .",

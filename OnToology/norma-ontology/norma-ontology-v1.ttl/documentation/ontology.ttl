@@ -19,7 +19,7 @@
                                 <http://purl.org/dc/terms/description> "The NORMA ontology is a formal semantic model for representing machine-readable legal norm annotations as reusable knowledge graph resources. It distinguishes between regulative norms and constitutive rules; represents legal conditions, their evaluated outcomes, and branch-sensitive activation through a TriggerEvent n-ary relation pattern; and captures the legal agents, actions, objects, sources, provenance metadata, lifecycle status, review status, extraction method, and controlled classification values needed for traceable and interoperable publication. The ontology aligns with PROV-O for provenance, ELI for legal resource modelling, FOAF for agent-oriented metadata, and SKOS for controlled vocabularies, and provides informative alignments with LKIF-Core via SKOS mapping properties."@en ;
                                 <http://purl.org/dc/terms/issued> "2026-04-17"^^xsd:date ;
                                 <http://purl.org/dc/terms/language> <http://id.loc.gov/vocabulary/iso639-1/en> ;
-                                <http://purl.org/dc/terms/license> <https://creativecommons.org/licenses/by-nc/4.0/> ;
+                                <http://purl.org/dc/terms/license> <https://creativecommons.org/licenses/by/4.0/> ;
                                 <http://purl.org/dc/terms/modified> "2026-04-28"^^xsd:date ;
                                 <http://purl.org/dc/terms/publisher> _:genid4 ;
                                 <http://purl.org/dc/terms/source> <https://github.com/sheyls/norma-semantic-toolkit> ;
@@ -1134,12 +1134,12 @@ rdf:value rdf:type owl:ObjectProperty .
 
 ###  https://w3id.org/def/norma-o#LegalAction
 :LegalAction rdf:type owl:NamedIndividual ;
-             <http://www.w3.org/2004/02/skos/core#closeMatch> <http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Action> .
+             <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Action> .
 
 
 ###  https://w3id.org/def/norma-o#LegalAgent
 :LegalAgent rdf:type owl:NamedIndividual ;
-            <http://www.w3.org/2004/02/skos/core#closeMatch> <http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Person> .
+            <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://www.estrellaproject.org/lkif-core/legal-action.owl#Legal_Person> .
 
 
 ###  https://w3id.org/def/norma-o#Low
@@ -1234,7 +1234,7 @@ rdf:value rdf:type owl:ObjectProperty .
 
 ###  https://w3id.org/def/norma-o#Obligation
 :Obligation rdf:type owl:NamedIndividual ;
-            <http://www.w3.org/2004/02/skos/core#closeMatch> <http://www.estrellaproject.org/lkif-core/norm.owl#Obligation> ;
+            <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://www.estrellaproject.org/lkif-core/norm.owl#Obligation> ;
             <http://www.w3.org/2004/02/skos/core#notation> "OBL" .
 
 
@@ -1264,13 +1264,13 @@ rdf:value rdf:type owl:ObjectProperty .
 
 ###  https://w3id.org/def/norma-o#Permission
 :Permission rdf:type owl:NamedIndividual ;
-            <http://www.w3.org/2004/02/skos/core#closeMatch> <http://www.estrellaproject.org/lkif-core/norm.owl#Permission> ;
+            <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://www.estrellaproject.org/lkif-core/norm.owl#Permission> ;
             <http://www.w3.org/2004/02/skos/core#notation> "PER" .
 
 
 ###  https://w3id.org/def/norma-o#Prohibition
 :Prohibition rdf:type owl:NamedIndividual ;
-             <http://www.w3.org/2004/02/skos/core#closeMatch> <http://www.estrellaproject.org/lkif-core/norm.owl#Prohibition> ;
+             <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://www.estrellaproject.org/lkif-core/norm.owl#Prohibition> ;
              <http://www.w3.org/2004/02/skos/core#notation> "PRH" .
 
 
@@ -1281,7 +1281,7 @@ rdf:value rdf:type owl:ObjectProperty .
 
 ###  https://w3id.org/def/norma-o#RegulativeNorm
 :RegulativeNorm rdf:type owl:NamedIndividual ;
-                <http://www.w3.org/2004/02/skos/core#closeMatch> <http://www.estrellaproject.org/lkif-core/norm.owl#Norm> .
+                <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://www.estrellaproject.org/lkif-core/norm.owl#Norm> .
 
 
 ###  https://w3id.org/def/norma-o#ReviewStatusScheme
@@ -1311,7 +1311,7 @@ rdf:value rdf:type owl:ObjectProperty .
 :SoftLaw rdf:type owl:NamedIndividual ,
                   <http://www.w3.org/2004/02/skos/core#Concept> ,
                   :BindingForce ;
-         <http://www.w3.org/2004/02/skos/core#closeMatch> <http://www.estrellaproject.org/lkif-core/norm.owl#Soft_Law> ;
+         <http://www.w3.org/2000/01/rdf-schema#seeAlso> <http://www.estrellaproject.org/lkif-core/norm.owl#Soft_Law> ;
          <http://www.w3.org/2004/02/skos/core#inScheme> :BindingForceScheme ;
          <http://www.w3.org/2004/02/skos/core#topConceptOf> :BindingForceScheme ;
          <http://www.w3.org/2004/02/skos/core#notation> "SOFT_LAW" ;
@@ -1372,7 +1372,7 @@ rdf:value rdf:type owl:ObjectProperty .
 :LegalAgent rdfs:comment "An entity that bears the legally relevant role of subject of a regulative norm: the party that is obliged, prohibited, permitted, or recommended to perform a legal action."@en ;
             rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
             rdfs:label "Legal Agent"@en ;
-            <http://www.w3.org/2004/02/skos/core#scopeNote> "Conceptually close to lkif-la:Legal_Person (Natural_Person, Private_Legal_Person, Public_Body). skos:closeMatch is used rather than rdfs:subClassOf because lkif-la:Legal_Person also covers Legislative_Body — entities that utter norms rather than bear them — which falls outside NORMA's LegalAgent role, and because lkif-core/legal-action.owl is not imported. foaf:Agent is intentionally not asserted as a TBox parent because it is broader than legal personhood (it includes software agents and other non-legal entities); FOAF classes remain available for instance-level annotation."@en .
+            <http://www.w3.org/2004/02/skos/core#scopeNote> "Conceptually close to lkif-la:Legal_Person (Natural_Person, Private_Legal_Person, Public_Body). rdfs:seeAlso is used rather than rdfs:subClassOf because lkif-la:Legal_Person also covers Legislative_Body — entities that utter norms rather than bear them — which falls outside NORMA's LegalAgent role, and because lkif-core/legal-action.owl is not imported. foaf:Agent is intentionally not asserted as a TBox parent because it is broader than legal personhood (it includes software agents and other non-legal entities); FOAF classes remain available for instance-level annotation."@en .
 
 
 :NegativeRecommendation rdfs:comment "A regulative norm stating that a legal action is discouraged."@en ;
@@ -1403,7 +1403,7 @@ rdf:value rdf:type owl:ObjectProperty .
 :RegulativeNorm rdfs:comment "A normative content item that regulates conduct by prescribing, prohibiting, permitting, or recommending a legal action."@en ;
                 rdfs:isDefinedBy <https://w3id.org/def/norma-o> ;
                 rdfs:label "Regulative Norm"@en ;
-                <http://www.w3.org/2004/02/skos/core#scopeNote> "Conceptually close to lkif:Norm in LKIF-Core. SKOS closeMatch is used rather than rdfs:subClassOf because lkif:Norm is equivalentClass to a restriction on lkif:qualifies (a property NORMA does not use) and because LKIF axiomatises the deontic operators as interdefinable (lkif:Obligation owl:equivalentClass lkif:Prohibition), which would conflict with NORMA's pairwise disjointness of regulative subclasses if formal subsumption were asserted."@en .
+                <http://www.w3.org/2004/02/skos/core#scopeNote> "Conceptually close to lkif:Norm in LKIF-Core. rdfs:seeAlso is used rather than rdfs:subClassOf because lkif:Norm is equivalentClass to a restriction on lkif:qualifies (a property NORMA does not use) and because LKIF axiomatises the deontic operators as interdefinable (lkif:Obligation owl:equivalentClass lkif:Prohibition), which would conflict with NORMA's pairwise disjointness of regulative subclasses if formal subsumption were asserted."@en .
 
 
 #################################################################
