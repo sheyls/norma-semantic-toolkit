@@ -7,7 +7,7 @@ warning generation, manual override application, and threshold behaviour.
 
 import pytest
 from norma_engine.kg.normalizer import normalize, save_override_template
-import json, tempfile, os
+import json, os, subprocess, sys, tempfile
 
 
 def _make_records(*regulation_labels):
@@ -89,6 +89,96 @@ class TestManualOverride:
         finally:
             os.unlink(tmp)
         assert recs[0]["regulation"] == "EU AI Act"
+
+
+def _make_action_records(*action_labels):
+    """Build minimal task records with the given action labels."""
+    return [
+        {
+            "element_type": "task",
+            "bpmn_id": f"t{i}",
+            "regulation": "EU AI Act",
+            "agent": "AI provider",
+            "object": "AI system",
+            "action": label,
+        }
+        for i, label in enumerate(action_labels)
+    ]
+
+
+def _make_action_records_with_deontic(*pairs):
+    """Build minimal task records from (action_label, deontic_type) pairs."""
+    return [
+        {
+            "element_type": "task",
+            "bpmn_id": f"t{i}",
+            "regulation": "EU AI Act",
+            "agent": "AI provider",
+            "object": "AI system",
+            "action": label,
+            "deontic_type": dtype,
+        }
+        for i, (label, dtype) in enumerate(pairs)
+    ]
+
+
+class TestDeonticTypeAwareMerge:
+    def test_plural_variant_not_merged_across_deontic_types(self):
+        """An obligation's "submit the report" must stay distinct from a
+        prohibition's "submit the reports" — they are different norms,
+        even though they differ only by a plural suffix."""
+        records = _make_action_records_with_deontic(
+            ("submit the report", "obligation"),
+            ("submit the reports", "prohibition"),
+        )
+        recs, _ = normalize(records, threshold=0.82)
+        actions = {r["action"] for r in recs}
+        assert actions == {"submit the report", "submit the reports"}
+
+    def test_plural_variant_still_merged_within_same_deontic_type(self):
+        records = _make_action_records_with_deontic(
+            ("submit the report", "obligation"),
+            ("submit the reports", "obligation"),
+        )
+        recs, _ = normalize(records, threshold=0.82)
+        actions = {r["action"] for r in recs}
+        assert len(actions) == 1
+
+
+class TestDeterminism:
+    def test_fuzzy_merge_deterministic_across_hash_seeds(self):
+        """Same input must produce the same normalization regardless of
+        PYTHONHASHSEED.
+
+        Reproduces the EU AI Act corpus case: "comply with marking
+        obligations" vs "comply high-risk obligations" have an asymmetric
+        SequenceMatcher.ratio() that straddles the fuzzy threshold in one
+        direction. The previous set-based dedup of `winners` made the pair
+        comparison order (and thus the merge outcome) depend on Python's
+        per-process string hash randomization.
+        """
+        records = _make_action_records(
+            "comply with marking obligations",
+            "comply high-risk obligations",
+        )
+        script = (
+            "import json\n"
+            "from norma_engine.kg.normalizer import normalize\n"
+            f"records = {records!r}\n"
+            "recs, _ = normalize(records, threshold=0.82)\n"
+            "print(json.dumps([r['action'] for r in recs]))\n"
+        )
+        outputs = set()
+        for seed in ("0", "1", "2", "3", "42"):
+            result = subprocess.run(
+                [sys.executable, "-c", script],
+                capture_output=True,
+                text=True,
+                check=True,
+                env={**os.environ, "PYTHONHASHSEED": seed},
+            )
+            outputs.add(result.stdout.strip())
+        assert len(outputs) == 1, f"normalization differs across hash seeds: {outputs}"
 
 
 class TestOverrideTemplate:
