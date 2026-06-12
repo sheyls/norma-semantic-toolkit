@@ -21,7 +21,6 @@ import argparse
 import json
 import re
 import sys
-from datetime import date as _date
 from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
@@ -656,7 +655,6 @@ def to_turtle(
             ]
 
     # ── Annotation Activities ──────────────────────────────────────────────────
-    today_iso = _date.today().isoformat()
     lines.append("# ── Annotation Activities ─────────────────────────────────────────")
     emitted_activities: set[str] = set()
     for r in records:
@@ -669,7 +667,7 @@ def to_turtle(
             continue
         emitted_activities.add(activity_local)
 
-        ann_date = r.get("annotation_date") or today_iso
+        ann_date = r.get("annotation_date", "").strip()
         confidence = r.get("confidence", "")
         annotator = r.get("annotator", "")
         annotator_local = annotators.get(annotator) if annotator else None
@@ -678,8 +676,9 @@ def to_turtle(
             f":{activity_local}",
             "    a owl:NamedIndividual, norma:AnnotationActivity ;",
             f'    rdfs:label "Annotation activity for {esc(activity_subject)}"@en ;',
-            f"    norma:annotationDate {_date_or_string_literal(ann_date)} ;",
         ]
+        if ann_date:
+            T.append(f"    norma:annotationDate {_date_or_string_literal(ann_date)} ;")
         if confidence:
             T.append(f"    norma:confidenceScore {lit(confidence, 'xsd:decimal')} ;")
         if annotator_local:

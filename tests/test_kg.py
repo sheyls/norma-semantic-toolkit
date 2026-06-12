@@ -287,6 +287,20 @@ class TestToTurtle:
         assert "norma:wasAssociatedWithAnnotator" in ttl
         assert "norma:annotator" not in ttl
 
+    def test_annotation_date_present_when_provided(self, sample_bpmn_xml):
+        ttl = self._turtle(sample_bpmn_xml)
+        assert "norma:annotationDate" in ttl
+        assert '"2026-02-15"^^xsd:date' in ttl
+
+    def test_annotation_date_omitted_when_missing(self, sample_bpmn_xml):
+        """No `compliance_annotationDate` -> no norma:annotationDate triple.
+        """
+        recs = _records(sample_bpmn_xml)
+        for r in recs:
+            r["annotation_date"] = ""
+        ttl = to_turtle(recs, "test_source", BASE_IRI)
+        assert "norma:annotationDate" not in ttl
+
     def test_norms_link_to_legal_source_derivation(self, sample_bpmn_xml):
         ttl = self._turtle(sample_bpmn_xml)
         assert "norma:hasLegalSource" in ttl
