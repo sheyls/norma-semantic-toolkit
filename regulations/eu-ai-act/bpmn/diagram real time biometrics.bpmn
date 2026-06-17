@@ -34,7 +34,7 @@
           <zeebe:property name="compliance_elementType" value="task" />
           <zeebe:property name="compliance_deonticType" value="prohibition" />
           <zeebe:property name="compliance_normStatement" value="The use of real-time remote biometric identification systems in publicly accessible spaces for the purposes of law enforcement shall be prohibited." />
-          <zeebe:property name="compliance_agent" value="AI provider" />
+          <zeebe:property name="compliance_agent" value="AI deployer" />
           <zeebe:property name="compliance_action" value="use real-time remote biometric identification systems" />
           <zeebe:property name="compliance_object" value="AI system" />
           <zeebe:property name="compliance_bindingForce" value="hard_law" />

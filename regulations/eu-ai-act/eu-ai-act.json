@@ -442,7 +442,7 @@
     "review_status": "pending",
     "deontic_id": "PRH_Respect_real_time_biometric_identification_ban",
     "norm_statement": "The use of real-time remote biometric identification systems in publicly accessible spaces for the purposes of law enforcement shall be prohibited.",
-    "agent": "AI provider",
+    "agent": "AI deployer",
     "action": "use real-time remote biometric identification systems",
     "object": "AI system",
     "fact_statement": "",
