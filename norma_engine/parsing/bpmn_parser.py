@@ -4,9 +4,16 @@ Parse a BPMN XML (Camunda Modeler style) into a *reduced* directed graph
 
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Set, Tuple
 import xml.etree.ElementTree as ET
+
+
+class BpmnLoopWarning(UserWarning):
+    """Raised when the flow graph loops back to an already visited node
+    while reducing from a kept node, the looping branch is omitted from
+    the reduced graph."""
 
 
 # -----------------------------
@@ -229,6 +236,7 @@ def parse_bpmn_to_reduced_graph(
                 tasks_acc=initial_tasks,
                 via_flows_acc=(first_flow_id,),
                 reduced_edges_out=reduced_edges_set,
+                path_nodes=(src_id,),
             )
 
     reduced_edges = sorted(
@@ -257,10 +265,20 @@ def _walk_from_flow(
     tasks_acc: Tuple[str, ...],
     via_flows_acc: Tuple[str, ...],
     reduced_edges_out: Set[ReducedEdge],
+    path_nodes: Tuple[str, ...],
     _seen: Optional[Set[Tuple[str, str]]] = None,
 ) -> None:
     if _seen is None:
         _seen = set()
+
+    if current_node in path_nodes:
+        warnings.warn(
+            f"Loop detected reducing from '{src_kept}': node '{current_node}' "
+            f"is revisited via flows {via_flows_acc!r}. The looping branch is "
+            f"omitted from the reduced graph.",
+            BpmnLoopWarning,
+        )
+        return
 
     last_flow_id = via_flows_acc[-1] if via_flows_acc else ""
     state = (current_node, last_flow_id)
@@ -300,5 +318,6 @@ def _walk_from_flow(
             tasks_acc=new_tasks,
             via_flows_acc=via_flows_acc + (fid,),
             reduced_edges_out=reduced_edges_out,
+            path_nodes=path_nodes + (current_node,),
             _seen=_seen,
         )

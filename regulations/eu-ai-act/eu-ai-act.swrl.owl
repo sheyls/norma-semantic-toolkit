@@ -34,7 +34,34 @@
   <swrl:Variable rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
 
   <!-- SWRL Rules -->
-  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r3">
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r2">
+    <swrl:body>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:DatavaluedPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Has_it_been_certified_under_the_EU_cybersecurity_scheme"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
+              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+            </swrl:DatavaluedPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:body>
+    <swrl:head>
+        <swrl:AtomList>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
+              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Has_it_been_certified_under_the_EU_cybersecurity_scheme_True_REC_NOT_Respect_cybersecurity_exemption"/>
+              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_NOT_Respect_cybersecurity_exemption"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </swrl:AtomList>
+    </swrl:head>
+  </swrl:Imp>
+
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r5">
     <swrl:body>
         <swrl:AtomList>
           <rdf:first>
@@ -72,7 +99,7 @@
     </swrl:head>
   </swrl:Imp>
 
-  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r5">
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r7">
     <swrl:body>
         <swrl:AtomList>
           <rdf:first>
@@ -110,7 +137,7 @@
     </swrl:head>
   </swrl:Imp>
 
-  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r6">
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r8">
     <swrl:body>
         <swrl:AtomList>
           <rdf:first>
@@ -159,7 +186,7 @@
     </swrl:head>
   </swrl:Imp>
 
-  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r9">
+  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r11">
     <swrl:body>
         <swrl:AtomList>
           <rdf:first>
@@ -190,33 +217,6 @@
               <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
               <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Is_it_supported_and_based_on_previous_offences_False_PRH_Respect_criminal_risk_assessment_ban"/>
               <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#PRH_Respect_criminal_risk_assessment_ban"/>
-            </swrl:IndividualPropertyAtom>
-          </rdf:first>
-          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-        </swrl:AtomList>
-    </swrl:head>
-  </swrl:Imp>
-
-  <swrl:Imp rdf:about="https://w3id.org/norma-abox/eu-ai-act/rules#r11">
-    <swrl:body>
-        <swrl:AtomList>
-          <rdf:first>
-            <swrl:DatavaluedPropertyAtom>
-              <swrl:propertyPredicate rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#Has_it_been_certified_under_the_EU_cybersecurity_scheme"/>
-              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act/rules#var_x"/>
-              <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
-            </swrl:DatavaluedPropertyAtom>
-          </rdf:first>
-          <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-        </swrl:AtomList>
-    </swrl:body>
-    <swrl:head>
-        <swrl:AtomList>
-          <rdf:first>
-            <swrl:IndividualPropertyAtom>
-              <swrl:propertyPredicate rdf:resource="https://w3id.org/def/norma-o#activatesNorm"/>
-              <swrl:argument1 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#TriggerEvent_Condition_Has_it_been_certified_under_the_EU_cybersecurity_scheme_True_REC_NOT_Respect_cybersecurity_exemption"/>
-              <swrl:argument2 rdf:resource="https://w3id.org/norma-abox/eu-ai-act#REC_NOT_Respect_cybersecurity_exemption"/>
             </swrl:IndividualPropertyAtom>
           </rdf:first>
           <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>

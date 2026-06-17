@@ -18,7 +18,15 @@
     a owl:NamedIndividual, norma:LegalAgent ;
     rdfs:label "AI provider"@en .
 
+:Agent_AI_deployer
+    a owl:NamedIndividual, norma:LegalAgent ;
+    rdfs:label "AI deployer"@en .
+
 # ── Legal Actions ────────────────────────────────────────────────
+:Action_be_exempted_from_cybersecurity_requirements
+    a owl:NamedIndividual, norma:LegalAction ;
+    rdfs:label "be exempted from cybersecurity requirements"@en .
+
 :Action_respect_obligations
     a owl:NamedIndividual, norma:LegalAction ;
     rdfs:label "respect obligations"@en .
@@ -34,10 +42,6 @@
 :Action_must_not_develop_deploy_or_sell
     a owl:NamedIndividual, norma:LegalAction ;
     rdfs:label "must not develop, deploy or sell"@en .
-
-:Action_be_exempted_from_cybersecurity_requirements
-    a owl:NamedIndividual, norma:LegalAction ;
-    rdfs:label "be exempted from cybersecurity requirements"@en .
 
 :Action_comply_with_codes_of_conducts
     a owl:NamedIndividual, norma:LegalAction ;
@@ -60,15 +64,15 @@
 :Regulation_EU_AI_Act
     a owl:NamedIndividual, norma:LegalSource ;
     norma:regulationName "EU AI Act"^^xsd:string ;
+    norma:articleNumber "42"^^xsd:string ;
+    norma:paragraphNumber "2"^^xsd:string ;
+    norma:originalText "High-risk AI systems that have been certified or for which a statement of conformity has been issued under a cybersecurity scheme pursuant to Regulation (EU) 2019/881 and the references of which have been published in the Official Journal of the European Union shall be presumed to comply with the cybersecurity requirements set out in Article 15 of this Regulation in so far as the cybersecurity certificate or statement of conformity or parts thereof cover those requirements"^^xsd:string ;
     norma:articleNumber "53"^^xsd:string ;
     norma:articleNumber "8 to 22"^^xsd:string ;
     norma:articleNumber "60 and 61"^^xsd:string ;
     norma:articleNumber "5"^^xsd:string ;
     norma:paragraphNumber "1 (d)"^^xsd:string ;
     norma:originalText "The following AI practices shall be prohibited:\nthe placing on the market, the putting into service for this specific purpose, or the use of an AI system for making risk assessments of natural persons in order to assess or predict the risk of a natural person committing a criminal offence, based solely on the profiling of a natural person or on assessing their personality traits and characteristics; this prohibition shall not apply to AI systems used to support the human assessment of the involvement of a person in a criminal activity, which is already based on objective and verifiable facts directly linked to a criminal activity;"^^xsd:string ;
-    norma:articleNumber "42"^^xsd:string ;
-    norma:paragraphNumber "2"^^xsd:string ;
-    norma:originalText "High-risk AI systems that have been certified or for which a statement of conformity has been issued under a cybersecurity scheme pursuant to Regulation (EU) 2019/881 and the references of which have been published in the Official Journal of the European Union shall be presumed to comply with the cybersecurity requirements set out in Article 15 of this Regulation in so far as the cybersecurity certificate or statement of conformity or parts thereof cover those requirements"^^xsd:string ;
     norma:articleNumber "95"^^xsd:string ;
     norma:originalText "1.   The AI Office and the Member States shall encourage and facilitate the drawing up of codes of conduct, including related governance mechanisms, intended to foster the voluntary application to AI systems, other than high-risk AI systems, of some or all of the requirements set out in Chapter III, Section 2 taking into account the available technical solutions and industry best practices allowing for the application of such requirements.\n\n2.   The AI Office and the Member States shall facilitate the drawing up of codes of conduct concerning the voluntary application, including by deployers, of specific requirements to all AI systems, on the basis of clear objectives and key performance indicators to measure the achievement of those objectives, including elements such as, but not limited to:\n\n(a)\n\napplicable elements provided for in Union ethical guidelines for trustworthy AI;\n\n(b)\n\nassessing and minimising the impact of AI systems on environmental sustainability, including as regards energy-efficient programming and techniques for the efficient design, training and use of AI;\n\n(c)\n\npromoting AI literacy, in particular that of persons dealing with the development, operation and use of AI;\n\n(d)\n\nfacilitating an inclusive and diverse design of AI systems, including through the establishment of inclusive and diverse development teams and the promotion of stakeholders’ participation in that process;\n\n(e)\n\nassessing and preventing the negative impact of AI systems on vulnerable persons or groups of vulnerable persons, including as regards accessibility for persons with a disability, as well as on gender equality.\n\n3.   Codes of conduct may be drawn up by individual providers or deployers of AI systems or by organisations representing them or by both, including with the involvement of any interested stakeholders and their representative organisations, including civil society organisations and academia. Codes of conduct may cover one or more AI systems taking into account the similarity of the intended purpose of the relevant systems.\n\n4.   The AI Office and the Member States shall take into account the specific interests and needs of SMEs, including start-ups, when encouraging and facilitating the drawing up of codes of conduct."^^xsd:string ;
     norma:articleNumber "50"^^xsd:string ;
@@ -84,6 +88,30 @@
     rdfs:label "NORMA Legal Expert"@en .
 
 # ── Norms ────────────────────────────────────────────────────────────
+:REC_NOT_Respect_cybersecurity_exemption
+    a owl:NamedIndividual, <https://w3id.org/def/norma-o#NegativeRecommendation> ;
+    rdfs:label "Respect cybersecurity exemption"@en ;
+    norma:deonticId "REC_NOT_Respect_cybersecurity_exemption"^^xsd:string ;
+    norma:normStatement "AI systems that have been certified under a cybersecurity scheme shall be presumed to comply with the cybersecurity requirements"^^xsd:string ;
+    norma:actionText "be exempted from cybersecurity requirements"^^xsd:string ;
+    norma:agentText "AI provider"^^xsd:string ;
+    norma:objectText "AI system"^^xsd:string ;
+    norma:fromRegulation "EU AI Act"^^xsd:string ;
+    norma:fromArticle "42"^^xsd:string ;
+    norma:fromParagraph "2"^^xsd:string ;
+    norma:hasBindingForce <https://w3id.org/def/norma-o#HardLaw> ;
+    norma:hasNormStatus <https://w3id.org/def/norma-o#Active> ;
+    norma:hasComplianceCriticality <https://w3id.org/def/norma-o#High> ;
+    norma:hasExtractionMethod <https://w3id.org/def/norma-o#ManualLawyer> ;
+    norma:hasReviewStatus <https://w3id.org/def/norma-o#PendingReview> ;
+    norma:hasLegalAgent  :Agent_AI_provider ;
+    norma:hasLegalAction :Action_be_exempted_from_cybersecurity_requirements ;
+    norma:hasLegalObject :Object_AI_system ;
+    norma:hasLegalSource :Regulation_EU_AI_Act ;
+    norma:wasDerivedFromSource :Regulation_EU_AI_Act ;
+    norma:wasAttributedToAnnotator :NORMAAnnotator ;
+    norma:wasGeneratedByAnnotationActivity :AnnotationActivity_REC_NOT_Respect_cybersecurity_exemption.
+
 :OBL_Respect_general_purpose_obligations
     a owl:NamedIndividual, <https://w3id.org/def/norma-o#Obligation> ;
     rdfs:label "Respect general purpose obligations"@en ;
@@ -174,30 +202,6 @@
     norma:wasAttributedToAnnotator :NORMAAnnotator ;
     norma:wasGeneratedByAnnotationActivity :AnnotationActivity_PRH_Respect_criminal_risk_assessment_ban.
 
-:REC_NOT_Respect_cybersecurity_exemption
-    a owl:NamedIndividual, <https://w3id.org/def/norma-o#NegativeRecommendation> ;
-    rdfs:label "Respect cybersecurity exemption"@en ;
-    norma:deonticId "REC_NOT_Respect_cybersecurity_exemption"^^xsd:string ;
-    norma:normStatement "AI systems that have been certified under a cybersecurity scheme shall be presumed to comply with the cybersecurity requirements"^^xsd:string ;
-    norma:actionText "be exempted from cybersecurity requirements"^^xsd:string ;
-    norma:agentText "AI provider"^^xsd:string ;
-    norma:objectText "AI system"^^xsd:string ;
-    norma:fromRegulation "EU AI Act"^^xsd:string ;
-    norma:fromArticle "42"^^xsd:string ;
-    norma:fromParagraph "2"^^xsd:string ;
-    norma:hasBindingForce <https://w3id.org/def/norma-o#HardLaw> ;
-    norma:hasNormStatus <https://w3id.org/def/norma-o#Active> ;
-    norma:hasComplianceCriticality <https://w3id.org/def/norma-o#High> ;
-    norma:hasExtractionMethod <https://w3id.org/def/norma-o#ManualLawyer> ;
-    norma:hasReviewStatus <https://w3id.org/def/norma-o#PendingReview> ;
-    norma:hasLegalAgent  :Agent_AI_provider ;
-    norma:hasLegalAction :Action_be_exempted_from_cybersecurity_requirements ;
-    norma:hasLegalObject :Object_AI_system ;
-    norma:hasLegalSource :Regulation_EU_AI_Act ;
-    norma:wasDerivedFromSource :Regulation_EU_AI_Act ;
-    norma:wasAttributedToAnnotator :NORMAAnnotator ;
-    norma:wasGeneratedByAnnotationActivity :AnnotationActivity_REC_NOT_Respect_cybersecurity_exemption.
-
 :REC_Respect_voluntary_codes_of_conducts
     a owl:NamedIndividual, <https://w3id.org/def/norma-o#Recommendation> ;
     rdfs:label "Respect voluntary codes of conducts"@en ;
@@ -251,7 +255,7 @@
     norma:deonticId "PRH_Respect_real_time_biometric_identification_ban"^^xsd:string ;
     norma:normStatement "The use of real-time remote biometric identification systems in publicly accessible spaces for the purposes of law enforcement shall be prohibited."^^xsd:string ;
     norma:actionText "use real-time remote biometric identification systems"^^xsd:string ;
-    norma:agentText "AI provider"^^xsd:string ;
+    norma:agentText "AI deployer"^^xsd:string ;
     norma:objectText "AI system"^^xsd:string ;
     norma:fromRegulation "EU AI Act"^^xsd:string ;
     norma:fromArticle "5"^^xsd:string ;
@@ -261,7 +265,7 @@
     norma:hasComplianceCriticality <https://w3id.org/def/norma-o#High> ;
     norma:hasExtractionMethod <https://w3id.org/def/norma-o#ManualLawyer> ;
     norma:hasReviewStatus <https://w3id.org/def/norma-o#PendingReview> ;
-    norma:hasLegalAgent  :Agent_AI_provider ;
+    norma:hasLegalAgent  :Agent_AI_deployer ;
     norma:hasLegalAction :Action_use_real_time_remote_biometric_identification_systems ;
     norma:hasLegalObject :Object_AI_system ;
     norma:hasLegalSource :Regulation_EU_AI_Act ;
@@ -293,6 +297,16 @@
     norma:wasGeneratedByAnnotationActivity :AnnotationActivity_OBL_Respect_prescribed_obligations.
 
 # ── Legal Conditions (Gateways) ──────────────────────────────────────
+:Condition_Has_it_been_certified_under_the_EU_cybersecurity_scheme
+    a owl:NamedIndividual, norma:LegalCondition ;
+    rdfs:label "Has it been certified under the EU cybersecurity scheme?"@en ;
+    norma:conditionStatement "Has it been certified under the EU cybersecurity scheme?"^^xsd:string ;
+    norma:hasTrigger :TriggerEvent_Condition_Has_it_been_certified_under_the_EU_cybersecurity_scheme_True_REC_NOT_Respect_cybersecurity_exemption.
+
+:TriggerEvent_Condition_Has_it_been_certified_under_the_EU_cybersecurity_scheme_True_REC_NOT_Respect_cybersecurity_exemption
+    a owl:NamedIndividual, norma:TriggerEvent ;
+    norma:hasOutcome norma:TrueOutcome .
+
 :Condition_Does_it_work_on_a_large_amount_of_data
     a owl:NamedIndividual, norma:LegalCondition ;
     rdfs:label "Does it work on a large amount of data?"@en ;
@@ -342,16 +356,6 @@
 :TriggerEvent_Condition_Is_it_supported_and_based_on_previous_offences_False_PRH_Respect_criminal_risk_assessment_ban
     a owl:NamedIndividual, norma:TriggerEvent ;
     norma:hasOutcome norma:FalseOutcome .
-
-:Condition_Has_it_been_certified_under_the_EU_cybersecurity_scheme
-    a owl:NamedIndividual, norma:LegalCondition ;
-    rdfs:label "Has it been certified under the EU cybersecurity scheme?"@en ;
-    norma:conditionStatement "Has it been certified under the EU cybersecurity scheme?"^^xsd:string ;
-    norma:hasTrigger :TriggerEvent_Condition_Has_it_been_certified_under_the_EU_cybersecurity_scheme_True_REC_NOT_Respect_cybersecurity_exemption.
-
-:TriggerEvent_Condition_Has_it_been_certified_under_the_EU_cybersecurity_scheme_True_REC_NOT_Respect_cybersecurity_exemption
-    a owl:NamedIndividual, norma:TriggerEvent ;
-    norma:hasOutcome norma:TrueOutcome .
 
 :Condition_Is_it_used_to_generate_syntetic_content
     a owl:NamedIndividual, norma:LegalCondition ;
@@ -434,10 +438,16 @@
     norma:hasOutcome norma:TrueOutcome .
 
 # ── Annotation Activities ─────────────────────────────────────────
+:AnnotationActivity_REC_NOT_Respect_cybersecurity_exemption
+    a owl:NamedIndividual, norma:AnnotationActivity ;
+    rdfs:label "Annotation activity for REC_NOT_Respect_cybersecurity_exemption"@en ;
+    norma:confidenceScore "1.0"^^xsd:decimal ;
+    norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
+    norma:usedLegalSource :Regulation_EU_AI_Act.
+
 :AnnotationActivity_OBL_Respect_general_purpose_obligations
     a owl:NamedIndividual, norma:AnnotationActivity ;
     rdfs:label "Annotation activity for OBL_Respect_general_purpose_obligations"@en ;
-    norma:annotationDate "2026-05-07"^^xsd:date ;
     norma:confidenceScore "1.0"^^xsd:decimal ;
     norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
     norma:usedLegalSource :Regulation_EU_AI_Act.
@@ -445,7 +455,6 @@
 :AnnotationActivity_OBL_Respect_high_risk_obligations
     a owl:NamedIndividual, norma:AnnotationActivity ;
     rdfs:label "Annotation activity for OBL_Respect_high_risk_obligations"@en ;
-    norma:annotationDate "2026-05-07"^^xsd:date ;
     norma:confidenceScore "1.0"^^xsd:decimal ;
     norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
     norma:usedLegalSource :Regulation_EU_AI_Act.
@@ -453,7 +462,6 @@
 :AnnotationActivity_OBL_ADD_testing_obligations
     a owl:NamedIndividual, norma:AnnotationActivity ;
     rdfs:label "Annotation activity for OBL_ADD_testing_obligations"@en ;
-    norma:annotationDate "2026-05-07"^^xsd:date ;
     norma:confidenceScore "1.0"^^xsd:decimal ;
     norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
     norma:usedLegalSource :Regulation_EU_AI_Act.
@@ -461,15 +469,6 @@
 :AnnotationActivity_PRH_Respect_criminal_risk_assessment_ban
     a owl:NamedIndividual, norma:AnnotationActivity ;
     rdfs:label "Annotation activity for PRH_Respect_criminal_risk_assessment_ban"@en ;
-    norma:annotationDate "2026-05-07"^^xsd:date ;
-    norma:confidenceScore "1.0"^^xsd:decimal ;
-    norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
-    norma:usedLegalSource :Regulation_EU_AI_Act.
-
-:AnnotationActivity_REC_NOT_Respect_cybersecurity_exemption
-    a owl:NamedIndividual, norma:AnnotationActivity ;
-    rdfs:label "Annotation activity for REC_NOT_Respect_cybersecurity_exemption"@en ;
-    norma:annotationDate "2026-05-07"^^xsd:date ;
     norma:confidenceScore "1.0"^^xsd:decimal ;
     norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
     norma:usedLegalSource :Regulation_EU_AI_Act.
@@ -477,7 +476,6 @@
 :AnnotationActivity_REC_Respect_voluntary_codes_of_conducts
     a owl:NamedIndividual, norma:AnnotationActivity ;
     rdfs:label "Annotation activity for REC_Respect_voluntary_codes_of_conducts"@en ;
-    norma:annotationDate "2026-05-07"^^xsd:date ;
     norma:confidenceScore "1.0"^^xsd:decimal ;
     norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
     norma:usedLegalSource :Regulation_EU_AI_Act.
@@ -485,7 +483,6 @@
 :AnnotationActivity_OBL_Respect_marking_obligations
     a owl:NamedIndividual, norma:AnnotationActivity ;
     rdfs:label "Annotation activity for OBL_Respect_marking_obligations"@en ;
-    norma:annotationDate "2026-05-07"^^xsd:date ;
     norma:confidenceScore "1.0"^^xsd:decimal ;
     norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
     norma:usedLegalSource :Regulation_EU_AI_Act.
@@ -493,7 +490,6 @@
 :AnnotationActivity_PRH_Respect_real_time_biometric_identification_ban
     a owl:NamedIndividual, norma:AnnotationActivity ;
     rdfs:label "Annotation activity for PRH_Respect_real_time_biometric_identification_ban"@en ;
-    norma:annotationDate "2026-05-07"^^xsd:date ;
     norma:confidenceScore "1.0"^^xsd:decimal ;
     norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
     norma:usedLegalSource :Regulation_EU_AI_Act.
@@ -501,7 +497,6 @@
 :AnnotationActivity_OBL_Respect_prescribed_obligations
     a owl:NamedIndividual, norma:AnnotationActivity ;
     rdfs:label "Annotation activity for OBL_Respect_prescribed_obligations"@en ;
-    norma:annotationDate "2026-05-07"^^xsd:date ;
     norma:confidenceScore "1.0"^^xsd:decimal ;
     norma:wasAssociatedWithAnnotator :NORMAAnnotator ;
     norma:usedLegalSource :Regulation_EU_AI_Act.

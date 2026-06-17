@@ -6,7 +6,52 @@ gateway ordering, and Zeebe compliance properties.
 """
 
 import pytest
-from norma_engine.parsing.bpmn_parser import parse_bpmn_to_reduced_graph, parse_bpmn_full
+from norma_engine.parsing.bpmn_parser import (
+    parse_bpmn_to_reduced_graph,
+    parse_bpmn_full,
+    BpmnLoopWarning,
+)
+
+
+# S -> A -> B -> A -> E and S -> A -> E: A loops back to itself via B
+# before ever reaching the end event.
+LOOP_BPMN = """\
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+    xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+    xmlns:zeebe="http://camunda.org/schema/zeebe/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    id="Definitions_loop" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_loop" isExecutable="true">
+
+    <bpmn:startEvent id="S" name="start">
+      <bpmn:outgoing>Flow_S_A</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:task id="A" name="Prep">
+      <bpmn:incoming>Flow_S_A</bpmn:incoming>
+      <bpmn:incoming>Flow_B_A</bpmn:incoming>
+      <bpmn:outgoing>Flow_A_B</bpmn:outgoing>
+      <bpmn:outgoing>Flow_A_E</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="B" name="Check">
+      <bpmn:incoming>Flow_A_B</bpmn:incoming>
+      <bpmn:outgoing>Flow_B_A</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="E" name="end">
+      <bpmn:incoming>Flow_A_E</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_S_A" sourceRef="S" targetRef="A" />
+    <bpmn:sequenceFlow id="Flow_A_B" sourceRef="A" targetRef="B" />
+    <bpmn:sequenceFlow id="Flow_B_A" sourceRef="B" targetRef="A" />
+    <bpmn:sequenceFlow id="Flow_A_E" sourceRef="A" targetRef="E" />
+
+  </bpmn:process>
+</bpmn:definitions>
+"""
 
 
 class TestParseBpmnFull:
@@ -72,3 +117,23 @@ class TestReducedGraph:
         ends   = [n for n in nodes.values() if n.type == "endEvent"]
         assert len(starts) == 1
         assert len(ends)   == 1
+
+
+class TestLoopHandling:
+    """S -> A -> E and S -> A -> B -> A -> E: A loops back to itself via B.
+
+    Reducing must not silently fold the looped branch into the direct
+    S -> E edge (which would corrupt its `tasks` and misrepresent the
+    process). The loop is reported via BpmnLoopWarning and the looping
+    branch is omitted, leaving only the direct S -> E edge with tasks=("A",).
+    """
+
+    def test_loop_branch_is_reported_and_omitted(self):
+        with pytest.warns(BpmnLoopWarning):
+            _, edges, _, _, _ = parse_bpmn_to_reduced_graph(LOOP_BPMN)
+
+        assert len(edges) == 1
+        edge = edges[0]
+        assert edge.src == "S"
+        assert edge.dst == "E"
+        assert edge.tasks == ("A",)

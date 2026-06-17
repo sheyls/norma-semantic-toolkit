@@ -143,6 +143,12 @@ def _similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, _canonical(a), _canonical(b)).ratio()
 
 
+def _deontic_types_compatible(a_types: set, b_types: set) -> bool:
+    if not a_types or not b_types:
+        return True
+    return bool(a_types & b_types)
+
+
 def _pick_winner(labels: List[str], first_seen: Dict[str, int]) -> Tuple[str, str]:
     """
     Given a list of labels known to be equivalent, pick the canonical winner.
@@ -166,20 +172,30 @@ def _normalize_field(
     report:    NormalizationReport,
     override:  Dict[str, str],
     threshold: float = FUZZY_THRESHOLD,
+    deontic_aware: bool = False,
 ) -> Dict[str, str]:
     """
     Normalize all values of a given field across records.
     Returns a mapping: raw_label → canonical_winner.
+
+    If `deontic_aware` is set, two labels are only merged if 
+    they share `deontic_type`.
     """
-    # Collect all non-empty values and their frequencies
+    # Collect all non-empty values, their frequencies, and (if
+    # deontic_aware) the set of deontic types each value appears with.
     counts: Counter = Counter()
     first_seen: Dict[str, int] = {}
+    deontic_types: Dict[str, set] = defaultdict(set)
     for r in records:
         val = r.get(field_key, "").strip()
         if val:
             if val not in first_seen:
                 first_seen[val] = len(first_seen)
             counts[val] += 1
+            if deontic_aware:
+                dtype = r.get("deontic_type", "").strip()
+                if dtype:
+                    deontic_types[val].add(dtype)
 
     all_labels = list(counts.keys())
     if not all_labels:
@@ -218,9 +234,19 @@ def _normalize_field(
         for label in group:
             mapping[label] = winner
 
+    # Each raw label's deontic types are the union of the deontic types of
+    # all records currently mapped to it (e.g. all types an action label
+    # has been annotated with so far).
+    def _label_deontic_types(label: str) -> set:
+        types: set = set()
+        for raw, mapped in mapping.items():
+            if mapped == label:
+                types |= deontic_types.get(raw, set())
+        return types
+
     # Plural/singular merge: auto-consolidate winners that differ only by a plural suffix.
     # Groups winners by their singularized canonical form; the shorter (singular) label wins.
-    current_winners = list({v for v in mapping.values()})
+    current_winners = list(dict.fromkeys(mapping.values()))
     singular_groups: Dict[str, List[str]] = defaultdict(list)
     for w in current_winners:
         singular_groups[_singularize(_canonical(w))].append(w)
@@ -231,10 +257,16 @@ def _normalize_field(
         # Prefer the label whose canonical form is already singular (i.e. unchanged by _singularize)
         already_singular = [w for w in group if _singularize(_canonical(w)) == _canonical(w)]
         winner = already_singular[0] if already_singular else sorted(group, key=lambda w: len(_canonical(w)))[0]
-        losers = [w for w in group if w != winner]
+        winner_types = _label_deontic_types(winner)
+        losers = [
+            w for w in group
+            if w != winner and _deontic_types_compatible(winner_types, _label_deontic_types(w))
+        ]
+        if not losers:
+            continue
         report.decisions.append(NormalizationDecision(
             field      = field_name,
-            raw_labels = group,
+            raw_labels = [winner, *losers],
             winner     = winner,
             reason     = "plural_variant",
             confidence = 1.0,
@@ -245,8 +277,9 @@ def _normalize_field(
 
     # Fuzzy merge: auto-consolidate remaining winners with high similarity.
     # Union-find over fuzzy-similar pairs so transitive chains collapse correctly.
-    winners = list({v for v in mapping.values()})
+    winners = list(dict.fromkeys(mapping.values()))
     parent: Dict[str, str] = {w: w for w in winners}
+    root_types: Dict[str, set] = {w: _label_deontic_types(w) for w in winners}
 
     def _find(x: str) -> str:
         while parent[x] != x:
@@ -258,12 +291,14 @@ def _normalize_field(
         for j in range(i + 1, len(winners)):
             if _similarity(winners[i], winners[j]) >= threshold:
                 ri, rj = _find(winners[i]), _find(winners[j])
-                if ri != rj:
+                if ri != rj and _deontic_types_compatible(root_types[ri], root_types[rj]):
                     # Keep the label that appears first (lower first_seen index)
                     if first_seen.get(ri, 0) <= first_seen.get(rj, 0):
                         parent[rj] = ri
+                        root_types[ri] |= root_types[rj]
                     else:
                         parent[ri] = rj
+                        root_types[rj] |= root_types[ri]
 
     fuzzy_groups: Dict[str, List[str]] = defaultdict(list)
     for w in winners:
@@ -420,7 +455,7 @@ def normalize(
     reg_map    = _normalize_field(records, "regulation",         "regulation",         report, override.get("regulation", {}),         threshold)
     ag_map     = _normalize_field(records, "agent",              "agent",              report, override.get("agent", {}),              threshold)
     ob_map     = _normalize_field(records, "object",             "object",             report, override.get("object", {}),             threshold)
-    action_map = _normalize_field(records, "action",             "action",             report, override.get("action", {}),             threshold)
+    action_map = _normalize_field(records, "action",             "action",             report, override.get("action", {}),             threshold, deontic_aware=True)
     did_map    = _normalize_field(records, "deontic_id",         "deontic_id",         report, override.get("deontic_id", {}),         threshold)
     cond_map   = _normalize_field(records, "condition_statement","condition_statement", report, override.get("condition_statement", {}), threshold)
 
