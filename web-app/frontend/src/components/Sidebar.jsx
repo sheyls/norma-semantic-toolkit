@@ -112,9 +112,17 @@ const ICONS = {
       <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
     </>
   ),
+  guide: (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9.09 9a3 3 0 1 1 5.83 1c0 2-3 3-3 3" />
+      <line x1="12" y1="17" x2="12" y2="17.01" />
+    </>
+  ),
 };
 
 const CORE_ITEMS = [
+  { id: "guide", label: "How to Use", icon: "guide" },
   { id: "overview", label: "Overview", icon: "overview" },
   { id: "annotation", label: "BPMN Annotation", icon: "annotation" },
   { id: "evaluator", label: "Norm Determination", icon: "evaluator" },

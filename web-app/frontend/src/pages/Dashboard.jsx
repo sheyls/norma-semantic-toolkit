@@ -24,6 +24,7 @@ import Sidebar from "../components/Sidebar";
 
 const VIEW_LABELS = {
   overview: "Overview",
+  guide: "How to Use",
   evaluator: "Norm Determination",
   artifacts: "Knowledge Base",
   rules: "Rules",
@@ -34,6 +35,38 @@ const VIEW_LABELS = {
   ontology: "Ontology",
   annotation: "BPMN Annotation",
 };
+
+const GUIDE_STEPS = [
+  {
+    kicker: "Step 1",
+    title: "Get the annotation template (only if starting from scratch)",
+    description:
+      "If your regulation isn't annotated yet, download the Camunda 8 element template below and follow the instructions bundled with it: import it in Camunda Modeler 8 via Edit → Element Templates → Import, apply it to each task (norm) or exclusive gateway (decision point), and fill in the legal fields — type of norm, responsible party, legal action, source article, and for gateways the yes/no decision criterion. Save the .bpmn file when done. Already have an annotated BPMN, or just want to explore eu-ai-act? Skip to Step 2.",
+    view: "annotation",
+    link: { href: getTemplateDownloadUrl(), label: "Download Camunda 8 element template (.json)" },
+  },
+  {
+    kicker: "Step 2",
+    title: "Select an existing pack, or upload your BPMN",
+    description:
+      "To explore existing data, pick an official pack such as eu-ai-act from “Regulation Packs” in the sidebar. To process your own BPMN, use “Create temporary pack from BPMN” in Pack Management for a brand-new pack, or select a pack first and use “Add BPMN to selected pack” to extend it — you can also just drop the file onto the dropzone on this Overview tab.",
+    view: "overview",
+  },
+  {
+    kicker: "Step 3",
+    title: "Determine applicable norms",
+    description:
+      "Open Norm Determination and answer each extracted gateway condition (yes/no) for your concrete scenario. NORMA walks the matching BPMN paths and returns the obligations, prohibitions, permissions, and recommendations that apply.",
+    view: "evaluator",
+  },
+  {
+    kicker: "Step 4",
+    title: "Explore the generated knowledge",
+    description:
+      "Download the ABox as Turtle/RDF in Knowledge Base, read rule paths and SWRL OWL/XML in Rules, run a curated preset or your own query in SPARQL, check class and property definitions in Ontology, and browse every annotated field per norm in Norm Review or visually in KG Visualisation.",
+    view: "artifacts",
+  },
+];
 
 const ONTOLOGY_ITEMS = [
   "NormativeContent covers Obligation, Prohibition, Permission, Recommendation, NegativeRecommendation, and ConstitutiveRule",
@@ -956,6 +989,87 @@ export default function Dashboard() {
                 ? "Dropping here adds the BPMN to the selected pack"
                 : "Select a pack first, then drop a BPMN file here"}
             </span>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  function renderGuide() {
+    return (
+      <div className="workspace-grid workspace-grid--guide">
+        <section className="panel">
+          <div className="panel__head">
+            <div className="section-intro">
+              <p className="eyebrow">Guide</p>
+              <h2>How to use NORMA</h2>
+              <p className="section-copy">
+                NORMA turns legally annotated BPMN diagrams into a queryable knowledge graph.
+                Follow these steps the first time you use the toolkit, then jump straight to any
+                tab from the sidebar once you are familiar with the workflow.
+              </p>
+            </div>
+          </div>
+          <div className="workflow-grid">
+            {GUIDE_STEPS.map((step) => (
+              <article className="workflow-card" key={step.kicker}>
+                <span className="workflow-card__kicker">{step.kicker}</span>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+                {step.link ? (
+                  <a className="action-card" href={step.link.href}>
+                    <strong>{step.link.label}</strong>
+                  </a>
+                ) : null}
+                <button
+                  className="button button--ghost"
+                  type="button"
+                  onClick={() => setActiveView(step.view)}
+                >
+                  Go to {VIEW_LABELS[step.view]} →
+                </button>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel ontology-panel">
+          <div className="panel__head">
+            <div className="ontology-panel__intro">
+              <p className="eyebrow">Tips</p>
+              <h2>Common questions</h2>
+            </div>
+          </div>
+          <div className="ontology-panel__sections">
+            <section className="ontology-panel__section">
+              <div className="ontology-panel__row-list">
+                <div className="ontology-panel__row">
+                  <span>
+                    <strong>Where do I get the annotation template?</strong> It's the link in
+                    Step 1 above, also available from the BPMN Annotation tab. It is a Zeebe
+                    element template (.json) you import once into Camunda Modeler 8.
+                  </span>
+                </div>
+                <div className="ontology-panel__row">
+                  <span>
+                    <strong>Not sure how to write a SPARQL query?</strong> Open the SPARQL tab and
+                    run one of the curated presets first — you can edit it afterwards instead of
+                    starting from a blank query.
+                  </span>
+                </div>
+                <div className="ontology-panel__row">
+                  <span>
+                    <strong>Will uploading a BPMN change the official pack?</strong> No. Official
+                    packs are curated and officially reviewed by legal experts as the baseline. To
+                    contribute to an official pack for any regulation, open a pull request to the
+                    repository or contact the maintainer, Sheyla Leyva-Sánchez (
+                    <a href="mailto:sheyla.leyva.sanchez@upm.es">sheyla.leyva.sanchez@upm.es</a>
+                    ). “Add BPMN to selected pack” only copies it into a new temporary workspace —
+                    it never edits the original.
+                  </span>
+                </div>
+              </div>
+            </section>
           </div>
         </section>
       </div>
@@ -1899,6 +2013,8 @@ export default function Dashboard() {
 
   function renderActiveView() {
     switch (activeView) {
+      case "guide":
+        return renderGuide();
       case "evaluator":
         return renderEvaluator();
       case "norms":
@@ -1999,7 +2115,7 @@ export default function Dashboard() {
             <span className="spinner" />
             Loading pack data…
           </div>
-        ) : !selectedPack && activeView !== "overview" ? (
+        ) : !selectedPack && activeView !== "overview" && activeView !== "guide" ? (
           <div className="no-pack-banner">
             <div className="no-pack-banner__icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

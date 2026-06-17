@@ -1828,6 +1828,10 @@ input::placeholder, textarea::placeholder {
   align-items: start;
 }
 
+.workspace-grid--guide {
+  grid-template-columns: 1fr;
+}
+
 .action-grid {
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
