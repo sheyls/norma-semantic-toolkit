@@ -285,7 +285,7 @@
           <zeebe:property name="compliance_elementType" value="task" />
           <zeebe:property name="compliance_deonticType" value="obligation" />
           <zeebe:property name="compliance_normStatement" value="Respect the fundamental right impact assessment and the registration obligation" />
-          <zeebe:property name="compliance_agent" value="AI provider" />
+          <zeebe:property name="compliance_agent" value="AI deployer" />
           <zeebe:property name="compliance_action" value="comply with obligations" />
           <zeebe:property name="compliance_object" value="AI systems" />
           <zeebe:property name="compliance_bindingForce" value="hard_law" />

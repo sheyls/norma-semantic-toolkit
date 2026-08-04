@@ -525,9 +525,9 @@ bash reproduce.sh
 Expected output ends with:
 
 ```
-  [OK]   eu-ai-act.abox.ttl  sha256=11af73da90aeceece7ab5b15507cdd24afc8a4f18bc99500c3e46bbb9f31544a
+  [OK]   eu-ai-act.abox.ttl  sha256=b37aae65ea29d4e4742a74d56e63456cbf62b6b1c4c2d3c43ffd039e1518a138
   [OK]   eu-ai-act.swrl.owl  sha256=abfedffa2eb1d3d33d19fc3636d573185cf510a86f35a01a79149dd962b6eaf3
-  [OK]   eu-ai-act.json  sha256=fd89a7988ec6910a0d287fcb14147a3e1b369f0022a86a33ff33af901643a9a6
+  [OK]   eu-ai-act.json  sha256=7ba605cf8fea21c82f2d55e5ebe7384bc7dccba29ae272a27c5754c084b3e0c4
 
   Reproducibility: PASSED — pipeline is deterministic and the
   committed artifacts match a clean rebuild.
@@ -649,9 +649,9 @@ The pipeline is a deterministic, stateless transformation. Given the same BPMN i
 
 | Artifact | SHA-256 |
 |---|---|
-| `eu-ai-act.abox.ttl` | `11af73da90aeceece7ab5b15507cdd24afc8a4f18bc99500c3e46bbb9f31544a` |
+| `eu-ai-act.abox.ttl` | `b37aae65ea29d4e4742a74d56e63456cbf62b6b1c4c2d3c43ffd039e1518a138` |
 | `eu-ai-act.swrl.owl` | `abfedffa2eb1d3d33d19fc3636d573185cf510a86f35a01a79149dd962b6eaf3` |
-| `eu-ai-act.json` | `fd89a7988ec6910a0d287fcb14147a3e1b369f0022a86a33ff33af901643a9a6` |
+| `eu-ai-act.json` | `7ba605cf8fea21c82f2d55e5ebe7384bc7dccba29ae272a27c5754c084b3e0c4` |
 
 The full EU AI Act annotation corpus (6 BPMN diagrams) is committed in `regulations/eu-ai-act/bpmn/`. Every result reported in the accompanying paper can be regenerated and verified by running `bash reproduce.sh`.
 

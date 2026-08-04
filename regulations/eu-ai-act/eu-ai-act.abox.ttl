@@ -279,7 +279,7 @@
     norma:deonticId "OBL_Respect_prescribed_obligations"^^xsd:string ;
     norma:normStatement "Respect the fundamental right impact assessment and the registration obligation"^^xsd:string ;
     norma:actionText "comply with marking obligations"^^xsd:string ;
-    norma:agentText "AI provider"^^xsd:string ;
+    norma:agentText "AI deployer"^^xsd:string ;
     norma:objectText "AI system"^^xsd:string ;
     norma:fromRegulation "EU AI Act"^^xsd:string ;
     norma:fromArticle "5(2), 27, 49"^^xsd:string ;
@@ -288,7 +288,7 @@
     norma:hasComplianceCriticality <https://w3id.org/def/norma-o#High> ;
     norma:hasExtractionMethod <https://w3id.org/def/norma-o#ManualLawyer> ;
     norma:hasReviewStatus <https://w3id.org/def/norma-o#PendingReview> ;
-    norma:hasLegalAgent  :Agent_AI_provider ;
+    norma:hasLegalAgent  :Agent_AI_deployer ;
     norma:hasLegalAction :Action_comply_with_marking_obligations ;
     norma:hasLegalObject :Object_AI_system ;
     norma:hasLegalSource :Regulation_EU_AI_Act ;

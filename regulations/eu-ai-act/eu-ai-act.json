@@ -474,7 +474,7 @@
     "review_status": "pending",
     "deontic_id": "OBL_Respect_prescribed_obligations",
     "norm_statement": "Respect the fundamental right impact assessment and the registration obligation",
-    "agent": "AI provider",
+    "agent": "AI deployer",
     "action": "comply with marking obligations",
     "object": "AI system",
     "fact_statement": "",
