@@ -46,7 +46,7 @@
         "Have_safeguards_on_nature_of_the_system_and_consequence_of_its_use_been_taken_into_consideration": false
       },
       "expect_norms": [
-        "PRH_Ban_the_system"
+        "PRH_Respect_real_time_biometric_identification_ban"
       ]
     },
     {
@@ -55,7 +55,7 @@
         "Has_it_been_certified_under_the_EU_cybersecurity_scheme": true
       },
       "expect_norms": [
-        "REC_NOT_Cybersecurity_Exemption"
+        "REC_NOT_Respect_cybersecurity_exemption"
       ]
     }
   ]

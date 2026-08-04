@@ -5,7 +5,7 @@
 [![Code License: Apache 2.0](https://img.shields.io/badge/Code-Apache%202.0-0b7285.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Content License: CC BY 4.0](https://img.shields.io/badge/Content-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/Tests-73%20passing-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/Tests-97%20passing-brightgreen)](#testing)
 [![OWL 2 DL](https://img.shields.io/badge/Ontology-OWL%202%20DL-orange)](https://www.w3.org/TR/owl2-overview/)
 [![Ontology Docs](https://img.shields.io/badge/Docs-NORMA--O%20Ontology-navy)](https://w3id.org/def/norma-o)
 
@@ -134,7 +134,7 @@ norma-semantic-toolkit/
 │   │   └── sparql_presets.py          # Curated SPARQL query library
 │   └── frontend/                      # React + Vite + D3.js single-page application
 │
-├── tests/                             # 73 unit and integration tests
+├── tests/                             # 97 unit and integration tests
 │   ├── test_parsing.py
 │   ├── test_rules.py
 │   ├── test_kg.py
@@ -518,18 +518,19 @@ bash reproduce.sh
 
 `reproduce.sh` does four things:
 1. Regenerates the EU AI Act ABox and SWRL from the source BPMN corpus.
-2. Runs the engine test suite (73 tests).
+2. Runs the engine test suite (79 tests; the 18 web-app tests need the FastAPI stack and are run separately).
 3. Builds the knowledge graph twice in isolated environments.
-4. Asserts SHA-256 identity of all output files (determinism check).
+4. Asserts SHA-256 identity of all output files — both between the two runs (determinism) and against the artifacts committed in this repository, which are snapshotted before step 1 rewrites them.
 
 Expected output ends with:
 
 ```
-  [OK]   eu-ai-act.abox.ttl  sha256=36a224af398155391f69e8588164f3971f5db743ef53b92bcf1c6fad2fa87240
-  [OK]   eu-ai-act.swrl.owl  sha256=22705dbf4e452c1781ae235a7736ef1d52ccdce473ff9c3ffdb0c2ba735104ee
-  [OK]   entities.json  sha256=f4c9894c371d1584f263beef45689b67e06ceebc1b76d8469ec009f13c3d46f3
+  [OK]   eu-ai-act.abox.ttl  sha256=11af73da90aeceece7ab5b15507cdd24afc8a4f18bc99500c3e46bbb9f31544a
+  [OK]   eu-ai-act.swrl.owl  sha256=abfedffa2eb1d3d33d19fc3636d573185cf510a86f35a01a79149dd962b6eaf3
+  [OK]   eu-ai-act.json  sha256=fd89a7988ec6910a0d287fcb14147a3e1b369f0022a86a33ff33af901643a9a6
 
-  Reproducibility: PASSED — pipeline is deterministic.
+  Reproducibility: PASSED — pipeline is deterministic and the
+  committed artifacts match a clean rebuild.
 ```
 
 ---
@@ -648,9 +649,9 @@ The pipeline is a deterministic, stateless transformation. Given the same BPMN i
 
 | Artifact | SHA-256 |
 |---|---|
-| `eu-ai-act.abox.ttl` | `36a224af398155391f69e8588164f3971f5db743ef53b92bcf1c6fad2fa87240` |
-| `eu-ai-act.swrl.owl` | `22705dbf4e452c1781ae235a7736ef1d52ccdce473ff9c3ffdb0c2ba735104ee` |
-| `eu-ai-act.json` | `f4c9894c371d1584f263beef45689b67e06ceebc1b76d8469ec009f13c3d46f3` |
+| `eu-ai-act.abox.ttl` | `11af73da90aeceece7ab5b15507cdd24afc8a4f18bc99500c3e46bbb9f31544a` |
+| `eu-ai-act.swrl.owl` | `abfedffa2eb1d3d33d19fc3636d573185cf510a86f35a01a79149dd962b6eaf3` |
+| `eu-ai-act.json` | `fd89a7988ec6910a0d287fcb14147a3e1b369f0022a86a33ff33af901643a9a6` |
 
 The full EU AI Act annotation corpus (6 BPMN diagrams) is committed in `regulations/eu-ai-act/bpmn/`. Every result reported in the accompanying paper can be regenerated and verified by running `bash reproduce.sh`.
 
@@ -709,7 +710,7 @@ The full EU AI Act annotation corpus (6 BPMN diagrams) is committed in `regulati
 
 ## Testing
 
-The test suite covers parsing, rule extraction, ABox construction, entity normalisation, SWRL export, and end-to-end SWRL evaluation. All 73 tests pass against the current codebase.
+The test suite covers parsing, rule extraction, ABox construction, entity normalisation, SWRL export, and end-to-end SWRL evaluation. All 97 tests pass against the current codebase.
 
 ```bash
 pip install -e .[dev]
@@ -718,12 +719,16 @@ pytest
 
 | Module | Tests | Coverage |
 |---|---|---|
-| `test_parsing.py` | 14 | BPMN parsing, reduced graph construction, gateway indexing |
-| `test_rules.py` | 21 | Path enumeration (DFS), RuleIR construction, condition handling |
-| `test_kg.py` | 11 | ABox Turtle output, individual minting, provenance, deduplication |
-| `test_normalizer.py` | 9 | Fuzzy matching, alias resolution, override application, warning generation |
-| `test_exporters.py` | 11 | SWRL OWL/XML serialisation, head compactness, unconditional exclusion |
-| `test_swrl_case_runner.py` | 7 | End-to-end SWRL evaluation against 5 EU AI Act scenarios |
+| `test_parsing.py` | 9 | BPMN parsing, reduced graph construction, gateway indexing |
+| `test_rules.py` | 19 | Path enumeration (DFS), RuleIR construction, condition handling |
+| `test_kg.py` | 24 | ABox Turtle output, individual minting, provenance, deduplication |
+| `test_normalizer.py` | 12 | Fuzzy matching, alias resolution, override application, warning generation |
+| `test_exporters.py` | 12 | SWRL OWL/XML serialisation, head compactness, unconditional exclusion |
+| `test_swrl_case_runner.py` | 3 | End-to-end SWRL evaluation against 5 EU AI Act scenarios |
+| `test_sparql_presets.py` | 1 | SPARQL preset catalogue validation |
+| `test_web_app_storage.py` | 3 | Pack storage isolation, uploaded vs. official pack workspaces |
+| `test_web_evaluator.py` | 12 | SWRL norm determination, evaluator parity against reference cases |
+| `test_web_pipeline.py` | 2 | Norm review deduplication across BPMN files |
 
 End-to-end SWRL test cases are defined in `tests/eu_ai_act_cases.json`. Each case provides a set of boolean condition values and asserts which norms should be activated:
 
@@ -732,8 +737,8 @@ End-to-end SWRL test cases are defined in `tests/eu_ai_act_cases.json`. Each cas
 | `high_risk_biometric_not_tested` | biometric=true, tested=false | `OBL_Respect_high_risk_obligations` |
 | `high_risk_biometric_tested` | biometric=true, tested=true | `OBL_ADD_testing_obligations` + high-risk |
 | `biometric_law_enforcement_with_safeguards` | 6 conditions incl. safeguards=true | `OBL_Respect_prescribed_obligations` |
-| `biometric_law_enforcement_without_safeguards` | same minus safeguards | `PRH_Ban_the_system` |
-| `certified_cybersecurity_case` | cybersecurity_certified=true | `REC_NOT_Cybersecurity_Exemption` |
+| `biometric_law_enforcement_without_safeguards` | same minus safeguards | `PRH_Respect_real_time_biometric_identification_ban` |
+| `certified_cybersecurity_case` | cybersecurity_certified=true | `REC_NOT_Respect_cybersecurity_exemption` |
 
 ---
 

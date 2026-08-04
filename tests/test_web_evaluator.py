@@ -77,7 +77,7 @@ def test_swrl_and_rule_ir_evaluators_match_for_reference_cases(case_spec: dict):
 
 
 @pytest.mark.parametrize("case_spec", _load_cases(), ids=lambda case: case["id"])
-def test_swrI_norm_determination_matches_expected_reference_cases(case_spec: dict):
+def test_swrl_norm_determination_matches_expected_reference_cases(case_spec: dict):
     load_regulation_packs()
 
     result = evaluate_pack("eu-ai-act", case_spec["facts"])
